@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In | Conneto — Internship Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        :root {
+            --primary: #2563EB;
+            --primary-dark: #1D4ED8;
+            --primary-light: #EFF6FF;
+            --text: #0F172A;
+            --text-muted: #64748B;
+            --border: #E2E8F0;
+            --input-bg: #F8FAFC;
+            --shadow: 0 20px 60px rgba(0, 0, 0, .12)
+        }
+
+        html,
+        body {
+            height: 100%;
+            font-family: 'Inter', sans-serif
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background: #fff;
+            color: var(--text)
+        }
+
+        /* LEFT PANEL */
+        .auth-left {
+            width: 52%;
+            background: linear-gradient(145deg, #1E3A5F 0%, #2563EB 50%, #0EA5E9 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-left::before {
+            content: '';
+            position: absolute;
+            top: -120px;
+            right: -120px;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, .06);
+            border-radius: 50%
+        }
+
+        .auth-left::after {
+            content: '';
+            position: absolute;
+            bottom: -80px;
+            left: -80px;
+            width: 280px;
+            height: 280px;
+            background: rgba(255, 255, 255, .04);
+            border-radius: 50%
+        }
+
+        .auth-left-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 440px
+        }
+
+        .auth-hero-img {
+            width: 100%;
+            max-width: 360px;
+            height: 260px;
+            object-fit: cover;
+            border-radius: 20px;
+            margin-bottom: 36px;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, .3);
+            border: 3px solid rgba(255, 255, 255, .2)
+        }
+
+        .auth-brand {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: -1px;
+            margin-bottom: 8px
+        }
+
+        .auth-brand span {
+            color: #BAE6FD
+        }
+
+        .auth-tagline {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, .8);
+            line-height: 1.7;
+            margin-bottom: 32px
+        }
+
+        .auth-stats {
+            display: flex;
+            gap: 32px;
+            justify-content: center
+        }
+
+        .auth-stat strong {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #fff
+        }
+
+        .auth-stat span {
+            font-size: .8rem;
+            color: rgba(255, 255, 255, .7)
+        }
+
+        .auth-ticker {
+            background: rgba(255, 255, 255, .1);
+            border-radius: 100px;
+            padding: 10px 20px;
+            margin-top: 28px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, .15)
+        }
+
+        .ticker-track {
+            display: flex;
+            gap: 30px;
+            width: max-content;
+            animation: ticker 18s linear infinite;
+            white-space: nowrap
+        }
+
+        .ticker-track span {
+            font-size: .8rem;
+            color: rgba(255, 255, 255, .85);
+            font-weight: 500
+        }
+
+        @keyframes ticker {
+            from {
+                transform: translateX(0)
+            }
+
+            to {
+                transform: translateX(-50%)
+            }
+        }
+
+        /* RIGHT PANEL */
+        .auth-right {
+            width: 48%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 48px;
+            background: #fff
+        }
+
+        .auth-form-wrap {
+            width: 100%;
+            max-width: 400px
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-muted);
+            font-size: .9rem;
+            font-weight: 500;
+            text-decoration: none;
+            margin-bottom: 36px;
+            transition: .2s
+        }
+
+        .back-link:hover {
+            color: var(--primary)
+        }
+
+        .back-link svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor
+        }
+
+        .form-logo {
+            font-size: 1.6rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            margin-bottom: 4px
+        }
+
+        .form-logo span {
+            color: var(--primary)
+        }
+
+        .form-greeting {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            margin-top: 24px
+        }
+
+        .form-sub {
+            color: var(--text-muted);
+            font-size: .95rem;
+            margin-bottom: 32px
+        }
+
+        .form-group {
+            margin-bottom: 20px
+        }
+
+        .form-group label {
+            display: block;
+            font-size: .85rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 8px
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 13px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: .95rem;
+            background: var(--input-bg);
+            color: var(--text);
+            transition: .25s;
+            box-sizing: border-box
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, .08)
+        }
+
+        .form-input::placeholder {
+            color: #CBD5E1
+        }
+
+        .input-wrap {
+            position: relative
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none
+        }
+
+        .input-icon svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--text-muted)
+        }
+
+        .form-row-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px
+        }
+
+        .checkbox-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: .875rem;
+            color: var(--text-muted);
+            cursor: pointer
+        }
+
+        .checkbox-wrap input {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--primary)
+        }
+
+        .forgot-link {
+            font-size: .875rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600
+        }
+
+        .forgot-link:hover {
+            text-decoration: underline
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .25s;
+            box-shadow: 0 4px 16px rgba(37, 99, 235, .3)
+        }
+
+        .btn-submit:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, .35)
+        }
+
+        .btn-submit:active {
+            transform: translateY(0)
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 24px 0;
+            color: var(--text-muted);
+            font-size: .85rem
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border)
+        }
+
+        .btn-social {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid var(--border);
+            background: #fff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: inherit;
+            font-size: .9rem;
+            font-weight: 600;
+            color: var(--text);
+            cursor: pointer;
+            transition: .25s
+        }
+
+        .btn-social:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            color: var(--primary)
+        }
+
+        .btn-social img {
+            width: 20px;
+            height: 20px
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 24px;
+            font-size: .9rem;
+            color: var(--text-muted)
+        }
+
+        .auth-switch a {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none
+        }
+
+        .auth-switch a:hover {
+            text-decoration: underline
+        }
+
+        .error-box {
+            background: #FFF1F1;
+            border: 1px solid #FECACA;
+            color: #DC2626;
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: .875rem;
+            font-weight: 500
+        }
+
+        /* FLOATING LABELS ANIMATION */
+        .form-group.focused label {
+            color: var(--primary)
+        }
+
+        /* RESPONSIVE */
+        @media(max-width:900px) {
+            .auth-left {
+                display: none
+            }
+
+            .auth-right {
+                width: 100%;
+                padding: 40px 24px
+            }
+        }
+
+        @media(max-width:480px) {
+            .auth-right {
+                padding: 32px 20px
+            }
+
+            .auth-form-wrap {
+                max-width: 100%
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- LEFT PANEL -->
+    <div class="auth-left">
+        <div class="auth-left-content">
+            <img class="auth-hero-img" src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=700&q=80"
+                alt="Students and professionals collaborating">
+            <div class="auth-brand">Conn<span>eto</span></div>
+            <p class="auth-tagline">The platform where ambitious students meet forward-thinking companies. Your career
+                journey starts here.</p>
+            <div class="auth-stats">
+                <div class="auth-stat"><strong>500+</strong><span>Companies</span></div>
+                <div class="auth-stat"><strong>15K+</strong><span>Students</span></div>
+                <div class="auth-stat"><strong>2K+</strong><span>Internships</span></div>
+            </div>
+            <div class="auth-ticker">
+                <div class="ticker-track">
+                    <span>Verified Companies</span>
+                    <span>&middot;</span>
+                    <span>Smart Matching</span>
+                    <span>&middot;</span>
+                    <span>Career Growth</span>
+                    <span>&middot;</span>
+                    <span>Real Opportunities</span>
+                    <span>&middot;</span>
+                    <span>Top Companies</span>
+                    <span>&middot;</span>
+                    <span>Verified Companies</span>
+                    <span>&middot;</span>
+                    <span>Smart Matching</span>
+                    <span>&middot;</span>
+                    <span>Career Growth</span>
+                    <span>&middot;</span>
+                    <span>Real Opportunities</span>
+                    <span>&middot;</span>
+                    <span>Top Companies</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="auth-right">
+        <div class="auth-form-wrap">
+            <a href="/" class="back-link">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                </svg>
+                Back to Home
+            </a>
+
+            <div class="form-logo">Conn<span>eto</span></div>
+            <h1 class="form-greeting">Welcome Back</h1>
+            <p class="form-sub">Sign in to manage your internship journey</p>
+
+            <% if (error) { %>
+                <div class="error-box">
+                    <%= error %>
+                </div>
+                <% } %>
+
+                    <form method="POST" action="/auth/login">
+                        <div class="form-group">
+                            <label for="login-email">Email Address</label>
+                            <div class="input-wrap">
+                                <input type="email" id="login-email" name="email" class="form-input"
+                                    placeholder="name@example.com" required autocomplete="email">
+                                <span class="input-icon"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                                    </svg></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="login-password">Password</label>
+                            <div class="input-wrap">
+                                <input type="password" id="login-password" name="password" class="form-input"
+                                    placeholder="Enter your password" required autocomplete="current-password">
+                                <span class="input-icon"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                                    </svg></span>
+                            </div>
+                        </div>
+
+                        <div class="form-row-between">
+                            <label class="checkbox-wrap">
+                                <input type="checkbox" name="remember"> Remember me
+                            </label>
+                            <a href="#" class="forgot-link">Forgot password?</a>
+                        </div>
+
+                        <button type="submit" class="btn-submit">Sign In to Conneto</button>
+                    </form>
+
+                    <div class="divider">or continue with</div>
+
+                    <button class="btn-social" type="button">
+                        <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google">
+                        Continue with Google
+                    </button>
+
+                    <p class="auth-switch">
+                        Don't have an account? <a href="/auth/register">Create one free</a>
+                    </p>
+        </div>
+    </div>
+
+    <script>
+        // Highlight label on focus
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('focus', () => input.closest('.form-group').classList.add('focused'));
+            input.addEventListener('blur', () => input.closest('.form-group').classList.remove('focused'));
+        });
+    </script>
+</body>
+
+</html>

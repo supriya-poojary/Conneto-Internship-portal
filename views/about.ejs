@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Conneto — India's Premier Internship Portal</title>
+    <meta name="description"
+        content="Learn about Conneto's mission, story, and the team driving India's leading internship portal forward.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Roboto:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/css/landi.css">
+    <style>
+        .mission-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px
+        }
+
+        .mission-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition)
+        }
+
+        .mission-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gold), var(--brown));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: var(--transition)
+        }
+
+        .mission-card:hover {
+            box-shadow: 0 16px 48px rgba(58, 42, 8, .12);
+            transform: translateY(-4px)
+        }
+
+        .mission-card:hover::before {
+            transform: scaleX(1)
+        }
+
+        .mission-card h3 {
+            font-family: 'Lora', serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--brown);
+            margin-bottom: 12px
+        }
+
+        .mission-card p {
+            color: var(--text-muted);
+            font-size: .9rem;
+            line-height: 1.8
+        }
+
+        .feat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px
+        }
+
+        .feat-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+            transition: var(--transition);
+            overflow: hidden;
+            position: relative
+        }
+
+        .feat-card::after {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -60%;
+            width: 40%;
+            height: 300%;
+            background: linear-gradient(105deg, transparent 20%, rgba(255, 255, 255, .7) 50%, transparent 80%);
+            transform: rotate(25deg);
+            transition: 0s
+        }
+
+        .feat-card:hover::after {
+            left: 130%;
+            transition: left .5s ease
+        }
+
+        .feat-card:hover {
+            box-shadow: 0 16px 40px rgba(58, 42, 8, .1);
+            transform: translateY(-5px);
+            border-color: rgba(168, 149, 32, .3)
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px
+        }
+
+        .team-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: var(--transition);
+            text-align: center
+        }
+
+        .team-card:hover {
+            box-shadow: 0 20px 56px rgba(58, 42, 8, .14);
+            transform: translateY(-6px)
+        }
+
+        .team-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover
+        }
+
+        .team-info {
+            padding: 20px
+        }
+
+        .team-info h3 {
+            font-family: 'Lora', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--brown);
+            margin-bottom: 4px
+        }
+
+        .team-info p {
+            font-size: .8rem;
+            color: var(--gold);
+            font-weight: 600
+        }
+
+        .testi-grid-4 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px
+        }
+
+        .marquee-section {
+            background: var(--gold-light);
+            border-top: 1px solid rgba(168, 149, 32, .2);
+            border-bottom: 1px solid rgba(168, 149, 32, .2);
+            padding: 32px 0;
+            overflow: hidden
+        }
+
+        .mq-row {
+            display: flex;
+            width: max-content;
+            animation: mqani 28s linear infinite
+        }
+
+        .mq-row-rev {
+            animation-direction: reverse;
+            margin-top: 14px
+        }
+
+        .mq-item {
+            padding: 0 36px;
+            white-space: nowrap;
+            font-family: 'Lora', serif;
+            font-size: .95rem;
+            font-weight: 600;
+            color: var(--brown-mid);
+            display: flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .mq-item::before {
+            content: '⬦';
+            color: var(--gold);
+            font-size: 1.2rem
+        }
+
+        @keyframes mqani {
+            from {
+                transform: translateX(0)
+            }
+
+            to {
+                transform: translateX(-50%)
+            }
+        }
+
+        @media(max-width:1024px) {
+
+            .mission-grid,
+            .feat-grid {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .team-grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .testi-grid-4 {
+                grid-template-columns: 1fr 1fr
+            }
+        }
+
+        @media(max-width:768px) {
+
+            .mission-grid,
+            .feat-grid,
+            .testi-grid-4 {
+                grid-template-columns: 1fr
+            }
+
+            .team-grid {
+                grid-template-columns: 1fr 1fr
+            }
+        }
+
+        @media(max-width:480px) {
+            .team-grid {
+                grid-template-columns: 1fr
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+        <div class="inner">
+            <div class="topbar-left">
+                <div class="topbar-item">
+                    <svg class="topbar-icon" viewBox="0 0 24 24" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                    </svg>
+                    Call us : +91 94821 19446, +91 93807 19446
+                </div>
+                <div class="topbar-item">
+                    <svg class="topbar-icon" viewBox="0 0 24 24" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Mon - Sat, 9AM - 6PM IST
+                </div>
+            </div>
+            <div class="topbar-right">
+                <a href="https://www.linkedin.com/company/algoorbit/posts/?feedView=all" target="_blank"
+                    rel="noopener">LinkedIn</a>
+                <a href="https://www.instagram.com/algoorbit_official/" target="_blank" rel="noopener">Instagram</a>
+                <a href="https://www.whatsapp.com/channel/0029VbBktvfAYlUS6kToth1B" target="_blank"
+                    rel="noopener">WhatsApp</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAV -->
+    <header class="cn-nav" id="cn-nav">
+        <div class="inner">
+            <a href="/" class="cn-logo">
+                <div class="logo-icon"><span></span><span></span><span></span><span></span></div>Conneto
+            </a>
+            <ul class="cn-nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about" class="active">About</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+            <a href="/auth/register" class="btn-cta">Sign Up Free</a>
+            <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+        </div>
+    </header>
+    <nav class="mobile-nav" id="mobileNav">
+        <button class="close-btn" id="closeNav">&times;</button>
+        <a href="/">Home</a><a href="/about">About</a><a href="/contact">Contact</a>
+        <a href="/auth/login" class="btn-cta-outline">Login</a><a href="/auth/register" class="btn-cta">Sign Up Free</a>
+    </nav>
+
+    <!-- PAGE HEADER -->
+    <section class="page-header">
+        <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1400&q=80" alt="About Us"
+            style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.18">
+        <div class="container" style="position:relative;z-index:1">
+            <h1>About Conneto</h1>
+            <p>Empowering the next generation of professionals across India</p>
+            <div class="breadcrumb"><a href="/">Home</a><span>/</span><span>About Us</span></div>
+        </div>
+    </section>
+
+    <!-- HERO ABOUT -->
+    <section class="section section-cream">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-imgs" data-aos="fade-right">
+                    <img class="about-img-main"
+                        src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=700&q=80"
+                        alt="Conneto Team">
+                    <img class="about-img-sub"
+                        src="https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=400&q=80"
+                        alt="Partner companies">
+                    <div class="about-badge"><strong>2025</strong><span>Est. Year</span></div>
+                </div>
+                <div data-aos="fade-left">
+                    <span class="landi-tag">Who We Are</span>
+                    <h2 class="section-h2">India's Premier Platform for Internship Discovery</h2>
+                    <p class="section-p">Conneto was built on a simple but powerful belief — every ambitious student
+                        deserves access to great internship opportunities, regardless of their background, college, or
+                        city. We are here to make that happen at scale.</p>
+                    <ul class="check-list" style="margin:24px 0 32px">
+                        <li>Over 500 verified partner companies across all major industries</li>
+                        <li>Over 15,000 students actively building their careers with Conneto</li>
+                        <li>Real-time application tracking and expert mentorship built in</li>
+                        <li>100% free for every student who signs up and applies</li>
+                    </ul>
+                    <div style="display:flex;gap:16px">
+                        <a href="/auth/register" class="btn-cta">Join Conneto</a>
+                        <a href="/contact" class="btn-cta-outline">Contact Us</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="marquee-section">
+        <div class="mq-row">
+            <span class="mq-item">Smart Matching</span><span class="mq-item">500+ Companies</span><span
+                class="mq-item">15K+ Students</span><span class="mq-item">Real Opportunities</span><span
+                class="mq-item">Career Growth</span><span class="mq-item">Mentorship</span><span
+                class="mq-item">Verified Listings</span><span class="mq-item">India Wide</span>
+            <span class="mq-item">Smart Matching</span><span class="mq-item">500+ Companies</span><span
+                class="mq-item">15K+ Students</span><span class="mq-item">Real Opportunities</span><span
+                class="mq-item">Career Growth</span><span class="mq-item">Mentorship</span><span
+                class="mq-item">Verified Listings</span><span class="mq-item">India Wide</span>
+        </div>
+        <div class="mq-row mq-row-rev">
+            <span class="mq-item">Internship Portal</span><span class="mq-item">Technology</span><span
+                class="mq-item">Finance</span><span class="mq-item">Design</span><span
+                class="mq-item">Marketing</span><span class="mq-item">Engineering</span><span
+                class="mq-item">Management</span><span class="mq-item">AI &amp; Data</span>
+            <span class="mq-item">Internship Portal</span><span class="mq-item">Technology</span><span
+                class="mq-item">Finance</span><span class="mq-item">Design</span><span
+                class="mq-item">Marketing</span><span class="mq-item">Engineering</span><span
+                class="mq-item">Management</span><span class="mq-item">AI &amp; Data</span>
+        </div>
+    </div>
+
+    <!-- MISSION VISION -->
+    <section class="section section-white">
+        <div class="container">
+            <div class="text-center" style="margin-bottom:48px" data-aos="fade-up">
+                <span class="landi-tag">Our Purpose</span>
+                <h2 class="section-h2">Mission &amp; Vision</h2>
+            </div>
+            <div class="mission-grid">
+                <div class="mission-card" data-aos="fade-right">
+                    <div class="diamond-icon" style="float:left;margin-right:20px;margin-bottom:12px">
+                        <div class="diamond-inner"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"
+                                stroke="var(--brown)">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                            </svg></div>
+                    </div>
+                    <h3>Our Mission</h3>
+                    <p>To democratise access to quality internship opportunities for every student across India while
+                        helping companies discover the best emerging talent efficiently, quickly, and at zero cost to
+                        students.</p>
+                </div>
+                <div class="mission-card" data-aos="fade-left">
+                    <div class="diamond-icon" style="float:left;margin-right:20px;margin-bottom:12px">
+                        <div class="diamond-inner"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"
+                                stroke="var(--brown)">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg></div>
+                    </div>
+                    <h3>Our Vision</h3>
+                    <p>To become South Asia's most trusted internship ecosystem where ambitious students and world-class
+                        companies meet, collaborate, and build extraordinary careers together over the next decade.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="section section-cream">
+        <div class="container">
+            <div class="text-center" style="margin-bottom:48px" data-aos="fade-up">
+                <span class="landi-tag">Simple Process</span>
+                <h2 class="section-h2">How Conneto Works</h2>
+            </div>
+            <div class="process-grid">
+                <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:40px 32px;text-align:center;transition:var(--transition)"
+                    class="svc-card" data-aos="fade-up" data-aos-delay="0">
+                    <div
+                        style="font-family:'Lora',serif;font-size:4rem;font-weight:700;color:var(--gold-light);line-height:1;margin-bottom:14px;letter-spacing:-2px">
+                        01</div>
+                    <div class="diamond-icon">
+                        <div class="diamond-inner"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"
+                                stroke="var(--brown)">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                            </svg></div>
+                    </div>
+                    <h3>Create Your Profile</h3>
+                    <p>Sign up and build a detailed profile highlighting your skills, education, projects, and career
+                        aspirations in under five minutes.</p>
+                </div>
+                <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:40px 32px;text-align:center;transition:var(--transition)"
+                    class="svc-card" data-aos="fade-up" data-aos-delay="100">
+                    <div
+                        style="font-family:'Lora',serif;font-size:4rem;font-weight:700;color:var(--gold-light);line-height:1;margin-bottom:14px;letter-spacing:-2px">
+                        02</div>
+                    <div class="diamond-icon">
+                        <div class="diamond-inner"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"
+                                stroke="var(--brown)">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                            </svg></div>
+                    </div>
+                    <h3>Discover and Apply</h3>
+                    <p>Browse curated, verified internship listings matched to your profile. Apply with a single click
+                        and track every application live.</p>
+                </div>
+                <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:40px 32px;text-align:center;transition:var(--transition)"
+                    class="svc-card" data-aos="fade-up" data-aos-delay="200">
+                    <div
+                        style="font-family:'Lora',serif;font-size:4rem;font-weight:700;color:var(--gold-light);line-height:1;margin-bottom:14px;letter-spacing:-2px">
+                        03</div>
+                    <div class="diamond-icon">
+                        <div class="diamond-inner"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"
+                                stroke="var(--brown)">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
+                            </svg></div>
+                    </div>
+                    <h3>Get Hired and Grow</h3>
+                    <p>Receive interview invitations from top companies, begin your career journey, and grow with
+                        ongoing mentorship and support from Conneto.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS BAR -->
+    <section class="stats-bar">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item" data-aos="fade-up" data-aos-delay="0">
+                    <div class="stat-num" data-count="500">0<span class="stat-plus">+</span></div>
+                    <div class="stat-label">Partner Companies</div>
+                </div>
+                <div class="stat-item" data-aos="fade-up" data-aos-delay="100">
+                    <div class="stat-num" data-count="15">0<span class="stat-plus">K+</span></div>
+                    <div class="stat-label">Student Users</div>
+                </div>
+                <div class="stat-item" data-aos="fade-up" data-aos-delay="200">
+                    <div class="stat-num" data-count="2000">0<span class="stat-plus">+</span></div>
+                    <div class="stat-label">Internships Posted</div>
+                </div>
+                <div class="stat-item" data-aos="fade-up" data-aos-delay="300">
+                    <div class="stat-num" data-count="800">0<span class="stat-plus">+</span></div>
+                    <div class="stat-label">Successful Hires</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY CONNETO FEATURES -->
+    <section class="section section-white">
+        <div class="container">
+            <div class="text-center" style="margin-bottom:48px" data-aos="fade-up">
+                <span class="landi-tag">Why Choose Us</span>
+                <h2 class="section-h2">Why Conneto Stands Apart</h2>
+            </div>
+            <div class="feat-grid">
+                <div class="feat-card" data-aos="fade-up" data-aos-delay="0">
+                    <div class="diamond-icon" style="margin-bottom:20px">
+                        <div class="diamond-inner"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"
+                                stroke="var(--brown)">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg></div>
+                    </div>
+                    <h3 style="font-family:'Lora',serif;font-weight:700;color:var(--brown);margin-bottom:8px">Fully
+                        Verified Companies</h3>
+                    <p style="color:var(--text-muted);font-size:.875rem;line-height:1.7">Every company on Conneto is
+                        manually verified by our curation team to ensure all listings are safe, legitimate, and of the
+                        highest quality.</p>
+                </div>
+                <div class="feat-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="diamond-icon" style="margin-bottom:20px">
+                        <div class="diamond-inner"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"
+                                stroke="var(--brown)">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                            </svg></div>
+                    </div>
+                    <h3 style="font-family:'Lora',serif;font-weight:700;color:var(--brown);margin-bottom:8px">
+                        Intelligent Matching</h3>
+                    <p style="color:var(--text-muted);font-size:.875rem;line-height:1.7">Our smart algorithm learns your
+                        skills and career goals to surface the most relevant internship opportunities without manual
+                        searching.</p>
+                </div>
+                <div class="feat-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="diamond-icon" style="margin-bottom:20px">
+                        <div class="diamond-inner"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"
+                                stroke="var(--brown)">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+                            </svg></div>
+                    </div>
+                    <h3 style="font-family:'Lora',serif;font-weight:700;color:var(--brown);margin-bottom:8px">Real-time
+                        Tracking</h3>
+                    <p style="color:var(--text-muted);font-size:.875rem;line-height:1.7">Monitor every application
+                        status in real time, from submission to final decision. Receive instant notifications so you
+                        never miss an update.</p>
+                </div>
+                <div class="feat-card" data-aos="fade-up" data-aos-delay="0">
+                    <div class="diamond-icon" style="margin-bottom:20px">
+                        <div class="diamond-inner"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"
+                                stroke="var(--brown)">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
+                            </svg></div>
+                    </div>
+                    <h3 style="font-family:'Lora',serif;font-weight:700;color:var(--brown);margin-bottom:8px">Expert
+                        Mentorship</h3>
+                    <p style="color:var(--text-muted);font-size:.875rem;line-height:1.7">Get access to a growing network
+                        of industry professionals who provide personalised guidance, mock interviews, and career roadmap
+                        advice.</p>
+                </div>
+                <div class="feat-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="diamond-icon" style="margin-bottom:20px">
+                        <div class="diamond-inner"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"
+                                stroke="var(--brown)">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
+                            </svg></div>
+                    </div>
+                    <h3 style="font-family:'Lora',serif;font-weight:700;color:var(--brown);margin-bottom:8px">Talent
+                        Portal</h3>
+                    <p style="color:var(--text-muted);font-size:.875rem;line-height:1.7">Companies can post internships,
+                        browse candidates, shortlist profiles, and schedule interviews all within one clean, streamlined
+                        dashboard.</p>
+                </div>
+                <div class="feat-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="diamond-icon" style="margin-bottom:20px">
+                        <div class="diamond-inner"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"
+                                stroke="var(--brown)">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                            </svg></div>
+                    </div>
+                    <h3 style="font-family:'Lora',serif;font-weight:700;color:var(--brown);margin-bottom:8px">Free for
+                        Students</h3>
+                    <p style="color:var(--text-muted);font-size:.875rem;line-height:1.7">Conneto is and will always
+                        remain completely free for students. Sign up, build your profile, and apply to unlimited
+                        internships at no cost.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TEAM -->
+    <section class="section section-cream">
+        <div class="container">
+            <div class="text-center" style="margin-bottom:48px" data-aos="fade-up">
+                <span class="landi-tag">Our Team</span>
+                <h2 class="section-h2">Meet the Specialists</h2>
+            </div>
+            <div class="team-grid">
+                <div class="team-card" data-aos="fade-up" data-aos-delay="0">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80"
+                        alt="Team member">
+                    <div class="team-info">
+                        <h3>Arjun Sharma</h3>
+                        <p>Co-Founder &amp; CEO</p>
+                    </div>
+                </div>
+                <div class="team-card" data-aos="fade-up" data-aos-delay="100">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80"
+                        alt="Team member">
+                    <div class="team-info">
+                        <h3>Kavya Nair</h3>
+                        <p>Head of Product</p>
+                    </div>
+                </div>
+                <div class="team-card" data-aos="fade-up" data-aos-delay="200">
+                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80"
+                        alt="Team member">
+                    <div class="team-info">
+                        <h3>Rahul Menon</h3>
+                        <p>Lead Engineer</p>
+                    </div>
+                </div>
+                <div class="team-card" data-aos="fade-up" data-aos-delay="300">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80"
+                        alt="Team member">
+                    <div class="team-info">
+                        <h3>Priya Iyer</h3>
+                        <p>Director of Growth</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="section section-white">
+        <div class="container">
+            <div class="text-center" style="margin-bottom:48px" data-aos="fade-up">
+                <span class="landi-tag">Success Stories</span>
+                <h2 class="section-h2">What Our Users Say</h2>
+            </div>
+            <div class="testi-grid">
+                <div class="testi-card" data-aos="fade-up" data-aos-delay="0">
+                    <div class="stars">
+                        <span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span>
+                    </div>
+                    <p class="testi-text">"Conneto made my internship search completely effortless. Within two weeks I
+                        had calls from three top companies. I landed a fintech role and it was life-changing."</p>
+                    <div class="testi-author"><img class="testi-av"
+                            src="https://images.unsplash.com/photo-1494790108755-2616b612b838?w=100&q=80" alt="Priya">
+                        <div>
+                            <div class="testi-name">Priya Sharma</div>
+                            <div class="testi-role">CS Engineer, SRM University</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testi-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="stars">
+                        <span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span>
+                    </div>
+                    <p class="testi-text">"As a hiring manager, Conneto has completely transformed our recruitment. The
+                        quality of candidates is exceptional and our time-to-hire has reduced by 60%."</p>
+                    <div class="testi-author"><img class="testi-av"
+                            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" alt="Rahul">
+                        <div>
+                            <div class="testi-name">Rahul Mehta</div>
+                            <div class="testi-role">HR Director, FinServe Analytics</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testi-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="stars">
+                        <span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span>
+                    </div>
+                    <p class="testi-text">"The mentorship and real-time tracking make Conneto stand out from every other
+                        platform. I always knew where I stood, making my career journey far less stressful."</p>
+                    <div class="testi-author"><img class="testi-av"
+                            src="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=100&q=80" alt="Aanya">
+                        <div>
+                            <div class="testi-name">Aanya Patel</div>
+                            <div class="testi-role">MBA Student, IIM Bengaluru</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section style="background:var(--gold);padding:80px 0">
+        <div class="container">
+            <div style="text-align:center;position:relative;z-index:1" data-aos="fade-up">
+                <h2
+                    style="font-family:'Lora',serif;font-size:clamp(2rem,3.5vw,3rem);font-weight:700;color:#fff;letter-spacing:-.5px;margin-bottom:14px">
+                    Your Career Journey Begins Today</h2>
+                <p
+                    style="color:rgba(255,255,255,.85);font-size:1rem;max-width:540px;margin:0 auto 32px;line-height:1.7">
+                    Join 15,000+ students and 500+ companies already building the future with Conneto. Free for
+                    students, always.</p>
+                <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+                    <a href="/auth/register" class="btn-dark">Start for Free</a>
+                    <a href="/contact"
+                        style="background:transparent;color:#fff;border:2px solid rgba(255,255,255,.6);padding:12px 28px;border-radius:100px;font-weight:700;font-size:.875rem;text-transform:uppercase;transition:.3s;display:inline-block">Contact
+                        Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="cn-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-brand-logo">
+                        <div class="logo-icon" style="background:var(--gold)"><span
+                                style="background:#fff"></span><span></span><span></span><span
+                                style="background:#fff"></span></div>Conneto
+                    </div>
+                    <p>The premier internship portal connecting ambitious students with forward-thinking companies
+                        across India and beyond. Karkala, Karnataka — 574122</p>
+                    <p style="margin-top:8px"><a href="mailto:connect@algoorbit.in"
+                            style="color:rgba(255,255,255,.55)">connect@algoorbit.in</a></p>
+                </div>
+                <div class="footer-col">
+                    <h4>Platform</h4>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/auth/register">Sign Up</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Students</h4>
+                    <ul>
+                        <li><a href="/auth/register">Create Profile</a></li>
+                        <li><a href="/auth/login">Browse Internships</a></li>
+                        <li><a href="/auth/login">Track Applications</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Companies</h4>
+                    <ul>
+                        <li><a href="/auth/register">Register</a></li>
+                        <li><a href="/auth/login">Post Internships</a></li>
+                        <li><a href="/auth/login">Search Candidates</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-social">
+                <a href="https://www.linkedin.com/company/algoorbit/posts/?feedView=all" target="_blank" rel="noopener"
+                    class="footer-soc-link">in</a>
+                <a href="https://www.instagram.com/algoorbit_official/" target="_blank" rel="noopener"
+                    class="footer-soc-link">&#9679;</a>
+                <a href="https://www.whatsapp.com/channel/0029VbBktvfAYlUS6kToth1B" target="_blank" rel="noopener"
+                    class="footer-soc-link">&#9993;</a>
+            </div>
+            <div class="footer-bottom"><span>&copy; 2025 Conneto. All rights reserved.</span><span>Connecting talent
+                    with opportunity across India</span></div>
+        </div>
+    </footer>
+
+    <button id="back-top" aria-label="Back to top">&#8593;</button>
+
+    <script>
+        document.getElementById('hamburger').addEventListener('click', () => document.getElementById('mobileNav').classList.add('open'));
+        document.getElementById('closeNav').addEventListener('click', () => document.getElementById('mobileNav').classList.remove('open'));
+        const bt = document.getElementById('back-top');
+        window.addEventListener('scroll', () => bt.classList.toggle('visible', window.scrollY > 400));
+        bt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        (function () {
+            const obs = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) { const d = parseInt(e.target.dataset.aosDelay || 0); setTimeout(() => e.target.classList.add('aos-animate'), d); } }), { threshold: .1 });
+            document.querySelectorAll('[data-aos]').forEach(el => obs.observe(el));
+        })();
+        let counted = false;
+        const sb = document.querySelector('.stats-bar');
+        if (sb) { new IntersectionObserver(e => { if (e[0].isIntersecting && !counted) { counted = true; document.querySelectorAll('.stat-num[data-count]').forEach(el => { const t = parseInt(el.dataset.count), p = el.querySelector('.stat-plus')?.outerHTML || '', s = performance.now(); const r = n => { const pr = Math.min((n - s) / 2000, 1), v = Math.round((1 - Math.pow(1 - pr, 3)) * t); el.innerHTML = v + p; if (pr < 1) requestAnimationFrame(r); }; requestAnimationFrame(r); }); } }, { threshold: .4 }).observe(sb); }
+    </script>
+</body>
+
+</html>
