@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Dashboard | Conneto</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #7C3AED;
+            --primary-dark: #6D28D9;
+            --primary-light: #EDE9FE;
+            --secondary: #2563EB;
+            --secondary-light: #DBEAFE;
+            --success: #10B981;
+            --success-light: #D1FAE5;
+            --warning: #F59E0B;
+            --warning-light: #FEF3C7;
+            --danger: #EF4444;
+            --danger-light: #FEE2E2;
+            --info: #06B6D4;
+            --info-light: #CFFAFE;
+            --text: #0F172A;
+            --text-muted: #64748B;
+            --border: #E2E8F0;
+            --bg: #F8FAFC;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #F5F3FF 0%, #EDE9FE 50%, #E0E7FF 100%);
+            color: var(--text);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(124, 58, 237, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(37, 99, 235, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 60% 60%, rgba(16, 185, 129, 0.08) 0%, transparent 40%);
+            animation: bgMove 25s ease-in-out infinite;
+            z-index: -1;
+        }
+        
+        @keyframes bgMove {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(1%, -1%) rotate(0.5deg); }
+            66% { transform: translate(-1%, 1%) rotate(-0.5deg); }
+        }
+        
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            padding: 20px 40px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+        
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: logoGlow 3s ease-in-out infinite;
+        }
+        
+        @keyframes logoGlow {
+            0%, 100% { filter: drop-shadow(0 0 2px rgba(124, 58, 237, 0.3)); }
+            50% { filter: drop-shadow(0 0 8px rgba(124, 58, 237, 0.6)); }
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .notification-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .notification-btn:hover {
+            background: var(--primary-light);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .notification-btn::after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 8px;
+            height: 8px;
+            background: var(--danger);
+            border-radius: 50%;
+            border: 2px solid #fff;
+        }
+        
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+            animation: avatarPop 0.5s ease-out;
+        }
+        
+        @keyframes avatarPop {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .user-name {
+            font-weight: 600;
+            color: var(--text);
+            font-size: 1rem;
+        }
+        
+        .btn-logout {
+            padding: 10px 24px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-logout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+        }
+        
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+        
+        /* Welcome Section */
+        .welcome-section {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F5F3FF 100%);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            position: relative;
+            overflow: hidden;
+            animation: slideUp 0.6s ease-out;
+        }
+        
+        @keyframes slideUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        .welcome-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(124, 58, 237, 0.1) 0%, transparent 70%);
+        }
+        
+        .welcome-section::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.08) 0%, transparent 70%);
+        }
+        
+        .welcome-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+        }
+        
+        .welcome-text h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--text) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .welcome-text p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+        
+        .welcome-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .btn-primary {
+            padding: 14px 28px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(124, 58, 237, 0.5);
+        }
+        
+        .btn-secondary {
+            padding: 14px 28px;
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-secondary:hover {
+            background: var(--primary-light);
+        }
+        
+        .welcome-illustration {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .welcome-illustration img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: cardPop 0.5s ease-out backwards;
+        }
+        
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.35s; }
+        
+        @keyframes cardPop {
+            0% { opacity: 0; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        
+        .stat-card.success::before { background: linear-gradient(90deg, var(--success), #34D399); }
+        .stat-card.warning::before { background: linear-gradient(90deg, var(--warning), #FBBF24); }
+        .stat-card.info::before { background: linear-gradient(90deg, var(--info), #22D3EE); }
+        
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            background: var(--primary-light);
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover .stat-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .stat-card.success .stat-icon { background: var(--success-light); color: var(--success); }
+        .stat-card.warning .stat-icon { background: var(--warning-light); color: var(--warning); }
+        .stat-card.info .stat-icon { background: var(--info-light); color: var(--info); }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+        
+        .stat-trend {
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+        
+        .stat-trend.up {
+            background: var(--success-light);
+            color: var(--success);
+        }
+        
+        .stat-trend.down {
+            background: var(--danger-light);
+            color: var(--danger);
+        }
+        
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+        
+        @media (max-width: 1024px) {
+            .content-grid { grid-template-columns: 1fr; }
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            animation: cardPop 0.5s ease-out backwards;
+        }
+        
+        .card:nth-child(1) { animation-delay: 0.4s; }
+        .card:nth-child(2) { animation-delay: 0.5s; }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-title i {
+            color: var(--primary);
+        }
+        
+        .card-badge {
+            padding: 6px 14px;
+            background: var(--primary-light);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        /* Applicant List */
+        .applicant-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .applicant-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px;
+            background: var(--bg);
+            border-radius: 14px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .applicant-item:hover {
+            background: var(--primary-light);
+            transform: translateX(8px);
+        }
+        
+        .applicant-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--secondary-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+        
+        .applicant-info {
+            flex: 1;
+        }
+        
+        .applicant-name {
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 2px;
+        }
+        
+        .applicant-role {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        
+        .applicant-meta {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .status-badge.pending {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+        
+        .status-badge.reviewing {
+            background: var(--info-light);
+            color: var(--info);
+        }
+        
+        .status-badge.new {
+            background: var(--success-light);
+            color: var(--success);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .btn-view {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+        
+        .btn-view:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* Quick Actions */
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 20px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--text);
+        }
+        
+        .action-btn:hover {
+            background: var(--primary-light);
+            border-color: var(--primary);
+            transform: translateY(-4px);
+        }
+        
+        .action-btn i {
+            font-size: 1.5rem;
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+        
+        .action-btn:hover i {
+            transform: scale(1.2);
+        }
+        
+        .action-btn span {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        /* Recent Activity */
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .activity-item {
+            display: flex;
+            gap: 12px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        
+        .activity-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+        
+        .activity-icon.application {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+        
+        .activity-icon.interview {
+            background: var(--success-light);
+            color: var(--success);
+        }
+        
+        .activity-icon.profile {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-text {
+            font-size: 0.9rem;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+        
+        .activity-text strong {
+            font-weight: 600;
+        }
+        
+        .activity-time {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header { padding: 16px 20px; }
+            .container { padding: 20px; }
+            .welcome-content { flex-direction: column; text-align: center; }
+            .welcome-illustration { width: 150px; height: 150px; }
+            .welcome-text h1 { font-size: 1.8rem; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .welcome-actions { justify-content: center; flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">Conneto</div>
+        <div class="user-info">
+            <button class="notification-btn">
+                <i class="fas fa-bell"></i>
+            </button>
+            <div class="user-avatar"><%= user.name.charAt(0).toUpperCase() %></div>
+            <span class="user-name"><%= user.name %></span>
+            <a href="/auth/logout" class="btn-logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </header>
+    
+    <div class="container">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <div class="welcome-content">
+                <div class="welcome-text">
+                    <h1>Welcome back, <%= user.name.split(' ')[0] %>! 🏢</h1>
+                    <p>Find the best talent for your internship programs. Manage postings and review applicants.</p>
+                    <div class="welcome-actions">
+                        <button class="btn-primary">
+                            <i class="fas fa-plus"></i> Post Internship
+                        </button>
+                        <button class="btn-secondary">
+                            <i class="fas fa-users"></i> View All Applicants
+                        </button>
+                    </div>
+                </div>
+                <div class="welcome-illustration">
+                    <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&q=80" alt="Team meeting">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-briefcase"></i></div>
+                <div class="stat-number">
+                    <%= stats ? stats.active : 0 %>
+                </div>
+                <div class="stat-label">Active Internships</div>
+            </div>
+            <div class="stat-card success">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <div class="stat-number">
+                    <%= stats ? stats.totalApplicants : 0 %>
+                </div>
+                <div class="stat-label">Total Applicants</div>
+            </div>
+            <div class="stat-card warning">
+                <div class="stat-icon"><i class="fas fa-user-check"></i></div>
+                <div class="stat-number">
+                    <%= stats ? stats.interviews : 0 %>
+                </div>
+                <div class="stat-label">Interview Scheduled</div>
+            </div>
+            <div class="stat-card info">
+                <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                <div class="stat-number">
+                    <%= stats ? stats.hired : 0 %>
+                </div>
+                <div class="stat-label">Hired</div>
+            </div>
+        </div>
+        
+        <!-- Content Grid -->
+        <div class="content-grid">
+            <!-- Recent Applicants -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fas fa-user-friends"></i> Recent Applicants</h2>
+                    <span class="card-badge">8 New</span>
+                </div>
+                <div class="applicant-list">
+                    <% if (applicants && applicants.length > 0) { %>
+                        <% applicants.forEach(function(app) { %>
+                            <div class="applicant-item">
+                                <div class="applicant-avatar"><%= app.student ? app.student.name.charAt(0).toUpperCase() : 'S' %></div>
+                                <div class="applicant-info">
+                                    <div class="applicant-name"><%= app.student ? app.student.name : 'Student' %></div>
+                                    <div class="applicant-role"><%= app.internship ? app.internship.title : 'Position' %></div>
+                                </div>
+                                <div class="applicant-meta">
+                                    <span class="status-badge <%= app.status === 'applied' ? 'new' : app.status === 'under_review' ? 'reviewing' : 'pending' %>">
+                                        <%= app.status ? app.status.replace('_', ' ').toUpperCase() : 'APPLIED' %>
+                                    </span>
+                                    <div class="action-buttons">
+                                        <button class="btn-icon btn-view"><i class="fas fa-eye"></i></button>
+                                        <button class="btn-icon btn-view"><i class="fas fa-check"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }); %>
+                    <% } else { %>
+                        <div class="applicant-item">
+                            <div class="applicant-avatar">!</div>
+                            <div class="applicant-info">
+                                <div class="applicant-name">No applicants yet</div>
+                                <div class="applicant-role">Post an internship to receive applications</div>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+            
+            <!-- Sidebar -->
+            <div>
+                <!-- Quick Actions -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><i class="fas fa-bolt"></i> Quick Actions</h2>
+                    </div>
+                    <div class="action-grid">
+                        <a href="#" class="action-btn">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Post Job</span>
+                        </a>
+                        <a href="#" class="action-btn">
+                            <i class="fas fa-search"></i>
+                            <span>Find Talent</span>
+                        </a>
+                        <a href="#" class="action-btn">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Analytics</span>
+                        </a>
+                        <a href="#" class="action-btn">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Recent Activity -->
+                <div class="card" style="margin-top: 24px;">
+                    <div class="card-header">
+                        <h2 class="card-title"><i class="fas fa-history"></i> Recent Activity</h2>
+                    </div>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon application">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-text"><strong>12 new applications</strong> for Frontend Developer</div>
+                                <div class="activity-time">2 hours ago</div>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon interview">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-text">Interview scheduled with <strong>Sarah Connor</strong></div>
+                                <div class="activity-time">5 hours ago</div>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon profile">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-text"><strong>8 new company views</strong> on your profile</div>
+                                <div class="activity-time">1 day ago</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Add smooth scroll reveal animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.stat-card, .card').forEach(el => {
+            el.style.animationPlayState = 'paused';
+            observer.observe(el);
+        });
+        
+        // Add pulse animation to notification badge
+        const notificationBtn = document.querySelector('.notification-btn');
+        setInterval(() => {
+            notificationBtn.style.transform = 'scale(1.05)';
+            setTimeout(() => {
+                notificationBtn.style.transform = 'scale(1)';
+            }, 200);
+        }, 3000);
+        
+        // Button hover effects
+        document.querySelectorAll('.action-btn, .btn-primary, .btn-secondary, .btn-icon, .btn-logout').forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+                this.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+            });
+        });
+    </script>
+</body>
+</html>

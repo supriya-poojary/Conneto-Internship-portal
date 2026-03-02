@@ -16,8 +16,13 @@ router.post('/register', async (req, res) => {
         if (existing) {
             return res.render('auth/register', { title: 'Register — Conneto', error: 'Email already registered.' });
         }
+        // Create the user - data will be stored in MongoDB
         const user = await User.create({ name, email, password, role });
+        
+        // Auto-login after registration - create session
         req.session.user = { id: user._id, name: user.name, role: user.role };
+        
+        // Redirect to dashboard based on role
         if (role === 'student') return res.redirect('/student/dashboard');
         return res.redirect('/company/dashboard');
     } catch (err) {
@@ -28,7 +33,8 @@ router.post('/register', async (req, res) => {
 // GET /auth/login
 router.get('/login', (req, res) => {
     if (req.session.user) return res.redirect('/');
-    res.render('auth/login', { title: 'Login — Conneto', error: null });
+    const registered = req.query.registered === 'true';
+    res.render('auth/login', { title: 'Login — Conneto', error: null, success: registered ? 'Account created successfully! Please sign in to continue.' : null });
 });
 
 // POST /auth/login
@@ -37,13 +43,13 @@ router.post('/login', async (req, res) => {
     try {
         const user = await User.findOne({ email });
         if (!user || !(await user.comparePassword(password))) {
-            return res.render('auth/login', { title: 'Login — Conneto', error: 'Invalid email or password.' });
+            return res.render('auth/login', { title: 'Login — Conneto', error: 'Invalid email or password.', success: null });
         }
         req.session.user = { id: user._id, name: user.name, role: user.role };
         if (user.role === 'student') return res.redirect('/student/dashboard');
         return res.redirect('/company/dashboard');
     } catch (err) {
-        res.render('auth/login', { title: 'Login — Conneto', error: 'Something went wrong. Please try again.' });
+        res.render('auth/login', { title: 'Login — Conneto', error: 'Something went wrong. Please try again.', success: null });
     }
 });
 

@@ -56,9 +56,9 @@
             <ul class="cn-nav-links">
                 <li><a href="/" class="active">Home</a></li>
                 <li><a href="/about">About</a></li>
-                <li><a href="/contact">Contact</a></li>
+<li><a href="/contact">Contact</a></li>
             </ul>
-            <a href="/auth/register" class="btn-cta">Sign Up Free</a>
+            <a href="/auth/register" class="btn-cta" id="signupBtn">Sign Up Free</a>
             <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
         </div>
     </header>
@@ -69,8 +69,8 @@
         <a href="/">Home</a>
         <a href="/about">About</a>
         <a href="/contact">Contact</a>
-        <a href="/auth/login" class="btn-cta-outline">Login</a>
-        <a href="/auth/register" class="btn-cta">Sign Up Free</a>
+<a href="/auth/login" class="btn-cta-outline">Login</a>
+        <a href="/auth/register" class="btn-cta" id="mobileSignupBtn">Sign Up Free</a>
     </nav>
 
     <!-- HERO -->
@@ -454,8 +454,25 @@
                 requestAnimationFrame(tick);
             });
         }
-        let counted = false;
+let counted = false;
         new IntersectionObserver(e => { if (e[0].isIntersecting && !counted) { counted = true; runCounters(); } }, { threshold: .4 }).observe(document.querySelector('.stats-bar'));
+        
+        // Force navigation for Sign Up buttons
+        const signupBtn = document.getElementById('signupBtn');
+if (signupBtn) {
+            signupBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = '/auth/register';
+            });
+        }
+        
+        const mobileSignupBtn = document.getElementById('mobileSignupBtn');
+        if (mobileSignupBtn) {
+            mobileSignupBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = '/auth/register';
+            });
+        }
     </script>
 </body>
 

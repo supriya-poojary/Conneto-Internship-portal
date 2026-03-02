@@ -9,7 +9,8 @@ const app = express();
 
 // ─── Connect to MongoDB Atlas ──────────────────────────────────────────────
 let dbConnected = false;
-const mongodb_uri = process.env.MONGODB_URI || "";
+const MONGODB_URI = "mongodb+srv://akankshaa412_db_user:VHGVJhg4hasdhaj@mongocluster.3whtc05.mongodb.net/conneto?retryWrites=true&w=majority&appName=Mongocluster";
+const mongodb_uri = process.env.MONGODB_URI || MONGODB_URI;
 if (mongodb_uri && !mongodb_uri.includes('<username>') && !mongodb_uri.includes('xxxxx')) {
     mongoose.connect(mongodb_uri)
         .then(() => { console.log('✅ Connected to MongoDB Atlas'); dbConnected = true; })
