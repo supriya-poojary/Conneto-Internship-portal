@@ -1,0 +1,492 @@
+/*=============================================================
+  responsive_custom.css  — Conneto Responsive Overrides
+  Breakpoints:
+    Mobile  : max-width 767px
+    Tablet  : 768px – 1199px
+    Desktop : 1200px+ (default, no overrides needed)
+=============================================================*/
+
+/* ─── Universal Mobile Resets ─── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ─── Base: ensure viewport meta is respected ─── */
+.page-wrapper {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* ===========================================================
+   TABLET  (768px – 1199px)
+   =========================================================== */
+@media (max-width: 1199px) {
+
+  /* ── Header Top Bar: hide on tablets too (too cluttered) ── */
+  .main-menu-two__top {
+    display: none !important;
+  }
+
+  /* ── Nav wrapper: make it flex so logo + hamburger sit side-by-side ── */
+  .main-menu-two__wrapper-inner {
+    flex-wrap: nowrap;
+    padding: 0 15px;
+  }
+
+  /* ── Logo padding ── */
+  .main-menu-two__logo,
+  .main-menu__logo {
+    padding: 18px 0;
+  }
+
+  /* ── Hide desktop nav list ── */
+  .main-menu-two__main-menu-box .main-menu__list {
+    display: none !important;
+  }
+
+  /* ── Hide desktop Login/Sign Up buttons on tablet (they're in mobile drawer) ── */
+  .main-menu-two__right {
+    display: none !important;
+  }
+
+  /* ── Show hamburger clearly ── */
+  .mobile-nav__toggler {
+    display: flex !important;
+    align-items: center;
+    font-size: 22px;
+    margin-left: auto;
+    padding: 10px 0;
+  }
+
+  /* ── Section padding ── */
+  section,
+  .about-two,
+  .about-four,
+  .why-choose-three,
+  .counter-two,
+  .team-two,
+  .process-one,
+  .testimonial-two,
+  .contact-one,
+  .newsletter-two,
+  .mission-vision-section {
+    padding-top: 80px !important;
+    padding-bottom: 80px !important;
+  }
+
+  /* ── Section title ── */
+  .section-title__title {
+    font-size: 32px !important;
+    line-height: 42px !important;
+  }
+
+  /* ── Footer: 2-column layout ── */
+  .site-footer-two__top .row {
+    --bs-gutter-y: 30px;
+  }
+
+  /* ── Footer bottom: stack ── */
+  .site-footer-two__bottom-inner {
+    flex-direction: column !important;
+    gap: 15px;
+    text-align: center;
+  }
+
+  /* ── Slider title ── */
+  .main-slider-two__title {
+    font-size: 38px !important;
+    line-height: 1.2 !important;
+  }
+
+  /* ── Mission/Vision cards: reduce padding ── */
+  .mission-vision-card {
+    padding: 35px !important;
+  }
+
+  /* ── Newsletter inner ── */
+  .newsletter-two__inner {
+    flex-direction: column !important;
+    gap: 30px;
+    text-align: center;
+  }
+
+  .newsletter-two__right {
+    width: 100%;
+  }
+
+  /* ── Process section ── */
+  .process-one__left {
+    margin-bottom: 40px;
+  }
+
+  /* ── Team section ── */
+  .team-two__left {
+    margin-bottom: 40px;
+  }
+
+  /* ── About sections ── */
+  .about-two__left,
+  .about-four__left {
+    margin-bottom: 50px;
+  }
+}
+
+
+/* ===========================================================
+   MOBILE  (max-width 767px)
+   =========================================================== */
+@media (max-width: 767px) {
+
+  /* ── Header ── */
+  .main-header-two {
+    position: relative;
+  }
+
+  .main-menu-two__top {
+    display: none !important;
+  }
+
+  .main-menu-two__wrapper {
+    padding: 0;
+  }
+
+  .main-menu-two__wrapper-inner {
+    display: flex !important;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
+  }
+
+  /* Logo */
+  .main-menu-two__logo a span,
+  .main-menu__logo a span {
+    font-size: 1.5rem !important;
+  }
+
+  /* Hamburger menu toggler */
+  .mobile-nav__toggler {
+    display: flex !important;
+    align-items: center;
+    font-size: 24px !important;
+    color: #fff;
+    margin-left: auto;
+    padding: 10px 0;
+  }
+
+  /* Hide desktop nav & buttons */
+  .main-menu-two__main-menu-box .main-menu__list {
+    display: none !important;
+  }
+  .main-menu-two__right {
+    display: none !important;
+  }
+
+  /* Mobile nav drawer: add login/signup buttons */
+  .mobile-nav__content {
+    width: 280px;
+  }
+
+  /* Add Login & Signup buttons inside mobile nav */
+  .mobile-nav__content::after {
+    content: "";
+    display: block;
+    margin: 20px auto 0;
+  }
+
+  /* ── Mobile Nav: Login/Signup injected via custom class ── */
+  .mobile-nav__auth-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px 0;
+  }
+
+  .mobile-nav__auth-btns a {
+    display: block;
+    text-align: center;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+  }
+
+  .mobile-nav__auth-btns a.login-btn {
+    background: linear-gradient(270deg, #FA5674 0%, #6065D4 100%);
+    color: #fff;
+  }
+
+  .mobile-nav__auth-btns a.signup-btn {
+    background: #60A5FA;
+    color: #fff;
+  }
+
+  /* ── Sticky header: also hide on mobile ── */
+  .stricky-header {
+    display: none !important;
+  }
+
+  /* ── Section padding ── */
+  section,
+  .about-two,
+  .about-four,
+  .why-choose-three,
+  .counter-two,
+  .team-two,
+  .process-one,
+  .testimonial-two,
+  .contact-one,
+  .newsletter-two,
+  .mission-vision-section {
+    padding-top: 60px !important;
+    padding-bottom: 60px !important;
+  }
+
+  /* ── Section title ── */
+  .section-title__title {
+    font-size: 26px !important;
+    line-height: 36px !important;
+    margin-top: 18px !important;
+  }
+
+  .section-title {
+    margin-bottom: 36px !important;
+  }
+
+  /* ── Main Slider ── */
+  .main-slider-two__title {
+    font-size: 26px !important;
+    line-height: 1.25 !important;
+  }
+
+  .main-slider-two__text {
+    font-size: 15px !important;
+  }
+
+  .main-slider-two__sub-title {
+    font-size: 13px !important;
+  }
+
+  .main-slider-two__btns-box {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .main-slider-two__btn-box-1,
+  .main-slider-two__btn-box-2 {
+    width: 100%;
+  }
+
+  .main-slider-two__btn-box-1 a,
+  .main-slider-two__btn-box-2 a {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Brand / trustpilot inside slider */
+  .brand-two__inner {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .brand-two__left,
+  .brand-two__right {
+    width: 100%;
+  }
+
+  /* ── About Sections: stack columns ── */
+  .about-two__left,
+  .about-four__left {
+    margin-bottom: 40px;
+  }
+
+  .about-two__img-box,
+  .about-four__img-box {
+    margin-bottom: 0;
+  }
+
+  .about-two__img-2,
+  .about-four__img-2 {
+    display: none; /* secondary overlap image doesn't work on mobile */
+  }
+
+  .about-two__experience-contact-and-btn {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .about-two__points-list {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* ── Why Choose columns: 1 per row ── */
+  .why-choose-three__single-left {
+    margin-bottom: 20px;
+  }
+
+  /* ── Counter: 2-column grid on mobile ── */
+  .counter-two__single {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  /* ── Team section: stack ── */
+  .team-two__left {
+    margin-bottom: 40px;
+  }
+
+  /* ── Process section: stack ── */
+  .process-one__left {
+    margin-bottom: 40px;
+  }
+
+  .process-one__btn-box {
+    margin-top: 20px;
+  }
+
+  .process-one__btn-box a {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* ── Contact form ── */
+  .contact-one__left {
+    padding: 25px !important;
+    margin-bottom: 40px;
+  }
+
+  /* ── Contact list info ── */
+  .contact-one__list li {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* ── Mission / Vision cards ── */
+  .mission-vision-card {
+    padding: 25px !important;
+    margin-bottom: 20px;
+  }
+
+  /* ── Newsletter ── */
+  .newsletter-two__inner {
+    flex-direction: column !important;
+    gap: 25px;
+    text-align: center;
+  }
+
+  .newsletter-two__title {
+    font-size: 24px !important;
+  }
+
+  .newsletter-two__form {
+    width: 100%;
+  }
+
+  .newsletter-two__input {
+    width: 100%;
+  }
+
+  .newsletter-two__form .thm-btn {
+    width: 100%;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  /* ── Footer ── */
+  .site-footer-two__top .row {
+    --bs-gutter-y: 30px;
+  }
+
+  .footer-widget-two__quick-links,
+  .footer-widget-two__support {
+    margin-bottom: 10px;
+  }
+
+  .site-footer-two__bottom-inner {
+    flex-direction: column !important;
+    text-align: center;
+    gap: 15px;
+  }
+
+  .site-footer-two__social-box {
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  /* ── Page Header (breadcrumb banner) ── */
+  .page-header__inner h2 {
+    font-size: 28px !important;
+  }
+
+  .page-header {
+    padding: 80px 0 40px !important;
+  }
+
+  /* ── Thm Btn: ensure they don't overflow ── */
+  .thm-btn {
+    font-size: 14px;
+    padding: 14px 18px !important;
+  }
+
+  /* ── Google Map ── */
+  .google-map__one {
+    height: 300px;
+  }
+
+  /* ── Mobile social links ── */
+  .main-slider-two__social-box {
+    display: none; /* vertical social sidebar not needed on mobile */
+  }
+
+  /* ── Hide custom cursor on touch devices ── */
+  .custom-cursor__cursor,
+  .custom-cursor__cursor-two {
+    display: none !important;
+  }
+}
+
+
+/* ===========================================================
+   EXTRA SMALL MOBILE  (max-width 479px)
+   =========================================================== */
+@media (max-width: 479px) {
+
+  .main-menu-two__logo a span {
+    font-size: 1.3rem !important;
+  }
+
+  .section-title__title {
+    font-size: 22px !important;
+    line-height: 32px !important;
+  }
+
+  .main-slider-two__title {
+    font-size: 22px !important;
+  }
+
+  .contact-one__left {
+    padding: 20px !important;
+  }
+
+  .mission-vision-card {
+    padding: 20px !important;
+  }
+
+  .site-footer-two__logo h2 {
+    font-size: 1.8rem;
+  }
+
+  /* About experience box */
+  .about-two__experience-box,
+  .about-four__experience {
+    width: 100%;
+  }
+}
