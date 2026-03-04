@@ -479,6 +479,12 @@
                                 placeholder="name@example.com" required autocomplete="email">
                         </div>
 
+                        <div class="form-group" id="companyNameGroup" style="display: none;">
+                            <label for="reg-company">Company Name</label>
+                            <input type="text" id="reg-company" name="companyName" class="form-input"
+                                placeholder="Google Inc.">
+                        </div>
+
                         <div class="form-group">
                             <label for="reg-password">Create Password</label>
                             <input type="password" id="reg-password" name="password" class="form-input"
@@ -499,11 +505,22 @@
         // Role button toggle
         const roleStudent = document.getElementById('roleStudent');
         const roleCompany = document.getElementById('roleCompany');
+        const companyNameGroup = document.getElementById('companyNameGroup');
+        const companyNameInput = document.getElementById('reg-company');
+
         [roleStudent, roleCompany].forEach(btn => {
             btn.addEventListener('click', () => {
                 roleStudent.classList.remove('selected');
                 roleCompany.classList.remove('selected');
                 btn.classList.add('selected');
+
+                if (btn.id === 'roleCompany') {
+                    companyNameGroup.style.display = 'block';
+                    companyNameInput.required = true;
+                } else {
+                    companyNameGroup.style.display = 'none';
+                    companyNameInput.required = false;
+                }
             });
         });
         // Input focus highlight

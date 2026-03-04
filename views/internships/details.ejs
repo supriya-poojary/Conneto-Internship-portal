@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= internship.title %> | Conneto
+    </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563EB;
+            --primary-dark: #1D4ED8;
+            --primary-light: #DBEAFE;
+            --secondary: #7C3AED;
+            --success: #10B981;
+            --success-light: #D1FAE5;
+            --warning: #F59E0B;
+            --text: #0F172A;
+            --text-muted: #64748B;
+            --border: #E2E8F0;
+            --bg: #F1F5F9;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .header {
+            background: white;
+            padding: 20px 40px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .back-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .internship-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--shadow);
+        }
+
+        .company-header {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 32px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .company-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .company-info h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .company-name {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            padding: 6px 14px;
+            background: var(--primary-light);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .tag.remote {
+            background: #DCFCE7;
+            color: #166534;
+        }
+
+        .tag.onsite {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .tag.hybrid {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        @media (max-width: 768px) {
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .detail-item {
+            background: var(--bg);
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .detail-icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .detail-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .detail-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .section {
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .description {
+            line-height: 1.8;
+            color: var(--text-muted);
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .skill-tag {
+            padding: 8px 16px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .apply-section {
+            background: var(--primary-light);
+            padding: 32px;
+            border-radius: 16px;
+            text-align: center;
+            margin-top: 32px;
+        }
+
+        .apply-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .apply-subtitle {
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .apply-form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            min-height: 120px;
+            margin-bottom: 16px;
+            font-family: inherit;
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .btn-apply {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-apply:hover {
+            background: var(--primary-dark);
+        }
+
+        .applied-message {
+            background: var(--success-light);
+            padding: 24px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .applied-message i {
+            font-size: 3rem;
+            color: var(--success);
+            margin-bottom: 16px;
+        }
+
+        .applied-message h3 {
+            color: var(--success);
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <a href="/" class="logo">Conneto</a>
+        <a href="/internships" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Internships
+        </a>
+    </header>
+
+    <div class="container">
+        <div class="internship-card">
+            <div class="company-header">
+                <div class="company-logo">
+                    <% var companyName=internship.company && internship.company.companyName ?
+                        internship.company.companyName : (internship.companyName || 'Company' ); %>
+                        <%= companyName.charAt(0).toUpperCase() %>
+                </div>
+                <div class="company-info">
+                    <h1>
+                        <%= internship.title %>
+                    </h1>
+                    <p class="company-name">
+                        <%= companyName %>
+                    </p>
+                    <div class="tags">
+                        <span class="tag <%= internship.type %>">
+                            <%= internship.type %>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="details-grid">
+                <div class="detail-item">
+                    <div class="detail-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="detail-label">Location</div>
+                    <div class="detail-value">
+                        <%= internship.location || 'Remote' %>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-icon"><i class="fas fa-clock"></i></div>
+                    <div class="detail-label">Duration</div>
+                    <div class="detail-value">
+                        <%= internship.duration || 'Flexible' %>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-icon"><i class="fas fa-rupee-sign"></i></div>
+                    <div class="detail-label">Stipend</div>
+                    <div class="detail-value">
+                        <%= internship.stipend ? internship.stipend + '/month' : 'Unpaid' %>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-icon"><i class="fas fa-users"></i></div>
+                    <div class="detail-label">Openings</div>
+                    <div class="detail-value">
+                        <%= internship.openings %>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-icon"><i class="fas fa-calendar"></i></div>
+                    <div class="detail-label">Deadline</div>
+                    <div class="detail-value">
+                        <%= internship.deadline ? new Date(internship.deadline).toLocaleDateString() : 'Rolling' %>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-icon"><i class="fas fa-building"></i></div>
+                    <div class="detail-label">Industry</div>
+                    <div class="detail-value">
+                        <%= internship.company ? (internship.company.industry || 'Not specified' ) : 'N/A' %>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">About the Role</h2>
+                <p class="description">
+                    <%= internship.description %>
+                </p>
+            </div>
+
+            <% if (internship.skills && internship.skills.length> 0) { %>
+                <div class="section">
+                    <h2 class="section-title">Required Skills</h2>
+                    <div class="skills-list">
+                        <% internship.skills.forEach(function(skill) { %>
+                            <span class="skill-tag">
+                                <%= skill %>
+                            </span>
+                            <% }); %>
+                    </div>
+                </div>
+                <% } %>
+
+                    <% if (internship.company && (internship.company.description || internship.company.website)) { %>
+                        <% var aboutCompanyName=internship.company && internship.company.companyName ?
+                            internship.company.companyName : (internship.companyName || 'Company' ); %>
+                            <div class="section">
+                                <h2 class="section-title">About <%= aboutCompanyName %>
+                                </h2>
+                                <p class="description">
+                                    <%= internship.company.description || 'Company description not available.' %>
+                                </p>
+                                <% if (internship.company.website) { %>
+                                    <p style="margin-top: 12px;">
+                                        <a href="<%= internship.company.website %>" target="_blank"
+                                            style="color: var(--primary);">
+                                            <i class="fas fa-globe"></i> Visit Website
+                                        </a>
+                                    </p>
+                                    <% } %>
+                            </div>
+                            <% } %>
+
+                                <div class="apply-section">
+                                    <% if (user && user.role==='student' ) { %>
+                                        <% if (hasApplied) { %>
+                                            <div class="applied-message" style="text-align: left;">
+                                                <div style="text-align: center; margin-bottom: 24px;">
+                                                    <i class="fas fa-check-circle"
+                                                        style="font-size: 3rem; color: var(--success);"></i>
+                                                    <h3 style="color: var(--success); margin-top: 10px;">Application
+                                                        Submitted Successfully!</h3>
+                                                    <p>You applied on <%= new
+                                                            Date(myApplication.appliedAt).toLocaleDateString() %>
+                                                    </p>
+                                                </div>
+
+                                                <div
+                                                    style="background: white; padding: 24px; border-radius: 12px; border: 1px solid var(--border);">
+                                                    <h4
+                                                        style="margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
+                                                        Your Application Details</h4>
+
+                                                    <div style="margin-bottom: 15px;">
+                                                        <strong
+                                                            style="display: block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 4px;">Skills
+                                                            Submitted:</strong>
+                                                        <p>
+                                                            <%= myApplication.studentSkills %>
+                                                        </p>
+                                                    </div>
+
+                                                    <div style="margin-bottom: 15px;">
+                                                        <strong
+                                                            style="display: block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 4px;">Why
+                                                            should you be hired?</strong>
+                                                        <p>
+                                                            <%= myApplication.question1Answer %>
+                                                        </p>
+                                                    </div>
+
+                                                    <div style="margin-bottom: 15px;">
+                                                        <strong
+                                                            style="display: block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 4px;">Availability
+                                                            Match:</strong>
+                                                        <p>
+                                                            <%= myApplication.question2Answer %>
+                                                        </p>
+                                                    </div>
+
+                                                    <% if (myApplication.resumeUrl) { %>
+                                                        <div style="margin-top: 20px;">
+                                                            <a href="<%= myApplication.resumeUrl %>" target="_blank"
+                                                                class="btn-apply"
+                                                                style="background: var(--bg); color: var(--primary); border: 1px solid var(--primary); font-size: 0.9rem; padding: 10px;">
+                                                                <i class="fas fa-file-pdf"></i> View Submitted Resume
+                                                            </a>
+                                                        </div>
+                                                        <% } %>
+                                                </div>
+                                            </div>
+                                            <% } else { %>
+                                                <h2 class="apply-title">Apply for this Internship</h2>
+                                                <p class="apply-subtitle">Submit your application now</p>
+                                                <form action="/internships/<%= internship._id %>/apply" method="POST"
+                                                    class="apply-form" enctype="multipart/form-data">
+
+                                                    <label
+                                                        style="display: block; text-align: left; margin-bottom: 8px; font-weight: 500;">Your
+                                                        Skills (Comma separated) <span>*</span></label>
+                                                    <input type="text" name="studentSkills" class="form-input"
+                                                        style="width: 100%; padding: 12px; margin-bottom: 24px; border: 2px solid var(--border); border-radius: 10px; font-family: inherit;"
+                                                        placeholder="e.g., HTML, CSS, JavaScript" required>
+
+                                                    <label
+                                                        style="display: block; text-align: left; margin-bottom: 8px; font-weight: 500;">Why
+                                                        should you be hired for this role? <span>*</span></label>
+                                                    <textarea name="question1Answer" class="form-textarea"
+                                                        style="min-height: 80px;"
+                                                        placeholder="Write your answer here..." required></textarea>
+
+                                                    <label
+                                                        style="display: block; text-align: left; margin-bottom: 8px; font-weight: 500;">Are
+                                                        you available for the specified duration? <span>*</span></label>
+                                                    <textarea name="question2Answer" class="form-textarea"
+                                                        style="min-height: 80px;"
+                                                        placeholder="Yes, I am available for 3 months..."
+                                                        required></textarea>
+
+                                                    <label
+                                                        style="display: block; text-align: left; margin-bottom: 8px; font-weight: 500;">Cover
+                                                        Letter (Optional)</label>
+                                                    <textarea name="coverLetter" class="form-textarea"
+                                                        placeholder="Write a cover letter (optional)..."></textarea>
+
+                                                    <label
+                                                        style="display: block; text-align: left; margin-bottom: 8px; font-weight: 500;">Resume
+                                                        (PDF only) <span>*</span></label>
+                                                    <input type="file" name="resume" accept="application/pdf" required
+                                                        style="width: 100%; padding: 12px; margin-bottom: 24px; border: 2px solid var(--border); border-radius: 10px; background: white; cursor: pointer;">
+
+                                                    <button type="submit" class="btn-apply">
+                                                        <i class="fas fa-paper-plane"></i> Submit Application
+                                                    </button>
+                                                </form>
+                                                <% } %>
+                                                    <% } else if (!user) { %>
+                                                        <h2 class="apply-title">Login to Apply</h2>
+                                                        <p class="apply-subtitle">You need to be logged in as a student
+                                                            to apply</p>
+                                                        <a href="/auth/login?redirect=/internships/<%= internship._id %>"
+                                                            class="btn-apply"
+                                                            style="text-decoration: none; display: inline-flex;">
+                                                            <i class="fas fa-sign-in-alt"></i> Login
+                                                        </a>
+                                                        <% } else { %>
+                                                            <h2 class="apply-title">Company Mode</h2>
+                                                            <p class="apply-subtitle">Switch to a student account to
+                                                                apply for internships</p>
+                                                            <% } %>
+                                </div>
+        </div>
+    </div>
+</body>
+
+</html>
