@@ -1,15 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Company Dashboard | Conneto</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         :root {
             --primary: #7C3AED;
             --primary-dark: #6D28D9;
@@ -32,7 +40,7 @@
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
         }
-        
+
         body {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #F5F3FF 0%, #EDE9FE 50%, #E0E7FF 100%);
@@ -41,7 +49,7 @@
             position: relative;
             overflow-x: hidden;
         }
-        
+
         /* Animated Background */
         body::before {
             content: '';
@@ -50,20 +58,30 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: 
+            background:
                 radial-gradient(circle at 20% 80%, rgba(124, 58, 237, 0.12) 0%, transparent 50%),
                 radial-gradient(circle at 80% 20%, rgba(37, 99, 235, 0.12) 0%, transparent 50%),
                 radial-gradient(circle at 60% 60%, rgba(16, 185, 129, 0.08) 0%, transparent 40%);
             animation: bgMove 25s ease-in-out infinite;
             z-index: -1;
         }
-        
+
         @keyframes bgMove {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            33% { transform: translate(1%, -1%) rotate(0.5deg); }
-            66% { transform: translate(-1%, 1%) rotate(-0.5deg); }
+
+            0%,
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            33% {
+                transform: translate(1%, -1%) rotate(0.5deg);
+            }
+
+            66% {
+                transform: translate(-1%, 1%) rotate(-0.5deg);
+            }
         }
-        
+
         /* Header */
         .header {
             background: rgba(255, 255, 255, 0.9);
@@ -78,7 +96,7 @@
             z-index: 100;
             box-shadow: var(--shadow);
         }
-        
+
         .logo {
             font-family: 'Poppins', sans-serif;
             font-size: 1.8rem;
@@ -89,18 +107,25 @@
             background-clip: text;
             animation: logoGlow 3s ease-in-out infinite;
         }
-        
+
         @keyframes logoGlow {
-            0%, 100% { filter: drop-shadow(0 0 2px rgba(124, 58, 237, 0.3)); }
-            50% { filter: drop-shadow(0 0 8px rgba(124, 58, 237, 0.6)); }
+
+            0%,
+            100% {
+                filter: drop-shadow(0 0 2px rgba(124, 58, 237, 0.3));
+            }
+
+            50% {
+                filter: drop-shadow(0 0 8px rgba(124, 58, 237, 0.6));
+            }
         }
-        
+
         .user-info {
             display: flex;
             align-items: center;
             gap: 20px;
         }
-        
+
         .notification-btn {
             width: 45px;
             height: 45px;
@@ -116,13 +141,13 @@
             transition: all 0.3s ease;
             position: relative;
         }
-        
+
         .notification-btn:hover {
             background: var(--primary-light);
             color: var(--primary);
             border-color: var(--primary);
         }
-        
+
         .notification-btn::after {
             content: '';
             position: absolute;
@@ -134,7 +159,7 @@
             border-radius: 50%;
             border: 2px solid #fff;
         }
-        
+
         .user-avatar {
             width: 45px;
             height: 45px;
@@ -149,19 +174,27 @@
             box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
             animation: avatarPop 0.5s ease-out;
         }
-        
+
         @keyframes avatarPop {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(0);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
-        
+
         .user-name {
             font-weight: 600;
             color: var(--text);
             font-size: 1rem;
         }
-        
+
         .btn-logout {
             padding: 10px 24px;
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
@@ -178,37 +211,45 @@
             align-items: center;
             gap: 8px;
         }
-        
+
         .btn-logout:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
         }
-        
+
         /* Main Container */
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 40px;
         }
-        
+
         /* Welcome Section */
         .welcome-section {
-            background: linear-gradient(135deg, #FFFFFF 0%, #F5F3FF 100%);
-            border-radius: 24px;
-            padding: 40px;
-            margin-bottom: 32px;
-            box-shadow: var(--shadow-lg);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 50px;
+            margin-bottom: 35px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.4);
             position: relative;
             overflow: hidden;
-            animation: slideUp 0.6s ease-out;
+            animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
-        
+
         @keyframes slideUp {
-            0% { opacity: 0; transform: translateY(30px); }
-            100% { opacity: 1; transform: translateY(0); }
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        
+
         .welcome-section::before {
             content: '';
             position: absolute;
@@ -218,7 +259,7 @@
             height: 350px;
             background: radial-gradient(circle, rgba(124, 58, 237, 0.1) 0%, transparent 70%);
         }
-        
+
         .welcome-section::after {
             content: '';
             position: absolute;
@@ -228,14 +269,14 @@
             height: 200px;
             background: radial-gradient(circle, rgba(37, 99, 235, 0.08) 0%, transparent 70%);
         }
-        
+
         .welcome-content {
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 30px;
         }
-        
+
         .welcome-text h1 {
             font-size: 2.5rem;
             font-weight: 800;
@@ -245,18 +286,18 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
+
         .welcome-text p {
             color: var(--text-muted);
             font-size: 1.1rem;
         }
-        
+
         .welcome-actions {
             display: flex;
             gap: 12px;
             margin-top: 20px;
         }
-        
+
         .btn-primary {
             padding: 14px 28px;
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
@@ -272,12 +313,12 @@
             align-items: center;
             gap: 8px;
         }
-        
+
         .btn-primary:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(124, 58, 237, 0.5);
         }
-        
+
         .btn-secondary {
             padding: 14px 28px;
             background: white;
@@ -292,29 +333,36 @@
             align-items: center;
             gap: 8px;
         }
-        
+
         .btn-secondary:hover {
             background: var(--primary-light);
         }
-        
+
         .welcome-illustration {
             width: 200px;
             height: 200px;
             position: relative;
             animation: float 4s ease-in-out infinite;
         }
-        
+
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
         }
-        
+
         .welcome-illustration img {
             width: 100%;
             height: 100%;
             object-fit: contain;
         }
-        
+
         /* Stats Grid */
         .stats-grid {
             display: grid;
@@ -322,34 +370,53 @@
             gap: 24px;
             margin-bottom: 32px;
         }
-        
+
         .stat-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 28px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
-            animation: cardPop 0.5s ease-out backwards;
+            animation: cardPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
         }
-        
-        .stat-card:nth-child(1) { animation-delay: 0.1s; }
-        .stat-card:nth-child(2) { animation-delay: 0.2s; }
-        .stat-card:nth-child(3) { animation-delay: 0.3s; }
-        .stat-card:nth-child(4) { animation-delay: 0.35s; }
-        
+
+        .stat-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .stat-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .stat-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .stat-card:nth-child(4) {
+            animation-delay: 0.35s;
+        }
+
         @keyframes cardPop {
-            0% { opacity: 0; transform: scale(0.9); }
-            100% { opacity: 1; transform: scale(1); }
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
-        
+
         .stat-card:hover {
             transform: translateY(-8px);
             box-shadow: var(--shadow-lg);
         }
-        
+
         .stat-card::before {
             content: '';
             position: absolute;
@@ -359,11 +426,19 @@
             height: 4px;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
         }
-        
-        .stat-card.success::before { background: linear-gradient(90deg, var(--success), #34D399); }
-        .stat-card.warning::before { background: linear-gradient(90deg, var(--warning), #FBBF24); }
-        .stat-card.info::before { background: linear-gradient(90deg, var(--info), #22D3EE); }
-        
+
+        .stat-card.success::before {
+            background: linear-gradient(90deg, var(--success), #34D399);
+        }
+
+        .stat-card.warning::before {
+            background: linear-gradient(90deg, var(--warning), #FBBF24);
+        }
+
+        .stat-card.info::before {
+            background: linear-gradient(90deg, var(--info), #22D3EE);
+        }
+
         .stat-icon {
             width: 56px;
             height: 56px;
@@ -377,15 +452,26 @@
             color: var(--primary);
             transition: all 0.3s ease;
         }
-        
+
         .stat-card:hover .stat-icon {
             transform: scale(1.1) rotate(5deg);
         }
-        
-        .stat-card.success .stat-icon { background: var(--success-light); color: var(--success); }
-        .stat-card.warning .stat-icon { background: var(--warning-light); color: var(--warning); }
-        .stat-card.info .stat-icon { background: var(--info-light); color: var(--info); }
-        
+
+        .stat-card.success .stat-icon {
+            background: var(--success-light);
+            color: var(--success);
+        }
+
+        .stat-card.warning .stat-icon {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+
+        .stat-card.info .stat-icon {
+            background: var(--info-light);
+            color: var(--info);
+        }
+
         .stat-number {
             font-size: 2.5rem;
             font-weight: 800;
@@ -395,60 +481,68 @@
             align-items: baseline;
             gap: 8px;
         }
-        
+
         .stat-trend {
             font-size: 0.85rem;
             font-weight: 600;
             padding: 4px 10px;
             border-radius: 20px;
         }
-        
+
         .stat-trend.up {
             background: var(--success-light);
             color: var(--success);
         }
-        
+
         .stat-trend.down {
             background: var(--danger-light);
             color: var(--danger);
         }
-        
+
         .stat-label {
             color: var(--text-muted);
             font-size: 0.95rem;
             font-weight: 500;
         }
-        
+
         /* Content Grid */
         .content-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
             gap: 24px;
         }
-        
+
         @media (max-width: 1024px) {
-            .content-grid { grid-template-columns: 1fr; }
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
         }
-        
+
         .card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 28px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            animation: cardPop 0.5s ease-out backwards;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(15px);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            animation: cardPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
         }
-        
-        .card:nth-child(1) { animation-delay: 0.4s; }
-        .card:nth-child(2) { animation-delay: 0.5s; }
-        
+
+        .card:nth-child(1) {
+            animation-delay: 0.4s;
+        }
+
+        .card:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
         .card-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 24px;
         }
-        
+
         .card-title {
             font-size: 1.25rem;
             font-weight: 700;
@@ -457,11 +551,11 @@
             align-items: center;
             gap: 10px;
         }
-        
+
         .card-title i {
             color: var(--primary);
         }
-        
+
         .card-badge {
             padding: 6px 14px;
             background: var(--primary-light);
@@ -470,14 +564,14 @@
             font-size: 0.8rem;
             font-weight: 600;
         }
-        
+
         /* Applicant List */
         .applicant-list {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
-        
+
         .applicant-item {
             display: flex;
             align-items: center;
@@ -488,12 +582,12 @@
             transition: all 0.3s ease;
             cursor: pointer;
         }
-        
+
         .applicant-item:hover {
             background: var(--primary-light);
             transform: translateX(8px);
         }
-        
+
         .applicant-avatar {
             width: 48px;
             height: 48px;
@@ -506,55 +600,55 @@
             color: var(--primary);
             font-size: 1.1rem;
         }
-        
+
         .applicant-info {
             flex: 1;
         }
-        
+
         .applicant-name {
             font-weight: 600;
             color: var(--text);
             margin-bottom: 2px;
         }
-        
+
         .applicant-role {
             font-size: 0.85rem;
             color: var(--text-muted);
         }
-        
+
         .applicant-meta {
             display: flex;
             gap: 12px;
             align-items: center;
         }
-        
+
         .status-badge {
             padding: 6px 12px;
             border-radius: 20px;
             font-size: 0.75rem;
             font-weight: 600;
         }
-        
+
         .status-badge.pending {
             background: var(--warning-light);
             color: var(--warning);
         }
-        
+
         .status-badge.reviewing {
             background: var(--info-light);
             color: var(--info);
         }
-        
+
         .status-badge.new {
             background: var(--success-light);
             color: var(--success);
         }
-        
+
         .action-buttons {
             display: flex;
             gap: 8px;
         }
-        
+
         .btn-icon {
             width: 36px;
             height: 36px;
@@ -567,24 +661,24 @@
             transition: all 0.3s ease;
             font-size: 0.9rem;
         }
-        
+
         .btn-view {
             background: var(--primary-light);
             color: var(--primary);
         }
-        
+
         .btn-view:hover {
             background: var(--primary);
             color: white;
         }
-        
+
         /* Quick Actions */
         .action-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
         }
-        
+
         .action-btn {
             display: flex;
             flex-direction: column;
@@ -599,47 +693,47 @@
             text-decoration: none;
             color: var(--text);
         }
-        
+
         .action-btn:hover {
             background: var(--primary-light);
             border-color: var(--primary);
             transform: translateY(-4px);
         }
-        
+
         .action-btn i {
             font-size: 1.5rem;
             color: var(--primary);
             transition: all 0.3s ease;
         }
-        
+
         .action-btn:hover i {
             transform: scale(1.2);
         }
-        
+
         .action-btn span {
             font-size: 0.85rem;
             font-weight: 600;
         }
-        
+
         /* Recent Activity */
         .activity-list {
             display: flex;
             flex-direction: column;
             gap: 16px;
         }
-        
+
         .activity-item {
             display: flex;
             gap: 12px;
             padding-bottom: 16px;
             border-bottom: 1px solid var(--border);
         }
-        
+
         .activity-item:last-child {
             border-bottom: none;
             padding-bottom: 0;
         }
-        
+
         .activity-icon {
             width: 36px;
             height: 36px;
@@ -650,53 +744,234 @@
             font-size: 0.85rem;
             flex-shrink: 0;
         }
-        
+
         .activity-icon.application {
             background: var(--primary-light);
             color: var(--primary);
         }
-        
+
         .activity-icon.interview {
             background: var(--success-light);
             color: var(--success);
         }
-        
+
         .activity-icon.profile {
             background: var(--warning-light);
             color: var(--warning);
         }
-        
+
         .activity-content {
             flex: 1;
         }
-        
+
         .activity-text {
             font-size: 0.9rem;
             color: var(--text);
             margin-bottom: 4px;
         }
-        
+
         .activity-text strong {
             font-weight: 600;
         }
-        
+
         .activity-time {
             font-size: 0.8rem;
             color: var(--text-muted);
         }
-        
+
         /* Responsive */
         @media (max-width: 768px) {
-            .header { padding: 16px 20px; }
-            .container { padding: 20px; }
-            .welcome-content { flex-direction: column; text-align: center; }
-            .welcome-illustration { width: 150px; height: 150px; }
-            .welcome-text h1 { font-size: 1.8rem; }
-            .stats-grid { grid-template-columns: 1fr; }
-            .welcome-actions { justify-content: center; flex-wrap: wrap; }
+            .header {
+                padding: 16px 20px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .welcome-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .welcome-illustration {
+                width: 150px;
+                height: 150px;
+            }
+
+            .welcome-text h1 {
+                font-size: 1.8rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome-actions {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 30px;
+            width: 90%;
+            max-width: 650px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+            position: relative;
+            animation: slideInModal 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInModal {
+            from {
+                transform: translateY(40px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .close-btn {
+            background: var(--bg);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close-btn:hover {
+            background: var(--danger-light);
+            color: var(--danger);
+            transform: rotate(90deg);
+        }
+
+        .detail-grid-modal {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .detail-item-modal {
+            background: var(--bg);
+            padding: 16px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .detail-label-modal {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+
+        .detail-value-modal {
+            font-size: 1rem;
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .q-section {
+            background: var(--primary-light);
+            padding: 24px;
+            border-radius: 20px;
+            margin-bottom: 24px;
+        }
+
+        .q-title {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .q-text {
+            color: var(--text);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .resume-link-modal {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px;
+            background: var(--secondary-light);
+            color: var(--secondary);
+            border-radius: 16px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .resume-link-modal:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.1);
         }
     </style>
 </head>
+
 <body>
     <header class="header">
         <div class="logo">Conneto</div>
@@ -704,28 +979,41 @@
             <button class="notification-btn">
                 <i class="fas fa-bell"></i>
             </button>
-            <div class="user-avatar"><%= user.name.charAt(0).toUpperCase() %></div>
-            <span class="user-name"><%= user.name %></span>
+            <div class="user-avatar">
+                <%= user.name.charAt(0).toUpperCase() %>
+            </div>
+            <span class="user-name">
+                <%= user.name %>
+            </span>
             <a href="/auth/logout" class="btn-logout">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
         </div>
     </header>
-    
+
     <div class="container">
         <!-- Welcome Section -->
         <div class="welcome-section">
             <div class="welcome-content">
                 <div class="welcome-text">
-                    <h1>Welcome back, <%= user.name.split(' ')[0] %>! 🏢</h1>
-                    <p>Find the best talent for your internship programs. Manage postings and review applicants.</p>
+                    <h1>Welcome back, <span
+                            style="background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                            <%= user.name %>
+                        </span></h1>
+                    <p style="font-size: 1.25rem; font-weight: 500; color: var(--text); margin-top: 5px;">
+                        Managing <span style="color: var(--primary); font-weight: 700;">
+                            <%= user.companyName %>
+                        </span>
+                    </p>
+                    <p style="margin-top: 15px; max-width: 500px;">Find the best talent for your internship programs.
+                        Manage postings and review applicants with precision.</p>
                     <div class="welcome-actions">
-                        <button class="btn-primary">
+                        <a href="/company/internships/create" class="btn-primary" style="text-decoration: none;">
                             <i class="fas fa-plus"></i> Post Internship
-                        </button>
-                        <button class="btn-secondary">
+                        </a>
+                        <a href="/company/applications" class="btn-secondary" style="text-decoration: none;">
                             <i class="fas fa-users"></i> View All Applicants
-                        </button>
+                        </a>
                     </div>
                 </div>
                 <div class="welcome-illustration">
@@ -733,7 +1021,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Stats Grid -->
         <div class="stats-grid">
             <div class="stat-card">
@@ -765,47 +1053,120 @@
                 <div class="stat-label">Hired</div>
             </div>
         </div>
-        
+
         <!-- Content Grid -->
         <div class="content-grid">
+            <!-- My Posted Internships -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fas fa-briefcase"></i> My Posted Internships</h2>
+                    <a href="/company/internships"
+                        style="color: var(--primary); text-decoration: none; font-size: 0.9rem; font-weight: 600;">Manage
+                        All <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="applicant-list">
+                    <% if (myInternships && myInternships.length> 0) { %>
+                        <% myInternships.forEach(function(internship) { %>
+                            <div class="applicant-item">
+                                <div class="applicant-avatar">
+                                    <%= internship.title.charAt(0).toUpperCase() %>
+                                </div>
+                                <div class="applicant-info">
+                                    <div class="applicant-name">
+                                        <%= internship.title %>
+                                    </div>
+                                    <div class="applicant-role">
+                                        <%= internship.location || ' Remote' %> | <%= internship.type %>
+                                    </div>
+                                </div>
+                                <div class="applicant-meta">
+                                    <span class="status-badge <%= internship.isActive ? 'new' : 'pending' %>">
+                                        <%= internship.isActive ? 'ACTIVE' : 'INACTIVE' %>
+                                    </span>
+                                    <div class="action-buttons">
+                                        <a href="/company/internships/<%= internship._id %>/edit"
+                                            class="btn-icon btn-view"><i class="fas fa-edit"></i></a>
+                                        <form action="/company/internships/<%= internship._id %>/delete" method="POST"
+                                            onsubmit="return confirm('Delete this internship and its applications?')"
+                                            style="margin: 0;">
+                                            <button type="submit" class="btn-icon btn-view"
+                                                style="color: var(--danger); background: #FEE2E2;"><i
+                                                    class="fas fa-trash"></i></button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <% }); %>
+                                <% } else { %>
+                                    <div class="applicant-item">
+                                        <div class="applicant-avatar">!</div>
+                                        <div class="applicant-info">
+                                            <div class="applicant-name">No internships posted</div>
+                                            <div class="applicant-role">Post your first internship</div>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                </div>
+            </div>
+
             <!-- Recent Applicants -->
             <div class="card">
                 <div class="card-header">
                     <h2 class="card-title"><i class="fas fa-user-friends"></i> Recent Applicants</h2>
-                    <span class="card-badge">8 New</span>
                 </div>
                 <div class="applicant-list">
-                    <% if (applicants && applicants.length > 0) { %>
-                        <% applicants.forEach(function(app) { %>
+                    <% if (applicants && applicants.length> 0) { %>
+                        <% applicants.forEach(function(app, index) { %>
                             <div class="applicant-item">
-                                <div class="applicant-avatar"><%= app.student ? app.student.name.charAt(0).toUpperCase() : 'S' %></div>
+                                <div class="applicant-avatar">
+                                    <%= app.student ? app.student.name.charAt(0).toUpperCase() : 'S' %>
+                                </div>
                                 <div class="applicant-info">
-                                    <div class="applicant-name"><%= app.student ? app.student.name : 'Student' %></div>
-                                    <div class="applicant-role"><%= app.internship ? app.internship.title : 'Position' %></div>
+                                    <div class="applicant-name">
+                                        <%= app.student ? app.student.name : 'Student' %>
+                                    </div>
+                                    <div class="applicant-role">
+                                        <%= app.internship ? app.internship.title : 'Position' %>
+                                    </div>
                                 </div>
                                 <div class="applicant-meta">
-                                    <span class="status-badge <%= app.status === 'applied' ? 'new' : app.status === 'under_review' ? 'reviewing' : 'pending' %>">
-                                        <%= app.status ? app.status.replace('_', ' ').toUpperCase() : 'APPLIED' %>
+                                    <span
+                                        class="status-badge <%= app.status === 'applied' ? 'new' : app.status === 'under_review' ? 'reviewing' : 'pending' %>">
+                                        <%= app.status ? app.status.replace('_', ' ' ).toUpperCase() : 'APPLIED' %>
                                     </span>
                                     <div class="action-buttons">
-                                        <button class="btn-icon btn-view"><i class="fas fa-eye"></i></button>
+                                        <button class="btn-icon btn-view" onclick="openDetailsModal(<%= index %>)"><i
+                                                class="fas fa-eye"></i></button>
                                         <button class="btn-icon btn-view"><i class="fas fa-check"></i></button>
                                     </div>
                                 </div>
                             </div>
-                        <% }); %>
-                    <% } else { %>
-                        <div class="applicant-item">
-                            <div class="applicant-avatar">!</div>
-                            <div class="applicant-info">
-                                <div class="applicant-name">No applicants yet</div>
-                                <div class="applicant-role">Post an internship to receive applications</div>
-                            </div>
-                        </div>
-                    <% } %>
+                            <% }); %>
+                                <% } else { %>
+                                    <div class="applicant-item">
+                                        <div class="applicant-avatar">!</div>
+                                        <div class="applicant-info">
+                                            <div class="applicant-name">No applicants yet</div>
+                                            <div class="applicant-role">Post an internship to receive applications</div>
+                                        </div>
+                                    </div>
+                                    <% } %>
                 </div>
             </div>
-            
+
+            <!-- Applicant Details Modal -->
+            <div id="detailsModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title">Application Details</h2>
+                        <button class="close-btn" onclick="closeDetailsModal()">&times;</button>
+                    </div>
+                    <div id="modalBody">
+                        <!-- Content populated by JS -->
+                    </div>
+                </div>
+            </div>
+
             <!-- Sidebar -->
             <div>
                 <!-- Quick Actions -->
@@ -814,17 +1175,17 @@
                         <h2 class="card-title"><i class="fas fa-bolt"></i> Quick Actions</h2>
                     </div>
                     <div class="action-grid">
-                        <a href="#" class="action-btn">
+                        <a href="/company/internships/create" class="action-btn">
                             <i class="fas fa-plus-circle"></i>
-                            <span>Post Job</span>
+                            <span>Post Internship</span>
                         </a>
-                        <a href="#" class="action-btn">
-                            <i class="fas fa-search"></i>
-                            <span>Find Talent</span>
+                        <a href="/company/applications" class="action-btn">
+                            <i class="fas fa-users"></i>
+                            <span>View Applicants</span>
                         </a>
-                        <a href="#" class="action-btn">
-                            <i class="fas fa-chart-line"></i>
-                            <span>Analytics</span>
+                        <a href="/company/internships" class="action-btn">
+                            <i class="fas fa-briefcase"></i>
+                            <span>Manage Posts</span>
                         </a>
                         <a href="#" class="action-btn">
                             <i class="fas fa-cog"></i>
@@ -832,53 +1193,93 @@
                         </a>
                     </div>
                 </div>
-                
-                <!-- Recent Activity -->
-                <div class="card" style="margin-top: 24px;">
-                    <div class="card-header">
-                        <h2 class="card-title"><i class="fas fa-history"></i> Recent Activity</h2>
-                    </div>
-                    <div class="activity-list">
-                        <div class="activity-item">
-                            <div class="activity-icon application">
-                                <i class="fas fa-file-alt"></i>
-                            </div>
-                            <div class="activity-content">
-                                <div class="activity-text"><strong>12 new applications</strong> for Frontend Developer</div>
-                                <div class="activity-time">2 hours ago</div>
-                            </div>
-                        </div>
-                        <div class="activity-item">
-                            <div class="activity-icon interview">
-                                <i class="fas fa-calendar-check"></i>
-                            </div>
-                            <div class="activity-content">
-                                <div class="activity-text">Interview scheduled with <strong>Sarah Connor</strong></div>
-                                <div class="activity-time">5 hours ago</div>
-                            </div>
-                        </div>
-                        <div class="activity-item">
-                            <div class="activity-icon profile">
-                                <i class="fas fa-user-plus"></i>
-                            </div>
-                            <div class="activity-content">
-                                <div class="activity-text"><strong>8 new company views</strong> on your profile</div>
-                                <div class="activity-time">1 day ago</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
-    
+
     <script>
+        // Store applicants data for modal
+        const applicantsData = <% - JSON.stringify(applicants) %>;
+
+        function openDetailsModal(index) {
+            const app = applicantsData[index];
+            const modal = document.getElementById('detailsModal');
+            const modalBody = document.getElementById('modalBody');
+
+            if (!app) return;
+
+            modalBody.innerHTML = `
+                <div class="detail-grid-modal">
+                    <div class="detail-item-modal">
+                        <div class="detail-label-modal">Student Name</div>
+                        <div class="detail-value-modal">${app.student ? app.student.name : 'N/A'}</div>
+                    </div>
+                    <div class="detail-item-modal">
+                        <div class="detail-label-modal">Contact Email</div>
+                        <div class="detail-value-modal">${app.student ? app.student.email : 'N/A'}</div>
+                    </div>
+                    <div class="detail-item-modal">
+                        <div class="detail-label-modal">Internship Role</div>
+                        <div class="detail-value-modal">${app.internship ? app.internship.title : 'N/A'}</div>
+                    </div>
+                    <div class="detail-item-modal">
+                        <div class="detail-label-modal">Current Status</div>
+                        <div class="detail-value-modal" style="color: var(--primary); text-transform: uppercase; font-size: 0.8rem;">
+                            ${app.status ? app.status.replace('_', ' ') : 'PENDING'}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="q-section">
+                    <div class="q-title"><i class="fas fa-question-circle"></i> Why should you be hired?</div>
+                    <div class="q-text">${app.question1Answer || 'No answer provided.'}</div>
+                </div>
+
+                <div class="q-section">
+                    <div class="q-title"><i class="fas fa-clock"></i> Availability & Duration Match</div>
+                    <div class="q-text">${app.question2Answer || 'No answer provided.'}</div>
+                </div>
+
+                <div class="q-section" style="background: #F8FAFC; border: 1px solid var(--border);">
+                    <div class="q-title" style="color: var(--text-muted)"><i class="fas fa-tools"></i> Declared Skills</div>
+                    <div class="q-text">${app.studentSkills || 'None specified.'}</div>
+                </div>
+
+                ${app.resumeUrl ? `
+                    <a href="${app.resumeUrl}" target="_blank" class="resume-link-modal">
+                        <i class="fas fa-file-pdf" style="font-size: 1.5rem;"></i>
+                        <div>
+                            <div style="font-size: 0.9rem;">Applicant Resume</div>
+                            <div style="font-size: 0.7rem; opacity: 0.7;">Click to view full PDF</div>
+                        </div>
+                        <i class="fas fa-external-link-alt" style="margin-left: auto; font-size: 0.8rem;"></i>
+                    </a>
+                ` : '<div style="text-align: center; color: var(--text-muted); padding: 20px; border: 1px dashed var(--border); border-radius: 16px;">No resume document provided</div>'}
+            `;
+
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDetailsModal() {
+            document.getElementById('detailsModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function (event) {
+            const modal = document.getElementById('detailsModal');
+            if (event.target == modal) {
+                closeDetailsModal();
+            }
+        }
+
         // Add smooth scroll reveal animation
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
         };
-        
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -886,12 +1287,12 @@
                 }
             });
         }, observerOptions);
-        
+
         document.querySelectorAll('.stat-card, .card').forEach(el => {
             el.style.animationPlayState = 'paused';
             observer.observe(el);
         });
-        
+
         // Add pulse animation to notification badge
         const notificationBtn = document.querySelector('.notification-btn');
         setInterval(() => {
@@ -900,13 +1301,14 @@
                 notificationBtn.style.transform = 'scale(1)';
             }, 200);
         }, 3000);
-        
+
         // Button hover effects
         document.querySelectorAll('.action-btn, .btn-primary, .btn-secondary, .btn-icon, .btn-logout').forEach(btn => {
-            btn.addEventListener('mouseenter', function() {
+            btn.addEventListener('mouseenter', function () {
                 this.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
             });
         });
     </script>
 </body>
+
 </html>

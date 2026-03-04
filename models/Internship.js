@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const internshipSchema = new mongoose.Schema({
     company: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    companyName: { type: String }, // Overriding company name at internship level
     title: { type: String, required: true },
     description: { type: String, required: true },
     location: { type: String },

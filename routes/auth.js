@@ -10,18 +10,18 @@ router.get('/register', (req, res) => {
 
 // POST /auth/register
 router.post('/register', async (req, res) => {
-    const { name, email, password, role } = req.body;
+    const { name, companyName, email, password, role } = req.body;
     try {
         const existing = await User.findOne({ email });
         if (existing) {
             return res.render('auth/register', { title: 'Register — Conneto', error: 'Email already registered.' });
         }
         // Create the user - data will be stored in MongoDB
-        const user = await User.create({ name, email, password, role });
-        
+        const user = await User.create({ name, companyName, email, password, role });
+
         // Auto-login after registration - create session
-        req.session.user = { id: user._id, name: user.name, role: user.role };
-        
+        req.session.user = { id: user._id, name: user.name, companyName: user.companyName, role: user.role };
+
         // Redirect to dashboard based on role
         if (role === 'student') return res.redirect('/student/dashboard');
         return res.redirect('/company/dashboard');
@@ -45,7 +45,7 @@ router.post('/login', async (req, res) => {
         if (!user || !(await user.comparePassword(password))) {
             return res.render('auth/login', { title: 'Login — Conneto', error: 'Invalid email or password.', success: null });
         }
-        req.session.user = { id: user._id, name: user.name, role: user.role };
+        req.session.user = { id: user._id, name: user.name, companyName: user.companyName, role: user.role };
         if (user.role === 'student') return res.redirect('/student/dashboard');
         return res.redirect('/company/dashboard');
     } catch (err) {

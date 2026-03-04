@@ -9,6 +9,11 @@ const applicationSchema = new mongoose.Schema({
         default: 'applied'
     },
     coverLetter: { type: String },
+    resumeUrl: { type: String }, // path to the uploaded PDF file
+    studentSkills: { type: String }, // user input skills
+    question1Answer: { type: String },
+    question2Answer: { type: String },
+    extractedSkills: { type: [String], default: [] }, // auto-extracted skills
     interviewDate: { type: Date },
     interviewNote: { type: String },   // company adds notes post-review
     appliedAt: { type: Date, default: Date.now },

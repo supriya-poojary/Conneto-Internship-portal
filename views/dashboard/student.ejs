@@ -1,15 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard | Conneto</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         :root {
             --primary: #2563EB;
             --primary-dark: #1D4ED8;
@@ -30,7 +38,7 @@
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
         }
-        
+
         body {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 50%, #C7D2FE 100%);
@@ -39,7 +47,7 @@
             position: relative;
             overflow-x: hidden;
         }
-        
+
         /* Animated Background */
         body::before {
             content: '';
@@ -48,19 +56,26 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: 
+            background:
                 radial-gradient(circle at 20% 80%, rgba(37, 99, 235, 0.1) 0%, transparent 50%),
                 radial-gradient(circle at 80% 20%, rgba(124, 58, 237, 0.1) 0%, transparent 50%),
                 radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.05) 0%, transparent 40%);
             animation: bgMove 20s ease-in-out infinite;
             z-index: -1;
         }
-        
+
         @keyframes bgMove {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            50% { transform: translate(-2%, -2%) rotate(1deg); }
+
+            0%,
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            50% {
+                transform: translate(-2%, -2%) rotate(1deg);
+            }
         }
-        
+
         /* Header */
         .header {
             background: rgba(255, 255, 255, 0.9);
@@ -75,7 +90,7 @@
             z-index: 100;
             box-shadow: var(--shadow);
         }
-        
+
         .logo {
             font-family: 'Poppins', sans-serif;
             font-size: 1.8rem;
@@ -86,18 +101,25 @@
             background-clip: text;
             animation: logoGlow 3s ease-in-out infinite;
         }
-        
+
         @keyframes logoGlow {
-            0%, 100% { filter: drop-shadow(0 0 2px rgba(37, 99, 235, 0.3)); }
-            50% { filter: drop-shadow(0 0 8px rgba(37, 99, 235, 0.6)); }
+
+            0%,
+            100% {
+                filter: drop-shadow(0 0 2px rgba(37, 99, 235, 0.3));
+            }
+
+            50% {
+                filter: drop-shadow(0 0 8px rgba(37, 99, 235, 0.6));
+            }
         }
-        
+
         .user-info {
             display: flex;
             align-items: center;
             gap: 20px;
         }
-        
+
         .user-avatar {
             width: 45px;
             height: 45px;
@@ -112,19 +134,27 @@
             box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
             animation: avatarPop 0.5s ease-out;
         }
-        
+
         @keyframes avatarPop {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(0);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
-        
+
         .user-name {
             font-weight: 600;
             color: var(--text);
             font-size: 1rem;
         }
-        
+
         .btn-logout {
             padding: 10px 24px;
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
@@ -141,37 +171,45 @@
             align-items: center;
             gap: 8px;
         }
-        
+
         .btn-logout:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
         }
-        
+
         /* Main Container */
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 40px;
         }
-        
+
         /* Welcome Section */
         .welcome-section {
-            background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);
-            border-radius: 24px;
-            padding: 40px;
-            margin-bottom: 32px;
-            box-shadow: var(--shadow-lg);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 50px;
+            margin-bottom: 35px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.4);
             position: relative;
             overflow: hidden;
-            animation: slideUp 0.6s ease-out;
+            animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
-        
+
         @keyframes slideUp {
-            0% { opacity: 0; transform: translateY(30px); }
-            100% { opacity: 1; transform: translateY(0); }
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        
+
         .welcome-section::before {
             content: '';
             position: absolute;
@@ -181,14 +219,14 @@
             height: 300px;
             background: radial-gradient(circle, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
         }
-        
+
         .welcome-content {
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 30px;
         }
-        
+
         .welcome-text h1 {
             font-size: 2.5rem;
             font-weight: 800;
@@ -198,30 +236,37 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
+
         .welcome-text p {
             color: var(--text-muted);
             font-size: 1.1rem;
         }
-        
+
         .welcome-illustration {
             width: 180px;
             height: 180px;
             position: relative;
             animation: float 4s ease-in-out infinite;
         }
-        
+
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
         }
-        
+
         .welcome-illustration img {
             width: 100%;
             height: 100%;
             object-fit: contain;
         }
-        
+
         /* Stats Grid */
         .stats-grid {
             display: grid;
@@ -229,33 +274,49 @@
             gap: 24px;
             margin-bottom: 32px;
         }
-        
+
         .stat-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 28px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
-            animation: cardPop 0.5s ease-out backwards;
+            animation: cardPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
         }
-        
-        .stat-card:nth-child(1) { animation-delay: 0.1s; }
-        .stat-card:nth-child(2) { animation-delay: 0.2s; }
-        .stat-card:nth-child(3) { animation-delay: 0.3s; }
-        
+
+        .stat-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .stat-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .stat-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
         @keyframes cardPop {
-            0% { opacity: 0; transform: scale(0.9); }
-            100% { opacity: 1; transform: scale(1); }
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
-        
+
         .stat-card:hover {
             transform: translateY(-8px);
             box-shadow: var(--shadow-lg);
         }
-        
+
         .stat-card::before {
             content: '';
             position: absolute;
@@ -265,11 +326,19 @@
             height: 4px;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
         }
-        
-        .stat-card.success::before { background: linear-gradient(90deg, var(--success), #34D399); }
-        .stat-card.warning::before { background: linear-gradient(90deg, var(--warning), #FBBF24); }
-        .stat-card.secondary::before { background: linear-gradient(90deg, var(--secondary), #A78BFA); }
-        
+
+        .stat-card.success::before {
+            background: linear-gradient(90deg, var(--success), #34D399);
+        }
+
+        .stat-card.warning::before {
+            background: linear-gradient(90deg, var(--warning), #FBBF24);
+        }
+
+        .stat-card.secondary::before {
+            background: linear-gradient(90deg, var(--secondary), #A78BFA);
+        }
+
         .stat-icon {
             width: 56px;
             height: 56px;
@@ -283,58 +352,77 @@
             color: var(--primary);
             transition: all 0.3s ease;
         }
-        
+
         .stat-card:hover .stat-icon {
             transform: scale(1.1) rotate(5deg);
         }
-        
-        .stat-card.success .stat-icon { background: var(--success-light); color: var(--success); }
-        .stat-card.warning .stat-icon { background: var(--warning-light); color: var(--warning); }
-        .stat-card.secondary .stat-icon { background: var(--secondary-light); color: var(--secondary); }
-        
+
+        .stat-card.success .stat-icon {
+            background: var(--success-light);
+            color: var(--success);
+        }
+
+        .stat-card.warning .stat-icon {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+
+        .stat-card.secondary .stat-icon {
+            background: var(--secondary-light);
+            color: var(--secondary);
+        }
+
         .stat-number {
             font-size: 2.5rem;
             font-weight: 800;
             color: var(--text);
             margin-bottom: 4px;
         }
-        
+
         .stat-label {
             color: var(--text-muted);
             font-size: 0.95rem;
             font-weight: 500;
         }
-        
+
         /* Content Grid */
         .content-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
             gap: 24px;
         }
-        
+
         @media (max-width: 1024px) {
-            .content-grid { grid-template-columns: 1fr; }
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
         }
-        
+
         .card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 28px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            animation: cardPop 0.5s ease-out backwards;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(15px);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            animation: cardPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
         }
-        
-        .card:nth-child(1) { animation-delay: 0.4s; }
-        .card:nth-child(2) { animation-delay: 0.5s; }
-        
+
+        .card:nth-child(1) {
+            animation-delay: 0.4s;
+        }
+
+        .card:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
         .card-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 24px;
         }
-        
+
         .card-title {
             font-size: 1.25rem;
             font-weight: 700;
@@ -343,11 +431,11 @@
             align-items: center;
             gap: 10px;
         }
-        
+
         .card-title i {
             color: var(--primary);
         }
-        
+
         .card-badge {
             padding: 6px 14px;
             background: var(--primary-light);
@@ -356,14 +444,14 @@
             font-size: 0.8rem;
             font-weight: 600;
         }
-        
+
         /* Internship List */
         .internship-list {
             display: flex;
             flex-direction: column;
             gap: 16px;
         }
-        
+
         .internship-item {
             display: flex;
             align-items: center;
@@ -374,12 +462,12 @@
             transition: all 0.3s ease;
             cursor: pointer;
         }
-        
+
         .internship-item:hover {
             background: var(--primary-light);
             transform: translateX(8px);
         }
-        
+
         .internship-logo {
             width: 50px;
             height: 50px;
@@ -393,28 +481,28 @@
             color: var(--primary);
             box-shadow: var(--shadow);
         }
-        
+
         .internship-info {
             flex: 1;
         }
-        
+
         .internship-title {
             font-weight: 600;
             color: var(--text);
             margin-bottom: 4px;
         }
-        
+
         .internship-company {
             font-size: 0.85rem;
             color: var(--text-muted);
         }
-        
+
         .internship-meta {
             display: flex;
             gap: 12px;
             align-items: center;
         }
-        
+
         .meta-item {
             display: flex;
             align-items: center;
@@ -422,11 +510,11 @@
             font-size: 0.8rem;
             color: var(--text-muted);
         }
-        
+
         .meta-item i {
             font-size: 0.8rem;
         }
-        
+
         .apply-btn {
             padding: 10px 20px;
             background: var(--primary);
@@ -438,19 +526,19 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        
+
         .apply-btn:hover {
             background: var(--primary-dark);
             transform: scale(1.05);
         }
-        
+
         /* Quick Actions */
         .action-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
         }
-        
+
         .action-btn {
             display: flex;
             flex-direction: column;
@@ -465,28 +553,28 @@
             text-decoration: none;
             color: var(--text);
         }
-        
+
         .action-btn:hover {
             background: var(--primary-light);
             border-color: var(--primary);
             transform: translateY(-4px);
         }
-        
+
         .action-btn i {
             font-size: 1.5rem;
             color: var(--primary);
             transition: all 0.3s ease;
         }
-        
+
         .action-btn:hover i {
             transform: scale(1.2);
         }
-        
+
         .action-btn span {
             font-size: 0.85rem;
             font-weight: 600;
         }
-        
+
         /* Profile Card */
         .profile-card {
             text-align: center;
@@ -495,7 +583,7 @@
             border-radius: 16px;
             margin-top: 20px;
         }
-        
+
         .profile-avatar-large {
             width: 80px;
             height: 80px;
@@ -510,13 +598,13 @@
             color: white;
             box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
         }
-        
+
         .profile-name {
             font-weight: 700;
             font-size: 1.1rem;
             margin-bottom: 4px;
         }
-        
+
         .profile-status {
             display: inline-flex;
             align-items: center;
@@ -528,7 +616,7 @@
             font-size: 0.8rem;
             font-weight: 600;
         }
-        
+
         .profile-status::before {
             content: '';
             width: 6px;
@@ -537,68 +625,121 @@
             border-radius: 50%;
             animation: pulse 2s infinite;
         }
-        
+
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
         }
-        
+
         /* Responsive */
         @media (max-width: 768px) {
-            .header { padding: 16px 20px; }
-            .container { padding: 20px; }
-            .welcome-content { flex-direction: column; text-align: center; }
-            .welcome-illustration { width: 140px; height: 140px; }
-            .welcome-text h1 { font-size: 1.8rem; }
-            .stats-grid { grid-template-columns: 1fr; }
+            .header {
+                padding: 16px 20px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .welcome-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .welcome-illustration {
+                width: 140px;
+                height: 140px;
+            }
+
+            .welcome-text h1 {
+                font-size: 1.8rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
+
 <body>
     <header class="header">
         <div class="logo">Conneto</div>
         <div class="user-info">
-            <div class="user-avatar"><%= user.name.charAt(0).toUpperCase() %></div>
-            <span class="user-name"><%= user.name %></span>
+            <div class="user-avatar">
+                <%= user.name.charAt(0).toUpperCase() %>
+            </div>
+            <span class="user-name">
+                <%= user.name %>
+            </span>
             <a href="/auth/logout" class="btn-logout">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
         </div>
     </header>
-    
+
     <div class="container">
         <!-- Welcome Section -->
         <div class="welcome-section">
             <div class="welcome-content">
                 <div class="welcome-text">
-                    <h1>Welcome back, <%= user.name.split(' ')[0] %>! 👋</h1>
-                    <p>Ready to kickstart your career journey? Explore new opportunities and track your applications.</p>
+                    <h1>Welcome back, <span
+                            style="background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                            <%= user.name %>
+                        </span></h1>
+                    <p style="font-size: 1.15rem; font-weight: 500; color: var(--text); margin-top: 10px;">Ready to
+                        kickstart your career journey at <span
+                            style="color: var(--primary); font-weight: 700;">Conneto</span>?</p>
+                    <p style="margin-top: 15px; color: var(--text-muted);">Explore premium opportunities, refine your
+                        skills, and track your path to success in real-time.</p>
                 </div>
                 <div class="welcome-illustration">
-                    <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=400&q=80" alt="Student with laptop">
+                    <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=400&q=80"
+                        alt="Student with laptop">
                 </div>
             </div>
         </div>
-        
+
         <!-- Stats Grid -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-icon"><i class="fas fa-file-alt"></i></div>
-                <div class="stat-number"><%= stats ? stats.total : 0 %></div>
+                <div class="stat-number">
+                    <%= stats ? stats.total : 0 %>
+                </div>
                 <div class="stat-label">Total Applications</div>
             </div>
             <div class="stat-card success">
                 <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
-                <div class="stat-number"><%= stats ? stats.interviews : 0 %></div>
+                <div class="stat-number">
+                    <%= stats ? stats.interviews : 0 %>
+                </div>
                 <div class="stat-label">Interview Scheduled</div>
             </div>
             <div class="stat-card warning">
                 <div class="stat-icon"><i class="fas fa-clock"></i></div>
-                <div class="stat-number"><%= stats ? stats.pending : 0 %></div>
+                <div class="stat-number">
+                    <%= stats ? stats.pending : 0 %>
+                </div>
                 <div class="stat-label">Pending Review</div>
             </div>
+            <div class="stat-card secondary">
+                <div class="stat-icon" style="background: var(--success-light); color: var(--success);"><i
+                        class="fas fa-trophy"></i></div>
+                <div class="stat-number">
+                    <%= stats ? stats.hired : 0 %>
+                </div>
+                <div class="stat-label">Hired / Selected</div>
+            </div>
         </div>
-        
+
         <!-- Content Grid -->
         <div class="content-grid">
             <!-- Featured Internships -->
@@ -608,33 +749,46 @@
                     <span class="card-badge">12 New</span>
                 </div>
                 <div class="internship-list">
-                    <% if (internships && internships.length > 0) { %>
+                    <% if (internships && internships.length> 0) { %>
                         <% internships.forEach(function(internship) { %>
                             <div class="internship-item">
-                                <div class="internship-logo"><%= internship.company ? internship.company.name.charAt(0).toUpperCase() : 'C' %></div>
-                                <div class="internship-info">
-                                    <div class="internship-title"><%= internship.title %></div>
-                                    <div class="internship-company"><%= internship.company ? internship.company.name : 'Company' %></div>
-                                </div>
-                                <div class="internship-meta">
-                                    <span class="meta-item"><i class="fas fa-map-marker-alt"></i> <%= internship.location || 'Remote' %></span>
-                                    <span class="meta-item"><i class="fas fa-clock"></i> <%= internship.duration || '3 mo' %></span>
-                                </div>
-                                <button class="apply-btn">Apply</button>
+                                <% var cName=internship.company ? ((internship.company &&
+                                    internship.company.companyName) ? internship.company.companyName :
+                                    (internship.companyName || '' )) : '' ; %>
+                                    <div class="internship-logo">
+                                        <%= cName ? cName.charAt(0).toUpperCase() : ' C' %>
+                                    </div>
+                                    <div class="internship-info">
+                                        <div class="internship-title">
+                                            <%= internship.title %>
+                                        </div>
+                                        <div class="internship-company">
+                                            <%= cName || 'Company' %>
+                                        </div>
+                                    </div>
+                                    <div class="internship-meta">
+                                        <span class="meta-item"><i class="fas fa-map-marker-alt"></i>
+                                            <%= internship.location || 'Remote' %>
+                                        </span>
+                                        <span class="meta-item"><i class="fas fa-clock"></i>
+                                            <%= internship.duration || '3 mo' %>
+                                        </span>
+                                    </div>
+                                    <a href="/internships/<%= internship._id %>" class="apply-btn">View</a>
                             </div>
-                        <% }); %>
-                    <% } else { %>
-                        <div class="internship-item">
-                            <div class="internship-logo">!</div>
-                            <div class="internship-info">
-                                <div class="internship-title">No internships available</div>
-                                <div class="internship-company">Check back later</div>
-                            </div>
-                        </div>
-                    <% } %>
+                            <% }); %>
+                                <% } else { %>
+                                    <div class="internship-item">
+                                        <div class="internship-logo">!</div>
+                                        <div class="internship-info">
+                                            <div class="internship-title">No internships available</div>
+                                            <div class="internship-company">Check back later</div>
+                                        </div>
+                                    </div>
+                                    <% } %>
                 </div>
             </div>
-            
+
             <!-- Sidebar -->
             <div>
                 <!-- Quick Actions -->
@@ -643,17 +797,17 @@
                         <h2 class="card-title"><i class="fas fa-bolt"></i> Quick Actions</h2>
                     </div>
                     <div class="action-grid">
-                        <a href="#" class="action-btn">
+                        <a href="/internships" class="action-btn">
                             <i class="fas fa-search"></i>
-                            <span>Browse Jobs</span>
+                            <span>Browse Internships</span>
+                        </a>
+                        <a href="/student/applications" class="action-btn">
+                            <i class="fas fa-file-alt"></i>
+                            <span>My Applications</span>
                         </a>
                         <a href="#" class="action-btn">
                             <i class="fas fa-user-edit"></i>
                             <span>Edit Profile</span>
-                        </a>
-                        <a href="#" class="action-btn">
-                            <i class="fas fa-envelope"></i>
-                            <span>Messages</span>
                         </a>
                         <a href="#" class="action-btn">
                             <i class="fas fa-cog"></i>
@@ -661,15 +815,19 @@
                         </a>
                     </div>
                 </div>
-                
+
                 <!-- Profile Status -->
                 <div class="card" style="margin-top: 24px;">
                     <div class="card-header">
                         <h2 class="card-title"><i class="fas fa-user-circle"></i> Profile</h2>
                     </div>
                     <div class="profile-card">
-                        <div class="profile-avatar-large"><%= user.name.charAt(0).toUpperCase() %></div>
-                        <div class="profile-name"><%= user.name %></div>
+                        <div class="profile-avatar-large">
+                            <%= user.name.charAt(0).toUpperCase() %>
+                        </div>
+                        <div class="profile-name">
+                            <%= user.name %>
+                        </div>
                         <span class="profile-status">Active</span>
                     </div>
                     <p style="text-align: center; margin-top: 16px; color: var(--text-muted); font-size: 0.9rem;">
@@ -679,14 +837,14 @@
             </div>
         </div>
     </div>
-    
+
     <script>
         // Add smooth scroll reveal animation
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
         };
-        
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -694,18 +852,19 @@
                 }
             });
         }, observerOptions);
-        
+
         document.querySelectorAll('.stat-card, .card').forEach(el => {
             el.style.animationPlayState = 'paused';
             observer.observe(el);
         });
-        
+
         // Add hover sound effect (optional)
         document.querySelectorAll('.action-btn, .apply-btn, .btn-logout').forEach(btn => {
-            btn.addEventListener('mouseenter', function() {
+            btn.addEventListener('mouseenter', function () {
                 this.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
             });
         });
     </script>
 </body>
+
 </html>
