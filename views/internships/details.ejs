@@ -10,528 +10,903 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --pr: #2563EB;
+            --pr-dk: #1D4ED8;
+            --pr-lt: #DBEAFE;
+            --sec: #7C3AED;
+            --ok: #10B981;
+            --ok-lt: #D1FAE5;
+            --warn: #F59E0B;
+            --warn-lt: #FEF3C7;
+            --danger: #EF4444;
+            --text: #0F172A;
+            --muted: #64748B;
+            --border: #E2E8F0;
+            --bg: #F1F5F9;
+            --card: #FFFFFF;
+            --sh: 0 4px 24px rgba(0, 0, 0, 0.07);
+        }
+
+        [data-theme="dark"] {
+            --pr: #60a5fa;
+            --pr-dk: #3b82f6;
+            --pr-lt: rgba(96, 165, 250, 0.12);
+            --sec: #a78bfa;
+            --ok: #34d399;
+            --ok-lt: rgba(52, 211, 153, 0.12);
+            --warn: #fbbf24;
+            --warn-lt: rgba(251, 191, 36, 0.12);
+            --danger: #f87171;
+            --text: #f0f6fc;
+            --muted: #8b949e;
+            --border: rgba(255, 255, 255, 0.1);
+            --bg: #0d1117;
+            --card: #161b22;
+            --sh: 0 4px 24px rgba(0, 0, 0, 0.4);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        :root {
-            --primary: #2563EB;
-            --primary-dark: #1D4ED8;
-            --primary-light: #DBEAFE;
-            --secondary: #7C3AED;
-            --success: #10B981;
-            --success-light: #D1FAE5;
-            --warning: #F59E0B;
-            --text: #0F172A;
-            --text-muted: #64748B;
-            --border: #E2E8F0;
-            --bg: #F1F5F9;
-            --card-bg: #FFFFFF;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
         body {
             font-family: 'Inter', sans-serif;
             background: var(--bg);
             color: var(--text);
+            transition: background 0.3s, color 0.3s;
+            min-height: 100vh;
         }
 
-        .header {
-            background: white;
-            padding: 20px 40px;
+        /* NAV */
+        .d-nav {
+            background: var(--card);
             border-bottom: 1px solid var(--border);
+            padding: 0 40px;
+            height: 64px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: var(--shadow);
+            box-shadow: var(--sh);
+            transition: background 0.3s, border-color 0.3s;
         }
 
-        .logo {
+        .d-nav-logo {
             font-family: 'Poppins', sans-serif;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 800;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: linear-gradient(135deg, var(--pr) 0%, var(--sec) 100%);
             -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
             background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
         }
 
-        .back-link {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-            display: flex;
+        .d-nav-back {
+            display: inline-flex;
             align-items: center;
             gap: 8px;
+            padding: 9px 20px;
+            border: 1.5px solid var(--border);
+            border-radius: 50px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text);
+            text-decoration: none;
+            transition: all 0.25s;
+            background: var(--bg);
         }
 
-        .container {
-            max-width: 900px;
+        .d-nav-back:hover {
+            border-color: var(--pr);
+            color: var(--pr);
+            transform: translateX(-3px);
+        }
+
+        .d-nav-back i {
+            color: var(--pr);
+        }
+
+        /* MAIN LAYOUT */
+        .d-page {
+            max-width: 1060px;
             margin: 0 auto;
             padding: 40px 20px;
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 28px;
+            align-items: start;
         }
 
-        .internship-card {
-            background: white;
+        /* CARD */
+        .d-card {
+            background: var(--card);
             border-radius: 20px;
-            padding: 40px;
-            box-shadow: var(--shadow);
+            padding: 36px;
+            box-shadow: var(--sh);
+            border: 1px solid var(--border);
+            transition: background 0.3s, border-color 0.3s;
+            animation: fadeUp 0.5s ease;
         }
 
-        .company-header {
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* HERO HEADER */
+        .d-hero {
             display: flex;
             gap: 20px;
+            align-items: flex-start;
             margin-bottom: 32px;
-            padding-bottom: 32px;
+            padding-bottom: 28px;
             border-bottom: 1px solid var(--border);
         }
 
-        .company-logo {
-            width: 80px;
-            height: 80px;
-            border-radius: 16px;
-            background: var(--primary-light);
+        .d-logo {
+            width: 72px;
+            height: 72px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, var(--pr-lt), rgba(167, 139, 250, 0.2));
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary);
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--pr);
             flex-shrink: 0;
+            border: 1px solid var(--border);
         }
 
-        .company-info h1 {
-            font-size: 2rem;
+        .d-hero-info h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.7rem;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
+            color: var(--text);
         }
 
-        .company-name {
-            color: var(--text-muted);
-            font-size: 1.1rem;
+        .d-company-name {
+            color: var(--muted);
+            font-size: 1rem;
             margin-bottom: 12px;
         }
 
-        .tags {
+        .d-tags {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
         }
 
-        .tag {
-            padding: 6px 14px;
-            background: var(--primary-light);
-            color: var(--primary);
+        .d-tag {
+            padding: 5px 14px;
             border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-
-        .tag.remote {
-            background: #DCFCE7;
-            color: #166534;
-        }
-
-        .tag.onsite {
-            background: #FEE2E2;
-            color: #991B1B;
-        }
-
-        .tag.hybrid {
-            background: #FEF3C7;
-            color: #92400E;
-        }
-
-        .details-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            margin-bottom: 32px;
-        }
-
-        @media (max-width: 768px) {
-            .details-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .detail-item {
-            background: var(--bg);
-            padding: 20px;
-            border-radius: 12px;
-        }
-
-        .detail-icon {
-            font-size: 1.5rem;
-            color: var(--primary);
-            margin-bottom: 8px;
-        }
-
-        .detail-label {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 4px;
-        }
-
-        .detail-value {
-            font-size: 1.1rem;
+            font-size: 0.8rem;
             font-weight: 600;
         }
 
-        .section {
+        .d-tag.remote {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .d-tag.on-site {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .d-tag.hybrid {
+            background: var(--warn-lt);
+            color: #78350f;
+        }
+
+        .d-tag.default {
+            background: var(--pr-lt);
+            color: var(--pr);
+        }
+
+        /* DETAILS GRID */
+        .d-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
             margin-bottom: 32px;
         }
 
-        .section-title {
-            font-size: 1.25rem;
+        .d-detail {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 18px 16px;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .d-detail-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--pr-lt);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--pr);
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+
+        .d-detail-label {
+            font-size: 0.75rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+
+        .d-detail-value {
             font-weight: 700;
-            margin-bottom: 16px;
+            font-size: 1rem;
+            color: var(--text);
         }
 
-        .description {
+        /* SECTIONS */
+        .d-section {
+            margin-bottom: 28px;
+        }
+
+        .d-section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text);
+        }
+
+        .d-section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .d-desc {
             line-height: 1.8;
-            color: var(--text-muted);
+            color: var(--muted);
+            font-size: 0.95rem;
         }
 
-        .skills-list {
+        .d-skills {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
         }
 
-        .skill-tag {
-            padding: 8px 16px;
+        .d-skill {
+            padding: 7px 16px;
             background: var(--bg);
-            border: 1px solid var(--border);
+            border: 1.5px solid var(--border);
             border-radius: 8px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text);
+            transition: all 0.2s;
         }
 
-        .apply-section {
-            background: var(--primary-light);
-            padding: 32px;
-            border-radius: 16px;
-            text-align: center;
-            margin-top: 32px;
+        .d-skill:hover {
+            border-color: var(--pr);
+            color: var(--pr);
         }
 
-        .apply-title {
-            font-size: 1.5rem;
+        /* SIDEBAR CARD */
+        .d-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .d-apply-card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: var(--sh);
+            border: 1px solid var(--border);
+            animation: fadeUp 0.6s ease;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .d-apply-heading {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.3rem;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
+            color: var(--text);
         }
 
-        .apply-subtitle {
-            color: var(--text-muted);
-            margin-bottom: 24px;
+        .d-apply-sub {
+            color: var(--muted);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
         }
 
-        .apply-form {
-            max-width: 500px;
-            margin: 0 auto;
+        .d-form-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 7px;
+            color: var(--text);
         }
 
-        .form-textarea {
+        .d-form-label span {
+            color: var(--danger);
+        }
+
+        .d-input,
+        .d-textarea {
             width: 100%;
-            padding: 14px;
+            padding: 11px 14px;
             border: 2px solid var(--border);
             border-radius: 10px;
-            font-size: 1rem;
-            min-height: 120px;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            transition: all 0.3s;
             margin-bottom: 16px;
-            font-family: inherit;
         }
 
-        .form-textarea:focus {
+        .d-input:focus,
+        .d-textarea:focus {
             outline: none;
-            border-color: var(--primary);
+            border-color: var(--pr);
+            box-shadow: 0 0 0 3px var(--pr-lt);
         }
 
-        .btn-apply {
+        .d-textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .d-file-input {
             width: 100%;
-            padding: 16px;
-            background: var(--primary);
+            padding: 11px 14px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            font-size: 0.88rem;
+            margin-bottom: 16px;
+            background: var(--bg);
+            color: var(--muted);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .d-file-input:hover {
+            border-color: var(--pr);
+        }
+
+        .d-btn-apply {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--pr), var(--pr-dk));
             color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: 600;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
         }
 
-        .btn-apply:hover {
-            background: var(--primary-dark);
+        .d-btn-apply:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
         }
 
-        .applied-message {
-            background: var(--success-light);
-            padding: 24px;
-            border-radius: 12px;
+        /* Applied badge */
+        .d-applied-box {
+            background: var(--ok-lt);
+            border: 1.5px solid var(--ok);
+            border-radius: 14px;
+            padding: 20px;
             text-align: center;
-        }
-
-        .applied-message i {
-            font-size: 3rem;
-            color: var(--success);
             margin-bottom: 16px;
         }
 
-        .applied-message h3 {
-            color: var(--success);
+        .d-applied-box i {
+            font-size: 2.2rem;
+            color: var(--ok);
             margin-bottom: 8px;
         }
+
+        .d-applied-box h3 {
+            color: var(--ok);
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .d-applied-box p {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        .d-app-detail {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 12px;
+        }
+
+        .d-app-detail-label {
+            font-size: 0.75rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+
+        .d-app-detail-value {
+            font-size: 0.9rem;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* login / company banners */
+        .d-info-banner {
+            background: var(--pr-lt);
+            border: 1.5px solid rgba(37, 99, 235, 0.2);
+            border-radius: 14px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .d-info-banner h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--text);
+        }
+
+        .d-info-banner p {
+            color: var(--muted);
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+        }
+
+        .d-btn-login {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: var(--pr);
+            color: white;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .d-btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+            color: white;
+        }
+
+        /* Theme Toggle */
+        .c-theme-toggle {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            z-index: 9999;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            color: #facc15;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+            transition: all 0.3s;
+        }
+
+        .c-theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        [data-theme="dark"] .c-theme-toggle {
+            background: linear-gradient(135deg, #fef9c3, #fde68a);
+            color: #92400e;
+        }
+
+        .c-theme-toggle .icon-sun {
+            display: none;
+        }
+
+        .c-theme-toggle .icon-moon {
+            display: block;
+        }
+
+        [data-theme="dark"] .c-theme-toggle .icon-sun {
+            display: block;
+        }
+
+        [data-theme="dark"] .c-theme-toggle .icon-moon {
+            display: none;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .d-page {
+                grid-template-columns: 1fr;
+            }
+
+            .d-sidebar {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .d-nav {
+                padding: 0 16px;
+            }
+
+            .d-page {
+                padding: 20px 14px;
+            }
+
+            .d-card {
+                padding: 22px;
+            }
+
+            .d-apply-card {
+                padding: 20px;
+            }
+
+            .d-hero h1 {
+                font-size: 1.35rem;
+            }
+
+            .d-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 400px) {
+            .d-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
+
+    <!-- Apply saved theme before render to prevent flash -->
+    <script>
+        (function () {
+            var t = localStorage.getItem('conneto-theme');
+            if (t) document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+
+    <!-- Prevent FOUT -> Pre-load Theme -->
+    <script>
+        (function () {
+            var saved = localStorage.getItem('conneto-theme');
+            if (saved !== 'light') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
 </head>
 
 <body>
-    <header class="header">
-        <a href="/" class="logo">Conneto</a>
-        <a href="/internships" class="back-link">
+    <nav class="d-nav">
+        <a href="/" class="d-nav-logo">Conneto</a>
+        <a href="/internships" class="d-nav-back">
             <i class="fas fa-arrow-left"></i> Back to Internships
         </a>
-    </header>
+    </nav>
 
-    <div class="container">
-        <div class="internship-card">
-            <div class="company-header">
-                <div class="company-logo">
-                    <% var companyName=internship.company && internship.company.companyName ?
-                        internship.company.companyName : (internship.companyName || 'Company' ); %>
-                        <%= companyName.charAt(0).toUpperCase() %>
-                </div>
-                <div class="company-info">
-                    <h1>
-                        <%= internship.title %>
-                    </h1>
-                    <p class="company-name">
-                        <%= companyName %>
-                    </p>
-                    <div class="tags">
-                        <span class="tag <%= internship.type %>">
-                            <%= internship.type %>
-                        </span>
+    <div class="d-page">
+        <!-- LEFT: Main Content -->
+        <main>
+            <div class="d-card">
+                <!-- Hero -->
+                <div class="d-hero">
+                    <div class="d-logo">
+                        <% var companyName=internship.company && internship.company.companyName ?
+                            internship.company.companyName : (internship.companyName || 'C' ); %>
+                            <%= companyName.charAt(0).toUpperCase() %>
                     </div>
-                </div>
-            </div>
-
-            <div class="details-grid">
-                <div class="detail-item">
-                    <div class="detail-icon"><i class="fas fa-map-marker-alt"></i></div>
-                    <div class="detail-label">Location</div>
-                    <div class="detail-value">
-                        <%= internship.location || 'Remote' %>
-                    </div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-icon"><i class="fas fa-clock"></i></div>
-                    <div class="detail-label">Duration</div>
-                    <div class="detail-value">
-                        <%= internship.duration || 'Flexible' %>
-                    </div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-icon"><i class="fas fa-rupee-sign"></i></div>
-                    <div class="detail-label">Stipend</div>
-                    <div class="detail-value">
-                        <%= internship.stipend ? internship.stipend + '/month' : 'Unpaid' %>
-                    </div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-icon"><i class="fas fa-users"></i></div>
-                    <div class="detail-label">Openings</div>
-                    <div class="detail-value">
-                        <%= internship.openings %>
-                    </div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-icon"><i class="fas fa-calendar"></i></div>
-                    <div class="detail-label">Deadline</div>
-                    <div class="detail-value">
-                        <%= internship.deadline ? new Date(internship.deadline).toLocaleDateString() : 'Rolling' %>
-                    </div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-icon"><i class="fas fa-building"></i></div>
-                    <div class="detail-label">Industry</div>
-                    <div class="detail-value">
-                        <%= internship.company ? (internship.company.industry || 'Not specified' ) : 'N/A' %>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <h2 class="section-title">About the Role</h2>
-                <p class="description">
-                    <%= internship.description %>
-                </p>
-            </div>
-
-            <% if (internship.skills && internship.skills.length> 0) { %>
-                <div class="section">
-                    <h2 class="section-title">Required Skills</h2>
-                    <div class="skills-list">
-                        <% internship.skills.forEach(function(skill) { %>
-                            <span class="skill-tag">
-                                <%= skill %>
+                    <div class="d-hero-info">
+                        <h1>
+                            <%= internship.title %>
+                        </h1>
+                        <p class="d-company-name"><i class="fas fa-building"
+                                style="margin-right:6px;color:var(--pr);"></i>
+                            <%= companyName %>
+                        </p>
+                        <div class="d-tags">
+                            <span class="d-tag <%= internship.type %>">
+                                <%= internship.type %>
                             </span>
-                            <% }); %>
+                            <% if (internship.location) { %>
+                                <span class="d-tag default"><i class="fas fa-map-marker-alt"
+                                        style="margin-right:4px;font-size:.75rem;"></i>
+                                    <%= internship.location %>
+                                </span>
+                                <% } %>
+                        </div>
                     </div>
                 </div>
-                <% } %>
 
-                    <% if (internship.company && (internship.company.description || internship.company.website)) { %>
-                        <% var aboutCompanyName=internship.company && internship.company.companyName ?
-                            internship.company.companyName : (internship.companyName || 'Company' ); %>
-                            <div class="section">
-                                <h2 class="section-title">About <%= aboutCompanyName %>
+                <!-- Stats Grid -->
+                <div class="d-grid">
+                    <div class="d-detail">
+                        <div class="d-detail-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div class="d-detail-label">Location</div>
+                        <div class="d-detail-value">
+                            <%= internship.location || 'Remote' %>
+                        </div>
+                    </div>
+                    <div class="d-detail">
+                        <div class="d-detail-icon"><i class="fas fa-clock"></i></div>
+                        <div class="d-detail-label">Duration</div>
+                        <div class="d-detail-value">
+                            <%= internship.duration || 'Flexible' %>
+                        </div>
+                    </div>
+                    <div class="d-detail">
+                        <div class="d-detail-icon"><i class="fas fa-rupee-sign"></i></div>
+                        <div class="d-detail-label">Stipend</div>
+                        <div class="d-detail-value">
+                            <%= internship.stipend ? '₹' + internship.stipend + '/mo' : 'Unpaid' %>
+                        </div>
+                    </div>
+                    <div class="d-detail">
+                        <div class="d-detail-icon"><i class="fas fa-users"></i></div>
+                        <div class="d-detail-label">Openings</div>
+                        <div class="d-detail-value">
+                            <%= internship.openings %>
+                        </div>
+                    </div>
+                    <div class="d-detail">
+                        <div class="d-detail-icon"><i class="fas fa-calendar-alt"></i></div>
+                        <div class="d-detail-label">Deadline</div>
+                        <div class="d-detail-value">
+                            <%= internship.deadline ? new Date(internship.deadline).toLocaleDateString('en-IN',
+                                {day:'numeric',month:'short',year:'numeric'}) : 'Rolling' %>
+                        </div>
+                    </div>
+                    <div class="d-detail">
+                        <div class="d-detail-icon"><i class="fas fa-industry"></i></div>
+                        <div class="d-detail-label">Industry</div>
+                        <div class="d-detail-value">
+                            <%= internship.company ? (internship.company.industry || 'N/A' ) : 'N/A' %>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- About Role -->
+                <div class="d-section">
+                    <h2 class="d-section-title">About the Role</h2>
+                    <p class="d-desc">
+                        <%= internship.description %>
+                    </p>
+                </div>
+
+                <!-- Required Skills -->
+                <% if (internship.skills && internship.skills.length> 0) { %>
+                    <div class="d-section">
+                        <h2 class="d-section-title">Required Skills</h2>
+                        <div class="d-skills">
+                            <% internship.skills.forEach(function(skill) { %>
+                                <span class="d-skill">
+                                    <%= skill %>
+                                </span>
+                                <% }); %>
+                        </div>
+                    </div>
+                    <% } %>
+
+                        <!-- About Company -->
+                        <% if (internship.company && (internship.company.description || internship.company.website)) {
+                            %>
+                            <div class="d-section">
+                                <h2 class="d-section-title">About <%= companyName %>
                                 </h2>
-                                <p class="description">
-                                    <%= internship.company.description || 'Company description not available.' %>
+                                <p class="d-desc">
+                                    <%= internship.company.description || 'No description available.' %>
                                 </p>
                                 <% if (internship.company.website) { %>
-                                    <p style="margin-top: 12px;">
-                                        <a href="<%= internship.company.website %>" target="_blank"
-                                            style="color: var(--primary);">
-                                            <i class="fas fa-globe"></i> Visit Website
-                                        </a>
-                                    </p>
+                                    <a href="<%= internship.company.website %>" target="_blank"
+                                        style="display:inline-flex;align-items:center;gap:7px;margin-top:14px;color:var(--pr);font-weight:600;font-size:0.9rem;text-decoration:none;">
+                                        <i class="fas fa-globe"></i> Visit Company Website
+                                    </a>
                                     <% } %>
                             </div>
                             <% } %>
+            </div>
+        </main>
 
-                                <div class="apply-section">
-                                    <% if (user && user.role==='student' ) { %>
-                                        <% if (hasApplied) { %>
-                                            <div class="applied-message" style="text-align: left;">
-                                                <div style="text-align: center; margin-bottom: 24px;">
-                                                    <i class="fas fa-check-circle"
-                                                        style="font-size: 3rem; color: var(--success);"></i>
-                                                    <h3 style="color: var(--success); margin-top: 10px;">Application
-                                                        Submitted Successfully!</h3>
-                                                    <p>You applied on <%= new
-                                                            Date(myApplication.appliedAt).toLocaleDateString() %>
-                                                    </p>
-                                                </div>
+        <!-- RIGHT: Sidebar -->
+        <aside class="d-sidebar">
+            <div class="d-apply-card">
 
-                                                <div
-                                                    style="background: white; padding: 24px; border-radius: 12px; border: 1px solid var(--border);">
-                                                    <h4
-                                                        style="margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
-                                                        Your Application Details</h4>
+                <!-- STUDENT: Already Applied -->
+                <% if (user && user.role==='student' ) { %>
+                    <% if (hasApplied) { %>
+                        <div class="d-applied-box">
+                            <i class="fas fa-check-circle"></i>
+                            <h3>Application Submitted!</h3>
+                            <p>Applied on <%= new Date(myApplication.appliedAt).toLocaleDateString('en-IN',
+                                    {day:'numeric',month:'short',year:'numeric'}) %>
+                            </p>
+                        </div>
 
-                                                    <div style="margin-bottom: 15px;">
-                                                        <strong
-                                                            style="display: block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 4px;">Skills
-                                                            Submitted:</strong>
-                                                        <p>
-                                                            <%= myApplication.studentSkills %>
-                                                        </p>
-                                                    </div>
-
-                                                    <div style="margin-bottom: 15px;">
-                                                        <strong
-                                                            style="display: block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 4px;">Why
-                                                            should you be hired?</strong>
-                                                        <p>
-                                                            <%= myApplication.question1Answer %>
-                                                        </p>
-                                                    </div>
-
-                                                    <div style="margin-bottom: 15px;">
-                                                        <strong
-                                                            style="display: block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 4px;">Availability
-                                                            Match:</strong>
-                                                        <p>
-                                                            <%= myApplication.question2Answer %>
-                                                        </p>
-                                                    </div>
-
-                                                    <% if (myApplication.resumeUrl) { %>
-                                                        <div style="margin-top: 20px;">
-                                                            <a href="<%= myApplication.resumeUrl %>" target="_blank"
-                                                                class="btn-apply"
-                                                                style="background: var(--bg); color: var(--primary); border: 1px solid var(--primary); font-size: 0.9rem; padding: 10px;">
-                                                                <i class="fas fa-file-pdf"></i> View Submitted Resume
-                                                            </a>
-                                                        </div>
-                                                        <% } %>
+                        <% if (myApplication.studentSkills) { %>
+                            <div class="d-app-detail" style="margin-top:0;">
+                                <div class="d-app-detail-label">Skills Submitted</div>
+                                <div class="d-app-detail-value">
+                                    <%= myApplication.studentSkills %>
+                                </div>
+                            </div>
+                            <% } %>
+                                <% if (myApplication.question1Answer) { %>
+                                    <div class="d-app-detail">
+                                        <div class="d-app-detail-label">Why should you be hired?</div>
+                                        <div class="d-app-detail-value">
+                                            <%= myApplication.question1Answer %>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                                        <% if (myApplication.question2Answer) { %>
+                                            <div class="d-app-detail">
+                                                <div class="d-app-detail-label">Availability</div>
+                                                <div class="d-app-detail-value">
+                                                    <%= myApplication.question2Answer %>
                                                 </div>
                                             </div>
-                                            <% } else { %>
-                                                <h2 class="apply-title">Apply for this Internship</h2>
-                                                <p class="apply-subtitle">Submit your application now</p>
-                                                <form action="/internships/<%= internship._id %>/apply" method="POST"
-                                                    class="apply-form" enctype="multipart/form-data">
+                                            <% } %>
+                                                <% if (myApplication.resumeUrl) { %>
+                                                    <a href="<%= myApplication.resumeUrl %>" target="_blank"
+                                                        style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:14px;padding:11px;background:var(--pr-lt);color:var(--pr);border-radius:10px;font-weight:600;font-size:0.88rem;text-decoration:none;transition:all 0.3s;">
+                                                        <i class="fas fa-file-pdf"></i> View Submitted Resume
+                                                    </a>
+                                                    <% } %>
 
-                                                    <label
-                                                        style="display: block; text-align: left; margin-bottom: 8px; font-weight: 500;">Your
-                                                        Skills (Comma separated) <span>*</span></label>
-                                                    <input type="text" name="studentSkills" class="form-input"
-                                                        style="width: 100%; padding: 12px; margin-bottom: 24px; border: 2px solid var(--border); border-radius: 10px; font-family: inherit;"
-                                                        placeholder="e.g., HTML, CSS, JavaScript" required>
-
-                                                    <label
-                                                        style="display: block; text-align: left; margin-bottom: 8px; font-weight: 500;">Why
-                                                        should you be hired for this role? <span>*</span></label>
-                                                    <textarea name="question1Answer" class="form-textarea"
-                                                        style="min-height: 80px;"
-                                                        placeholder="Write your answer here..." required></textarea>
-
-                                                    <label
-                                                        style="display: block; text-align: left; margin-bottom: 8px; font-weight: 500;">Are
-                                                        you available for the specified duration? <span>*</span></label>
-                                                    <textarea name="question2Answer" class="form-textarea"
-                                                        style="min-height: 80px;"
-                                                        placeholder="Yes, I am available for 3 months..."
-                                                        required></textarea>
-
-                                                    <label
-                                                        style="display: block; text-align: left; margin-bottom: 8px; font-weight: 500;">Cover
-                                                        Letter (Optional)</label>
-                                                    <textarea name="coverLetter" class="form-textarea"
-                                                        placeholder="Write a cover letter (optional)..."></textarea>
-
-                                                    <label
-                                                        style="display: block; text-align: left; margin-bottom: 8px; font-weight: 500;">Resume
-                                                        (PDF only) <span>*</span></label>
-                                                    <input type="file" name="resume" accept="application/pdf" required
-                                                        style="width: 100%; padding: 12px; margin-bottom: 24px; border: 2px solid var(--border); border-radius: 10px; background: white; cursor: pointer;">
-
-                                                    <button type="submit" class="btn-apply">
-                                                        <i class="fas fa-paper-plane"></i> Submit Application
-                                                    </button>
-                                                </form>
-                                                <% } %>
-                                                    <% } else if (!user) { %>
-                                                        <h2 class="apply-title">Login to Apply</h2>
-                                                        <p class="apply-subtitle">You need to be logged in as a student
-                                                            to apply</p>
-                                                        <a href="/auth/login?redirect=/internships/<%= internship._id %>"
-                                                            class="btn-apply"
-                                                            style="text-decoration: none; display: inline-flex;">
-                                                            <i class="fas fa-sign-in-alt"></i> Login
-                                                        </a>
+                                                        <!-- STUDENT: Apply Form -->
                                                         <% } else { %>
-                                                            <h2 class="apply-title">Company Mode</h2>
-                                                            <p class="apply-subtitle">Switch to a student account to
-                                                                apply for internships</p>
+                                                            <h2 class="d-apply-heading">Apply Now</h2>
+                                                            <p class="d-apply-sub">Submit your application for this role
+                                                            </p>
+                                                            <form action="/internships/<%= internship._id %>/apply"
+                                                                method="POST" enctype="multipart/form-data">
+                                                                <label class="d-form-label">Your Skills
+                                                                    <span>*</span></label>
+                                                                <input type="text" name="studentSkills" class="d-input"
+                                                                    placeholder="e.g., HTML, CSS, JavaScript" required>
+
+                                                                <label class="d-form-label">Why should you be hired?
+                                                                    <span>*</span></label>
+                                                                <textarea name="question1Answer" class="d-textarea"
+                                                                    placeholder="Describe your strengths..."
+                                                                    required></textarea>
+
+                                                                <label class="d-form-label">Are you available for the
+                                                                    duration? <span>*</span></label>
+                                                                <textarea name="question2Answer" class="d-textarea"
+                                                                    placeholder="Yes, I am available for..."
+                                                                    required></textarea>
+
+                                                                <label class="d-form-label">Cover Letter <small
+                                                                        style="font-weight:400;color:var(--muted);">(optional)</small></label>
+                                                                <textarea name="coverLetter" class="d-textarea"
+                                                                    placeholder="Write a short cover letter..."></textarea>
+
+                                                                <label class="d-form-label">Resume (PDF only)
+                                                                    <span>*</span></label>
+                                                                <input type="file" name="resume"
+                                                                    accept="application/pdf" required
+                                                                    class="d-file-input">
+
+                                                                <button type="submit" class="d-btn-apply">
+                                                                    <i class="fas fa-paper-plane"></i> Submit
+                                                                    Application
+                                                                </button>
+                                                            </form>
                                                             <% } %>
-                                </div>
-        </div>
+
+                                                                <!-- NOT LOGGED IN -->
+                                                                <% } else if (!user) { %>
+                                                                    <div class="d-info-banner">
+                                                                        <h3>Login to Apply</h3>
+                                                                        <p>Sign in with a student account to apply for
+                                                                            this internship</p>
+                                                                        <a href="/auth/login?redirect=/internships/<%= internship._id %>"
+                                                                            class="d-btn-login">
+                                                                            <i class="fas fa-sign-in-alt"></i> Login to
+                                                                            Apply
+                                                                        </a>
+                                                                    </div>
+
+                                                                    <!-- COMPANY MODE -->
+                                                                    <% } else { %>
+                                                                        <div class="d-info-banner">
+                                                                            <h3>Company View</h3>
+                                                                            <p>Switch to a student account to apply for
+                                                                                internships on Conneto</p>
+                                                                            <a href="/company/dashboard"
+                                                                                class="d-btn-login"
+                                                                                style="background: linear-gradient(135deg,var(--sec),#5b21b6);">
+                                                                                <i class="fas fa-th-large"></i> Go to
+                                                                                Dashboard
+                                                                            </a>
+                                                                        </div>
+                                                                        <% } %>
+
+            </div>
+
+            <!-- Quick info card -->
+            <div class="d-apply-card" style="padding:20px;">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+                    <div
+                        style="width:36px;height:36px;border-radius:10px;background:var(--warn-lt);display:flex;align-items:center;justify-content:center;color:var(--warn);font-size:1rem;">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <span style="font-weight:700;font-size:0.95rem;color:var(--text);">Pro Tip</span>
+                </div>
+                <p style="font-size:0.85rem;color:var(--muted);line-height:1.7;">Tailor your application to the <strong
+                        style="color:var(--text);">specific skills</strong> listed. Companies love candidates who show
+                    genuine alignment with their needs.</p>
+            </div>
+        </aside>
     </div>
+
+    <!-- Theme Toggle -->
+    <button class="c-theme-toggle" id="themeBtn" onclick="toggleTheme()" title="Toggle theme" aria-label="Toggle theme">
+        <i class="fas fa-sun icon-sun"></i>
+        <i class="fas fa-moon icon-moon"></i>
+    </button>
+
+    <script>
+        function toggleTheme() {
+            var html = document.documentElement;
+            var isDark = html.getAttribute('data-theme') === 'dark';
+            if (isDark) {
+                html.removeAttribute('data-theme');
+                localStorage.setItem('conneto-theme', 'light');
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                localStorage.setItem('conneto-theme', 'dark');
+            }
+        }
+    </script>
 </body>
 
 </html>

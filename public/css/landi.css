@@ -16,17 +16,20 @@
     --gold-light: #F5F0D0;
     --brown: #3A2A08;
     --brown-mid: #5C4A1E;
-    --cream: #F0EDD8;
-    --cream-alt: #E8E4CC;
+    --primary-blue: #1E3A8A;
+    --accent-blue: #3B82F6;
+    --cream: #FDFBF5;
+    --cream-alt: #F4EEDB;
     --white: #FFFFFF;
-    --gray: #F5F5F0;
-    --text: #3A2A08;
-    --text-muted: #7A6A4A;
-    --border: #D8D0B0;
-    --dark-bar: #4A3A0A;
-    --radius: 8px;
-    --transition: .3s ease;
-    --shadow: 0 4px 24px rgba(58, 42, 8, .10)
+    --gray: #F8F8F5;
+    --text: #2A1F06;
+    --text-muted: #6A5B42;
+    --border: #E8E2CD;
+    --dark-bar: #1A1303;
+    --radius: 12px;
+    --transition: .3s cubic-bezier(0.4, 0, 0.2, 1);
+    --shadow: 0 4px 24px rgba(58, 42, 8, .08);
+    --shadow-lg: 0 12px 36px rgba(58, 42, 8, .12);
 }
 
 html {
@@ -53,7 +56,7 @@ img {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1320px;
     margin: 0 auto;
     padding: 0 24px
 }
@@ -68,7 +71,7 @@ img {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    max-width: 1200px;
+    max-width: 1320px;
     margin: 0 auto;
     padding: 0 24px
 }
@@ -123,7 +126,7 @@ img {
     align-items: center;
     justify-content: space-between;
     padding: 18px 24px;
-    max-width: 1200px;
+    max-width: 1320px;
     margin: 0 auto
 }
 
@@ -237,7 +240,7 @@ img {
 }
 
 .btn-dark {
-    background: var(--brown);
+    background: var(--primary-blue);
     color: #fff;
     padding: 12px 28px;
     border-radius: 100px;
@@ -252,8 +255,9 @@ img {
 }
 
 .btn-dark:hover {
-    background: #2a1e04;
+    background: #152960;
     transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(30, 58, 138, .35);
     color: #fff
 }
 
@@ -426,6 +430,20 @@ img {
     background: var(--gray)
 }
 
+.section-blue {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #152960 100%);
+    color: var(--white);
+}
+
+.section-blue .section-h2,
+.section-blue .section-p {
+    color: var(--white);
+}
+
+.section-blue .landi-tag {
+    color: var(--gold-light);
+}
+
 .landi-tag {
     display: block;
     font-family: 'Lora', serif;
@@ -560,6 +578,19 @@ img {
     opacity: .9;
     line-height: 1.7;
     margin-bottom: 24px
+}
+
+.home-split-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 52px;
+}
+
+@media(max-width:900px) {
+    .home-split-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* ========= ZIGZAG LAYOUT ========= */

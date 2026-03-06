@@ -2,664 +2,508 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Student Dashboard | Conneto</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --bg-main: #030a16;
+            --bg-card: #0a162d;
+            --bg-sidebar: #01050b;
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.3);
+            --text-main: #f4f4f5;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+            --sidebar-width: 280px;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        :root {
-            --primary: #2563EB;
-            --primary-dark: #1D4ED8;
-            --primary-light: #DBEAFE;
-            --secondary: #7C3AED;
-            --secondary-light: #EDE9FE;
-            --success: #10B981;
-            --success-light: #D1FAE5;
-            --warning: #F59E0B;
-            --warning-light: #FEF3C7;
-            --danger: #EF4444;
-            --danger-light: #FEE2E2;
-            --text: #0F172A;
-            --text-muted: #64748B;
-            --border: #E2E8F0;
-            --bg: #F1F5F9;
-            --card-bg: #FFFFFF;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-        }
-
         body {
+            background: var(--bg-main);
+            color: var(--text-main);
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 50%, #C7D2FE 100%);
-            color: var(--text);
-            min-height: 100vh;
-            position: relative;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            min-height: 100vh;
         }
 
-        /* Animated Background */
-        body::before {
-            content: '';
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            color: #ffffff !important;
+        }
+
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        input,
+        select,
+        textarea {
+            font-family: 'Inter', sans-serif;
+        }
+
+        button {
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border);
             position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background:
-                radial-gradient(circle at 20% 80%, rgba(37, 99, 235, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(124, 58, 237, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.05) 0%, transparent 40%);
-            animation: bgMove 20s ease-in-out infinite;
-            z-index: -1;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+            transition: transform 0.3s ease;
         }
 
-        @keyframes bgMove {
-
-            0%,
-            100% {
-                transform: translate(0, 0) rotate(0deg);
-            }
-
-            50% {
-                transform: translate(-2%, -2%) rotate(1deg);
-            }
+        .sb-header {
+            padding: 30px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        /* Header */
-        .header {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            padding: 20px 40px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        .sb-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+
+        .sb-logo span {
+            color: var(--accent);
+            font-style: italic;
+        }
+
+        .sb-menu {
+            flex: 1;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sb-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 20px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .sb-link svg {
+            width: 18px;
+            fill: currentColor;
+        }
+
+        .sb-link:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .sb-link.active {
+            color: #fff;
+            background: rgba(56, 189, 248, 0.1);
+            border-left: 3px solid var(--accent);
+            border-radius: 0 8px 8px 0;
+        }
+
+        .sb-footer {
+            padding: 30px 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 40px 60px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: margin 0.3s ease;
+        }
+
+        .topbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: var(--shadow);
+            margin-bottom: 50px;
         }
 
-        .logo {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: logoGlow 3s ease-in-out infinite;
+        .page-title {
+            font-size: 2.2rem;
+            font-weight: 400;
+            letter-spacing: 0.02em;
         }
 
-        @keyframes logoGlow {
+        .page-title span {
+            color: var(--accent);
+            font-style: italic;
+        }
 
-            0%,
-            100% {
-                filter: drop-shadow(0 0 2px rgba(37, 99, 235, 0.3));
-            }
+        .user-widget {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
 
-            50% {
-                filter: drop-shadow(0 0 8px rgba(37, 99, 235, 0.6));
-            }
+        .user-avt {
+            width: 44px;
+            height: 44px;
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            border: 1px solid rgba(56, 189, 248, 0.3);
         }
 
         .user-info {
             display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .user-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 1.1rem;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
-            animation: avatarPop 0.5s ease-out;
-        }
-
-        @keyframes avatarPop {
-            0% {
-                transform: scale(0);
-            }
-
-            50% {
-                transform: scale(1.1);
-            }
-
-            100% {
-                transform: scale(1);
-            }
+            flex-direction: column;
         }
 
         .user-name {
             font-weight: 600;
-            color: var(--text);
-            font-size: 1rem;
+            font-size: 0.95rem;
         }
 
-        .btn-logout {
-            padding: 10px 24px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: #fff;
-            border: none;
+        .user-role {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Tab Logic */
+        .tab-pane {
+            display: none;
+            opacity: 0;
+        }
+
+        .tab-pane.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Forms & Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
             border-radius: 12px;
-            cursor: pointer;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-logout:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
-        }
-
-        /* Main Container */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
             padding: 40px;
         }
 
-        /* Welcome Section */
-        .welcome-section {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            border-radius: 30px;
-            padding: 50px;
-            margin-bottom: 35px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            position: relative;
-            overflow: hidden;
-            animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-
-        @keyframes slideUp {
-            0% {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .welcome-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
-        }
-
-        .welcome-content {
+        .card-header {
+            margin-bottom: 30px;
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            gap: 30px;
+            align-items: flex-end;
         }
 
-        .welcome-text h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 8px;
-            background: linear-gradient(135deg, var(--text) 0%, var(--primary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 400;
         }
 
-        .welcome-text p {
+        .card-desc {
             color: var(--text-muted);
-            font-size: 1.1rem;
+            font-size: 0.9rem;
+            margin-top: 5px;
         }
 
-        .welcome-illustration {
-            width: 180px;
-            height: 180px;
-            position: relative;
-            animation: float 4s ease-in-out infinite;
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
         }
 
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-15px);
-            }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
-        .welcome-illustration img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
+        .form-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            color: #fff;
+            padding: 14px 18px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent);
+            background: rgba(56, 189, 248, 0.02);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-weight: 500;
+            color: #fff;
+            padding: 14px 30px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+            background: transparent;
+        }
+
+        .btn:hover {
+            background: #fff;
+            color: var(--bg-main);
+            border-color: #fff;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #005ecc;
+            border-color: #005ecc;
+            color: #fff;
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        .btn-danger:hover {
+            background: #ef4444;
+            color: #fff;
         }
 
         /* Stats Grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 24px;
-            margin-bottom: 32px;
+            margin-bottom: 40px;
         }
 
         .stat-card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            border-radius: 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
             padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            animation: cardPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
-        .stat-card:nth-child(1) {
-            animation-delay: 0.1s;
+        .stat-val {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            line-height: 1;
+            color: #fff;
         }
 
-        .stat-card:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .stat-card:nth-child(3) {
-            animation-delay: 0.3s;
-        }
-
-        @keyframes cardPop {
-            0% {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .stat-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-        }
-
-        .stat-card.success::before {
-            background: linear-gradient(90deg, var(--success), #34D399);
-        }
-
-        .stat-card.warning::before {
-            background: linear-gradient(90deg, var(--warning), #FBBF24);
-        }
-
-        .stat-card.secondary::before {
-            background: linear-gradient(90deg, var(--secondary), #A78BFA);
+        .stat-lbl {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
         }
 
         .stat-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 16px;
+            width: 40px;
+            height: 40px;
+            background: rgba(56, 189, 248, 0.1);
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 16px;
-            background: var(--primary-light);
-            color: var(--primary);
-            transition: all 0.3s ease;
+            color: var(--accent);
         }
 
-        .stat-card:hover .stat-icon {
-            transform: scale(1.1) rotate(5deg);
+        /* Table */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
         }
 
-        .stat-card.success .stat-icon {
-            background: var(--success-light);
-            color: var(--success);
+        table {
+            width: 100%;
+            border-collapse: collapse;
         }
 
-        .stat-card.warning .stat-icon {
-            background: var(--warning-light);
-            color: var(--warning);
-        }
-
-        .stat-card.secondary .stat-icon {
-            background: var(--secondary-light);
-            color: var(--secondary);
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--text);
-            margin-bottom: 4px;
-        }
-
-        .stat-label {
+        th {
+            text-align: left;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
             color: var(--text-muted);
-            font-size: 0.95rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
             font-weight: 500;
         }
 
-        /* Content Grid */
-        .content-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 24px;
+        td {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        .badge {
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: inline-block;
+            border: 1px solid transparent;
+        }
+
+        .badge-pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+            border-color: rgba(245, 158, 11, 0.2);
+        }
+
+        .badge-review {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+
+        .badge-shortlist {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border-color: rgba(16, 185, 129, 0.2);
+        }
+
+        .badge-reject {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+
+        .empty-state {
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .empty-state svg {
+            width: 64px;
+            fill: var(--border);
+            margin-bottom: 20px;
+        }
+
+        /* Responsive menu */
+        .menu-toggle {
+            display: none;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: #fff;
+            width: 44px;
+            height: 44px;
+            border-radius: 6px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-toggle svg {
+            width: 24px;
+            fill: currentColor;
         }
 
         @media (max-width: 1024px) {
-            .content-grid {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 260px;
+            }
+
+            .sidebar.mobile-open {
+                transform: translateX(0);
+                box-shadow: 20px 0 50px rgba(0, 0, 0, 0.5);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 30px 20px;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .form-grid {
                 grid-template-columns: 1fr;
-            }
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(15px);
-            border-radius: 24px;
-            padding: 32px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            animation: cardPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
-        }
-
-        .card:nth-child(1) {
-            animation-delay: 0.4s;
-        }
-
-        .card:nth-child(2) {
-            animation-delay: 0.5s;
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 24px;
-        }
-
-        .card-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--text);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .card-title i {
-            color: var(--primary);
-        }
-
-        .card-badge {
-            padding: 6px 14px;
-            background: var(--primary-light);
-            color: var(--primary);
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        /* Internship List */
-        .internship-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .internship-item {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 16px;
-            background: var(--bg);
-            border-radius: 14px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .internship-item:hover {
-            background: var(--primary-light);
-            transform: translateX(8px);
-        }
-
-        .internship-logo {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--primary);
-            box-shadow: var(--shadow);
-        }
-
-        .internship-info {
-            flex: 1;
-        }
-
-        .internship-title {
-            font-weight: 600;
-            color: var(--text);
-            margin-bottom: 4px;
-        }
-
-        .internship-company {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .internship-meta {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        .meta-item i {
-            font-size: 0.8rem;
-        }
-
-        .apply-btn {
-            padding: 10px 20px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .apply-btn:hover {
-            background: var(--primary-dark);
-            transform: scale(1.05);
-        }
-
-        /* Quick Actions */
-        .action-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-
-        .action-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            padding: 20px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            color: var(--text);
-        }
-
-        .action-btn:hover {
-            background: var(--primary-light);
-            border-color: var(--primary);
-            transform: translateY(-4px);
-        }
-
-        .action-btn i {
-            font-size: 1.5rem;
-            color: var(--primary);
-            transition: all 0.3s ease;
-        }
-
-        .action-btn:hover i {
-            transform: scale(1.2);
-        }
-
-        .action-btn span {
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        /* Profile Card */
-        .profile-card {
-            text-align: center;
-            padding: 24px;
-            background: linear-gradient(135deg, var(--primary-light) 0%, var(--secondary-light) 100%);
-            border-radius: 16px;
-            margin-top: 20px;
-        }
-
-        .profile-avatar-large {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 16px;
-            font-size: 2rem;
-            font-weight: 700;
-            color: white;
-            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
-        }
-
-        .profile-name {
-            font-weight: 700;
-            font-size: 1.1rem;
-            margin-bottom: 4px;
-        }
-
-        .profile-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            background: var(--success-light);
-            color: var(--success);
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .profile-status::before {
-            content: '';
-            width: 6px;
-            height: 6px;
-            background: var(--success);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.5;
-            }
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header {
-                padding: 16px 20px;
-            }
-
-            .container {
-                padding: 20px;
-            }
-
-            .welcome-content {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .welcome-illustration {
-                width: 140px;
-                height: 140px;
-            }
-
-            .welcome-text h1 {
-                font-size: 1.8rem;
             }
 
             .stats-grid {
@@ -667,203 +511,541 @@
             }
         }
     </style>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Prevent FOUT -> Pre-load Theme -->
+    <script>
+        (function () {
+            var saved = localStorage.getItem('conneto-theme');
+            if (saved !== 'light') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
 </head>
 
 <body>
-    <header class="header">
-        <div class="logo">Conneto</div>
-        <div class="user-info">
-            <div class="user-avatar">
-                <%= user.name.charAt(0).toUpperCase() %>
-            </div>
-            <span class="user-name">
-                <%= user.name %>
-            </span>
-            <a href="/auth/logout" class="btn-logout">
-                <i class="fas fa-sign-out-alt"></i> Logout
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sb-header">
+            <a href="/" class="sb-logo">Con<span>neto</span></a>
+            <button class="menu-toggle d-lg-none" id="closeSidebar" style="border:none;">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                </svg>
+            </button>
+        </div>
+        <div class="sb-menu">
+            <a href="#" class="sb-link active" data-tab="overview">
+                <svg viewBox="0 0 24 24">
+                    <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
+                </svg>
+                Overview
+            </a>
+            <a href="#" class="sb-link" data-tab="applications">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z" />
+                </svg>
+                My Applications
+            </a>
+            <a href="#" class="sb-link" data-tab="profile">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                </svg>
+                Profile Setup
+            </a>
+            <a href="#" class="sb-link" data-tab="settings">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z" />
+                </svg>
+                Settings
+            </a>
+            <a href="/internships" class="sb-link" style="margin-top:auto;">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                </svg>
+                Explore More
             </a>
         </div>
-    </header>
+        <div class="sb-footer">
+            <a href="/auth/logout" class="sb-link">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" />
+                </svg>
+                Disconnect
+            </a>
+        </div>
+    </aside>
 
-    <div class="container">
-        <!-- Welcome Section -->
-        <div class="welcome-section">
-            <div class="welcome-content">
-                <div class="welcome-text">
-                    <h1>Welcome back, <span
-                            style="background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
-                            <%= user.name %>
-                        </span></h1>
-                    <p style="font-size: 1.15rem; font-weight: 500; color: var(--text); margin-top: 10px;">Ready to
-                        kickstart your career journey at <span
-                            style="color: var(--primary); font-weight: 700;">Conneto</span>?</p>
-                    <p style="margin-top: 15px; color: var(--text-muted);">Explore premium opportunities, refine your
-                        skills, and track your path to success in real-time.</p>
+    <main class="main-content">
+        <!-- Topbar -->
+        <div class="topbar">
+            <button class="menu-toggle" id="openSidebar">
+                <svg viewBox="0 0 24 24">
+                    <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+                </svg>
+            </button>
+            <div class="user-widget ms-auto">
+                <div class="user-info text-end">
+                    <span class="user-name">
+                        <%= user.name %>
+                    </span>
+                    <span class="user-role">Student</span>
                 </div>
-                <div class="welcome-illustration">
-                    <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=400&q=80"
-                        alt="Student with laptop">
+                <div class="user-avt">
+                    <%= user.name[0].toUpperCase() %>
                 </div>
             </div>
         </div>
 
-        <!-- Stats Grid -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-file-alt"></i></div>
-                <div class="stat-number">
-                    <%= stats ? stats.total : 0 %>
-                </div>
-                <div class="stat-label">Total Applications</div>
-            </div>
-            <div class="stat-card success">
-                <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
-                <div class="stat-number">
-                    <%= stats ? stats.interviews : 0 %>
-                </div>
-                <div class="stat-label">Interview Scheduled</div>
-            </div>
-            <div class="stat-card warning">
-                <div class="stat-icon"><i class="fas fa-clock"></i></div>
-                <div class="stat-number">
-                    <%= stats ? stats.pending : 0 %>
-                </div>
-                <div class="stat-label">Pending Review</div>
-            </div>
-            <div class="stat-card secondary">
-                <div class="stat-icon" style="background: var(--success-light); color: var(--success);"><i
-                        class="fas fa-trophy"></i></div>
-                <div class="stat-number">
-                    <%= stats ? stats.hired : 0 %>
-                </div>
-                <div class="stat-label">Hired / Selected</div>
-            </div>
-        </div>
+        <% var totalApps=applications ? applications.length : 0; var shortlists=applications ? applications.filter(a=>
+            ['shortlisted', 'selected', 'interview_scheduled'].includes(a.status)).length : 0;
+            var rejections = applications ? applications.filter(a => a.status === 'rejected').length : 0;
+            var hasProfile = profile && profile.fullName ? true : false;
+            %>
 
-        <!-- Content Grid -->
-        <div class="content-grid">
-            <!-- Featured Internships -->
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title"><i class="fas fa-briefcase"></i> Featured Internships</h2>
-                    <span class="card-badge">12 New</span>
-                </div>
-                <div class="internship-list">
-                    <% if (internships && internships.length> 0) { %>
-                        <% internships.forEach(function(internship) { %>
-                            <div class="internship-item">
-                                <% var cName=internship.company ? ((internship.company &&
-                                    internship.company.companyName) ? internship.company.companyName :
-                                    (internship.companyName || '' )) : '' ; %>
-                                    <div class="internship-logo">
-                                        <%= cName ? cName.charAt(0).toUpperCase() : ' C' %>
-                                    </div>
-                                    <div class="internship-info">
-                                        <div class="internship-title">
-                                            <%= internship.title %>
-                                        </div>
-                                        <div class="internship-company">
-                                            <%= cName || 'Company' %>
-                                        </div>
-                                    </div>
-                                    <div class="internship-meta">
-                                        <span class="meta-item"><i class="fas fa-map-marker-alt"></i>
-                                            <%= internship.location || 'Remote' %>
-                                        </span>
-                                        <span class="meta-item"><i class="fas fa-clock"></i>
-                                            <%= internship.duration || '3 mo' %>
-                                        </span>
-                                    </div>
-                                    <a href="/internships/<%= internship._id %>" class="apply-btn">View</a>
-                            </div>
-                            <% }); %>
-                                <% } else { %>
-                                    <div class="internship-item">
-                                        <div class="internship-logo">!</div>
-                                        <div class="internship-info">
-                                            <div class="internship-title">No internships available</div>
-                                            <div class="internship-company">Check back later</div>
-                                        </div>
-                                    </div>
-                                    <% } %>
-                </div>
-            </div>
+            <!-- OVERVIEW TAB -->
+            <div class="tab-pane active gsap-fadein" id="overview">
+                <h1 class="page-title mb-2">Welcome <span>
+                        <%= user.name.split(' ')[0] %></span>.</h1>
+            <p style="color:var(--text-muted); margin-bottom: 40px; font-weight:300;">Elevating your career trajectory begins here.</p>
 
-            <!-- Sidebar -->
-            <div>
-                <!-- Quick Actions -->
+            <% if(!hasProfile) { %>
+                <div class="card mb-4" style="border-color: var(--accent); background: rgba(56, 189, 248,0.05);">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <h4 style="color:#fff; margin-bottom: 10px;">Incomplete Profile</h4>
+                            <p style="color:var(--text-muted); font-size:0.9rem;">To apply for premium internships, a completed profile is required.</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="switchTab(' profile')">Complete Now</button>
+            </div>
+            </div>
+            <% } %>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div style="display:flex; justify-content:space-between;">
+                            <span class="stat-lbl">Total Applications</span>
+                            <div class="stat-icon"><svg viewBox="0 0 24 24" width="20">
+                                    <path fill="currentColor"
+                                        d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
+                                </svg></div>
+                        </div>
+                        <div class="stat-val">
+                            <%= totalApps %>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div style="display:flex; justify-content:space-between;">
+                            <span class="stat-lbl">Shortlisted</span>
+                            <div class="stat-icon" style="color:#10b981; background:rgba(16,185,129,0.1);"><svg
+                                    viewBox="0 0 24 24" width="20">
+                                    <path fill="currentColor" d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" />
+                                </svg></div>
+                        </div>
+                        <div class="stat-val">
+                            <%= shortlists %>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div style="display:flex; justify-content:space-between;">
+                            <span class="stat-lbl">Rejected</span>
+                            <div class="stat-icon" style="color:#ef4444; background:rgba(239,68,68,0.1);"><svg
+                                    viewBox="0 0 24 24" width="20">
+                                    <path fill="currentColor"
+                                        d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                                </svg></div>
+                        </div>
+                        <div class="stat-val">
+                            <%= rejections %>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="card-title"><i class="fas fa-bolt"></i> Quick Actions</h2>
+                        <h3 class="card-title">Recent Activity</h3>
                     </div>
-                    <div class="action-grid">
-                        <a href="/internships" class="action-btn">
-                            <i class="fas fa-search"></i>
-                            <span>Browse Internships</span>
-                        </a>
-                        <a href="/student/applications" class="action-btn">
-                            <i class="fas fa-file-alt"></i>
-                            <span>My Applications</span>
-                        </a>
-                        <a href="#" class="action-btn">
-                            <i class="fas fa-user-edit"></i>
-                            <span>Edit Profile</span>
-                        </a>
-                        <a href="#" class="action-btn">
-                            <i class="fas fa-cog"></i>
-                            <span>Settings</span>
-                        </a>
+                    <% if(applications && applications.length> 0) { %>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Company</th>
+                                        <th>Role</th>
+                                        <th>Date Applied</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% applications.slice(0, 5).forEach(function(app) { %>
+                                        <tr>
+                                            <td style="font-weight:600;">
+                                                <%= app.internship && app.internship.companyName ?
+                                                    app.internship.companyName : (app.internship &&
+                                                    app.internship.company ? app.internship.company.companyName
+                                                    : 'Archived' ) %>
+                                            </td>
+                                            <td>
+                                                <%= app.internship ? app.internship.title : 'Deleted Role' %>
+                                            </td>
+                                            <td style="color:var(--text-muted);">
+                                                <%= new Date(app.appliedAt).toLocaleDateString() %>
+                                            </td>
+                                            <td>
+                                                <% if(app.status==='applied' ) { %> <span
+                                                        class="badge badge-pending">Applied</span>
+                                                    <% } else if(app.status==='under_review' ) { %> <span
+                                                            class="badge badge-review">Under Review</span>
+                                                        <% } else if(['shortlisted', 'selected' , 'interview_scheduled'
+                                                            ].includes(app.status)) { %>
+                                                            <span class="badge badge-shortlist">
+                                                                <%= app.status==='interview_scheduled' ? 'Interview' :
+                                                                    (app.status.charAt(0).toUpperCase() +
+                                                                    app.status.slice(1)) %>
+                                                            </span>
+                                                            <% } else { %> <span
+                                                                    class="badge badge-reject">Rejected</span>
+                                                                <% } %>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <% } else { %>
+                            <div class="empty-state">
+                                <svg viewBox="0 0 24 24">
+                                    <path
+                                        d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z" />
+                                </svg>
+                                <p style="color:var(--text-muted); margin-bottom:20px;">No applications yet.</p>
+                                <a href="/internships" class="btn btn-primary">Find Opportunities</a>
+                            </div>
+                            <% } %>
+                </div>
+                </div>
+
+                <!-- APPLICATIONS TAB -->
+                <div class="tab-pane gsap-fadein" id="applications">
+                    <h1 class="page-title mb-5">My <span>Archive</span>.</h1>
+                    <div class="card">
+                        <% if(applications && applications.length> 0) { %>
+                            <div class="table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Company</th>
+                                            <th>Role</th>
+                                            <th>Location</th>
+                                            <th>Date Applied</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% applications.forEach(function(app) { %>
+                                            <tr>
+                                                <td style="font-weight:600;">
+                                                    <%= app.internship && app.internship.companyName ?
+                                                        app.internship.companyName : (app.internship &&
+                                                        app.internship.company ? app.internship.company.companyName
+                                                        : 'Archived' ) %>
+                                                </td>
+                                                <td>
+                                                    <%= app.internship ? app.internship.title : 'Deleted Role' %>
+                                                </td>
+                                                <td>
+                                                    <%= app.internship ? (app.internship.location || 'Remote' )
+                                                        : 'Remote' %>
+                                                </td>
+                                                <td style="color:var(--text-muted);">
+                                                    <%= new Date(app.appliedAt).toLocaleDateString() %>
+                                                </td>
+                                                <td>
+                                                    <% if(app.status==='applied' ) { %> <span
+                                                            class="badge badge-pending">Applied</span>
+                                                        <% } else if(app.status==='under_review' ) { %> <span
+                                                                class="badge badge-review">Under Review</span>
+                                                            <% } else if(['shortlisted', 'selected'
+                                                                , 'interview_scheduled' ].includes(app.status)) { %>
+                                                                <span class="badge badge-shortlist">
+                                                                    <%= app.status==='interview_scheduled' ? 'Interview'
+                                                                        : (app.status.charAt(0).toUpperCase() +
+                                                                        app.status.slice(1)) %>
+                                                                </span>
+                                                                <% } else { %> <span
+                                                                        class="badge badge-reject">Rejected</span>
+                                                                    <% } %>
+                                                </td>
+                                            </tr>
+                                            <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <% } else { %>
+                                <div class="empty-state">
+                                    <p style="color:var(--text-muted); margin-bottom:20px;">Your archive is empty.</p>
+                                    <a href="/internships" class="btn btn-primary">Explore Internships</a>
+                                </div>
+                                <% } %>
                     </div>
                 </div>
 
-                <!-- Profile Status -->
-                <div class="card" style="margin-top: 24px;">
-                    <div class="card-header">
-                        <h2 class="card-title"><i class="fas fa-user-circle"></i> Profile</h2>
+                <!-- PROFILE TAB -->
+                <div class="tab-pane gsap-fadein" id="profile">
+                    <h1 class="page-title mb-5">Professional <span>Identity</span>.</h1>
+                    <div class="card">
+                        <form id="profileForm" action="/student/profile" method="POST">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Full Name</label>
+                                    <input type="text" name="fullName" class="form-control"
+                                        value="<%= profile?.fullName || user.name %>" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Phone Number</label>
+                                    <input type="tel" name="phone" class="form-control"
+                                        value="<%= profile?.phone || '' %>" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Institution</label>
+                                    <input type="text" name="collegeName" class="form-control"
+                                        value="<%= profile?.collegeName || '' %>" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Degree</label>
+                                    <input type="text" name="degree" class="form-control"
+                                        value="<%= profile?.degree || '' %>" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Graduation Year</label>
+                                    <input type="number" name="graduationYear" class="form-control"
+                                        value="<%= profile?.graduationYear || '' %>" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Location</label>
+                                    <input type="text" name="location" class="form-control"
+                                        value="<%= profile?.location || '' %>" required>
+                                </div>
+                                <div class="form-group" style="grid-column: 1 / -1;">
+                                    <label class="form-label">Professional Core Skills (Comma Separated)</label>
+                                    <input type="text" name="skills" class="form-control"
+                                        value="<%= profile && profile.skills ? profile.skills.join(', ') : '' %>"
+                                        required>
+                                </div>
+                                <div class="form-group" style="grid-column: 1 / -1;">
+                                    <label class="form-label">Professional Summary</label>
+                                    <textarea name="bio" class="form-control"
+                                        rows="4"><%= profile?.bio || '' %></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">LinkedIn Ref</label>
+                                    <input type="url" name="linkedin" class="form-control"
+                                        value="<%= profile?.linkedin || '' %>">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">GitHub Ref</label>
+                                    <input type="url" name="github" class="form-control"
+                                        value="<%= profile?.github || '' %>">
+                                </div>
+                            </div>
+                            <div style="margin-top: 40px; text-align: right;">
+                                <button type="submit" class="btn btn-primary">Update Architecture</button>
+                            </div>
+                        </form>
                     </div>
-                    <div class="profile-card">
-                        <div class="profile-avatar-large">
-                            <%= user.name.charAt(0).toUpperCase() %>
-                        </div>
-                        <div class="profile-name">
-                            <%= user.name %>
-                        </div>
-                        <span class="profile-status">Active</span>
-                    </div>
-                    <p style="text-align: center; margin-top: 16px; color: var(--text-muted); font-size: 0.9rem;">
-                        Complete your profile to increase your chances of getting hired!
-                    </p>
                 </div>
-            </div>
-        </div>
-    </div>
 
+                <!-- SETTINGS TAB -->
+                <div class="tab-pane gsap-fadein" id="settings">
+                    <h1 class="page-title mb-5">System <span>Preferences</span>.</h1>
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h3 class="card-title">Security Parameters</h3>
+                        </div>
+                        <form id="settingsForm" action="/student/settings" method="POST">
+                            <div class="form-grid">
+                                <div class="form-group" style="grid-column: 1/-1;">
+                                    <label class="form-label">Current Configuration</label>
+                                    <input type="password" name="currentPassword" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">New Credential</label>
+                                    <input type="password" name="newPassword" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Confirm Credential</label>
+                                    <input type="password" name="confirmPassword" class="form-control" required>
+                                </div>
+                            </div>
+                            <div style="text-align: right; margin-top:20px;">
+                                <button type="submit" class="btn btn-primary">Lock Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+    </main>
+
+    <!-- GSAP for animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script>
-        // Add smooth scroll reveal animation
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+        // Sidebar Toggle
+        const sidebar = document.getElementById('sidebar');
+        document.getElementById('openSidebar').addEventListener('click', () => sidebar.classList.add('mobile-open'));
+        document.getElementById('closeSidebar').addEventListener('click', () => sidebar.classList.remove('mobile-open'));
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.animationPlayState = 'running';
+        // Tabs Logic with GSAP
+        const links = document.querySelectorAll('.sb-link[data-tab]');
+        const panes = document.querySelectorAll('.tab-pane');
+
+        function switchTab(tabId) {
+            links.forEach(l => l.classList.remove('active'));
+            document.querySelector('.sb-link[data-tab="' + tabId + '"]')?.classList.add('active');
+
+            panes.forEach(p => {
+                p.classList.remove('active');
+                p.style.display = 'none';
+            });
+
+            const activePane = document.getElementById(tabId);
+            if (activePane) {
+                activePane.style.display = 'block';
+                activePane.classList.add('active');
+
+                // Entry animation
+                gsap.fromTo(activePane,
+                    { opacity: 0, y: 20 },
+                    { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
+                );
+            }
+            if (window.innerWidth <= 1024) {
+                sidebar.classList.remove('mobile-open');
+            }
+        }
+
+        links.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                switchTab(link.getAttribute('data-tab'));
+            });
+        });
+
+
+        // Form AJAX Handlers
+        function handleFormSubmit(formId, successTitle, successText) {
+            const form = document.getElementById(formId);
+            if (!form) return;
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData.entries());
+
+                // Show loading
+                Swal.fire({
+                    title: 'Processing...',
+                    background: 'var(--bg-card)',
+                    color: '#fff',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: successTitle,
+                            text: result.message || successText,
+                            background: 'var(--bg-card)',
+                            color: '#fff',
+                            confirmButtonColor: 'var(--accent)',
+                            iconColor: 'var(--accent)'
+                        });
+                    } else {
+                        throw new Error(result.error || 'Something went wrong');
+                    }
+                } catch (error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: error.message,
+                        background: 'var(--bg-card)',
+                        color: '#fff',
+                        confirmButtonColor: '#ef4444'
+                    });
                 }
             });
-        }, observerOptions);
+        }
 
-        document.querySelectorAll('.stat-card, .card').forEach(el => {
-            el.style.animationPlayState = 'paused';
-            observer.observe(el);
-        });
+        handleFormSubmit('profileForm', 'Profile Updated!', 'Your professional identity has been saved.');
+        handleFormSubmit('settingsForm', 'Security Updated!', 'Your credentials have been securely saved.');
 
-        // Add hover sound effect (optional)
-        document.querySelectorAll('.action-btn, .apply-btn, .btn-logout').forEach(btn => {
-            btn.addEventListener('mouseenter', function () {
-                this.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+        // Stat Counting Animation
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = Math.floor(progress * (end - start) + start);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        // Initial Load animation
+        window.onload = () => {
+            gsap.from(".topbar", { y: -50, opacity: 0, duration: 0.8, ease: "power3.out", delay: 0.2 });
+            gsap.from("#overview", { y: 30, opacity: 0, duration: 0.8, ease: "power3.out", delay: 0.4 });
+
+            // Animate stats
+            document.querySelectorAll('.stat-val').forEach(el => {
+                const target = parseInt(el.innerText);
+                if (!isNaN(target)) {
+                    animateValue(el, 0, target, 1500);
+                }
             });
-        });
+        };
+    </script>
+
+    <!-- Floating Theme Toggle Button -->
+    <button class="c-theme-toggle" onclick="toggleTheme()" title="Toggle dark/light mode" aria-label="Toggle theme">
+        <i class="fas fa-sun icon-sun"></i>
+        <i class="fas fa-moon icon-moon"></i>
+    </button>
+    <script>
+        
+        function toggleTheme() {
+            var html = document.documentElement;
+            var isDark = html.getAttribute('data-theme') === 'dark';
+            if (isDark) {
+                html.removeAttribute('data-theme');
+                localStorage.setItem('conneto-theme', 'light');
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                localStorage.setItem('conneto-theme', 'dark');
+            }
+        }
     </script>
 </body>
 

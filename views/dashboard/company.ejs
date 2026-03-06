@@ -11,806 +11,504 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/conneto.css">
     <style>
+        :root {
+            --bg-main: #030a16;
+            --bg-card: #0a162d;
+            --bg-sidebar: #01050b;
+            --accent: #7C3AED;
+            --text-main: #f4f4f5;
+            --text-muted: #888;
+            --border: rgba(255, 255, 255, 0.1);
+            --sidebar-width: 280px;
+
+            --primary: #7C3AED;
+            --secondary: #2563EB;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+        }
+
+        /* ===== LIGHT MODE OVERRIDES ===== */
+        [data-theme="light"] {
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-sidebar: #1e1b4b;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="light"] body {
+            background: #f8fafc;
+            color: #0f172a;
+        }
+
+        [data-theme="light"] .sidebar {
+            background: #1e1b4b;
+        }
+
+        [data-theme="light"] .main-content {
+            background: #f8fafc;
+        }
+
+        [data-theme="light"] .stat-card {
+            background: #fff;
+            border-color: rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="light"] .stat-label {
+            color: #64748b;
+        }
+
+        [data-theme="light"] .stat-value {
+            color: #0f172a;
+        }
+
+        [data-theme="light"] .card {
+            background: #fff;
+            border-color: rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="light"] .card-title {
+            color: #0f172a !important;
+        }
+
+        [data-theme="light"] .applicant-item,
+        [data-theme="light"] .listing-item {
+            background: #f8fafc;
+            border-color: rgba(0, 0, 0, 0.06);
+        }
+
+        [data-theme="light"] .applicant-name,
+        [data-theme="light"] .listing-name {
+            color: #0f172a !important;
+        }
+
+        [data-theme="light"] .applicant-role,
+        [data-theme="light"] .listing-role {
+            color: #64748b;
+        }
+
+        [data-theme="light"] .modal-content {
+            background: #fff;
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="light"] .profile-section {
+            background: #f8fafc;
+            border-color: rgba(0, 0, 0, 0.06);
+        }
+
+        [data-theme="light"] .profile-value,
+        [data-theme="light"] .applicant-name {
+            color: #0f172a !important;
+        }
+
+        [data-theme="light"] h1,
+        [data-theme="light"] h2,
+        [data-theme="light"] h3 {
+            color: #0f172a !important;
+        }
+
+        [data-theme="light"] .user-name {
+            color: #0f172a !important;
+        }
+
+        [data-theme="light"] .topbar>div>h1 {
+            color: #0f172a !important;
+        }
+
+        [data-theme="light"] .btn-icon {
+            background: #f1f5f9;
+            border-color: rgba(0, 0, 0, 0.1);
+            color: #0f172a;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        :root {
-            --primary: #7C3AED;
-            --primary-dark: #6D28D9;
-            --primary-light: #EDE9FE;
-            --secondary: #2563EB;
-            --secondary-light: #DBEAFE;
-            --success: #10B981;
-            --success-light: #D1FAE5;
-            --warning: #F59E0B;
-            --warning-light: #FEF3C7;
-            --danger: #EF4444;
-            --danger-light: #FEE2E2;
-            --info: #06B6D4;
-            --info-light: #CFFAFE;
-            --text: #0F172A;
-            --text-muted: #64748B;
-            --border: #E2E8F0;
-            --bg: #F8FAFC;
-            --card-bg: #FFFFFF;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-        }
-
         body {
+            background: var(--bg-main);
+            color: var(--text-main);
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #F5F3FF 0%, #EDE9FE 50%, #E0E7FF 100%);
-            color: var(--text);
-            min-height: 100vh;
-            position: relative;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            min-height: 100vh;
         }
 
-        /* Animated Background */
-        body::before {
-            content: '';
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            color: #ffffff !important;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border);
             position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background:
-                radial-gradient(circle at 20% 80%, rgba(124, 58, 237, 0.12) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(37, 99, 235, 0.12) 0%, transparent 50%),
-                radial-gradient(circle at 60% 60%, rgba(16, 185, 129, 0.08) 0%, transparent 40%);
-            animation: bgMove 25s ease-in-out infinite;
-            z-index: -1;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+            transition: transform 0.3s ease;
         }
 
-        @keyframes bgMove {
-
-            0%,
-            100% {
-                transform: translate(0, 0) rotate(0deg);
-            }
-
-            33% {
-                transform: translate(1%, -1%) rotate(0.5deg);
-            }
-
-            66% {
-                transform: translate(-1%, 1%) rotate(-0.5deg);
-            }
+        .sb-header {
+            padding: 30px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        /* Header */
-        .header {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            padding: 20px 40px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        .sb-logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+
+        .sb-logo span {
+            color: var(--accent);
+            font-style: italic;
+        }
+
+        .sb-menu {
+            flex: 1;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sb-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 20px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .sb-link i {
+            width: 18px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .sb-link:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .sb-link.active {
+            color: #fff;
+            background: rgba(124, 58, 237, 0.1);
+            border-left: 3px solid var(--accent);
+            border-radius: 0 8px 8px 0;
+        }
+
+        .sb-footer {
+            padding: 30px 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 40px 60px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: margin 0.3s ease;
+        }
+
+        .topbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: var(--shadow);
+            margin-bottom: 50px;
         }
 
-        .logo {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: logoGlow 3s ease-in-out infinite;
+        .user-widget {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
-        @keyframes logoGlow {
-
-            0%,
-            100% {
-                filter: drop-shadow(0 0 2px rgba(124, 58, 237, 0.3));
-            }
-
-            50% {
-                filter: drop-shadow(0 0 8px rgba(124, 58, 237, 0.6));
-            }
+        .user-avt {
+            width: 44px;
+            height: 44px;
+            background: rgba(124, 58, 237, 0.15);
+            color: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border: 1px solid rgba(124, 58, 237, 0.3);
         }
 
         .user-info {
             display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .notification-btn {
-            width: 45px;
-            height: 45px;
-            border-radius: 12px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .notification-btn:hover {
-            background: var(--primary-light);
-            color: var(--primary);
-            border-color: var(--primary);
-        }
-
-        .notification-btn::after {
-            content: '';
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 8px;
-            height: 8px;
-            background: var(--danger);
-            border-radius: 50%;
-            border: 2px solid #fff;
-        }
-
-        .user-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 1.1rem;
-            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
-            animation: avatarPop 0.5s ease-out;
-        }
-
-        @keyframes avatarPop {
-            0% {
-                transform: scale(0);
-            }
-
-            50% {
-                transform: scale(1.1);
-            }
-
-            100% {
-                transform: scale(1);
-            }
+            flex-direction: column;
         }
 
         .user-name {
+            font-size: 0.95rem;
             font-weight: 600;
-            color: var(--text);
-            font-size: 1rem;
-        }
-
-        .btn-logout {
-            padding: 10px 24px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: #fff;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
-        .btn-logout:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
-        }
-
-        /* Main Container */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 40px;
-        }
-
-        /* Welcome Section */
-        .welcome-section {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            border-radius: 30px;
-            padding: 50px;
-            margin-bottom: 35px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            position: relative;
-            overflow: hidden;
-            animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-
-        @keyframes slideUp {
-            0% {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .welcome-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 350px;
-            height: 350px;
-            background: radial-gradient(circle, rgba(124, 58, 237, 0.1) 0%, transparent 70%);
-        }
-
-        .welcome-section::after {
-            content: '';
-            position: absolute;
-            bottom: -50px;
-            right: -50px;
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(circle, rgba(37, 99, 235, 0.08) 0%, transparent 70%);
-        }
-
-        .welcome-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 30px;
-        }
-
-        .welcome-text h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 8px;
-            background: linear-gradient(135deg, var(--text) 0%, var(--primary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .welcome-text p {
+        .user-role {
+            font-size: 0.75rem;
             color: var(--text-muted);
-            font-size: 1.1rem;
-        }
-
-        .welcome-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 20px;
-        }
-
-        .btn-primary {
-            padding: 14px 28px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            border: none;
-            border-radius: 14px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(124, 58, 237, 0.5);
-        }
-
-        .btn-secondary {
-            padding: 14px 28px;
-            background: white;
-            color: var(--primary);
-            border: 2px solid var(--primary);
-            border-radius: 14px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-secondary:hover {
-            background: var(--primary-light);
-        }
-
-        .welcome-illustration {
-            width: 200px;
-            height: 200px;
-            position: relative;
-            animation: float 4s ease-in-out infinite;
-        }
-
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-15px);
-            }
-        }
-
-        .welcome-illustration img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
         }
 
         /* Stats Grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 24px;
-            margin-bottom: 32px;
+            margin-bottom: 40px;
         }
 
         .stat-card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            border-radius: 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
-            animation: cardPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
-        }
-
-        .stat-card:nth-child(1) {
-            animation-delay: 0.1s;
-        }
-
-        .stat-card:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .stat-card:nth-child(3) {
-            animation-delay: 0.3s;
-        }
-
-        .stat-card:nth-child(4) {
-            animation-delay: 0.35s;
-        }
-
-        @keyframes cardPop {
-            0% {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
         }
 
         .stat-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-        }
-
-        .stat-card.success::before {
-            background: linear-gradient(90deg, var(--success), #34D399);
-        }
-
-        .stat-card.warning::before {
-            background: linear-gradient(90deg, var(--warning), #FBBF24);
-        }
-
-        .stat-card.info::before {
-            background: linear-gradient(90deg, var(--info), #22D3EE);
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.1);
         }
 
         .stat-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 16px;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 16px;
-            background: var(--primary-light);
-            color: var(--primary);
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover .stat-icon {
-            transform: scale(1.1) rotate(5deg);
-        }
-
-        .stat-card.success .stat-icon {
-            background: var(--success-light);
-            color: var(--success);
-        }
-
-        .stat-card.warning .stat-icon {
-            background: var(--warning-light);
-            color: var(--warning);
-        }
-
-        .stat-card.info .stat-icon {
-            background: var(--info-light);
-            color: var(--info);
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--text);
-            margin-bottom: 4px;
-            display: flex;
-            align-items: baseline;
-            gap: 8px;
-        }
-
-        .stat-trend {
-            font-size: 0.85rem;
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 20px;
-        }
-
-        .stat-trend.up {
-            background: var(--success-light);
-            color: var(--success);
-        }
-
-        .stat-trend.down {
-            background: var(--danger-light);
-            color: var(--danger);
+            font-size: 1.4rem;
+            color: var(--accent);
         }
 
         .stat-label {
+            font-size: 0.85rem;
             color: var(--text-muted);
-            font-size: 0.95rem;
-            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
         }
 
-        /* Content Grid */
-        .content-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 24px;
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #fff;
         }
 
-        @media (max-width: 1024px) {
-            .content-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
+        /* Content Sections */
         .card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(15px);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
             border-radius: 24px;
-            padding: 32px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            animation: cardPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
-        }
-
-        .card:nth-child(1) {
-            animation-delay: 0.4s;
-        }
-
-        .card:nth-child(2) {
-            animation-delay: 0.5s;
+            padding: 35px;
+            margin-bottom: 30px;
         }
 
         .card-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 24px;
+            margin-bottom: 30px;
         }
 
         .card-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--text);
+            font-size: 1.4rem;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 10px;
-        }
-
-        .card-title i {
-            color: var(--primary);
-        }
-
-        .card-badge {
-            padding: 6px 14px;
-            background: var(--primary-light);
-            color: var(--primary);
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        /* Applicant List */
-        .applicant-list {
-            display: flex;
-            flex-direction: column;
             gap: 12px;
         }
 
-        .applicant-item {
+        .card-title i {
+            color: var(--accent);
+        }
+
+        /* Applicant and Listing items */
+        .applicant-list,
+        .listing-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .applicant-item,
+        .listing-item {
             display: flex;
             align-items: center;
-            gap: 14px;
-            padding: 16px;
-            background: var(--bg);
-            border-radius: 14px;
+            gap: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 16px;
             transition: all 0.3s ease;
-            cursor: pointer;
         }
 
-        .applicant-item:hover {
-            background: var(--primary-light);
-            transform: translateX(8px);
+        .applicant-item:hover,
+        .listing-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--accent);
+            transform: scale(1.01);
         }
 
-        .applicant-avatar {
-            width: 48px;
-            height: 48px;
+        .applicant-avatar,
+        .listing-avatar {
+            width: 50px;
+            height: 50px;
             border-radius: 12px;
-            background: linear-gradient(135deg, var(--primary-light) 0%, var(--secondary-light) 100%);
+            background: rgba(124, 58, 237, 0.1);
+            color: var(--accent);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            color: var(--primary);
-            font-size: 1.1rem;
+            font-size: 1.2rem;
         }
 
-        .applicant-info {
+        .applicant-info,
+        .listing-info {
             flex: 1;
         }
 
-        .applicant-name {
+        .applicant-name,
+        .listing-name {
+            font-size: 1.05rem;
             font-weight: 600;
-            color: var(--text);
-            margin-bottom: 2px;
+            color: #fff;
+            margin-bottom: 4px;
         }
 
-        .applicant-role {
+        
+        .applicant-role,
+        .listing-role {
             font-size: 0.85rem;
             color: var(--text-muted);
-        }
-
-        .applicant-meta {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-
-        .status-badge {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .status-badge.pending {
-            background: var(--warning-light);
-            color: var(--warning);
-        }
-
-        .status-badge.reviewing {
-            background: var(--info-light);
-            color: var(--info);
-        }
-
-        .status-badge.new {
-            background: var(--success-light);
-            color: var(--success);
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 8px;
         }
 
         .btn-icon {
             width: 36px;
             height: 36px;
-            border-radius: 10px;
-            border: none;
             display: flex;
             align-items: center;
             justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #fff;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 0.9rem;
-        }
-
-        .btn-view {
-            background: var(--primary-light);
-            color: var(--primary);
-        }
-
-        .btn-view:hover {
-            background: var(--primary);
-            color: white;
-        }
-
-        /* Quick Actions */
-        .action-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-
-        .action-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            padding: 20px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            color: var(--text);
-        }
-
-        .action-btn:hover {
-            background: var(--primary-light);
-            border-color: var(--primary);
-            transform: translateY(-4px);
-        }
-
-        .action-btn i {
-            font-size: 1.5rem;
-            color: var(--primary);
-            transition: all 0.3s ease;
-        }
-
-        .action-btn:hover i {
-            transform: scale(1.2);
-        }
-
-        .action-btn span {
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        /* Recent Activity */
-        .activity-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .activity-item {
-            display: flex;
-            gap: 12px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .activity-item:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-
-        .activity-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.85rem;
             flex-shrink: 0;
         }
 
-        .activity-icon.application {
-            background: var(--primary-light);
-            color: var(--primary);
+        .btn-icon:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            transform: scale(1.05);
         }
 
-        .activity-icon.interview {
-            background: var(--success-light);
-            color: var(--success);
-        }
-
-        .activity-icon.profile {
-            background: var(--warning-light);
-            color: var(--warning);
-        }
-
-        .activity-content {
-            flex: 1;
-        }
-
-        .activity-text {
-            font-size: 0.9rem;
-            color: var(--text);
-            margin-bottom: 4px;
-        }
-
-        .activity-text strong {
+        .status-badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
             font-weight: 600;
+            text-transform: uppercase;
         }
 
-        .activity-time {
-            font-size: 0.8rem;
-            color: var(--text-muted);
+        .status-badge.new {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10B981;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header {
-                padding: 16px 20px;
-            }
+        .status-badge.reviewing {
+            background: rgba(37, 99, 235, 0.1);
+            color: #2563EB;
+        }
 
-            .container {
-                padding: 20px;
-            }
+        .status-badge.pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: #F59E0B;
+        }
 
-            .welcome-content {
-                flex-direction: column;
-                text-align: center;
-            }
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
 
-            .welcome-illustration {
-                width: 150px;
-                height: 150px;
-            }
+        .applicant-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
 
-            .welcome-text h1 {
-                font-size: 1.8rem;
-            }
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.03);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
 
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .welcome-actions {
-                justify-content: center;
-                flex-wrap: wrap;
-            }
+        .btn-icon:hover {
+            background: var(--accent);
+            border-color: var(--accent);
         }
 
         /* Modal Styles */
@@ -821,27 +519,148 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(15, 23, 42, 0.4);
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(8px);
             z-index: 1000;
             align-items: center;
             justify-content: center;
-            animation: fadeIn 0.3s ease;
         }
 
         .modal-content {
-            background: white;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
             border-radius: 30px;
             width: 90%;
-            max-width: 650px;
-            max-height: 90vh;
+            max-width: 800px;
+            max-height: 85vh;
             overflow-y: auto;
             padding: 40px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
             position: relative;
-            animation: slideInModal 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Profile Details in Modal */
+        .profile-section {
+            margin-top: 30px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .profile-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .profile-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .profile-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .profile-value {
+            font-size: 0.95rem;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .skill-tag {
+            display: inline-block;
+            padding: 5px 12px;
+            background: rgba(124, 58, 237, 0.1);
+            color: var(--accent);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        
+        /* Overlay for mobile sidebar */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 90;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .sidebar-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+
+        @media (min-width: 1025px) {
+            #sidebarToggleBtn {
+                display: none !important;
+            }
+            .mobile-close-btn {
+                display: none !important;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+                box-shadow: 5px 0 25px rgba(0,0,0,0.5);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 30px 15px; /* Better mobile padding */
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+        }
+/* Modal Transitions */
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -863,6 +682,7 @@
                 opacity: 1;
             }
         }
+
 
         .modal-header {
             display: flex;
@@ -970,291 +790,369 @@
             box-shadow: 0 10px 20px rgba(37, 99, 235, 0.1);
         }
     </style>
+
+    <!-- Prevent FOUT -> Pre-load Theme -->
+    <script>
+        (function () {
+            var saved = localStorage.getItem('conneto-theme');
+            if (saved !== 'light') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
 </head>
 
 <body>
-    <header class="header">
-        <div class="logo">Conneto</div>
-        <div class="user-info">
-            <button class="notification-btn">
-                <i class="fas fa-bell"></i>
-            </button>
-            <div class="user-avatar">
-                <%= user.name.charAt(0).toUpperCase() %>
-            </div>
-            <span class="user-name">
-                <%= user.name %>
-            </span>
-            <a href="/auth/logout" class="btn-logout">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
+    <!-- Theme: auto-apply saved preference -->
+    <script>
+        (function () {
+            var t = localStorage.getItem('conneto-theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+    <aside class="sidebar" id="sidebar">
+        <div class="sb-header">
+            <div class="sb-logo">Conne<span>to</span></div>
         </div>
-    </header>
+        <div class="sb-menu">
+            <a href="/" class="sb-link" style="color: rgba(255,255,255,0.5); font-size: 0.8rem;">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+            <a href="/company/dashboard" class="sb-link active">
+                <i class="fas fa-th-large"></i>
+                Dashboard
+            </a>
+            <a href="/company/internships/create" class="sb-link">
+                <i class="fas fa-plus-circle"></i>
+                Post Internship
+            </a>
+            <a href="/company/applications" class="sb-link">
+                <i class="fas fa-users-viewfinder"></i>
+                Applicants
+            </a>
+            <a href="/company/internships" class="sb-link">
+                <i class="fas fa-briefcase"></i>
+                Manage Posts
+            </a>
+            <div style="margin-top: auto;">
+                <a href="/auth/logout" class="sb-link" style="color: var(--danger);">
+                    <i class="fas fa-power-off"></i>
+                    Logout
+                </a>
+            </div>
+        </div>
+    </aside>
 
-    <div class="container">
-        <!-- Welcome Section -->
-        <div class="welcome-section">
-            <div class="welcome-content">
-                <div class="welcome-text">
-                    <h1>Welcome back, <span
-                            style="background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
-                            <%= user.name %>
-                        </span></h1>
-                    <p style="font-size: 1.25rem; font-weight: 500; color: var(--text); margin-top: 5px;">
-                        Managing <span style="color: var(--primary); font-weight: 700;">
-                            <%= user.companyName %>
-                        </span>
-                    </p>
-                    <p style="margin-top: 15px; max-width: 500px;">Find the best talent for your internship programs.
-                        Manage postings and review applicants with precision.</p>
-                    <div class="welcome-actions">
-                        <a href="/company/internships/create" class="btn-primary" style="text-decoration: none;">
-                            <i class="fas fa-plus"></i> Post Internship
-                        </a>
-                        <a href="/company/applications" class="btn-secondary" style="text-decoration: none;">
-                            <i class="fas fa-users"></i> View All Applicants
-                        </a>
+    <main class="main-content">
+        <header class="topbar">
+            <div style="display:flex; align-items:center; gap:16px;">
+                <button id="sidebarToggleBtn"
+                    style="display:flex; flex-direction:column; gap:5px; cursor:pointer; padding:8px; border-radius:8px; border:1.5px solid var(--border); background:rgba(255,255,255,0.04); color:#fff;"
+                    aria-label="Menu">
+                    <span style="display:block;width:20px;height:2px;background:currentColor;border-radius:2px;"></span>
+                    <span style="display:block;width:20px;height:2px;background:currentColor;border-radius:2px;"></span>
+                    <span style="display:block;width:20px;height:2px;background:currentColor;border-radius:2px;"></span>
+                </button>
+                <div>
+                    <h1 style="font-size: 1.8rem; margin-bottom: 5px; color: #fff;">Expert Console</h1>
+                    <p style="color: var(--text-muted); font-size: 0.95rem;">Welcome back, <%= user.name %>! Managing
+                            <strong>
+                                <%= user.companyName %>
+                            </strong></p>
+                </div>
+            </div>
+            <div class="user-widget">
+                <div class="user-avt">
+                    <%= user.name.charAt(0).toUpperCase() %>
+                </div>
+                <div class="user-info">
+                    <div class="user-name">
+                        <%= user.name %>
+                    </div>
+                    <div class="user-role">Company Admin</div>
+                </div>
+            </div>
+        </header>
+
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-layer-group"></i></div>
+                <div>
+                    <div class="stat-label">Active Posts</div>
+                    <div class="stat-value">
+                        <%= stats.active %>
                     </div>
                 </div>
-                <div class="welcome-illustration">
-                    <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&q=80" alt="Team meeting">
-                </div>
             </div>
-        </div>
-
-        <!-- Stats Grid -->
-        <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-briefcase"></i></div>
-                <div class="stat-number">
-                    <%= stats ? stats.active : 0 %>
+                <div class="stat-icon" style="color: var(--warning);"><i class="fas fa-inbox"></i></div>
+                <div>
+                    <div class="stat-label">Applications</div>
+                    <div class="stat-value">
+                        <%= stats.totalApplicants %>
+                    </div>
                 </div>
-                <div class="stat-label">Active Internships</div>
             </div>
-            <div class="stat-card success">
-                <div class="stat-icon"><i class="fas fa-users"></i></div>
-                <div class="stat-number">
-                    <%= stats ? stats.totalApplicants : 0 %>
+            <div class="stat-card">
+                <div class="stat-icon" style="color: var(--success);"><i class="fas fa-calendar-check"></i></div>
+                <div>
+                    <div class="stat-label">Interviews</div>
+                    <div class="stat-value">
+                        <%= stats.interviews %>
+                    </div>
                 </div>
-                <div class="stat-label">Total Applicants</div>
             </div>
-            <div class="stat-card warning">
-                <div class="stat-icon"><i class="fas fa-user-check"></i></div>
-                <div class="stat-number">
-                    <%= stats ? stats.interviews : 0 %>
+            <div class="stat-card">
+                <div class="stat-icon" style="color: #60A5FA;"><i class="fas fa-award"></i></div>
+                <div>
+                    <div class="stat-label">Hired</div>
+                    <div class="stat-value">
+                        <%= stats.hired %>
+                    </div>
                 </div>
-                <div class="stat-label">Interview Scheduled</div>
             </div>
-            <div class="stat-card info">
-                <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
-                <div class="stat-number">
-                    <%= stats ? stats.hired : 0 %>
-                </div>
-                <div class="stat-label">Hired</div>
-            </div>
-        </div>
+        </section>
 
-        <!-- Content Grid -->
-        <div class="content-grid">
-            <!-- My Posted Internships -->
+        <div class="content-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px;">
             <div class="card">
                 <div class="card-header">
-                    <h2 class="card-title"><i class="fas fa-briefcase"></i> My Posted Internships</h2>
-                    <a href="/company/internships"
-                        style="color: var(--primary); text-decoration: none; font-size: 0.9rem; font-weight: 600;">Manage
-                        All <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="applicant-list">
-                    <% if (myInternships && myInternships.length> 0) { %>
-                        <% myInternships.forEach(function(internship) { %>
-                            <div class="applicant-item">
-                                <div class="applicant-avatar">
-                                    <%= internship.title.charAt(0).toUpperCase() %>
-                                </div>
-                                <div class="applicant-info">
-                                    <div class="applicant-name">
-                                        <%= internship.title %>
-                                    </div>
-                                    <div class="applicant-role">
-                                        <%= internship.location || ' Remote' %> | <%= internship.type %>
-                                    </div>
-                                </div>
-                                <div class="applicant-meta">
-                                    <span class="status-badge <%= internship.isActive ? 'new' : 'pending' %>">
-                                        <%= internship.isActive ? 'ACTIVE' : 'INACTIVE' %>
-                                    </span>
-                                    <div class="action-buttons">
-                                        <a href="/company/internships/<%= internship._id %>/edit"
-                                            class="btn-icon btn-view"><i class="fas fa-edit"></i></a>
-                                        <form action="/company/internships/<%= internship._id %>/delete" method="POST"
-                                            onsubmit="return confirm('Delete this internship and its applications?')"
-                                            style="margin: 0;">
-                                            <button type="submit" class="btn-icon btn-view"
-                                                style="color: var(--danger); background: #FEE2E2;"><i
-                                                    class="fas fa-trash"></i></button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                            <% }); %>
-                                <% } else { %>
-                                    <div class="applicant-item">
-                                        <div class="applicant-avatar">!</div>
-                                        <div class="applicant-info">
-                                            <div class="applicant-name">No internships posted</div>
-                                            <div class="applicant-role">Post your first internship</div>
-                                        </div>
-                                    </div>
-                                    <% } %>
-                </div>
-            </div>
-
-            <!-- Recent Applicants -->
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title"><i class="fas fa-user-friends"></i> Recent Applicants</h2>
+                    <h2 class="card-title"><i class="fas fa-user-graduate"></i> Recent Applicants</h2>
+                    <a href="/company/applications"
+                        style="font-size: 0.85rem; color: var(--accent); font-weight: 600;">Full List</a>
                 </div>
                 <div class="applicant-list">
                     <% if (applicants && applicants.length> 0) { %>
                         <% applicants.forEach(function(app, index) { %>
-                            <div class="applicant-item">
+                            <div class="applicant-item" onclick="openDetailsModal(<%= index %>)"
+                                style="cursor:pointer;">
                                 <div class="applicant-avatar">
                                     <%= app.student ? app.student.name.charAt(0).toUpperCase() : 'S' %>
                                 </div>
                                 <div class="applicant-info">
                                     <div class="applicant-name">
-                                        <%= app.student ? app.student.name : 'Student' %>
+                                        <%= app.student ? app.student.name : 'Unknown Student' %>
                                     </div>
                                     <div class="applicant-role">
                                         <%= app.internship ? app.internship.title : 'Position' %>
                                     </div>
                                 </div>
                                 <div class="applicant-meta">
-                                    <span
-                                        class="status-badge <%= app.status === 'applied' ? 'new' : app.status === 'under_review' ? 'reviewing' : 'pending' %>">
-                                        <%= app.status ? app.status.replace('_', ' ' ).toUpperCase() : 'APPLIED' %>
+                                    <span class="status-badge <%= app.status %>">
+                                        <%= app.status.replace(/_/g, ' ' ).toUpperCase() %>
                                     </span>
-                                    <div class="action-buttons">
-                                        <button class="btn-icon btn-view" onclick="openDetailsModal(<%= index %>)"><i
-                                                class="fas fa-eye"></i></button>
-                                        <button class="btn-icon btn-view"><i class="fas fa-check"></i></button>
-                                    </div>
+                                    <button class="btn-icon" title="View Profile">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
                                 </div>
                             </div>
                             <% }); %>
                                 <% } else { %>
-                                    <div class="applicant-item">
-                                        <div class="applicant-avatar">!</div>
-                                        <div class="applicant-info">
-                                            <div class="applicant-name">No applicants yet</div>
-                                            <div class="applicant-role">Post an internship to receive applications</div>
-                                        </div>
+                                    <div style="text-align: center; padding: 50px; color: var(--text-muted);">
+                                        <i class="fas fa-folder-open"
+                                            style="font-size: 3rem; margin-bottom: 20px; opacity: 0.3;"></i>
+                                        <p>No applicants found for your postings.</p>
                                     </div>
                                     <% } %>
                 </div>
             </div>
 
-            <!-- Applicant Details Modal -->
-            <div id="detailsModal" class="modal">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h2 class="modal-title">Application Details</h2>
-                        <button class="close-btn" onclick="closeDetailsModal()">&times;</button>
-                    </div>
-                    <div id="modalBody">
-                        <!-- Content populated by JS -->
-                    </div>
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fas fa-clipboard-list"></i> Your Posts</h2>
+                    <a href="/company/internships"
+                        style="font-size: 0.85rem; color: var(--accent); font-weight: 600;">Manage</a>
                 </div>
-            </div>
+                <div class="listing-list">
+                    <% if (myInternships && myInternships.length> 0) { %>
+                        <% myInternships.slice(0, 4).forEach(function(intern) { %>
+                            <div class="listing-item">
+                                <div class="listing-avatar">
+                                    <i class="fas fa-briefcase"></i>
+                                </div>
+                                <div class="listing-info">
+                                    <div class="listing-name">
+                                        <%= intern.title %>
+                                    </div>
+                                    <div class="listing-role">
+                                        <%= intern.type %> • <%= intern.location %>
+                                    </div>
+                                </div>
+                                <div class="action-buttons">
+                                    <a href="/company/internships/<%= intern._id %>/edit" class="btn-icon">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <% }); %>
+                                <% } else { %>
+                                    <div
+                                        style="text-align: center; padding: 30px; border: 1px dashed var(--border); border-radius: 20px;">
+                                        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">No
+                                            internships posted yet.</p>
+                                        <a href="/company/internships/create" class="sb-link"
+                                            style="background: var(--accent); color: #fff; text-transform: none; justify-content: center;">
+                                            Post First Job
+                                        </a>
+                                    </div>
+                                    <% } %>
+                </div>
 
-            <!-- Sidebar -->
-            <div>
-                <!-- Quick Actions -->
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title"><i class="fas fa-bolt"></i> Quick Actions</h2>
-                    </div>
-                    <div class="action-grid">
-                        <a href="/company/internships/create" class="action-btn">
-                            <i class="fas fa-plus-circle"></i>
-                            <span>Post Internship</span>
-                        </a>
-                        <a href="/company/applications" class="action-btn">
-                            <i class="fas fa-users"></i>
-                            <span>View Applicants</span>
-                        </a>
-                        <a href="/company/internships" class="action-btn">
-                            <i class="fas fa-briefcase"></i>
-                            <span>Manage Posts</span>
-                        </a>
-                        <a href="#" class="action-btn">
-                            <i class="fas fa-cog"></i>
-                            <span>Settings</span>
-                        </a>
+                <div style="margin-top: 40px; border-top: 1px solid var(--border); padding-top: 30px;">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 20px;">Recruiter Help</h3>
+                    <div
+                        style="background: rgba(124, 58, 237, 0.05); padding: 25px; border-radius: 20px; border: 1px solid rgba(124, 58, 237, 0.2);">
+                        <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">Need a customized
+                            recruitment plan or bulk hiring? Talk to our partnership manager.</p>
+                        <a href="mailto:connect@algoorbit.in"
+                            style="display: inline-block; margin-top: 15px; color: var(--accent); font-weight: 700; font-size: 0.9rem;">Emailalgoorbit.in
+                            →</a>
                     </div>
                 </div>
             </div>
         </div>
+    </main>
+
+    <!-- Enhanced Applicant Profile Modal -->
+    <div id="detailsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Student Candidate Profile</h2>
+                <button class="close-btn" onclick="closeDetailsModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="modalBody">
+                <!-- Data injected by Script -->
+            </div>
+        </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // Store applicants data for modal
         const applicantsData = <% - JSON.stringify(applicants) %>;
 
         function openDetailsModal(index) {
             const app = applicantsData[index];
+            if (!app) return;
+
             const modal = document.getElementById('detailsModal');
             const modalBody = document.getElementById('modalBody');
 
-            if (!app) return;
+            const student = app.student || {};
+            const profile = student.profile || {};
+
+            // Merge profile skills + application skills
+            const profileSkillsArr = (profile.skills && Array.isArray(profile.skills)) ? profile.skills : (profile.skills ? profile.skills.split(',') : []);
+            const appSkillsArr = app.studentSkills ? app.studentSkills.split(',') : [];
+            const allSkills = [...new Set([...profileSkillsArr, ...appSkillsArr].map(s => s.trim()).filter(s => s))];
 
             modalBody.innerHTML = `
-                <div class="detail-grid-modal">
-                    <div class="detail-item-modal">
-                        <div class="detail-label-modal">Student Name</div>
-                        <div class="detail-value-modal">${app.student ? app.student.name : 'N/A'}</div>
+                <div style="display:flex;align-items:flex-start;gap:20px;margin-bottom:24px;background:rgba(255,255,255,0.03);padding:24px;border-radius:18px;border:1px solid var(--border);flex-wrap:wrap;">
+                    <div style="width:72px;height:72px;border-radius:18px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:800;flex-shrink:0;">
+                        ${student.name ? student.name.charAt(0).toUpperCase() : 'S'}
                     </div>
-                    <div class="detail-item-modal">
-                        <div class="detail-label-modal">Contact Email</div>
-                        <div class="detail-value-modal">${app.student ? app.student.email : 'N/A'}</div>
-                    </div>
-                    <div class="detail-item-modal">
-                        <div class="detail-label-modal">Internship Role</div>
-                        <div class="detail-value-modal">${app.internship ? app.internship.title : 'N/A'}</div>
-                    </div>
-                    <div class="detail-item-modal">
-                        <div class="detail-label-modal">Current Status</div>
-                        <div class="detail-value-modal" style="color: var(--primary); text-transform: uppercase; font-size: 0.8rem;">
-                            ${app.status ? app.status.replace('_', ' ') : 'PENDING'}
+                    <div style="flex:1;min-width:0;">
+                        <h3 style="font-size:1.4rem;margin-bottom:4px;">${student.name || 'Unknown'}</h3>
+                        <p style="color:var(--accent);font-weight:600;font-size:0.88rem;margin-bottom:8px;">${app.internship ? app.internship.title : 'Applicant'}</p>
+                        <div style="display:flex;flex-wrap:wrap;gap:10px;">
+                            ${student.email ? `<span style="font-size:0.8rem;color:var(--text-muted);"><i class="fas fa-envelope" style="margin-right:4px;"></i>${student.email}</span>` : ''}
+                            ${profile.phone ? `<span style="font-size:0.8rem;color:var(--text-muted);"><i class="fas fa-phone" style="margin-right:4px;"></i>${profile.phone}</span>` : ''}
                         </div>
                     </div>
+                    <span class="status-badge ${app.status}" style="padding:8px 16px;border-radius:10px;font-size:0.78rem;flex-shrink:0;">
+                        ${app.status.replace(/_/g, ' ').toUpperCase()}
+                    </span>
                 </div>
 
-                <div class="q-section">
-                    <div class="q-title"><i class="fas fa-question-circle"></i> Why should you be hired?</div>
-                    <div class="q-text">${app.question1Answer || 'No answer provided.'}</div>
+                <div class="profile-grid" style="margin-bottom:18px;">
+                    <div class="profile-item">
+                        <span class="profile-label">Education</span>
+                        <span class="profile-value">${profile.degree || 'Not provided'}</span>
+                    </div>
+                    <div class="profile-item">
+                        <span class="profile-label">Institution</span>
+                        <span class="profile-value">${profile.college || 'Not provided'}</span>
+                    </div>
+                    <div class="profile-item">
+                        <span class="profile-label">Applied On</span>
+                        <span class="profile-value">${app.appliedAt ? new Date(app.appliedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : 'N/A'}</span>
+                    </div>
+                    <div class="profile-item">
+                        <span class="profile-label">CGPA / Year</span>
+                        <span class="profile-value">${profile.cgpa || profile.year || 'Not provided'}</span>
+                    </div>
                 </div>
 
-                <div class="q-section">
-                    <div class="q-title"><i class="fas fa-clock"></i> Availability & Duration Match</div>
-                    <div class="q-text">${app.question2Answer || 'No answer provided.'}</div>
+                <div class="profile-section">
+                    <h4 class="profile-title"><i class="fas fa-user" style="margin-right:7px;color:var(--accent);font-size:0.85rem;"></i>About the Student</h4>
+                    <p style="line-height:1.8;font-size:0.88rem;color:var(--text-muted);">${profile.bio || 'No bio added to their profile yet.'}</p>
                 </div>
 
-                <div class="q-section" style="background: #F8FAFC; border: 1px solid var(--border);">
-                    <div class="q-title" style="color: var(--text-muted)"><i class="fas fa-tools"></i> Declared Skills</div>
-                    <div class="q-text">${app.studentSkills || 'None specified.'}</div>
+                <div class="profile-section">
+                    <h4 class="profile-title"><i class="fas fa-code" style="margin-right:7px;color:var(--accent);font-size:0.85rem;"></i>Skills</h4>
+                    ${allSkills.length > 0
+                    ? `<div style="display:flex;flex-wrap:wrap;gap:8px;">${allSkills.map(s => `<span class="skill-tag">${s}</span>`).join('')}</div>`
+                    : `<p style="color:var(--text-muted);font-size:0.85rem;">No skills listed.</p>`
+                }
                 </div>
 
-                ${app.resumeUrl ? `
-                    <a href="${app.resumeUrl}" target="_blank" class="resume-link-modal">
-                        <i class="fas fa-file-pdf" style="font-size: 1.5rem;"></i>
-                        <div>
-                            <div style="font-size: 0.9rem;">Applicant Resume</div>
-                            <div style="font-size: 0.7rem; opacity: 0.7;">Click to view full PDF</div>
-                        </div>
-                        <i class="fas fa-external-link-alt" style="margin-left: auto; font-size: 0.8rem;"></i>
-                    </a>
-                ` : '<div style="text-align: center; color: var(--text-muted); padding: 20px; border: 1px dashed var(--border); border-radius: 16px;">No resume document provided</div>'}
+                <div class="profile-section" style="background:rgba(124,58,237,0.04);">
+                    <h4 class="profile-title"><i class="fas fa-comments" style="margin-right:7px;color:var(--accent);font-size:0.85rem;"></i>Application Responses</h4>
+                    <div style="margin-bottom:14px;">
+                        <p style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent);margin-bottom:5px;font-weight:700;">Why should they be hired?</p>
+                        <p style="font-size:0.88rem;line-height:1.7;color:var(--text-muted);">${app.question1Answer || 'No answer provided.'}</p>
+                    </div>
+                    <div>${app.question2Answer ? `
+                        <p style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent);margin-bottom:5px;font-weight:700;">Availability</p>
+                        <p style="font-size:0.88rem;line-height:1.7;color:var(--text-muted);">${app.question2Answer}</p>` : ''
+                }
+                    </div>
+                    ${app.coverLetter ? `
+                    <div style="margin-top:12px;">
+                        <p style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent);margin-bottom:5px;font-weight:700;">Cover Letter</p>
+                        <p style="font-size:0.88rem;line-height:1.7;color:var(--text-muted);">${app.coverLetter}</p>
+                    </div>` : ''}
+                </div>
+
+                <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;">
+                    ${app.resumeUrl
+                    ? `<a href="${app.resumeUrl}" target="_blank" style="flex:1;min-width:120px;display:flex;align-items:center;justify-content:center;gap:8px;padding:11px;background:#fff;color:#0f172a;border-radius:11px;font-weight:700;font-size:0.85rem;text-decoration:none;"><i class="fas fa-file-pdf" style="color:#dc2626;"></i> View Resume</a>`
+                    : `<div style="flex:1;min-width:120px;padding:11px;background:rgba(255,255,255,0.03);border:1px dashed var(--border);border-radius:11px;text-align:center;color:var(--text-muted);font-size:0.82rem;">No Resume</div>`
+                }
+                    ${profile.linkedin ? `<a href="${profile.linkedin}" target="_blank" style="width:46px;height:46px;background:#0A66C2;border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;"><i class="fab fa-linkedin-in"></i></a>` : ''}
+                    ${profile.github ? `<a href="${profile.github}" target="_blank" style="width:46px;height:46px;background:#24292e;border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;"><i class="fab fa-github"></i></a>` : ''}
+                    ${profile.portfolio ? `<a href="${profile.portfolio}" target="_blank" style="width:46px;height:46px;background:#7c3aed;border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;"><i class="fas fa-globe"></i></a>` : ''}
+                </div>
+
+                <div style="border-top:1px solid var(--border);padding-top:18px;">
+                    <p style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);font-weight:700;margin-bottom:10px;">Update Status</p>
+                    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                        <form action="/company/applications/${app._id}/status" method="POST" style="flex:1;min-width:90px;">
+                            <input type="hidden" name="status" value="shortlisted">
+                            <button type="submit" style="width:100%;padding:9px 6px;border-radius:9px;border:1.5px solid #3b82f6;background:rgba(59,130,246,0.1);color:#60a5fa;font-weight:700;font-size:0.78rem;cursor:pointer;transition:all 0.25s;">
+                                <i class="fas fa-star"></i> Shortlist
+                            </button>
+                        </form>
+                        <form action="/company/applications/${app._id}/status" method="POST" style="flex:1;min-width:90px;">
+                            <input type="hidden" name="status" value="interview_scheduled">
+                            <button type="submit" style="width:100%;padding:9px 6px;border-radius:9px;border:1.5px solid #10b981;background:rgba(16,185,129,0.1);color:#34d399;font-weight:700;font-size:0.78rem;cursor:pointer;transition:all 0.25s;">
+                                <i class="fas fa-calendar-check"></i> Interview
+                            </button>
+                        </form>
+                        <form action="/company/applications/${app._id}/status" method="POST" style="flex:1;min-width:90px;">
+                            <input type="hidden" name="status" value="selected">
+                            <button type="submit" style="width:100%;padding:9px 6px;border-radius:9px;border:1.5px solid #7c3aed;background:rgba(124,58,237,0.1);color:#a78bfa;font-weight:700;font-size:0.78rem;cursor:pointer;transition:all 0.25s;">
+                                <i class="fas fa-award"></i> Select
+                            </button>
+                        </form>
+                        <form action="/company/applications/${app._id}/status" method="POST" style="flex:1;min-width:90px;">
+                            <input type="hidden" name="status" value="rejected">
+                            <button type="submit" style="width:100%;padding:9px 6px;border-radius:9px;border:1.5px solid #ef4444;background:rgba(239,68,68,0.1);color:#f87171;font-weight:700;font-size:0.78rem;cursor:pointer;transition:all 0.25s;">
+                                <i class="fas fa-times"></i> Reject
+                            </button>
+                        </form>
+                    </div>
+                </div>
             `;
 
             modal.style.display = 'flex';
@@ -1266,49 +1164,51 @@
             document.body.style.overflow = 'auto';
         }
 
-        // Close modal when clicking outside
         window.onclick = function (event) {
-            const modal = document.getElementById('detailsModal');
-            if (event.target == modal) {
+            if (event.target == document.getElementById('detailsModal')) {
                 closeDetailsModal();
             }
         }
 
-        // Add smooth scroll reveal animation
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+        // Theme toggle
+        function toggleTheme() {
+            var html = document.documentElement;
+            var current = html.getAttribute('data-theme') || 'dark';
+            var next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('conneto-theme', next);
+        }
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.animationPlayState = 'running';
-                }
-            });
-        }, observerOptions);
+        
+        // Mobile sidebar toggle
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        const toggleBtn = document.getElementById('sidebarToggleBtn');
+        const closeBtn = document.getElementById('closeSidebarBtn');
 
-        document.querySelectorAll('.stat-card, .card').forEach(el => {
-            el.style.animationPlayState = 'paused';
-            observer.observe(el);
-        });
+        function openSidebar() {
+            sidebar.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
 
-        // Add pulse animation to notification badge
-        const notificationBtn = document.querySelector('.notification-btn');
-        setInterval(() => {
-            notificationBtn.style.transform = 'scale(1.05)';
-            setTimeout(() => {
-                notificationBtn.style.transform = 'scale(1)';
-            }, 200);
-        }, 3000);
+        function closeSidebar() {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
 
-        // Button hover effects
-        document.querySelectorAll('.action-btn, .btn-primary, .btn-secondary, .btn-icon, .btn-logout').forEach(btn => {
-            btn.addEventListener('mouseenter', function () {
-                this.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
-            });
-        });
+        if (toggleBtn) toggleBtn.addEventListener('click', openSidebar);
+        if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
+        if (overlay) overlay.addEventListener('click', closeSidebar);
     </script>
+
+
+    <!-- Floating Theme Toggle -->
+    <button class="c-theme-toggle" onclick="toggleTheme()" title="Toggle dark/light mode" aria-label="Toggle theme">
+        <i class="fas fa-sun icon-sun"></i>
+        <i class="fas fa-moon icon-moon"></i>
+    </button>
 </body>
 
 </html>

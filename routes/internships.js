@@ -236,7 +236,16 @@ router.get('/company/applications', isAuthenticated, isCompany, async (req, res)
                 path: 'internship',
                 select: 'title company'
             })
-            .sort({ appliedAt: -1 });
+            .sort({ appliedAt: -1 })
+            .lean();
+
+        // Attach student profiles
+        for (let app of applications) {
+            if (app.student && app.student._id) {
+                app.student.profile = await StudentProfile.findOne({ user: app.student._id }).lean() || {};
+            }
+        }
+
 
         // Group by internship
         const groupedByInternship = {};
@@ -564,7 +573,7 @@ router.post('/internships/:id/apply', isAuthenticated, isStudent, upload.single(
             status: 'applied'
         });
 
-        res.redirect('/student/applications?success=Application submitted successfully');
+        res.redirect('/student/dashboard?applied=1#applications');
     } catch (err) {
         console.error('Error applying:', err);
         res.redirect('/internships?error=Failed to submit application');

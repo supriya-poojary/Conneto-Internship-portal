@@ -5,585 +5,677 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Applications | Conneto</title>
+    <!-- Prevent FOUT -> Pre-load Theme -->
+    <script>
+        (function () {
+            var saved = localStorage.getItem('conneto-theme');
+            if (saved !== 'light') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/conneto.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* CSS Variables */
+        :root {
+            --sidebar-width: 250px;
+            --bg: #0f172a;
+            --bg-card: #1e293b;
+            --bg-sidebar: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #8b5cf6;
+            --border: #334155;
+            --danger: #ef4444;
+            --success: #10b981;
         }
 
-        :root {
-            --primary: #7C3AED;
-            --primary-dark: #6D28D9;
-            --primary-light: #EDE9FE;
-            --secondary: #2563EB;
-            --success: #10B981;
-            --success-light: #D1FAE5;
-            --warning: #F59E0B;
-            --warning-light: #FEF3C7;
-            --danger: #EF4444;
-            --danger-light: #FEE2E2;
-            --info: #06B6D4;
-            --info-light: #CFFAFE;
-            --text: #0F172A;
-            --text-muted: #64748B;
-            --border: #E2E8F0;
-            --bg: #F8FAFC;
-            --card-bg: #FFFFFF;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        [data-theme="light"] {
+            --bg: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-sidebar: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --accent: #6366f1;
+            --border: #e2e8f0;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #F5F3FF 0%, #EDE9FE 100%);
-            color: var(--text);
+            background: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+            transition: transform 0.3s ease;
+        }
+
+        .sb-header {
+            padding: 30px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sb-logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: 1px;
+        }
+
+        .sb-logo span {
+            color: var(--accent);
+            font-style: italic;
+        }
+
+        .sb-menu {
+            flex: 1;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .sb-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: all 0.3s;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        .sb-link i {
+            font-size: 1.2rem;
+        }
+
+        .sb-link:hover,
+        .sb-link.active {
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--accent);
+        }
+
+        .sb-link.active {
+            border-left: 4px solid var(--accent);
+        }
+
+        .sb-footer {
+            border-top: 1px solid var(--border);
+            padding: 20px;
+        }
+
+        .logout-btn {
+            color: var(--danger);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        /* Main Content styles */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 40px;
             min-height: 100vh;
         }
 
-        .header {
-            background: white;
-            padding: 20px 40px;
-            border-bottom: 1px solid var(--border);
+        .topbar {
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: var(--shadow);
+            margin-bottom: 40px;
         }
 
-        .logo {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .mobile-toggle {
+            display: none;
         }
 
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 20px;
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 90;
+            backdrop-filter: blur(4px);
         }
 
-        .nav-link {
-            color: var(--text);
-            text-decoration: none;
-            font-weight: 500;
+        /* Responsive Sidebar */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .sidebar-overlay.active {
+                display: block;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .mobile-toggle {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                padding: 10px;
+                background: var(--bg-card);
+                border: 1px solid var(--border);
+                border-radius: 8px;
+                cursor: pointer;
+            }
+
+            .mobile-toggle span {
+                display: block;
+                width: 22px;
+                height: 2px;
+                background: var(--text-main);
+            }
         }
 
-        .nav-link:hover {
-            color: var(--primary);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 32px;
-        }
-
-        .page-title {
-            font-size: 2rem;
-            font-weight: 700;
-        }
-
-        .btn-primary {
-            padding: 12px 24px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-dark);
-        }
-
-        .internship-tabs {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-        }
-
-        .internship-tab {
-            padding: 12px 20px;
-            background: white;
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-
-        .internship-tab:hover,
-        .internship-tab.active {
-            border-color: var(--primary);
-            background: var(--primary-light);
-            color: var(--primary);
-        }
-
-        .applications-card {
-            background: white;
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: var(--shadow);
-        }
-
-        .section-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .application-list {
+        /* Apps Specific Horizontal Row Cards */
+        .app-list {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 20px;
+            margin-bottom: 40px;
         }
 
-        .application-item {
+        .app-row-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
             display: flex;
-            gap: 16px;
-            padding: 20px;
-            background: var(--bg);
-            border-radius: 12px;
-            align-items: center;
+            flex-direction: column;
+            gap: 20px;
+            transition: all 0.3s ease;
+        }
+
+        @media (min-width: 768px) {
+            .app-row-card {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .app-main-info {
+                flex: 1;
+                display: flex;
+                align-items: center;
+                gap: 20px;
+            }
+
+            .app-details {
+                flex: 1.5;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                border-left: 1px solid var(--border);
+                padding-left: 20px;
+            }
+
+            .app-actions {
+                flex: 0.8;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                border-left: 1px solid var(--border);
+                padding-left: 20px;
+            }
+        }
+
+        .app-row-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
         .student-avatar {
-            width: 50px;
-            height: 50px;
+            width: 55px;
+            height: 55px;
             border-radius: 12px;
-            background: var(--primary-light);
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--accent);
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 1.5rem;
             font-weight: 700;
-            color: var(--primary);
             flex-shrink: 0;
         }
 
-        .application-info {
-            flex: 1;
-        }
-
         .student-name {
-            font-weight: 600;
-            margin-bottom: 4px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 0 0 5px 0;
         }
 
-        .application-date {
+        .student-applied {
             font-size: 0.85rem;
             color: var(--text-muted);
+            margin: 0;
         }
 
-        .status-badge {
-            padding: 6px 12px;
+        .app-status {
+            padding: 5px 12px;
             border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-top: 8px;
         }
 
-        .status-badge.applied {
-            background: var(--info-light);
-            color: #0891B2;
+        .status-applied {
+            background: rgba(14, 165, 233, 0.1);
+            color: #0ea5e9;
         }
 
-        .status-badge.under_review {
-            background: var(--warning-light);
-            color: #B45309;
+        .status-under_review {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
         }
 
-        .status-badge.shortlisted {
-            background: var(--primary-light);
-            color: var(--primary);
+        .status-shortlisted {
+            background: rgba(139, 92, 246, 0.1);
+            color: #8b5cf6;
         }
 
-        .status-badge.interview_scheduled {
-            background: var(--success-light);
-            color: #047857;
+        .status-interview_scheduled {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
         }
 
-        .status-badge.selected {
-            background: #DCFCE7;
-            color: #166534;
+        .status-selected {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
         }
 
-        .status-badge.rejected {
-            background: var(--danger-light);
-            color: #B91C1C;
+        .status-rejected {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
         }
 
-        .action-buttons {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
+        .skill-tag {
+            padding: 4px 10px;
+            background: rgba(139, 92, 246, 0.08);
+            color: var(--text-main);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            margin-right: 5px;
+            display: inline-block;
+            margin-bottom: 5px;
         }
 
-        .btn-action {
-            padding: 8px 14px;
+        .btn-act {
+            padding: 10px 15px;
             border-radius: 8px;
+            border: none;
             font-size: 0.85rem;
             font-weight: 600;
             cursor: pointer;
-            border: none;
-            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.25s;
+            width: 100%;
+            text-decoration: none;
         }
 
-        .btn-shortlist {
-            background: var(--primary-light);
-            color: var(--primary);
+        .btn-act i {
+            font-size: 1rem;
         }
 
-        .btn-shortlist:hover {
-            background: var(--primary);
-            color: white;
+        .btn-act-shortlist {
+            background: rgba(139, 92, 246, 0.1);
+            color: #8b5cf6;
         }
 
-        .btn-interview {
-            background: var(--success-light);
-            color: var(--success);
+        .btn-act-shortlist:hover {
+            background: #8b5cf6;
+            color: #fff;
         }
 
-        .btn-interview:hover {
-            background: var(--success);
-            color: white;
+        .btn-act-schedule {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
         }
 
-        .btn-reject {
-            background: var(--danger-light);
-            color: var(--danger);
+        .btn-act-schedule:hover {
+            background: #10b981;
+            color: #fff;
         }
 
-        .btn-reject:hover {
-            background: var(--danger);
-            color: white;
+        .btn-act-reject {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
         }
 
-        .btn-select {
-            background: #DCFCE7;
-            color: #166534;
+        .btn-act-reject:hover {
+            background: #ef4444;
+            color: #fff;
         }
 
-        .btn-select:hover {
-            background: #166534;
-            color: white;
+        .btn-act-hire {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+        }
+
+        .btn-act-hire:hover {
+            background: #22c55e;
+            color: #fff;
+        }
+
+        .group-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
         }
 
         .empty-state {
             text-align: center;
-            padding: 40px;
-            color: var(--text-muted);
-        }
-
-        .interview-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 32px;
-            border-radius: 16px;
-            max-width: 500px;
-            width: 90%;
-        }
-
-        .modal-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-
-        .modal-input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            margin-bottom: 16px;
-            font-size: 1rem;
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 12px;
-            justify-content: flex-end;
-        }
-
-        .btn-cancel {
-            padding: 10px 20px;
-            background: var(--bg);
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .btn-submit {
-            padding: 10px 20px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        @media (max-width: 768px) {
-            .application-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .action-buttons {
-                width: 100%;
-            }
-
-            .btn-action {
-                flex: 1;
-                text-align: center;
-            }
+            padding: 60px 20px;
+            background: var(--bg-card);
+            border-radius: 20px;
+            border: 1px dashed var(--border);
         }
     </style>
 </head>
 
 <body>
-    <header class="header">
-        <a href="/" class="logo">Conneto</a>
-        <nav class="nav-links">
-            <a href="/company/dashboard" class="nav-link">Dashboard</a>
-            <a href="/company/applications" class="nav-link" style="color: var(--primary);">Applications</a>
-            <a href="/company/internships/create" class="btn-primary">
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sb-header">
+            <a href="/" class="sb-logo">Conne<span>to</span></a>
+            <button id="closeSidebarBtn" class="mobile-toggle"
+                style="background:none; border:none; color:var(--text-muted); font-size:1.5rem;"><i
+                    class="fas fa-times"></i></button>
+        </div>
+        <nav class="sb-menu">
+            <a href="/" class="sb-link" style="color: var(--text-muted); font-size: 0.8rem;"><i
+                    class="fas fa-arrow-left"></i> Back to Home</a>
+            <a href="/company/dashboard" class="sb-link"><i class="fas fa-table-cells-large"></i> Dashboard</a>
+            <a href="/company/internships/create" class="sb-link"><i class="fas fa-circle-plus"></i> Post Internship</a>
+            <a href="/company/applications" class="sb-link active"><i class="fas fa-user-group"></i> Applicants</a>
+            <a href="/company/internships" class="sb-link"><i class="fas fa-briefcase"></i> Manage Posts</a>
+        </nav>
+        <div class="sb-footer">
+            <a href="/auth/logout" class="logout-btn"><i class="fas fa-power-off"></i> Logout</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div style="display:flex; align-items:center; gap:20px;">
+                <button id="sidebarToggleBtn" class="mobile-toggle">
+                    <span></span><span></span><span></span>
+                </button>
+                <div>
+                    <h1 style="font-size: 1.8rem; margin:0 0 5px 0; font-family:'Playfair Display',serif;">Manage
+                        Applications</h1>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; margin:0;">Review applicants for your
+                        internship posts.</p>
+                </div>
+            </div>
+            <a href="/company/internships/create" class="btn-act-shortlist"
+                style="padding:10px 20px; border-radius:10px; font-weight:600; display:flex; align-items:center; gap:8px;">
                 <i class="fas fa-plus"></i> Post Internship
             </a>
-        </nav>
-    </header>
+        </header>
 
-    <div class="container">
-        <div class="page-header">
-            <h1 class="page-title">Applications</h1>
-            <a href="/company/internships/create" class="btn-primary">
-                <i class="fas fa-plus"></i> Post New Internship
-            </a>
-        </div>
-
-        <% if (groupedApplications && groupedApplications.length> 0) { %>
-            <% groupedApplications.forEach(function(group) { %>
-                <div class="applications-card" style="margin-bottom: 24px;">
-                    <h2 class="section-title">
-                        <i class="fas fa-briefcase"></i>
-                        <%= group.internship.title %>
-                            <span style="font-size: 0.9rem; font-weight: 500; color: var(--text-muted);">
-                                (<%= group.applications.length %> applicant<%= group.applications.length !==1 ? 's' : ''
-                                        %>)
+        <div>
+            <% if (groupedApplications && groupedApplications.length> 0) { %>
+                <% groupedApplications.forEach(function(group, index) { %>
+                    <div style="margin-bottom: 50px;">
+                        <div class="group-header">
+                            <i class="fas fa-briefcase" style="font-size: 1.5rem; color: var(--accent);"></i>
+                            <h2 style="font-size:1.4rem; font-weight:600; margin:0;">
+                                <%= group.internship.title %>
+                            </h2>
+                            <span
+                                style="padding: 4px 12px; background: rgba(139, 92, 246, 0.1); color: var(--accent); border-radius: 50px; font-size: 0.85rem; font-weight: 700; margin-left:auto;">
+                                <%= group.applications.length %> Applicant<%= group.applications.length !==1 ? 's' : ''
+                                        %>
                             </span>
-                    </h2>
+                        </div>
 
-                    <% if (group.applications && group.applications.length> 0) { %>
-                        <div class="application-list">
-                            <% group.applications.forEach(function(app) { %>
-                                <div class="application-item">
-                                    <div class="student-avatar">
-                                        <%= app.student ? app.student.name.charAt(0).toUpperCase() : 'S' %>
-                                    </div>
-                                    <div class="application-info">
-                                        <div class="student-name">
-                                            <%= app.student ? app.student.name : 'Student' %>
-                                        </div>
-                                        <div class="application-date">
-                                            Applied on <%= new Date(app.appliedAt).toLocaleDateString() %>
-                                        </div>
-                                        <% if (app.resumeUrl) { %>
-                                            <div style="margin-top: 8px;">
-                                                <a href="<%= app.resumeUrl %>" target="_blank"
-                                                    style="color: var(--primary); font-size: 0.9rem; text-decoration: none; font-weight: 500;">
-                                                    <i class="fas fa-file-pdf"></i> View Resume
-                                                </a>
+                        <% if (group.applications && group.applications.length> 0) { %>
+                            <div class="app-list">
+                                <% group.applications.forEach(function(app) { %>
+                                    <div class="app-row-card">
+                                        <div class="app-main-info">
+                                            <div class="student-avatar">
+                                                <%= app.student ? app.student.name.charAt(0).toUpperCase() : 'S' %>
                                             </div>
-                                            <% } %>
-                                                <% if (app.extractedSkills && app.extractedSkills.length> 0) { %>
-                                                    <div style="margin-top: 8px; font-size: 0.85rem;">
-                                                        <strong>Skills Match:</strong>
-                                                        <% app.extractedSkills.forEach(skill=> { %>
-                                                            <span
-                                                                style="display:inline-block; padding: 2px 8px; background:var(--primary-light); color:var(--primary); border-radius:12px; margin-right:4px;">
-                                                                <%= skill %>
-                                                            </span>
-                                                            <% }) %>
+                                            <div>
+                                                <h3 class="student-name">
+                                                    <%= app.student ? app.student.name : 'Unknown Student' %>
+                                                </h3>
+                                                <p class="student-applied">Applied: <%= new
+                                                        Date(app.appliedAt).toLocaleDateString() %>
+                                                </p>
+                                                <span class="app-status status-<%= app.status %>">
+                                                    <%= app.status.replace('_', ' ' ) %>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="app-details">
+                                            <% if (app.resumeUrl) { %>
+                                                <a href="<%= app.resumeUrl %>" target="_blank"
+                                                    style="display:inline-flex; align-items:center; gap:8px; padding:10px 15px; background:rgba(56, 189, 248, 0.1); color:#38bdf8; border-radius:8px; font-size:0.85rem; font-weight:600; align-self:flex-start;">
+                                                    <i class="fas fa-file-pdf" style="color:#ef4444;"></i> View Resume
+                                                </a>
+                                                <% } %>
+                                                    <div style="margin-top:5px;">
+                                                        <p
+                                                            style="font-size:0.75rem; text-transform:uppercase; font-weight:700; color:var(--text-muted); margin: 0 0 5px 0;">
+                                                            Skills Summary</p>
+                                                        <div>
+                                                            <% if (app.extractedSkills && app.extractedSkills.length> 0)
+                                                                { %>
+                                                                <% app.extractedSkills.forEach(skill=> { %>
+                                                                    <span class="skill-tag">
+                                                                        <%= skill %>
+                                                                    </span>
+                                                                    <% }) %>
+                                                                        <% } else if (app.studentSkills) { %>
+                                                                            <%
+                                                                                app.studentSkills.split(',').forEach(skill=>
+                                                                                { %>
+                                                                                <span class="skill-tag">
+                                                                                    <%= skill.trim() %>
+                                                                                </span>
+                                                                                <% }) %>
+                                                                                    <% } else { %>
+                                                                                        <span
+                                                                                            style="font-size:0.85rem; color:var(--text-muted);">No
+                                                                                            skills listed</span>
+                                                                                        <% } %>
+                                                        </div>
                                                     </div>
-                                                    <% } %>
-                                                        <% if (app.studentSkills) { %>
-                                                            <div style="margin-top: 8px; font-size: 0.85rem;">
-                                                                <strong>Self-Reported Skills:</strong> <span
-                                                                    style="color: var(--text-muted);">
-                                                                    <%= app.studentSkills %>
-                                                                </span>
+                                        </div>
+
+                                        <div class="app-actions">
+                                            <% if (app.status==='applied' || app.status==='under_review' ) { %>
+                                                <form action="/company/applications/<%= app._id %>/shortlist"
+                                                    method="POST" style="margin:0;">
+                                                    <button type="submit" class="btn-act btn-act-shortlist"><i
+                                                            class="fas fa-star"></i> Shortlist</button>
+                                                </form>
+                                                <button type="button" class="btn-act btn-act-schedule"
+                                                    onclick="openInterviewModal('<%= app._id %>')"><i
+                                                        class="fas fa-calendar"></i> Schedule</button>
+                                                <form action="/company/applications/<%= app._id %>/reject" method="POST"
+                                                    style="margin:0;">
+                                                    <button type="submit" class="btn-act btn-act-reject"><i
+                                                            class="fas fa-times"></i> Reject</button>
+                                                </form>
+
+                                                <% } else if (app.status==='shortlisted' ) { %>
+                                                    <button type="button" class="btn-act btn-act-schedule"
+                                                        onclick="openInterviewModal('<%= app._id %>')"><i
+                                                            class="fas fa-calendar"></i> Interview</button>
+                                                    <form action="/company/applications/<%= app._id %>/select"
+                                                        method="POST" style="margin:0;">
+                                                        <button type="submit" class="btn-act btn-act-hire"><i
+                                                                class="fas fa-user-check"></i> Hire</button>
+                                                    </form>
+
+                                                    <% } else if (app.status==='interview_scheduled' ) { %>
+                                                        <form action="/company/applications/<%= app._id %>/select"
+                                                            method="POST" style="margin:0;">
+                                                            <button type="submit" class="btn-act btn-act-hire"><i
+                                                                    class="fas fa-award"></i> Select</button>
+                                                        </form>
+                                                        <% } else { %>
+                                                            <div
+                                                                style="font-size:0.85rem; color:var(--text-muted); text-align:center; padding:10px;">
+                                                                Status Finalized
                                                             </div>
                                                             <% } %>
-                                                                <% if (app.question1Answer || app.question2Answer) { %>
-                                                                    <div
-                                                                        style="margin-top: 12px; font-size: 0.85rem; background: var(--bg); border: 1px solid var(--border); padding: 12px; border-radius: 8px;">
-                                                                        <% if (app.question1Answer) { %>
-                                                                            <p style="margin-bottom: 8px;"><strong>Why
-                                                                                    should you be hired?</strong><br>
-                                                                                <span style="color: var(--text-muted);">
-                                                                                    <%= app.question1Answer %>
-                                                                                </span>
-                                                                            </p>
-                                                                            <% } %>
-                                                                                <% if (app.question2Answer) { %>
-                                                                                    <p><strong>Available for
-                                                                                            duration?</strong><br>
-                                                                                        <span
-                                                                                            style="color: var(--text-muted);">
-                                                                                            <%= app.question2Answer %>
-                                                                                        </span>
-                                                                                    </p>
-                                                                                    <% } %>
-                                                                    </div>
-                                                                    <% } %>
-                                                                        <% if (app.interviewDate) { %>
-                                                                            <div
-                                                                                style="margin-top: 8px; font-size: 0.9rem; color: var(--success);">
-                                                                                <i class="fas fa-calendar"></i>
-                                                                                Interview: <%= new
-                                                                                    Date(app.interviewDate).toLocaleString()
-                                                                                    %>
-                                                                            </div>
-                                                                            <% } %>
+                                        </div>
                                     </div>
-                                    <span class="status-badge <%= app.status %>">
-                                        <%= app.status.replace('_', ' ' ) %>
-                                    </span>
-                                    <div class="action-buttons">
-                                        <% if (app.status==='applied' || app.status==='under_review' ) { %>
-                                            <form action="/company/applications/<%= app._id %>/shortlist" method="POST"
-                                                style="display: inline;">
-                                                <button type="submit" class="btn-action btn-shortlist">
-                                                    <i class="fas fa-check"></i> Shortlist
-                                                </button>
-                                            </form>
-                                            <button class="btn-action btn-interview"
-                                                onclick="openInterviewModal('<%= app._id %>')">
-                                                <i class="fas fa-calendar"></i> Schedule
-                                            </button>
-                                            <form action="/company/applications/<%= app._id %>/reject" method="POST"
-                                                style="display: inline;">
-                                                <button type="submit" class="btn-action btn-reject">
-                                                    <i class="fas fa-times"></i> Reject
-                                                </button>
-                                            </form>
-                                            <% } else if (app.status==='shortlisted' ) { %>
-                                                <button class="btn-action btn-interview"
-                                                    onclick="openInterviewModal('<%= app._id %>')">
-                                                    <i class="fas fa-calendar"></i> Schedule Interview
-                                                </button>
-                                                <form action="/company/applications/<%= app._id %>/select" method="POST"
-                                                    style="display: inline;">
-                                                    <button type="submit" class="btn-action btn-select">
-                                                        <i class="fas fa-user-check"></i> Hire
-                                                    </button>
-                                                </form>
-                                                <% } else if (app.status==='interview_scheduled' ) { %>
-                                                    <form action="/company/applications/<%= app._id %>/select"
-                                                        method="POST" style="display: inline;">
-                                                        <button type="submit" class="btn-action btn-select">
-                                                            <i class="fas fa-user-check"></i> Hire
-                                                        </button>
-                                                    </form>
-                                                    <% } %>
-                                    </div>
+                                    <% }); %>
+                            </div>
+                            <% } else { %>
+                                <div class="empty-state">
+                                    <i class="fas fa-inbox"
+                                        style="font-size:2rem; color:var(--border); margin-bottom:15px; display:block;"></i>
+                                    <p style="margin:0; color:var(--text-muted);">No applications yet.</p>
                                 </div>
-                                <% }); %>
-                        </div>
+                                <% } %>
+                    </div>
+                    <% }); %>
                         <% } else { %>
                             <div class="empty-state">
-                                <p>No applications yet for this internship</p>
-                            </div>
-                            <% } %>
-                </div>
-                <% }); %>
-                    <% } else { %>
-                        <div class="applications-card">
-                            <div class="empty-state">
-                                <i class="fas fa-users"
-                                    style="font-size: 3rem; margin-bottom: 16px; color: var(--border);"></i>
-                                <p>No applications yet. Post an internship to receive applications.</p>
-                                <a href="/company/internships/create" class="btn-primary"
-                                    style="margin-top: 20px; display: inline-flex;">
-                                    <i class="fas fa-plus"></i> Post Internship
+                                <i class="fas fa-folder-open"
+                                    style="font-size:3rem; color:var(--border); margin-bottom:20px; display:block;"></i>
+                                <h3 style="font-size:1.5rem; margin:0 0 10px 0;">No Postings Found</h3>
+                                <p style="color:var(--text-muted); margin:0 0 25px 0;">Post an internship to start
+                                    receiving applications.</p>
+                                <a href="/company/internships/create" class="btn-act btn-act-shortlist"
+                                    style="display:inline-flex; width:auto; padding:12px 25px;">
+                                    Post a New Internship
                                 </a>
                             </div>
-                        </div>
-                        <% } %>
-    </div>
+                            <% } %>
+        </div>
+    </main>
 
     <!-- Interview Modal -->
-    <div class="interview-modal" id="interviewModal">
-        <div class="modal-content">
-            <h2 class="modal-title">Schedule Interview</h2>
+    <div class="sidebar-overlay" id="interviewModal"
+        style="display:none; align-items:center; justify-content:center; z-index:1000; opacity:1;">
+        <div
+            style="background:var(--bg-card); padding:30px; border-radius:16px; border:1px solid var(--border); width:90%; max-width:400px;">
+            <h2 style="font-size:1.3rem; margin:0 0 20px 0;">Schedule Interview</h2>
             <form id="interviewForm" action="" method="POST">
-                <input type="datetime-local" name="interviewDate" class="modal-input" required>
-                <textarea name="interviewNote" class="modal-input" placeholder="Add notes (optional)"
-                    rows="3"></textarea>
-                <div class="modal-actions">
-                    <button type="button" class="btn-cancel" onclick="closeInterviewModal()">Cancel</button>
-                    <button type="submit" class="btn-submit">Schedule</button>
+                <input type="datetime-local" name="interviewDate" required
+                    style="width:100%; padding:12px; border:1px solid var(--border); border-radius:8px; margin-bottom:15px; background:var(--bg); color:var(--text-main);">
+                <textarea name="interviewNote" placeholder="Meeting link or notes..." rows="3"
+                    style="width:100%; padding:12px; border:1px solid var(--border); border-radius:8px; margin-bottom:15px; background:var(--bg); color:var(--text-main);"></textarea>
+                <div style="display:flex; gap:10px;">
+                    <button type="button" onclick="closeInterviewModal()"
+                        style="flex:1; padding:10px; background:transparent; border:1px solid var(--border); border-radius:8px; color:var(--text-main); cursor:pointer;">Cancel</button>
+                    <button type="submit"
+                        style="flex:1; padding:10px; background:var(--accent); border:none; border-radius:8px; color:#fff; cursor:pointer;">Schedule</button>
                 </div>
             </form>
         </div>
     </div>
 
+    <button class="c-theme-toggle" onclick="toggleTheme()" title="Toggle dark/light mode">
+        <i class="fas fa-sun icon-sun"></i>
+        <i class="fas fa-moon icon-moon"></i>
+    </button>
+
     <script>
-        function openInterviewModal(applicationId) {
-            const modal = document.getElementById('interviewModal');
-            const form = document.getElementById('interviewForm');
-            form.action = '/company/applications/' + applicationId + '/interview';
-            modal.style.display = 'flex';
+        function openInterviewModal(id) {
+            document.getElementById('interviewForm').action = '/company/applications/' + id + '/interview';
+            document.getElementById('interviewModal').style.display = 'flex';
         }
-
         function closeInterviewModal() {
-            const modal = document.getElementById('interviewModal');
-            modal.style.display = 'none';
+            document.getElementById('interviewModal').style.display = 'none';
         }
 
-        // Close modal when clicking outside
-        document.getElementById('interviewModal').addEventListener('click', function (e) {
-            if (e.target === this) {
-                closeInterviewModal();
-            }
+        function toggleTheme() {
+            var html = document.documentElement;
+            var t = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', t);
+            localStorage.setItem('conneto-theme', t);
+        }
+
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        document.getElementById('sidebarToggleBtn').addEventListener('click', () => {
+            sidebar.classList.add('active');
+            overlay.classList.add('active');
+        });
+        document.getElementById('closeSidebarBtn').addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            closeInterviewModal();
         });
     </script>
 </body>

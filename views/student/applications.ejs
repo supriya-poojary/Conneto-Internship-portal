@@ -11,6 +11,7 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/conneto.css">
     <style>
         * {
             margin: 0;
@@ -37,6 +38,75 @@
             --bg: #F1F5F9;
             --card-bg: #FFFFFF;
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* DARK MODE OVERRIDES */
+        [data-theme="dark"] body {
+            background: linear-gradient(135deg, #0d1117, #161b22) !important;
+            color: #c9d1d9 !important;
+        }
+
+        [data-theme="dark"] .header {
+            background: #161b22 !important;
+            border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        [data-theme="dark"] .logo {
+            background: linear-gradient(135deg, #60a5fa, #a78bfa) !important;
+        }
+
+        [data-theme="dark"] .stat-card {
+            background: #1c2128 !important;
+            box-shadow: none !important;
+        }
+
+        [data-theme="dark"] .stat-number {
+            color: #60a5fa;
+        }
+
+        [data-theme="dark"] .stat-label {
+            color: #8b949e !important;
+        }
+
+        [data-theme="dark"] .applications-card {
+            background: #161b22 !important;
+            box-shadow: none !important;
+        }
+
+        [data-theme="dark"] .section-title {
+            color: #f0f6fc !important;
+        }
+
+        [data-theme="dark"] .page-title {
+            color: #f0f6fc !important;
+        }
+
+        [data-theme="dark"] .application-item {
+            background: #1c2128 !important;
+        }
+
+        [data-theme="dark"] .internship-title {
+            color: #f0f6fc !important;
+        }
+
+        [data-theme="dark"] .company-name {
+            color: #8b949e !important;
+        }
+
+        [data-theme="dark"] .application-date {
+            color: #8b949e !important;
+        }
+
+        [data-theme="dark"] .empty-title {
+            color: #f0f6fc !important;
+        }
+
+        [data-theme="dark"] .nav-link {
+            color: #c9d1d9 !important;
+        }
+
+        [data-theme="dark"] .nav-link:hover {
+            color: #60a5fa !important;
         }
 
         body {
@@ -311,14 +381,57 @@
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+
+            .header {
+                padding: 14px 16px;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .nav-links {
+                gap: 10px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .nav-links .nav-link {
+                display: none;
+            }
         }
     </style>
+
+    <!-- Prevent FOUT -> Pre-load Theme -->
+    <script>
+        (function () {
+            var saved = localStorage.getItem('conneto-theme');
+            if (saved !== 'light') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
 </head>
 
 <body>
+    <script>
+        (function () {
+            var t = localStorage.getItem('conneto-theme');
+            if (t) document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
     <header class="header">
-        <a href="/" class="logo">Conneto</a>
+        <a href="/" class="logo" style="-webkit-background-clip:text;background-clip:text;">Conneto</a>
         <nav class="nav-links">
+            <a href="/" class="nav-link" style="font-size:0.85rem;"><i class="fas fa-arrow-left"></i> Home</a>
             <a href="/student/dashboard" class="nav-link">Dashboard</a>
             <a href="/student/applications" class="nav-link active">My Applications</a>
             <a href="/internships" class="nav-link">Browse</a>
@@ -428,6 +541,21 @@
                     <% } %>
         </div>
     </div>
+
+    <!-- Floating Theme Toggle -->
+    <button class="c-theme-toggle" onclick="toggleTheme()" title="Toggle dark/light mode" aria-label="Toggle theme">
+        <i class="fas fa-sun icon-sun"></i>
+        <i class="fas fa-moon icon-moon"></i>
+    </button>
+
+    <script>
+        function toggleTheme() {
+            var html = document.documentElement;
+            var isDark = html.getAttribute('data-theme') === 'dark';
+            if (isDark) { html.removeAttribute('data-theme'); localStorage.setItem('conneto-theme', 'light'); }
+            else { html.setAttribute('data-theme', 'dark'); localStorage.setItem('conneto-theme', 'dark'); }
+        }
+    </script>
 </body>
 
 </html>

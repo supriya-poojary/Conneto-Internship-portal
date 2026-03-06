@@ -4,6 +4,8 @@ const path = require('path');
 const Application = require('../models/Application');
 const Internship = require('../models/Internship');
 const User = require('../models/User');
+const StudentProfile = require('../models/StudentProfile');
+const bcrypt = require('bcryptjs');
 
 // Project root directory
 const ROOT = path.resolve(__dirname, '..');
@@ -23,6 +25,11 @@ router.get('/contact', (req, res) => {
     res.render('contact', { title: 'Contact Us | Conneto', user: req.session.user || null });
 });
 
+// Premium Interior Portfolio Page
+router.get('/interior', (req, res) => {
+    res.render('interior', { title: 'Lumina | Luxury Interior Architecture' });
+});
+
 // Student Dashboard
 router.get('/student/dashboard', async (req, res) => {
     if (!req.session.user) return res.redirect('/auth/login');
@@ -31,7 +38,13 @@ router.get('/student/dashboard', async (req, res) => {
     try {
         // Get all applications for this student
         const applications = await Application.find({ student: req.session.user.id })
-            .populate('internship')
+            .populate({
+                path: 'internship',
+                populate: {
+                    path: 'company',
+                    select: 'companyName'
+                }
+            })
             .sort({ appliedAt: -1 });
 
         const totalApplications = applications.length;
@@ -58,6 +71,9 @@ router.get('/student/dashboard', async (req, res) => {
             .sort({ createdAt: -1 })
             .limit(5);
 
+        // Get student profile
+        const profile = await StudentProfile.findOne({ user: req.session.user.id });
+
         res.render('dashboard/student', {
             title: 'Student Dashboard | Conneto',
             user: req.session.user,
@@ -67,17 +83,66 @@ router.get('/student/dashboard', async (req, res) => {
                 pending: pendingCount,
                 hired: hiredCount
             },
-            internships: featuredInternships
+            applications: applications,
+            internships: featuredInternships,
+            profile: profile || {},
+            query: req.query
         });
     } catch (err) {
         console.error('Student dashboard error:', err);
         res.render('dashboard/student', {
             title: 'Student Dashboard | Conneto',
             user: req.session.user,
-            stats: { total: 0, interviews: 0, pending: 0 },
+            stats: { total: 0, interviews: 0, pending: 0, hired: 0 },
+            applications: [],
             internships: [],
-            myInternships: []
+            profile: {}
         });
+    }
+});
+
+// Update Profile API
+router.post('/student/profile', async (req, res) => {
+    if (!req.session.user || req.session.user.role !== 'student') return res.status(401).json({ error: 'Unauthorized' });
+    try {
+        const { college, degree, branch, year, gpa, bio, location, phone, linkedin, github, skills } = req.body;
+        const skillsArray = skills ? skills.split(',').map(s => s.trim()) : [];
+
+        const updateData = {
+            college, degree, branch, year, gpa, bio, location, phone, linkedin, github,
+            skills: skillsArray,
+            updatedAt: Date.now()
+        };
+
+        await StudentProfile.findOneAndUpdate(
+            { user: req.session.user.id },
+            { $set: updateData },
+            { new: true, upsert: true }
+        );
+        res.json({ success: true, message: 'Profile updated successfully' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to update profile' });
+    }
+});
+
+// Update Settings API
+router.post('/student/settings', async (req, res) => {
+    if (!req.session.user || req.session.user.role !== 'student') return res.status(401).json({ error: 'Unauthorized' });
+    try {
+        const { currentPassword, newPassword } = req.body;
+        const user = await User.findById(req.session.user.id);
+
+        if (!(await user.comparePassword(currentPassword))) {
+            return res.status(400).json({ error: 'Incorrect current password' });
+        }
+
+        user.password = newPassword;
+        await user.save();
+        res.json({ success: true, message: 'Password updated successfully' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to update settings' });
     }
 });
 
@@ -102,7 +167,16 @@ router.get('/company/dashboard', async (req, res) => {
                 path: 'internship',
                 select: 'title location stipend duration' // Specific fields from internship
             })
-            .sort({ appliedAt: -1 });
+            .sort({ appliedAt: -1 })
+            .lean();
+
+        // Attach student profiles
+        for (let app of applications) {
+            if (app.student && app.student._id) {
+                app.student.profile = await StudentProfile.findOne({ user: app.student._id }).lean() || {};
+            }
+        }
+
 
         const totalApplicants = applications.length;
         const interviewCount = applications.filter(app =>
