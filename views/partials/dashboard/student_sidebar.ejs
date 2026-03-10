@@ -1,0 +1,70 @@
+<!-- Background Blobs -->
+<div class="dashboard-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+</div>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+    <a href="/" class="logo">Conn<span>eto</span></a>
+
+    <div class="nav-section">
+        <div class="nav-section-label">Opportunity Hub</div>
+        <nav class="nav-menu">
+            <a href="/student/dashboard" class="nav-item <%= typeof activePage !== 'undefined' && activePage === 'dashboard' ? 'active' : '' %>">
+                <i class="fas fa-grid-2"></i>
+                <span>Member Home</span>
+            </a>
+            <a href="/student/dashboard?tab=browse" class="nav-item <%= typeof activePage !== 'undefined' && activePage === 'browse' ? 'active' : '' %>">
+                <i class="fas fa-search"></i>
+                <span>Explore Internships</span>
+            </a>
+            <a href="/student/dashboard?tab=applications" class="nav-item <%= typeof activePage !== 'undefined' && activePage === 'applications' ? 'active' : '' %>">
+                <i class="fas fa-file-invoice"></i>
+                <span>My Applications</span>
+            </a>
+        </nav>
+    </div>
+
+    <div class="nav-section">
+        <div class="nav-section-label">Student Account</div>
+        <nav class="nav-menu">
+            <a href="/student/dashboard?tab=profile" class="nav-item <%= typeof activePage !== 'undefined' && activePage === 'profile' ? 'active' : '' %>">
+                <i class="fas fa-user-circle"></i>
+                <span>Portfolio</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-heart"></i>
+                <span>Favorites</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-sliders-h"></i>
+                <span>Preferences</span>
+            </a>
+        </nav>
+    </div>
+
+    <div class="sidebar-footer">
+        <div class="user-card">
+            <div class="user-avatar">
+                <%= user.name.charAt(0).toUpperCase() %>
+            </div>
+            <div class="user-details">
+                <div class="user-name"><%= user.name %></div>
+                <div style="display:flex; align-items:center; gap:6px; margin-top:2px">
+                    <div class="user-role" style="margin:0">Intern</div>
+                    <span style="font-size:9px; background:rgba(217,95,59,0.15); color:var(--coral); padding:1px 6px; border-radius:100px; font-weight:800; letter-spacing:0.3px">
+                        <%= profile && profile.completionPercentage ? profile.completionPercentage : 0 %>% Strength
+                    </span>
+                </div>
+            </div>
+            <a href="/auth/logout" class="logout-btn" title="Logout">
+                <i class="fas fa-power-off"></i>
+            </a>
+        </div>
+    </div>
+</aside>
+
+<!-- Main Content Wrapper -->
+<main class="main-content">
