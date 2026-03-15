@@ -1,0 +1,202 @@
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-info">
+                <a href="/" class="logo" style="color:#fff;font-size:2rem">Conn<span
+                        style="color:var(--coral)">eto</span></a>
+                <p>Welcome to Conneto! This platform connects companies with students for internship opportunities.
+                    Companies can post internships, review student profiles, and shortlist candidates for
+                    interviews.</p>
+                <div class="footer-contact-item">
+                    <i class="fas fa-envelope"></i><a href="mailto:connect@algoorbit.in">connect@algoorbit.in</a>
+                </div>
+                <div class="footer-contact-item">
+                    <i class="fas fa-phone"></i><a href="tel:919900000000">+91 99000 00000</a>
+                </div>
+                <div class="footer-contact-item">
+                    <i class="fas fa-map-marker-alt"></i><span>Karkala, Karnataka, India - 574122</span>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about">About Us</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/internships">Internships</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col" style="margin-left: -50px;">
+                <h4>For Students</h4>
+                <ul class="footer-links" style="list-style: disc; padding-left: 15px; color: var(--coral)">
+                    <li><a href="/internships">Browse Internships</a></li>
+                    <li><a href="/student/dashboard?tab=profile">Create Profile</a></li>
+                    <li><a href="/internships">Apply for Roles</a></li>
+                    <li><a href="/student/dashboard?tab=applications">Track Applications</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>For Companies</h4>
+                <ul class="footer-links" style="list-style: disc; padding-left: 15px; color: var(--coral)">
+                    <li><a href="/company/internships/create">Post Internships</a></li>
+                    <li><a href="/company/dashboard?tab=applications">Review Applicants</a></li>
+                    <li><a href="/company/dashboard?tab=applications">Schedule Interviews</a></li>
+                    <li><a href="/company/dashboard?tab=applications">Manage Shortlisting</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-copy">© 2026 <a href="/">Conneto</a>. All rights reserved. Powered by <a
+                    href="/">AlgoOrbit</a>.</div>
+            <div class="footer-social" style="display:flex; gap:12px">
+                <a href="https://www.facebook.com/people/Aionyx-AI/pfbid026UzFDT5KEjJEqVDDwsFaF4nomU7YZSo1mv58BARkf7pcyCQgb3uYsf9kvparG33El/"
+                    target="_blank"
+                    style="background:rgba(255,255,255,0.05); color:#fff; width:36px; height:36px; display:flex; align-items:center; justify-content:center; border-radius:8px; transition:0.3s"
+                    onmouseover="this.style.background='var(--coral)'"
+                    onmouseout="this.style.background='rgba(255,255,255,0.05)'"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.linkedin.com/company/algoorbit/posts/?feedView=all" target="_blank"
+                    style="background:rgba(255,255,255,0.05); color:#fff; width:36px; height:36px; display:flex; align-items:center; justify-content:center; border-radius:8px; transition:0.3s"
+                    onmouseover="this.style.background='var(--coral)'"
+                    onmouseout="this.style.background='rgba(255,255,255,0.05)'"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://www.instagram.com/algoorbit_official/" target="_blank"
+                    style="background:rgba(255,255,255,0.05); color:#fff; width:36px; height:36px; display:flex; align-items:center; justify-content:center; border-radius:8px; transition:0.3s"
+                    onmouseover="this.style.background='var(--coral)'"
+                    onmouseout="this.style.background='rgba(255,255,255,0.05)'"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.whatsapp.com/channel/0029VbBktvfAYlUS6kToth1B" target="_blank"
+                    style="background:rgba(255,255,255,0.05); color:#fff; width:36px; height:36px; display:flex; align-items:center; justify-content:center; border-radius:8px; transition:0.3s"
+                    onmouseover="this.style.background='var(--coral)'"
+                    onmouseout="this.style.background='rgba(255,255,255,0.05)'"><i class="fab fa-whatsapp"></i></a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<style>
+    /* Ensure footer styles are present if not already elsewhere */
+    .footer {
+        background: #160A04;
+        padding: 60px 0 20px;
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .footer-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: 40px;
+        margin-bottom: 50px;
+    }
+
+    .footer-info {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .footer-info p {
+        font-size: 14px;
+        line-height: 1.6;
+        margin-bottom: 10px;
+    }
+
+    .footer-contact-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+    }
+
+    .footer-contact-item i {
+        color: var(--coral);
+    }
+
+    .footer-contact-item a {
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    .footer-contact-item a:hover {
+        color: #fff;
+    }
+
+    .footer-col h4 {
+        color: #fff;
+        font-family: 'Playfair Display', serif;
+        font-size: 1.2rem;
+        margin-bottom: 25px;
+        position: relative;
+    }
+
+    .footer-col h4::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -8px;
+        width: 40px;
+        height: 2px;
+        background: var(--coral);
+    }
+
+    .footer-links {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .footer-links li a {
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        font-size: 14px;
+        transition: 0.3s;
+    }
+
+    .footer-links li a:hover {
+        color: #fff;
+        padding-left: 5px;
+    }
+
+    .footer-bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .footer-copy {
+        font-size: 13px;
+    }
+
+    .footer-copy a {
+        color: var(--coral);
+        text-decoration: none;
+    }
+
+    @media (max-width: 992px) {
+        .footer-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .footer-col[style] {
+            margin-left: 0 !important;
+        }
+    }
+
+    @media (max-width: 500px) {
+        .footer-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .footer-bottom {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+</style>

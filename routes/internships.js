@@ -285,7 +285,7 @@ router.post('/company/applications/:id/shortlist', isAuthenticated, isCompany, a
         application.updatedAt = new Date();
         await application.save();
 
-        res.redirect('/company/applications?success=Student shortlisted');
+        res.redirect('/company/dashboard?tab=applications&success=Student shortlisted');
     } catch (err) {
         console.error('Error shortlisting:', err);
         res.redirect('/company/applications?error=Failed to shortlist');
@@ -315,7 +315,7 @@ router.post('/company/applications/:id/interview', isAuthenticated, isCompany, a
         application.updatedAt = new Date();
         await application.save();
 
-        res.redirect('/company/applications?success=Interview scheduled');
+        res.redirect('/company/dashboard?tab=applications&success=Interview scheduled');
     } catch (err) {
         console.error('Error scheduling interview:', err);
         res.redirect('/company/applications?error=Failed to schedule interview');
@@ -341,7 +341,7 @@ router.post('/company/applications/:id/select', isAuthenticated, isCompany, asyn
         application.updatedAt = new Date();
         await application.save();
 
-        res.redirect('/company/applications?success=Student selected/hired');
+        res.redirect('/company/dashboard?tab=applications&success=Student selected/hired');
     } catch (err) {
         console.error('Error selecting:', err);
         res.redirect('/company/applications?error=Failed to select');
@@ -367,7 +367,7 @@ router.post('/company/applications/:id/reject', isAuthenticated, isCompany, asyn
         application.updatedAt = new Date();
         await application.save();
 
-        res.redirect('/company/applications?success=Application rejected');
+        res.redirect('/company/dashboard?tab=applications&success=Application rejected');
     } catch (err) {
         console.error('Error rejecting:', err);
         res.redirect('/company/applications?error=Failed to reject');

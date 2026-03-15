@@ -13,17 +13,17 @@ const ROOT = path.resolve(__dirname, '..');
 router.get('/', async (req, res) => {
     try {
         const internships = await Internship.find({ isActive: true }).limit(6).sort({ createdAt: -1 });
-        res.render('index', { 
-            title: 'Conneto — Find Your Internship', 
+        res.render('index', {
+            title: 'Conneto — Find Your Internship',
             user: req.session.user || null,
-            internships: internships 
+            internships: internships
         });
     } catch (err) {
         console.error('Home route error:', err);
-        res.render('index', { 
-            title: 'Conneto — Find Your Internship', 
+        res.render('index', {
+            title: 'Conneto — Find Your Internship',
             user: req.session.user || null,
-            internships: [] 
+            internships: []
         });
     }
 });
@@ -77,7 +77,9 @@ router.get('/student/dashboard', async (req, res) => {
             stats,
             internships,
             applications,
-            profile: profile || {}
+            profile: profile || {},
+            success: req.query.success || null,
+            error: req.query.error || null
         });
     } catch (err) {
         console.error('Unified dashboard error:', err);
@@ -99,17 +101,17 @@ router.get('/company/dashboard', async (req, res) => {
 
     try {
         const myInternships = await Internship.find({ company: req.session.user.id });
-        const applications = await Application.find({ 
-            internship: { $in: myInternships.map(i => i._id) } 
+        const applications = await Application.find({
+            internship: { $in: myInternships.map(i => i._id) }
         })
-        .populate('student', 'name email phone')
-        .populate('internship')
-        .sort({ appliedAt: -1 });
+            .populate('student', 'name email phone')
+            .populate('internship')
+            .sort({ appliedAt: -1 });
 
         // NEW: Fetch profiles for each student in the pipeline
         const studentIds = applications.map(app => app.student._id);
         const profiles = await StudentProfile.find({ user: { $in: studentIds } });
-        
+
         // Attach profile to each application object
         applications.forEach(app => {
             app.profile = profiles.find(p => p.user.toString() === app.student._id.toString()) || {};
@@ -151,7 +153,9 @@ router.get('/company/dashboard', async (req, res) => {
             applicants: applications.slice(0, 10),
             myInternships: internshipsWithStats,
             groupedApplications: Object.values(grouped),
-            totalApplications: applications.length
+            totalApplications: applications.length,
+            success: req.query.success || null,
+            error: req.query.error || null
         });
     } catch (err) {
         console.error('Company unified error:', err);
@@ -169,10 +173,10 @@ router.post('/student/profile/update', async (req, res) => {
     if (!req.session.user || req.session.user.role !== 'student') return res.redirect('/auth/login');
 
     try {
-        const { 
-            name, email, dob, gender, usn, college, degree, department, semester, year, gpa, 
-            address, city, state, country, bio, experience, projects, skills, interests, 
-            certifications, languages, phone, linkedin, github, portfolio 
+        const {
+            name, email, dob, gender, usn, college, degree, department, semester, year, gpa,
+            address, city, state, country, bio, experience, projects, skills, interests,
+            certifications, languages, phone, linkedin, github, portfolio
         } = req.body;
 
         // 1. Update Core User (Name/Email)
@@ -190,12 +194,12 @@ router.post('/student/profile/update', async (req, res) => {
         // 2. Track 25 Key Fields (4% each)
         let filledCount = 0;
         const check = (val) => (val && val.toString().trim().length > 0);
-        
-        [name, email, dob, gender, usn, college, degree, department, semester, year, gpa, 
-         address, city, state, country, bio, experience, projects, skills, interests, 
-         certifications, languages, phone, linkedin, github, portfolio].forEach(f => {
-             if (check(f)) filledCount++;
-         });
+
+        [name, email, dob, gender, usn, college, degree, department, semester, year, gpa,
+            address, city, state, country, bio, experience, projects, skills, interests,
+            certifications, languages, phone, linkedin, github, portfolio].forEach(f => {
+                if (check(f)) filledCount++;
+            });
 
         const strength = Math.min(filledCount * 4, 100);
 

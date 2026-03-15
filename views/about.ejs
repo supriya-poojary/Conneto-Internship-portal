@@ -167,9 +167,17 @@
         }
 
         @keyframes shine-anim {
-            0% { left: -150%; }
-            20% { left: 150%; }
-            100% { left: 150%; }
+            0% {
+                left: -150%;
+            }
+
+            20% {
+                left: 150%;
+            }
+
+            100% {
+                left: 150%;
+            }
         }
 
         .topbar {
@@ -1578,13 +1586,13 @@
         </div>
     </div>
     <script>
-        (function() {
+        (function () {
             const entry = performance.getEntriesByType('navigation')[0];
             const isReload = entry && entry.type === 'reload';
             const isFirstVisit = !sessionStorage.getItem('conneto_visited');
             if (!isReload && !isFirstVisit) {
                 const ldr = document.getElementById('loader');
-                if(ldr) { ldr.style.display = 'none'; ldr.classList.add('hide'); }
+                if (ldr) { ldr.style.display = 'none'; ldr.classList.add('hide'); }
             }
         })();
     </script>
@@ -1729,7 +1737,8 @@
             <div class="text-center">
                 <div class="section-tag">Why Choose Us</div>
                 <h2 class="section-title">Empowering Your <em>Career</em><br>Journey — Future-Ready
-                    <span>Opportunities</span></h2>
+                    <span>Opportunities</span>
+                </h2>
                 <p class="section-sub">Four pillars that make Conneto the most trusted internship platform in India.</p>
             </div>
             <div class="why-grid">
@@ -1851,7 +1860,8 @@
                 <div class="fade-up">
                     <div class="section-tag">Working Process</div>
                     <h2 class="section-title">How We've <em>Empowered</em><br>Students with
-                        <span>Life-Changing</span><br>Internships</h2>
+                        <span>Life-Changing</span><br>Internships
+                    </h2>
                     <p class="section-sub" style="margin-bottom:28px">From personalized profile matching to mentor
                         support, we prioritize your career growth.</p>
                     <a href="contact.html" class="btn btn-fill">Start Your Journey <i
@@ -1989,89 +1999,42 @@
         </div>
     </section>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <a href="/" class="logo" style="color:#fff;font-size:2rem">Conn<span
-                            style="color:var(--coral)">eto</span></a>
-                    <p>Welcome to Conneto! This platform connects companies with students for internship opportunities.
-                        Companies can post internships, review student profiles, and shortlist candidates for
-                        interviews.</p>
-                    <div class="footer-contact-item"><i class="fas fa-envelope"></i><a
-                            href="mailto:connect@algoorbit.in">connect@algoorbit.in</a></div>
-                    <div class="footer-contact-item"><i class="fas fa-phone"></i><a href="tel:919900000000">+91 99000
-                            00000</a></div>
-                    <div class="footer-contact-item"><i class="fas fa-map-marker-alt"></i><span>Karkala, Karnataka,
-                            India - 574122</span></div>
-                </div>
-                <div class="footer-col">
-                    <h4>For Students</h4>
-                    <ul class="footer-links">
-                        <li><a href="#">Browse Internships</a></li>
-                        <li><a href="#">Create Profile</a></li>
-                        <li><a href="#">Apply for Roles</a></li>
-                        <li><a href="#">Track Applications</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>For Companies</h4>
-                    <ul class="footer-links">
-                        <li><a href="#">Post Internships</a></li>
-                        <li><a href="#">Review Applicants</a></li>
-                        <li><a href="#">Schedule Interviews</a></li>
-                        <li><a href="#">Manage Shortlisting</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <div class="footer-copy">© 2026 <a href="/">Conneto</a>. All rights reserved. Powered by <a
-                        href="/">AlgoOrbit</a>.</div>
-                <div class="footer-social">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <%- include('partials/footer') %>
 
-    <button class="scroll-top" id="scrollTop"><i class="fas fa-arrow-up"></i></button>
+        <button class="scroll-top" id="scrollTop"><i class="fas fa-arrow-up"></i></button>
 
-    <script>
-        // LOADER Logic
-        window.addEventListener('load', () => {
-            const loader = document.getElementById('loader');
-            const entry = performance.getEntriesByType('navigation')[0];
-            const navigationType = entry ? entry.type : '';
-            const isReload = navigationType === 'reload';
-            const isFirstVisit = !sessionStorage.getItem('conneto_visited');
+        <script>
+            // LOADER Logic
+            window.addEventListener('load', () => {
+                const loader = document.getElementById('loader');
+                const entry = performance.getEntriesByType('navigation')[0];
+                const navigationType = entry ? entry.type : '';
+                const isReload = navigationType === 'reload';
+                const isFirstVisit = !sessionStorage.getItem('conneto_visited');
 
-            if (isReload || isFirstVisit) {
-                // Show loader for 1.2s on INITIAL START or REFRESH
-                setTimeout(() => {
+                if (isReload || isFirstVisit) {
+                    // Show loader for 1.2s on INITIAL START or REFRESH
+                    setTimeout(() => {
+                        loader.classList.add('hide');
+                        sessionStorage.setItem('conneto_visited', 'true');
+                    }, 1200);
+                } else {
+                    // Direct redirect for header links
+                    loader.style.display = 'none';
                     loader.classList.add('hide');
-                    sessionStorage.setItem('conneto_visited', 'true');
-                }, 1200);
-            } else {
-                // Direct redirect for header links
-                loader.style.display = 'none';
-                loader.classList.add('hide');
-            }
-        });
-        const themeToggle = document.getElementById('themeToggle'), html = document.documentElement;
-        function updateTheme() { const t = html.getAttribute('data-theme'); themeToggle.innerHTML = t === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>'; }
-        themeToggle.addEventListener('click', () => { const c = html.getAttribute('data-theme'), n = c === 'dark' ? 'light' : 'dark'; html.setAttribute('data-theme', n); localStorage.setItem('conneto-theme', n); updateTheme(); });
-        updateTheme();
-        window.addEventListener('scroll', () => { document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50); document.getElementById('scrollTop').classList.toggle('show', window.scrollY > 300); });
-        document.getElementById('hamburger').addEventListener('click', () => document.getElementById('mobileNav').classList.add('open'));
-        document.getElementById('mobileClose').addEventListener('click', () => document.getElementById('mobileNav').classList.remove('open'));
-        document.getElementById('scrollTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-        const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.12 });
-        document.querySelectorAll('.fade-up,.scale-in').forEach(el => observer.observe(el));
-    </script>
+                }
+            });
+            const themeToggle = document.getElementById('themeToggle'), html = document.documentElement;
+            function updateTheme() { const t = html.getAttribute('data-theme'); themeToggle.innerHTML = t === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>'; }
+            themeToggle.addEventListener('click', () => { const c = html.getAttribute('data-theme'), n = c === 'dark' ? 'light' : 'dark'; html.setAttribute('data-theme', n); localStorage.setItem('conneto-theme', n); updateTheme(); });
+            updateTheme();
+            window.addEventListener('scroll', () => { document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50); document.getElementById('scrollTop').classList.toggle('show', window.scrollY > 300); });
+            document.getElementById('hamburger').addEventListener('click', () => document.getElementById('mobileNav').classList.add('open'));
+            document.getElementById('mobileClose').addEventListener('click', () => document.getElementById('mobileNav').classList.remove('open'));
+            document.getElementById('scrollTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.12 });
+            document.querySelectorAll('.fade-up,.scale-in').forEach(el => observer.observe(el));
+        </script>
 </body>
 
 </html>

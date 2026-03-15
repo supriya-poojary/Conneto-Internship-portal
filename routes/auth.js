@@ -71,14 +71,45 @@ router.post('/forgot-password', async (req, res) => {
         if (!user) {
             return res.render('auth/forgot-password', { title: 'Forgot Password', error: 'No account found with that email address.', success: null });
         }
-        
+
         user.password = newPassword;
         await user.save();
-        
+
         res.render('auth/login', { title: 'Login — Conneto', error: null, success: 'Password changed successfully! You can now sign in.' });
     } catch (err) {
         console.error('Password reset error:', err);
         res.render('auth/forgot-password', { title: 'Forgot Password', error: 'Something went wrong. Please try again.', success: null });
+    }
+});
+
+// POST /auth/change-password
+router.post('/change-password', async (req, res) => {
+    if (!req.session.user) return res.redirect('/auth/login');
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+    const role = req.session.user.role;
+    const dashboardUrl = role === 'student' ? '/student/dashboard?tab=settings' : '/company/dashboard?tab=settings';
+
+    try {
+        if (newPassword !== confirmPassword) {
+            return res.redirect(`${dashboardUrl}&error=New%20passwords%20do%20not%20match.`);
+        }
+
+        if (newPassword.length < 6) {
+            return res.redirect(`${dashboardUrl}&error=New%20password%20must%20be%20at%20least%206%20characters.`);
+        }
+
+        const user = await User.findById(req.session.user.id);
+        if (!user || !(await user.comparePassword(currentPassword))) {
+            return res.redirect(`${dashboardUrl}&error=Invalid%20current%20password.`);
+        }
+
+        user.password = newPassword;
+        await user.save();
+
+        res.redirect(`${dashboardUrl}&success=Password%20updated%20successfully.`);
+    } catch (err) {
+        console.error('Change password error:', err);
+        res.redirect(`${dashboardUrl}&error=Something%20went%20wrong.%20Please%20try%20again.`);
     }
 });
 

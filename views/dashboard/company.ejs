@@ -1,391 +1,964 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+
 <head>
     <%- include('../partials/dashboard/company_head', { title: 'Partner Portal | Company Dashboard' }) %>
-    <style>
-        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 40px; }
-        .stat-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 24px; padding: 24px; box-shadow: 0 10px 30px var(--shadow); transition: .3s; }
-        .stat-card:hover { transform: translateY(-5px); }
-        
-        .stat-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
-        .stat-icon { width: 50px; height: 50px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-        .stat-icon.blue { background: rgba(217,95,59,0.1); color: var(--coral); }
-        .stat-icon.green { background: rgba(90,122,92,0.1); color: var(--sage); }
-        .stat-icon.yellow { background: rgba(200,131,26,0.1); color: var(--amber); }
-        .stat-icon.sky { background: rgba(160,82,45,0.1); color: var(--terra); }
+        <style>
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 24px;
+                margin-bottom: 40px;
+            }
 
-        .stat-badge { font-size: 10px; font-weight: 800; padding: 4px 10px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .stat-badge.up { background: rgba(90,122,92,0.15); color: var(--sage); }
+            .stat-card {
+                background: var(--card-bg);
+                border: 1px solid var(--border);
+                border-radius: 24px;
+                padding: 24px;
+                box-shadow: 0 10px 30px var(--shadow);
+                transition: .3s;
+            }
 
-        .stat-value { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 800; color: var(--ink); margin-bottom: 4px; }
-        .stat-label { font-size: 13px; font-weight: 600; color: var(--text-muted); }
+            .stat-card:hover {
+                transform: translateY(-5px);
+            }
 
-        .dashboard-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 30px; }
-        .column { display: flex; flex-direction: column; gap: 30px; }
+            .stat-top {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                margin-bottom: 20px;
+            }
 
-        .item-row { display: flex; align-items: center; gap: 16px; padding: 16px; background: var(--cream); border: 1px solid var(--border); border-radius: 18px; transition: .3s; margin-bottom: 12px; }
-        .item-row:hover { border-color: var(--coral); transform: translateX(5px); }
-        .item-icon { width: 48px; height: 48px; border-radius: 14px; background: linear-gradient(135deg, var(--coral), var(--rose)); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-family: 'Playfair Display', serif; }
+            .stat-icon {
+                width: 50px;
+                height: 50px;
+                border-radius: 14px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 20px;
+            }
 
-        .status-pill { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; border: 1px solid var(--border); }
-        .status-active { border-color: var(--sage); color: var(--sage); background: rgba(90,122,92,0.1); }
-        .status-draft { border-color: var(--border); color: var(--text-muted); background: rgba(0,0,0,0.05); }
-        .status-pill.applied { background: rgba(200,131,26,0.1); color: var(--amber); }
-        .status-pill.selected { background: rgba(90,122,92,0.2); color: var(--sage); border: 1px solid var(--sage); }
+            .stat-icon.blue {
+                background: rgba(217, 95, 59, 0.1);
+                color: var(--coral);
+            }
 
-        .company-profile-card { padding: 30px; background: linear-gradient(135deg, #1C0F08, #2C1A0E); border-radius: 24px; margin-bottom: 24px; position: relative; overflow: hidden; }
-        .company-profile-card::after { content: ''; position: absolute; bottom: -20px; right: -20px; width: 100px; height: 100px; background: var(--coral); opacity: 0.2; filter: blur(40px); }
-        .company-avatar-lg { width: 60px; height: 60px; border-radius: 16px; background: #fff; display: flex; align-items: center; justify-content: center; color: #2C1A0E; font-size: 1.5rem; font-weight: 800; margin-bottom: 16px; font-family: 'Playfair Display', serif; }
-        .company-display-name { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: 4px; }
-        .company-display-email { font-size: 14px; color: rgba(255,255,255,0.6); }
+            .stat-icon.green {
+                background: rgba(90, 122, 92, 0.1);
+                color: var(--sage);
+            }
 
-        .post-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, var(--coral), var(--rose)); color: #fff; border: none; border-radius: 16px; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer; transition: .3s; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; }
-        .post-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(217,95,59,0.3); }
+            .stat-icon.yellow {
+                background: rgba(200, 131, 26, 0.1);
+                color: var(--amber);
+            }
 
-        .view-btn { padding: 8px 16px; background: rgba(217,95,59,0.1); color: var(--coral); border-radius: 10px; font-size: 13px; font-weight: 700; text-decoration: none; transition: .3s; }
-        .view-btn:hover { background: var(--coral); color: #fff; transform: translateY(-2px); }
+            .stat-icon.sky {
+                background: rgba(160, 82, 45, 0.1);
+                color: var(--terra);
+            }
 
-        .reveal { opacity: 0; transform: translateY(20px); transition: .6s cubic-bezier(0.1, 0, 0, 1); }
-        .reveal.visible { opacity: 1; transform: translateY(0); }
+            .stat-badge {
+                font-size: 10px;
+                font-weight: 800;
+                padding: 4px 10px;
+                border-radius: 100px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
 
-        @media (max-width: 1024px) {
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
-            .dashboard-grid { grid-template-columns: 1fr; }
-        }
-        @media (max-width: 500px) {
-            .stats-grid { grid-template-columns: 1fr; }
-        }
+            .stat-badge.up {
+                background: rgba(90, 122, 92, 0.15);
+                color: var(--sage);
+            }
 
-        /* Profile Modal Styles */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(12px); padding: 20px; }
-        .modal-content { background: var(--card-bg); width: 100%; max-width: 1000px; height: 90vh; border-radius: 32px; overflow: hidden; position: relative; box-shadow: 0 50px 150px rgba(0,0,0,0.5); border: 1px solid var(--border); display: flex; flex-direction: column; }
-        .modal-body { display: flex; flex: 1; overflow: hidden; }
-        .modal-sidebar { width: 320px; background: var(--nav-bg); border-right: 1px solid var(--border); padding: 40px 30px; display: flex; flex-direction: column; align-items: center; text-align: center; overflow-y: auto; }
-        .modal-main { flex: 1; padding: 50px; overflow-y: auto; }
-        .modal-close { position: absolute; top: 30px; right: 30px; font-size: 28px; cursor: pointer; color: var(--text-muted); z-index: 10; transition: .3s; }
-        .modal-close:hover { color: var(--rose); transform: rotate(90deg); }
-        
-        .profile-avatar-xl { width: 120px; height: 120px; border-radius: 35px; background: linear-gradient(135deg, var(--coral), var(--rose)); color: #fff; font-size: 3.5rem; font-weight: 800; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; margin-bottom: 24px; box-shadow: 0 20px 40px rgba(217,95,59,0.3); }
-        .qual-badge { background: rgba(90,122,92,0.1); color: var(--sage); padding: 8px 16px; border-radius: 100px; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; }
-        
-        .section-box { background: var(--cream); padding: 30px; border-radius: 24px; margin-bottom: 30px; border: 1px solid var(--border); }
-        .section-label { font-size: 11px; font-weight: 900; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-        .section-label i { color: var(--coral); }
-        
-        .modal-actions { padding: 30px; background: var(--nav-bg); border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 15px; }
-        .action-btn { padding: 12px 24px; border-radius: 14px; font-weight: 700; font-size: 14px; cursor: pointer; border: none; transition: .3s; display: flex; align-items: center; gap: 8px; text-decoration: none; }
-        .btn-hire { background: var(--sage); color: #fff; }
-        .btn-hire:hover { background: #4a6a4d; transform: translateY(-2px); }
-        .btn-reject { background: rgba(181,56,74,0.1); color: var(--rose); }
-        .btn-reject:hover { background: var(--rose); color: #fff; }
-        .btn-schedule { background: var(--coral); color: #fff; }
-        
-        /* Grid Layout Fixes */
-        .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
-        @media (max-width: 768px) {
-            .modal-body { flex-direction: column; }
-            .modal-sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
-            .info-grid { grid-template-columns: 1fr; }
-        }
-    </style>
+            .stat-value {
+                font-family: 'Playfair Display', serif;
+                font-size: 2rem;
+                font-weight: 800;
+                color: var(--ink);
+                margin-bottom: 4px;
+            }
+
+            .stat-label {
+                font-size: 13px;
+                font-weight: 600;
+                color: var(--text-muted);
+            }
+
+            .dashboard-grid {
+                display: grid;
+                grid-template-columns: 1.6fr 1fr;
+                gap: 30px;
+            }
+
+            .column {
+                display: flex;
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .item-row {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                padding: 16px;
+                background: var(--cream);
+                border: 1px solid var(--border);
+                border-radius: 18px;
+                transition: .3s;
+                margin-bottom: 12px;
+            }
+
+            .item-row:hover {
+                border-color: var(--coral);
+                transform: translateX(5px);
+            }
+
+            .item-icon {
+                width: 48px;
+                height: 48px;
+                border-radius: 14px;
+                background: linear-gradient(135deg, var(--coral), var(--rose));
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #fff;
+                font-weight: 800;
+                font-family: 'Playfair Display', serif;
+            }
+
+            .status-pill {
+                padding: 4px 12px;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: 600;
+                border: 1px solid var(--border);
+            }
+
+            .status-active {
+                border-color: var(--sage);
+                color: var(--sage);
+                background: rgba(90, 122, 92, 0.1);
+            }
+
+            .status-draft {
+                border-color: var(--border);
+                color: var(--text-muted);
+                background: rgba(0, 0, 0, 0.05);
+            }
+
+            .status-pill.applied {
+                background: rgba(200, 131, 26, 0.1);
+                color: var(--amber);
+            }
+
+            .status-pill.selected {
+                background: rgba(90, 122, 92, 0.2);
+                color: var(--sage);
+                border: 1px solid var(--sage);
+            }
+
+            .company-profile-card {
+                padding: 30px;
+                background: linear-gradient(135deg, #1C0F08, #2C1A0E);
+                border-radius: 24px;
+                margin-bottom: 24px;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .company-profile-card::after {
+                content: '';
+                position: absolute;
+                bottom: -20px;
+                right: -20px;
+                width: 100px;
+                height: 100px;
+                background: var(--coral);
+                opacity: 0.2;
+                filter: blur(40px);
+            }
+
+            .company-avatar-lg {
+                width: 60px;
+                height: 60px;
+                border-radius: 16px;
+                background: #fff;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #2C1A0E;
+                font-size: 1.5rem;
+                font-weight: 800;
+                margin-bottom: 16px;
+                font-family: 'Playfair Display', serif;
+            }
+
+            .company-display-name {
+                font-family: 'Playfair Display', serif;
+                font-size: 1.4rem;
+                font-weight: 800;
+                color: #fff;
+                margin-bottom: 4px;
+            }
+
+            .company-display-email {
+                font-size: 14px;
+                color: rgba(255, 255, 255, 0.6);
+            }
+
+            .post-btn {
+                width: 100%;
+                padding: 16px;
+                background: linear-gradient(135deg, var(--coral), var(--rose));
+                color: #fff;
+                border: none;
+                border-radius: 16px;
+                font-family: inherit;
+                font-size: 15px;
+                font-weight: 700;
+                cursor: pointer;
+                transition: .3s;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                text-decoration: none;
+            }
+
+            .post-btn:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 10px 25px rgba(217, 95, 59, 0.3);
+            }
+
+            .view-btn {
+                padding: 8px 16px;
+                background: rgba(217, 95, 59, 0.1);
+                color: var(--coral);
+                border-radius: 10px;
+                font-size: 13px;
+                font-weight: 700;
+                text-decoration: none;
+                transition: .3s;
+            }
+
+            .view-btn:hover {
+                background: var(--coral);
+                color: #fff;
+                transform: translateY(-2px);
+            }
+
+            .reveal {
+                opacity: 0;
+                transform: translateY(20px);
+                transition: .6s cubic-bezier(0.1, 0, 0, 1);
+            }
+
+            .reveal.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            @media (max-width: 1024px) {
+                .stats-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+
+                .dashboard-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+
+            @media (max-width: 500px) {
+                .stats-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+
+            /* Profile Modal Styles */
+            .modal-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                display: none;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+                backdrop-filter: blur(12px);
+                padding: 20px;
+            }
+
+            .modal-content {
+                background: var(--card-bg);
+                width: 100%;
+                max-width: 1000px;
+                height: 90vh;
+                border-radius: 32px;
+                overflow: hidden;
+                position: relative;
+                box-shadow: 0 50px 150px rgba(0, 0, 0, 0.5);
+                border: 1px solid var(--border);
+                display: flex;
+                flex-direction: column;
+            }
+
+            .modal-body {
+                display: flex;
+                flex: 1;
+                overflow: hidden;
+            }
+
+            .modal-sidebar {
+                width: 320px;
+                background: var(--nav-bg);
+                border-right: 1px solid var(--border);
+                padding: 40px 30px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                overflow-y: auto;
+            }
+
+            .modal-main {
+                flex: 1;
+                padding: 50px;
+                overflow-y: auto;
+            }
+
+            .modal-close {
+                position: absolute;
+                top: 30px;
+                right: 30px;
+                font-size: 28px;
+                cursor: pointer;
+                color: var(--text-muted);
+                z-index: 10;
+                transition: .3s;
+            }
+
+            .modal-close:hover {
+                color: var(--rose);
+                transform: rotate(90deg);
+            }
+
+            .profile-avatar-xl {
+                width: 120px;
+                height: 120px;
+                border-radius: 35px;
+                background: linear-gradient(135deg, var(--coral), var(--rose));
+                color: #fff;
+                font-size: 3.5rem;
+                font-weight: 800;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: 'Playfair Display', serif;
+                margin-bottom: 24px;
+                box-shadow: 0 20px 40px rgba(217, 95, 59, 0.3);
+            }
+
+            .qual-badge {
+                background: rgba(90, 122, 92, 0.1);
+                color: var(--sage);
+                padding: 8px 16px;
+                border-radius: 100px;
+                font-size: 11px;
+                font-weight: 800;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                margin-top: 10px;
+            }
+
+            .section-box {
+                background: var(--cream);
+                padding: 30px;
+                border-radius: 24px;
+                margin-bottom: 30px;
+                border: 1px solid var(--border);
+            }
+
+            .section-label {
+                font-size: 11px;
+                font-weight: 900;
+                color: var(--text-muted);
+                text-transform: uppercase;
+                letter-spacing: 1.5px;
+                margin-bottom: 20px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .section-label i {
+                color: var(--coral);
+            }
+
+            .modal-actions {
+                padding: 30px;
+                background: var(--nav-bg);
+                border-top: 1px solid var(--border);
+                display: flex;
+                justify-content: flex-end;
+                gap: 15px;
+            }
+
+            .action-btn {
+                padding: 12px 24px;
+                border-radius: 14px;
+                font-weight: 700;
+                font-size: 14px;
+                cursor: pointer;
+                border: none;
+                transition: .3s;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                text-decoration: none;
+            }
+
+            .btn-hire {
+                background: var(--sage);
+                color: #fff;
+            }
+
+            .btn-hire:hover {
+                background: #4a6a4d;
+                transform: translateY(-2px);
+            }
+
+            .btn-reject {
+                background: rgba(181, 56, 74, 0.1);
+                color: var(--rose);
+            }
+
+            .btn-reject:hover {
+                background: var(--rose);
+                color: #fff;
+            }
+
+            .btn-schedule {
+                background: var(--coral);
+                color: #fff;
+            }
+
+            /* Grid Layout Fixes */
+            .info-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 24px;
+            }
+
+            @media (max-width: 768px) {
+                .modal-body {
+                    flex-direction: column;
+                }
+
+                .modal-sidebar {
+                    width: 100%;
+                    border-right: none;
+                    border-bottom: 1px solid var(--border);
+                }
+
+                .info-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+        </style>
 </head>
+
 <body>
-    <%- include('../partials/dashboard/company_sidebar', { activePage: 'dashboard' }) %>
+    <%- include('../partials/dashboard/company_sidebar', { activePage: activePage }) %>
 
 
-    <div class="page-header">
-        <% if (activePage === 'dashboard') { %>
-            <h1 class="page-title">Executive Sync, <span><%= user.name.split(' ')[0] %></span></h1>
+        <div class="page-header">
+            <% if (activePage==='dashboard' ) { %>
+                <h1 class="page-title">Executive Sync, <span>
+                        <%= user.name.split(' ')[0] %></span></h1>
             <p class="page-subtitle">Manage your internship pipeline and coordinate with top talent.</p>
-        <% } else if (activePage === 'applications') { %>
-            <h1 class="page-title">Candidate Pipeline</h1>
-            <p class="page-subtitle">Review applications and manage recruitment stages.</p>
-        <% } %>
-    </div>
-
-    <% if (activePage === 'dashboard') { %>
-        <div class="stats-grid">
-            <div class="stat-card reveal">
-                <div class="stat-top">
-                    <div class="stat-icon blue"><i class="fas fa-briefcase"></i></div>
-                    <span class="stat-badge up"><i class="fas fa-check"></i> Live</span>
-                </div>
-                <div class="stat-value"><%= stats ? stats.active : 0 %></div>
-                <div class="stat-label">Active Listings</div>
-            </div>
-            <div class="stat-card reveal">
-                <div class="stat-top">
-                    <div class="stat-icon green"><i class="fas fa-users-viewfinder"></i></div>
-                    <span class="stat-badge up">+12%</span>
-                </div>
-                <div class="stat-value"><%= stats ? stats.totalApplicants : 0 %></div>
-                <div class="stat-label">Total Pipeline</div>
-            </div>
-            <div class="stat-card reveal">
-                <div class="stat-top">
-                    <div class="stat-icon yellow"><i class="fas fa-user-clock"></i></div>
-                    <span class="stat-badge">Action Req.</span>
-                </div>
-                <div class="stat-value"><%= stats ? stats.interviews : 0 %></div>
-                <div class="stat-label">Meetings Slotted</div>
-            </div>
-            <div class="stat-card reveal">
-                <div class="stat-top">
-                    <div class="stat-icon sky"><i class="fas fa-user-tie"></i></div>
-                    <span class="stat-badge up">Hiring</span>
-                </div>
-                <div class="stat-value"><%= stats ? stats.hired : 0 %></div>
-                <div class="stat-label">Successful Hires</div>
-            </div>
+        <% } else if (activePage === ' applications') { %>
+                            <h1 class="page-title">Candidate Pipeline</h1>
+                            <p class="page-subtitle">Review applications and manage recruitment stages.</p>
+                            <% } %>
         </div>
 
-        <div class="dashboard-grid">
-            <div class="column">
-                <div class="card reveal">
-                    <div class="card-header">
-                        <h2 class="card-title"><i class="fas fa-layer-group"></i> Active Opportunities</h2>
-                        <a href="/company/internships" class="view-btn">Management Hub</a>
+        <% if (activePage==='dashboard' ) { %>
+            <div class="stats-grid">
+                <div class="stat-card reveal">
+                    <div class="stat-top">
+                        <div class="stat-icon blue"><i class="fas fa-briefcase"></i></div>
+                        <span class="stat-badge up"><i class="fas fa-check"></i> Live</span>
                     </div>
-                    <div class="item-list">
-                        <% if (myInternships && myInternships.length > 0) { %>
-                            <% myInternships.slice(0, 4).forEach(function(item) { %>
-                                <div class="item-row">
-                                    <div class="item-icon"><%= item.title.charAt(0).toUpperCase() %></div>
-                                    <div style="flex:1">
-                                        <div style="font-weight:700; color:var(--ink); font-size:15px"><%= item.title %></div>
-                                        <div style="font-size:13px; color:var(--text-muted); font-weight:600"><%= item.location || 'Remote' %> &bull; <%= item.type || 'Internship' %></div>
-                                    </div>
-                                    <span class="status-pill active"><%= item.isActive ? 'Active' : 'Draft' %></span>
-                                </div>
-                            <% }); %>
-                        <% } else { %>
-                            <div style="text-align:center; padding: 40px 0; color:var(--text-muted)">
-                                <p>You haven't posted any roles yet.</p>
-                                <a href="/company/internships/create" style="color:var(--coral); font-weight:700; text-decoration:none; margin-top:10px; display:inline-block">Click here to start →</a>
-                            </div>
-                        <% } %>
+                    <div class="stat-value">
+                        <%= stats ? stats.active : 0 %>
                     </div>
+                    <div class="stat-label">Active Listings</div>
                 </div>
-
-                <div class="card reveal">
-                    <div class="card-header">
-                        <h2 class="card-title"><i class="fas fa-users-rays"></i> Recent Talent</h2>
-                        <a href="/company/dashboard?tab=applications" class="view-btn">Pipeline Center</a>
+                <div class="stat-card reveal">
+                    <div class="stat-top">
+                        <div class="stat-icon green"><i class="fas fa-users-viewfinder"></i></div>
+                        <span class="stat-badge up">+12%</span>
                     </div>
-                    <div class="item-list">
-                        <% if (applicants && applicants.length > 0) { %>
-                            <% applicants.slice(0, 4).forEach(function(app) { %>
-                                <div class="item-row">
-                                    <div class="item-icon" style="background:var(--amber)"><%= app.student ? app.student.name.charAt(0).toUpperCase() : 'S' %></div>
-                                    <div style="flex:1">
-                                        <div style="font-weight:700; color:var(--ink); font-size:15px"><%= app.student ? app.student.name : 'Unknown Candidate' %></div>
-                                        <div style="font-size:13px; color:var(--text-muted); font-weight:600"><%= app.internship ? app.internship.title : 'Internal Role' %></div>
-                                    </div>
-                                    <span class="status-pill applied"><%= app.status ? app.status.replace(/_/g, ' ') : 'New' %></span>
-                                </div>
-                            <% }); %>
-                        <% } else { %>
-                            <div style="text-align:center; padding: 40px 0; color:var(--text-muted)">
-                                <p>Awaiting new applications.</p>
-                            </div>
-                        <% } %>
+                    <div class="stat-value">
+                        <%= stats ? stats.totalApplicants : 0 %>
                     </div>
+                    <div class="stat-label">Total Pipeline</div>
+                </div>
+                <div class="stat-card reveal">
+                    <div class="stat-top">
+                        <div class="stat-icon yellow"><i class="fas fa-user-clock"></i></div>
+                        <span class="stat-badge">Action Req.</span>
+                    </div>
+                    <div class="stat-value">
+                        <%= stats ? stats.interviews : 0 %>
+                    </div>
+                    <div class="stat-label">Meetings Slotted</div>
+                </div>
+                <div class="stat-card reveal">
+                    <div class="stat-top">
+                        <div class="stat-icon sky"><i class="fas fa-user-tie"></i></div>
+                        <span class="stat-badge up">Hiring</span>
+                    </div>
+                    <div class="stat-value">
+                        <%= stats ? stats.hired : 0 %>
+                    </div>
+                    <div class="stat-label">Successful Hires</div>
                 </div>
             </div>
 
-            <div class="column" style="width: 100%;">
-                <div class="card reveal">
-                    <div class="company-profile-card">
-                        <div class="company-avatar-lg"><%= user.name.charAt(0).toUpperCase() %></div>
-                        <div class="company-display-name"><%= user.companyName || user.name %></div>
-                        <div class="company-display-email"><%= user.email %></div>
+            <div class="dashboard-grid">
+                <div class="column">
+                    <div class="card reveal">
+                        <div class="card-header">
+                            <h2 class="card-title"><i class="fas fa-layer-group"></i> Active Opportunities</h2>
+                            <a href="/company/internships" class="view-btn">Management Hub</a>
+                        </div>
+                        <div class="item-list">
+                            <% if (myInternships && myInternships.length> 0) { %>
+                                <% myInternships.slice(0, 4).forEach(function(item) { %>
+                                    <div class="item-row">
+                                        <div class="item-icon">
+                                            <%= item.title.charAt(0).toUpperCase() %>
+                                        </div>
+                                        <div style="flex:1">
+                                            <div style="font-weight:700; color:var(--ink); font-size:15px">
+                                                <%= item.title %>
+                                            </div>
+                                            <div style="font-size:13px; color:var(--text-muted); font-weight:600">
+                                                <%= item.location || 'Remote' %> &bull; <%= item.type || 'Internship' %>
+                                            </div>
+                                        </div>
+                                        <span class="status-pill active">
+                                            <%= item.isActive ? 'Active' : 'Draft' %>
+                                        </span>
+                                    </div>
+                                    <% }); %>
+                                        <% } else { %>
+                                            <div style="text-align:center; padding: 40px 0; color:var(--text-muted)">
+                                                <p>You haven't posted any roles yet.</p>
+                                                <a href="/company/internships/create"
+                                                    style="color:var(--coral); font-weight:700; text-decoration:none; margin-top:10px; display:inline-block">Click
+                                                    here to start →</a>
+                                            </div>
+                                            <% } %>
+                        </div>
                     </div>
-                    <a href="/company/internships/create" class="post-btn">
-                        <i class="fas fa-plus-circle"></i> Create New Opening
-                    </a>
+
+                    <div class="card reveal">
+                        <div class="card-header">
+                            <h2 class="card-title"><i class="fas fa-users-rays"></i> Recent Talent</h2>
+                            <a href="/company/dashboard?tab=applications" class="view-btn">Pipeline Center</a>
+                        </div>
+                        <div class="item-list">
+                            <% if (applicants && applicants.length> 0) { %>
+                                <% applicants.slice(0, 4).forEach(function(app) { %>
+                                    <div class="item-row">
+                                        <div class="item-icon" style="background:var(--amber)">
+                                            <%= app.student ? app.student.name.charAt(0).toUpperCase() : 'S' %>
+                                        </div>
+                                        <div style="flex:1">
+                                            <div style="font-weight:700; color:var(--ink); font-size:15px">
+                                                <%= app.student ? app.student.name : 'Unknown Candidate' %>
+                                            </div>
+                                            <div style="font-size:13px; color:var(--text-muted); font-weight:600">
+                                                <%= app.internship ? app.internship.title : 'Internal Role' %>
+                                            </div>
+                                        </div>
+                                        <span class="status-pill applied">
+                                            <%= app.status ? app.status.replace(/_/g, ' ' ) : 'New' %>
+                                        </span>
+                                    </div>
+                                    <% }); %>
+                                        <% } else { %>
+                                            <div style="text-align:center; padding: 40px 0; color:var(--text-muted)">
+                                                <p>Awaiting new applications.</p>
+                                            </div>
+                                            <% } %>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="card reveal" style="background: var(--section-alt);">
-                    <div class="card-header">
-                        <h2 class="card-title" style="font-size:1.1rem"><i class="fas fa-bullseye"></i> Goal Tracking</h2>
+                <div class="column" style="width: 100%;">
+                    <div class="card reveal">
+                        <div class="company-profile-card">
+                            <div class="company-avatar-lg">
+                                <%= user.name.charAt(0).toUpperCase() %>
+                            </div>
+                            <div class="company-display-name">
+                                <%= user.companyName || user.name %>
+                            </div>
+                            <div class="company-display-email">
+                                <%= user.email %>
+                            </div>
+                        </div>
+                        <a href="/company/internships/create" class="post-btn">
+                            <i class="fas fa-plus-circle"></i> Create New Opening
+                        </a>
                     </div>
-                    <% const total = stats ? stats.totalApplicants : 0; const pct = (n) => total > 0 ? Math.round((n / total) * 100) : 0; %>
-                    <div style="display:flex; flex-direction:column; gap:20px">
-                        <div class="progress-section">
-                            <div class="progress-title"><span>Review Phase</span><span><%= pct(total - (stats ? stats.interviews + stats.hired : 0)) %>%</span></div>
-                            <div class="progress-bar"><div class="progress-fill" style="width: <%= pct(total - (stats ? stats.interviews + stats.hired : 0)) %>%"></div></div>
-                        </div>
-                        <div class="progress-section">
-                            <div class="progress-title"><span>Interview Stage</span><span><%= pct(stats ? stats.interviews : 0) %>%</span></div>
-                            <div class="progress-bar"><div class="progress-fill" style="width: <%= pct(stats ? stats.interviews : 0) %>%; background:var(--amber)"></div></div>
-                        </div>
-                        <div class="progress-section">
-                            <div class="progress-title"><span>Final Selection</span><span><%= pct(stats ? stats.hired : 0) %>%</span></div>
-                            <div class="progress-bar"><div class="progress-fill" style="width: <%= pct(stats ? stats.hired : 0) %>%; background:var(--sage)"></div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-    <% } else if (activePage === 'applications') { %>
-        <div class="card reveal" style="margin-top: 20px;">
-            <% if (groupedApplications && groupedApplications.length > 0) { %>
-                <% groupedApplications.forEach(function(group) { %>
-                    <div style="margin-bottom: 30px; border-bottom: 2px solid var(--border); padding-bottom: 20px;">
-                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--coral); margin-bottom: 15px;">
-                            <%= group.internship.title %> 
-                            <span style="font-size: 0.9rem; color: var(--text-muted); font-family: inherit;">(<%= group.applications.length %> Applicants)</span>
-                        </h3>
-                        
-                                    <div class="item-list">
-                            <% group.applications.forEach(function(app) { %>
-                                <% var p = app.profile || {}; %>
-                                <div class="item-row" style="background: var(--card-bg); padding: 20px 24px;">
-                                    <div class="item-icon" style="background: var(--sage);"><%= app.student ? app.student.name.charAt(0).toUpperCase() : 'S' %></div>
-                                    <div style="flex:1">
-                                        <div style="font-weight:700; color:var(--ink); font-size:16px"><%= app.student ? app.student.name : 'Candidate' %></div>
-                                        <div style="font-size:12px; color:var(--text-muted); font-weight: 600;">
-                                            <%= p.college || 'University Not Shared' %> &bull; <%= p.degree || 'Degree Unknown' %>
+                    <div class="card reveal" style="background: var(--section-alt);">
+                        <div class="card-header">
+                            <h2 class="card-title" style="font-size:1.1rem"><i class="fas fa-bullseye"></i> Goal
+                                Tracking</h2>
+                        </div>
+                        <% const total=stats ? stats.totalApplicants : 0; const pct=(n)=> total > 0 ? Math.round((n /
+                            total) * 100) : 0; %>
+                            <div style="display:flex; flex-direction:column; gap:20px">
+                                <div class="progress-section">
+                                    <div class="progress-title"><span>Review Phase</span><span>
+                                            <%= pct(total - (stats ? stats.interviews + stats.hired : 0)) %>%
+                                        </span></div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill"
+                                            style="width: <%= pct(total - (stats ? stats.interviews + stats.hired : 0)) %>%">
                                         </div>
                                     </div>
-                                    <div style="display:flex; align-items: center; gap: 20px;">
-                                        <span class="status-pill <%= app.status %>"><%= app.status.replace(/_/g, ' ') %></span>
-                                        <button onclick="showProfile('<%= app._id %>')" class="view-btn">
-                                            <i class="fas fa-eye"></i> View Application
-                                        </button>
+                                </div>
+                                <div class="progress-section">
+                                    <div class="progress-title"><span>Interview Stage</span><span>
+                                            <%= pct(stats ? stats.interviews : 0) %>%
+                                        </span></div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill"
+                                            style="width: <%= pct(stats ? stats.interviews : 0) %>%; background:var(--amber)">
+                                        </div>
                                     </div>
-
-                                    <script>
-                                        if(!window.candidateProfiles) window.candidateProfiles = {};
-                                        window.candidateProfiles['<%= app._id %>'] = <%- JSON.stringify({ 
-                                            id: app._id,
-                                            status: app.status,
-                                            name: app.student ? app.student.name : '',
-                                            email: app.student ? app.student.email : '',
-                                            phone: (app.student && app.student.phone) ? app.student.phone : (p.phone || ''),
-                                            college: p.college || '',
-                                            usn: p.usn || '',
-                                            degree: p.degree || '',
-                                            department: p.department || '',
-                                            semester: p.semester || '',
-                                            year: p.year || '',
-                                            gpa: p.gpa || '',
-                                            dob: p.dob || '',
-                                            gender: p.gender || '',
-                                            address: p.address || '',
-                                            city: p.city || '',
-                                            state: p.state || '',
-                                            country: p.country || '',
-                                            bio: p.bio || '',
-                                            experience: p.experience || '',
-                                            projects: p.projects || '',
-                                            interests: p.interests || [],
-                                            certifications: p.certifications || '',
-                                            languages: p.languages || '',
-                                            skills: p.skills || [],
-                                            linkedin: p.linkedin || '',
-                                            github: p.github || '',
-                                            coverLetter: app.coverLetter || '',
-                                            studentSkills: app.studentSkills || '',
-                                            q1: app.question1Answer || '',
-                                            q2: app.question2Answer || '',
-                                            appliedAt: app.appliedAt,
-                                            resumeUrl: app.resumeUrl,
-                                            interviewDate: app.interviewDate
-                                        }) %>;
-                                    </script>
                                 </div>
-                            <% }); %>
-                        </div>
+                                <div class="progress-section">
+                                    <div class="progress-title"><span>Final Selection</span><span>
+                                            <%= pct(stats ? stats.hired : 0) %>%
+                                        </span></div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill"
+                                            style="width: <%= pct(stats ? stats.hired : 0) %>%; background:var(--sage)">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                     </div>
-                <% }); %>
-            <% } else { %>
-                <div style="text-align: center; padding: 60px 20px;">
-                    <i class="fas fa-users-slash" style="font-size: 3rem; color: var(--border); margin-bottom: 20px;"></i>
-                    <h2>No applications yet</h2>
-                    <p style="color: var(--text-muted); margin-bottom: 20px;">Applications for your internships will appear here.</p>
                 </div>
-            <% } %>
-        </div>
-    <% } else if (activePage === 'internships') { %>
-        <style>
-            .btn-action-group { display: flex; gap: 8px; }
-            .btn-mini { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 14px; transition: .3s; }
-            .btn-mini-edit { background: rgba(217,95,59,0.1); color: var(--coral); }
-            .btn-mini-del { background: rgba(181,56,74,0.1); color: var(--rose); border:none; cursor:pointer; }
-        </style>
-
-        <div class="card reveal" style="margin-top: 20px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                <h2 class="card-title"><i class="fas fa-briefcase"></i> Managed Postings</h2>
-                <a href="/company/internships/create" class="view-btn" style="background: var(--coral); color: #fff;">+ Post New</a>
             </div>
 
-            <div class="item-list">
-                <% if (myInternships && myInternships.length > 0) { %>
-                    <% myInternships.forEach(function(item) { %>
-                        <div class="item-row" style="background: var(--card-bg); flex-wrap: wrap; gap: 12px;">
-                            <div class="item-icon"><%= item.title.charAt(0).toUpperCase() %></div>
-                            <div style="flex:1; min-width: 150px;">
-                                <div style="font-weight:700; color:var(--ink); font-size:16px"><%= item.title %></div>
-                                <div style="font-size:13px; color:var(--text-muted); line-height: 1.4;">
-                                    <%= item.location || 'Remote' %> &bull; <%= item.stats ? item.stats.total : 0 %> Applicants
+            <% } else if (activePage==='applications' ) { %>
+                <div class="card reveal" style="margin-top: 20px;">
+                    <% if (groupedApplications && groupedApplications.length> 0) { %>
+                        <% groupedApplications.forEach(function(group) { %>
+                            <div
+                                style="margin-bottom: 30px; border-bottom: 2px solid var(--border); padding-bottom: 20px;">
+                                <h3
+                                    style="font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--coral); margin-bottom: 15px;">
+                                    <%= group.internship.title %>
+                                        <span
+                                            style="font-size: 0.9rem; color: var(--text-muted); font-family: inherit;">(
+                                            <%= group.applications.length %> Applicants)
+                                        </span>
+                                </h3>
+
+                                <div class="item-list">
+                                    <% group.applications.forEach(function(app) { %>
+                                        <% var p=app.profile || {}; %>
+                                            <div class="item-row"
+                                                style="background: var(--card-bg); padding: 20px 24px;">
+                                                <div class="item-icon" style="background: var(--sage);">
+                                                    <%= app.student ? app.student.name.charAt(0).toUpperCase() : 'S' %>
+                                                </div>
+                                                <div style="flex:1">
+                                                    <div style="font-weight:700; color:var(--ink); font-size:16px">
+                                                        <%= app.student ? app.student.name : 'Candidate' %>
+                                                    </div>
+                                                    <div
+                                                        style="font-size:12px; color:var(--text-muted); font-weight: 600;">
+                                                        <%= p.college || 'University Not Shared' %> &bull; <%= p.degree
+                                                                || 'Degree Unknown' %>
+                                                    </div>
+                                                </div>
+                                                <div style="display:flex; align-items: center; gap: 20px;">
+                                                    <span class="status-pill <%= app.status %>">
+                                                        <%= app.status.replace(/_/g, ' ' ) %>
+                                                    </span>
+                                                    <button onclick="showProfile('<%= app._id %>')" class="view-btn">
+                                                        <i class="fas fa-eye"></i> View Application
+                                                    </button>
+                                                </div>
+
+                                                <script>
+                                                    if (!window.candidateProfiles) window.candidateProfiles = {};
+                                                    window.candidateProfiles['<%= app._id %>'] = <% - JSON.stringify({
+                                                        id: app._id,
+                                                        status: app.status,
+                                                        name: app.student ? app.student.name : '',
+                                                        email: app.student ? app.student.email : '',
+                                                        phone: (app.student && app.student.phone) ? app.student.phone : (p.phone || ''),
+                                                        college: p.college || '',
+                                                        usn: p.usn || '',
+                                                        degree: p.degree || '',
+                                                        department: p.department || '',
+                                                        semester: p.semester || '',
+                                                        year: p.year || '',
+                                                        gpa: p.gpa || '',
+                                                        dob: p.dob || '',
+                                                        gender: p.gender || '',
+                                                        address: p.address || '',
+                                                        city: p.city || '',
+                                                        state: p.state || '',
+                                                        country: p.country || '',
+                                                        bio: p.bio || '',
+                                                        experience: p.experience || '',
+                                                        projects: p.projects || '',
+                                                        interests: p.interests || [],
+                                                        certifications: p.certifications || '',
+                                                        languages: p.languages || '',
+                                                        skills: p.skills || [],
+                                                        linkedin: p.linkedin || '',
+                                                        github: p.github || '',
+                                                        coverLetter: app.coverLetter || '',
+                                                        studentSkills: app.studentSkills || '',
+                                                        q1: app.question1Answer || '',
+                                                        q2: app.question2Answer || '',
+                                                        appliedAt: app.appliedAt,
+                                                        resumeUrl: app.resumeUrl,
+                                                        interviewDate: app.interviewDate
+                                                    }) %>;
+                                                </script>
+                                            </div>
+                                            <% }); %>
                                 </div>
                             </div>
-                            <div style="display:flex; gap: 15px; align-items: center; justify-content: flex-end; flex: 1; min-width: 100px;">
-                                <span class="status-pill <%= item.isActive ? 'status-active' : 'status-draft' %>">
-                                    <%= item.isActive ? 'Active' : 'Draft' %>
-                                </span>
-                                <div class="btn-action-group">
-                                    <a href="/company/internships/<%= item._id %>/edit" class="btn-mini btn-mini-edit" title="Edit"><i class="fas fa-edit"></i></a>
-                                    <form action="/company/internships/<%= item._id %>/delete" method="POST" onsubmit="return confirm('Delete this posting?')">
-                                        <button type="submit" class="btn-mini btn-mini-del" title="Delete"><i class="fas fa-trash"></i></button>
-                                    </form>
-                                </div>
-                            </div>
+                            <% }); %>
+                                <% } else { %>
+                                    <div style="text-align: center; padding: 60px 20px;">
+                                        <i class="fas fa-users-slash"
+                                            style="font-size: 3rem; color: var(--border); margin-bottom: 20px;"></i>
+                                        <h2>No applications yet</h2>
+                                        <p style="color: var(--text-muted); margin-bottom: 20px;">Applications for your
+                                            internships will appear here.</p>
+                                    </div>
+                                    <% } %>
+                </div>
+                <% } else if (activePage==='internships' ) { %>
+                    <style>
+                        .btn-action-group {
+                            display: flex;
+                            gap: 8px;
+                        }
+
+                        .btn-mini {
+                            width: 32px;
+                            height: 32px;
+                            border-radius: 8px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            text-decoration: none;
+                            font-size: 14px;
+                            transition: .3s;
+                        }
+
+                        .btn-mini-edit {
+                            background: rgba(217, 95, 59, 0.1);
+                            color: var(--coral);
+                        }
+
+                        .btn-mini-del {
+                            background: rgba(181, 56, 74, 0.1);
+                            color: var(--rose);
+                            border: none;
+                            cursor: pointer;
+                        }
+                    </style>
+
+                    <div class="card reveal" style="margin-top: 20px;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                            <h2 class="card-title"><i class="fas fa-briefcase"></i> Managed Postings</h2>
+                            <a href="/company/internships/create" class="view-btn"
+                                style="background: var(--coral); color: #fff;">+ Post New</a>
                         </div>
-                    <% }); %>
-                <% } else { %>
-                    <div style="text-align: center; padding: 60px 20px;">
-                        <i class="fas fa-folder-open" style="font-size: 3rem; color: var(--border); margin-bottom: 20px;"></i>
-                        <h2>No postings yet</h2>
-                        <a href="/company/internships/create" style="color: var(--coral); font-weight: 700;">Post your first internship →</a>
+
+                        <div class="item-list">
+                            <% if (myInternships && myInternships.length> 0) { %>
+                                <% myInternships.forEach(function(item) { %>
+                                    <div class="item-row"
+                                        style="background: var(--card-bg); flex-wrap: wrap; gap: 12px;">
+                                        <div class="item-icon">
+                                            <%= item.title.charAt(0).toUpperCase() %>
+                                        </div>
+                                        <div style="flex:1; min-width: 150px;">
+                                            <div style="font-weight:700; color:var(--ink); font-size:16px">
+                                                <%= item.title %>
+                                            </div>
+                                            <div style="font-size:13px; color:var(--text-muted); line-height: 1.4;">
+                                                <%= item.location || 'Remote' %> &bull; <%= item.stats ?
+                                                        item.stats.total : 0 %> Applicants
+                                            </div>
+                                        </div>
+                                        <div
+                                            style="display:flex; gap: 15px; align-items: center; justify-content: flex-end; flex: 1; min-width: 100px;">
+                                            <span
+                                                class="status-pill <%= item.isActive ? 'status-active' : 'status-draft' %>">
+                                                <%= item.isActive ? 'Active' : 'Draft' %>
+                                            </span>
+                                            <div class="btn-action-group">
+                                                <a href="/company/internships/<%= item._id %>/edit"
+                                                    class="btn-mini btn-mini-edit" title="Edit"><i
+                                                        class="fas fa-edit"></i></a>
+                                                <form action="/company/internships/<%= item._id %>/delete" method="POST"
+                                                    onsubmit="return confirm('Delete this posting?')">
+                                                    <button type="submit" class="btn-mini btn-mini-del"
+                                                        title="Delete"><i class="fas fa-trash"></i></button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% }); %>
+                                        <% } else { %>
+                                            <div style="text-align: center; padding: 60px 20px;">
+                                                <i class="fas fa-folder-open"
+                                                    style="font-size: 3rem; color: var(--border); margin-bottom: 20px;"></i>
+                                                <h2>No postings yet</h2>
+                                                <a href="/company/internships/create"
+                                                    style="color: var(--coral); font-weight: 700;">Post your first
+                                                    internship →</a>
+                                            </div>
+                                            <% } %>
+                        </div>
                     </div>
-                <% } %>
-            </div>
-        </div>
-    <% } %>
-</main>
+                    <% } else if (activePage==='settings' ) { %>
+                        <div class="card reveal" style="margin-top: 20px; max-width: 600px;">
+                            <div class="card-header">
+                                <h2 class="card-title"><i class="fas fa-shield-alt"></i> Security Settings</h2>
+                            </div>
 
-    <div class="modal-overlay" id="profileModal">
-        <div class="modal-content">
-            <span class="modal-close" onclick="closeModal()">&times;</span>
-            <div id="modalBody" class="modal-body">
-                <!-- Content injected by JS -->
-            </div>
-            <div id="modalFooter" class="modal-actions">
-                <!-- Actions injected by JS -->
-            </div>
-        </div>
-    </div>
+                            <% if (typeof success !=='undefined' && success && success.includes('Password')) { %>
+                                <div style="background:rgba(90,122,92,0.1); color:var(--sage); padding:15px; border-radius:12px; margin-bottom:20px; font-weight:700"
+                                    id="passwordSuccessMsg">
+                                    <i class="fas fa-check-circle"></i>
+                                    <%= success %>
+                                </div>
+                                <% } %>
+                                    <% if (typeof error !=='undefined' && error && error.includes('assword')) { %>
+                                        <div
+                                            style="background:rgba(181,56,74,0.1); color:var(--rose); padding:15px; border-radius:12px; margin-bottom:20px; font-weight:700">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            <%= error %>
+                                        </div>
+                                        <% } %>
 
-    <script>
-        const reveals = document.querySelectorAll('.reveal');
-        reveals.forEach((el, i) => {
-            setTimeout(() => el.classList.add('visible'), i * 80);
-        });
+                                            <form action="/auth/change-password" method="POST">
+                                                <div style="margin-bottom: 20px;">
+                                                    <label
+                                                        style="display:block; font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">Current
+                                                        Password</label>
+                                                    <input type="password" name="currentPassword" required
+                                                        placeholder="Enter current password"
+                                                        style="width:100%; padding:12px 16px; border:1.5px solid var(--border); border-radius:12px; background:var(--card-bg); outline:none;">
+                                                </div>
+                                                <div style="margin-bottom: 20px;">
+                                                    <label
+                                                        style="display:block; font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">New
+                                                        Password</label>
+                                                    <input type="password" name="newPassword" required
+                                                        placeholder="Enter new password"
+                                                        style="width:100%; padding:12px 16px; border:1.5px solid var(--border); border-radius:12px; background:var(--card-bg); outline:none;">
+                                                </div>
+                                                <div style="margin-bottom: 20px;">
+                                                    <label
+                                                        style="display:block; font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">Confirm
+                                                        New Password</label>
+                                                    <input type="password" name="confirmPassword" required
+                                                        placeholder="Confirm new password"
+                                                        style="width:100%; padding:12px 16px; border:1.5px solid var(--border); border-radius:12px; background:var(--card-bg); outline:none;">
+                                                </div>
+                                                <div style="margin-top:20px;">
+                                                    <button type="submit" class="post-btn"
+                                                        style="width:auto; padding:12px 30px;">
+                                                        Update Password
+                                                    </button>
+                                                </div>
+                                            </form>
+                        </div>
+                        <% } %>
+                            </main>
 
-        function showProfile(id) {
-            const data = window.candidateProfiles[id];
-            if(!data) return;
+                            <div class="modal-overlay" id="profileModal">
+                                <div class="modal-content">
+                                    <span class="modal-close" onclick="closeModal()">&times;</span>
+                                    <div id="modalBody" class="modal-body">
+                                        <!-- Content injected by JS -->
+                                    </div>
+                                    <div id="modalFooter" class="modal-actions">
+                                        <!-- Actions injected by JS -->
+                                    </div>
+                                </div>
+                            </div>
 
-            const modal = document.getElementById('profileModal');
-            const body = document.getElementById('modalBody');
-            const footer = document.getElementById('modalFooter');
-            const initials = data.name ? data.name.charAt(0).toUpperCase() : '?';
-            
-            body.innerHTML = `
+                            <script>
+                                // URL Search Params handler for SweetAlerts
+                                function handleAlerts() {
+                                    const urlParams = new URLSearchParams(window.location.search);
+                                    if (urlParams.get('success')) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Action Successful',
+                                            text: decodeURIComponent(urlParams.get('success')).replace(/_/g, ' '),
+                                            confirmButtonColor: '#D95F3B',
+                                            iconColor: '#D95F3B'
+                                        });
+                                    } else if (urlParams.get('error')) {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Attention Required',
+                                            text: decodeURIComponent(urlParams.get('error')),
+                                            confirmButtonColor: '#D95F3B'
+                                        });
+                                    }
+                                }
+
+                                handleAlerts();
+
+                                const reveals = document.querySelectorAll('.reveal');
+                                reveals.forEach((el, i) => {
+                                    setTimeout(() => el.classList.add('visible'), i * 80);
+                                });
+
+                                function showProfile(id) {
+                                    const data = window.candidateProfiles[id];
+                                    if (!data) return;
+
+                                    const modal = document.getElementById('profileModal');
+                                    const body = document.getElementById('modalBody');
+                                    const footer = document.getElementById('modalFooter');
+                                    const initials = data.name ? data.name.charAt(0).toUpperCase() : '?';
+
+                                    body.innerHTML = `
                 <aside class="modal-sidebar">
                     <div class="profile-avatar-xl">${initials}</div>
                     <h2 style="font-family:'Playfair Display', serif; font-size:1.6rem; color:var(--ink); margin-bottom:5px">${data.name}</h2>
@@ -449,34 +1022,34 @@
                 </main>
             `;
 
-            // Footer Actions
-            let actionHtml = '';
-            if (data.status !== 'selected' && data.status !== 'rejected') {
-                if (data.status === 'applied' || data.status === 'under_review') {
-                    actionHtml += `
+                                    // Footer Actions
+                                    let actionHtml = '';
+                                    if (data.status !== 'selected' && data.status !== 'rejected') {
+                                        if (data.status === 'applied' || data.status === 'under_review') {
+                                            actionHtml += `
                         <form action="/company/applications/${data.id}/shortlist" method="POST">
                             <button class="action-btn btn-schedule" style="background:var(--amber)"><i class="fas fa-star"></i> Shortlist</button>
                         </form>
                     `;
-                }
-                
-                if (data.status === 'shortlisted') {
-                    actionHtml += `
+                                        }
+
+                                        if (data.status === 'shortlisted') {
+                                            actionHtml += `
                         <form action="/company/applications/${data.id}/interview" method="POST" style="display:flex; gap:10px; align-items:center; background:#fff; padding:5px 15px; border-radius:14px; border:1px solid var(--border)">
                             <span style="font-size:12px; font-weight:800; color:var(--text-muted)">Schedule:</span>
                             <input type="datetime-local" name="interviewDate" required style="border:none; font-size:13px; outline:none">
                             <button class="action-btn btn-schedule"><i class="fas fa-calendar-plus"></i> Set Interview</button>
                         </form>
                     `;
-                } else if (data.interviewDate) {
-                    actionHtml += `
+                                        } else if (data.interviewDate) {
+                                            actionHtml += `
                         <div style="background:rgba(217,95,59,0.1); color:var(--coral); padding:10px 20px; border-radius:12px; font-size:13px; font-weight:700">
                             <i class="fas fa-clock"></i> Interview: ${new Date(data.interviewDate).toLocaleString()}
                         </div>
                     `;
-                }
+                                        }
 
-                actionHtml += `
+                                        actionHtml += `
                     <form action="/company/applications/${data.id}/reject" method="POST" onsubmit="return confirm('Reject this application?')">
                         <button class="action-btn btn-reject"><i class="fas fa-times-circle"></i> Reject</button>
                     </form>
@@ -484,31 +1057,32 @@
                         <button class="action-btn btn-hire"><i class="fas fa-check-double"></i> Hire Candidate</button>
                     </form>
                 `;
-            } else {
-                const statusColors = {
-                    'selected': 'background: rgba(90,122,92,0.15); color: var(--sage); border: 1.5px solid var(--sage)',
-                    'rejected': 'background: rgba(181,56,74,0.15); color: var(--rose); border: 1.5px solid var(--rose)',
-                    'shortlisted': 'background: rgba(200,131,26,0.15); color: var(--amber); border: 1.5px solid var(--amber)',
-                    'applied': 'background: rgba(217,95,59,0.15); color: var(--coral); border: 1.5px solid var(--coral)'
-                };
-                const style = statusColors[data.status] || 'background: var(--nav-bg); color: var(--text-muted); border: 1px solid var(--border)';
-                actionHtml = `<div style="padding: 10px 24px; border-radius: 12px; font-weight: 800; text-transform: uppercase; font-size: 13px; letter-spacing: 0.5px; ${style}">Application ${data.status.replace(/_/g, ' ')}</div>`;
-            }
-            
-            footer.innerHTML = actionHtml;
-            modal.style.display = 'flex';
-        }
+                                    } else {
+                                        const statusColors = {
+                                            'selected': 'background: rgba(90,122,92,0.15); color: var(--sage); border: 1.5px solid var(--sage)',
+                                            'rejected': 'background: rgba(181,56,74,0.15); color: var(--rose); border: 1.5px solid var(--rose)',
+                                            'shortlisted': 'background: rgba(200,131,26,0.15); color: var(--amber); border: 1.5px solid var(--amber)',
+                                            'applied': 'background: rgba(217,95,59,0.15); color: var(--coral); border: 1.5px solid var(--coral)'
+                                        };
+                                        const style = statusColors[data.status] || 'background: var(--nav-bg); color: var(--text-muted); border: 1px solid var(--border)';
+                                        actionHtml = `<div style="padding: 10px 24px; border-radius: 12px; font-weight: 800; text-transform: uppercase; font-size: 13px; letter-spacing: 0.5px; ${style}">Application ${data.status.replace(/_/g, ' ')}</div>`;
+                                    }
 
-        function closeModal() {
-            document.getElementById('profileModal').style.display = 'none';
-        }
+                                    footer.innerHTML = actionHtml;
+                                    modal.style.display = 'flex';
+                                }
 
-        window.onclick = function(event) {
-            const modal = document.getElementById('profileModal');
-            if (event.target == modal) {
-                closeModal();
-            }
-        }
-    </script>
+                                function closeModal() {
+                                    document.getElementById('profileModal').style.display = 'none';
+                                }
+
+                                window.onclick = function (event) {
+                                    const modal = document.getElementById('profileModal');
+                                    if (event.target == modal) {
+                                        closeModal();
+                                    }
+                                }
+                            </script>
 </body>
+
 </html>

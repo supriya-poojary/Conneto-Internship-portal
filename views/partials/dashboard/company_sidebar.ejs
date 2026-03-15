@@ -8,7 +8,7 @@
 <!-- Topbar -->
 <nav class="topbar">
     <a href="/" class="logo">Conn<span>eto</span></a>
-    
+
     <div class="topbar-right">
         <button class="topbar-btn" id="themeToggle" title="Toggle Theme">
             <i class="fas fa-moon"></i>
@@ -45,15 +45,18 @@
         <div class="sidebar-section">
             <div class="sidebar-title">Management Hub</div>
             <div class="nav-list">
-                <a href="/company/dashboard" class="nav-link <%= typeof activePage !== 'undefined' && activePage === 'dashboard' ? 'active' : '' %>">
+                <a href="/company/dashboard"
+                    class="nav-link <%= typeof activePage !== 'undefined' && activePage === 'dashboard' ? 'active' : '' %>">
                     <i class="fas fa-chart-pie"></i>
                     <span>Overview</span>
                 </a>
-                <a href="/company/dashboard?tab=internships" class="nav-link <%= typeof activePage !== 'undefined' && activePage === 'internships' ? 'active' : '' %>">
+                <a href="/company/dashboard?tab=internships"
+                    class="nav-link <%= typeof activePage !== 'undefined' && activePage === 'internships' ? 'active' : '' %>">
                     <i class="fas fa-briefcase"></i>
                     <span>Postings</span>
                 </a>
-                <a href="/company/dashboard?tab=applications" class="nav-link <%= typeof activePage !== 'undefined' && activePage === 'applications' ? 'active' : '' %>">
+                <a href="/company/dashboard?tab=applications"
+                    class="nav-link <%= typeof activePage !== 'undefined' && activePage === 'applications' ? 'active' : '' %>">
                     <i class="fas fa-user-friends"></i>
                     <span>Candidates</span>
                 </a>
@@ -62,24 +65,19 @@
         <div class="sidebar-section">
             <div class="sidebar-title">Quick Actions</div>
             <div class="nav-list">
-                <a href="/company/internships/create" class="nav-link <%= typeof activePage !== 'undefined' && activePage === 'create' ? 'active' : '' %>">
+                <a href="/company/internships/create"
+                    class="nav-link <%= typeof activePage !== 'undefined' && activePage === 'create' ? 'active' : '' %>">
                     <i class="fas fa-plus-square"></i>
                     <span>New Listing</span>
                 </a>
-                <a href="#" class="nav-link">
-                    <i class="fas fa-analytics"></i>
-                    <span>Reports</span>
-                </a>
-                <a href="#" class="nav-link">
-                    <i class="fas fa-id-badge"></i>
-                    <span>Profile</span>
-                </a>
+
             </div>
         </div>
         <div class="sidebar-section">
             <div class="sidebar-title">Security</div>
             <div class="nav-list">
-                <a href="#" class="nav-link">
+                <a href="/company/dashboard?tab=settings"
+                    class="nav-link <%= typeof activePage !== 'undefined' && activePage === 'settings' ? 'active' : '' %>">
                     <i class="fas fa-shield-alt"></i>
                     <span>Settings</span>
                 </a>
