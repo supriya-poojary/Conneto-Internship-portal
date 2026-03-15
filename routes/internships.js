@@ -236,16 +236,7 @@ router.get('/company/applications', isAuthenticated, isCompany, async (req, res)
                 path: 'internship',
                 select: 'title company'
             })
-            .sort({ appliedAt: -1 })
-            .lean();
-
-        // Attach student profiles
-        for (let app of applications) {
-            if (app.student && app.student._id) {
-                app.student.profile = await StudentProfile.findOne({ user: app.student._id }).lean() || {};
-            }
-        }
-
+            .sort({ appliedAt: -1 });
 
         // Group by internship
         const groupedByInternship = {};
@@ -468,12 +459,14 @@ router.get('/internships/:id', async (req, res) => {
         // Check if user has applied
         let hasApplied = false;
         let myApplication = null;
+        let studentProfile = null;
         if (req.session.user && req.session.user.role === 'student') {
             myApplication = await Application.findOne({
                 internship: req.params.id,
                 student: req.session.user.id
             });
             hasApplied = !!myApplication;
+            studentProfile = await StudentProfile.findOne({ user: req.session.user.id });
         }
 
         res.render('internships/details', {
@@ -481,7 +474,8 @@ router.get('/internships/:id', async (req, res) => {
             user: req.session.user || null,
             internship,
             hasApplied,
-            myApplication
+            myApplication,
+            studentProfile
         });
     } catch (err) {
         console.error('Error loading internship:', err);
@@ -560,6 +554,13 @@ router.post('/internships/:id/apply', isAuthenticated, isStudent, upload.single(
             return res.redirect('/internships?error=You have already applied');
         }
 
+        // PORTFOLIO GATE: Ensure student has 100% complete profile before applying
+        const studentProfile = await StudentProfile.findOne({ user: req.session.user.id });
+        const completionPct = studentProfile ? (studentProfile.completionPercentage || 0) : 0;
+        if (completionPct < 100) {
+            return res.redirect(`/internships/${req.params.id}?error=Your portfolio is currently at ${completionPct}%. Please reach 100% completion by filling out all profile fields to unlock the "Apply Now" button.`);
+        }
+
         // Create application
         await Application.create({
             internship: req.params.id,
@@ -573,7 +574,7 @@ router.post('/internships/:id/apply', isAuthenticated, isStudent, upload.single(
             status: 'applied'
         });
 
-        res.redirect('/student/dashboard?applied=1#applications');
+        res.redirect('/student/applications?success=Application submitted successfully');
     } catch (err) {
         console.error('Error applying:', err);
         res.redirect('/internships?error=Failed to submit application');

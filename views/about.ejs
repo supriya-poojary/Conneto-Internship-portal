@@ -1,788 +1,2077 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>
-        <%= title %>
-    </title>
-    <link rel="stylesheet" href="/solvior/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/css/conneto.css" />
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/themes/odometer-theme-minimal.min.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us — Conneto Internship Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet" />
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script>
+        (function () {
+            const t = localStorage.getItem('conneto-theme') || 'light';
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
     <style>
         :root {
-            --bg-dark: #ffffff;
-            --bg-darker: #f1f5f9;
-            --accent: #2563eb;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
-            --nav-bg: rgba(255, 255, 255, 0.9);
-            --card-bg: #ffffff;
+            --coral: #D95F3B;
+            --coral-light: #F07A56;
+            --rose: #B5384A;
+            --amber: #C8831A;
+            --amber-light: #E8A030;
+            --sage: #5A7A5C;
+            --sage-light: #7A9E7C;
+            --terra: #A0522D;
+            --terra-light: #C4723F;
+            --cream: #FAF3E8;
+            --cream2: #F5EAD8;
+            --warm-white: #FFF8F0;
+            --ink: #2C1A0E;
+            --ink2: #4A2E1A;
+            --text: #3D2B1F;
+            --text-muted: #7A5C4A;
+            --border: rgba(160, 82, 45, 0.15);
+            --shadow: rgba(44, 26, 14, 0.12);
+            --card-bg: rgba(255, 248, 240, 0.95);
+            --nav-bg: rgba(250, 243, 232, 0.97);
+            --section-alt: #F5EAD8;
+            --footer-bg: #1E0E05;
         }
 
         [data-theme="dark"] {
-            --bg-dark: #030a16;
-            --bg-darker: #01050b;
-            --accent: #38bdf8;
-            --text-main: #f4f4f5;
-            --text-muted: #888;
-            --border-color: var(--border-color);
-            --nav-bg: rgba(3, 10, 22, 0.9);
-            --card-bg: rgba(255, 255, 255, 0.03);
+            --cream: #1C0F08;
+            --cream2: #251508;
+            --warm-white: #1A0D06;
+            --ink: #FAF3E8;
+            --ink2: #F0E0C8;
+            --text: #E8D5BC;
+            --text-muted: #B8937A;
+            --border: rgba(200, 131, 26, 0.2);
+            --shadow: rgba(0, 0, 0, 0.4);
+            --card-bg: rgba(37, 21, 8, 0.95);
+            --nav-bg: rgba(28, 15, 8, 0.98);
+            --section-alt: #201008;
+            --footer-bg: #0E0704;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        html {
+            scroll-behavior: smooth
         }
 
         body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-            transition: background-color 0.3s, color 0.3s;
+            font-family: 'DM Sans', sans-serif;
+            background: var(--cream);
+            color: var(--text);
+            transition: background .4s, color .4s;
+            overflow-x: hidden
         }
 
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            font-family: 'Playfair Display', serif;
-            font-weight: 400;
-            color: var(--text-main) !important;
-        }
-
-        /* Lenis */
-        html.lenis {
-            height: auto;
-        }
-
-        .lenis.lenis-smooth {
-            scroll-behavior: auto;
-        }
-
-        /* Nav */
-        .c-nav {
+        .loader {
             position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            transition: all 0.4s ease;
-            padding: 20px 0;
-            mix-blend-mode: difference;
-        }
-
-        .c-nav.scrolled {
-            background: var(--nav-bg);
-            backdrop-filter: blur(10px);
-            padding: 15px 0;
-            mix-blend-mode: normal;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .c-nav-inner {
+            inset: 0;
+            background: var(--cream);
+            z-index: 9999;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            padding: 0 40px;
+            justify-content: center;
+            transition: opacity .5s, visibility .5s
         }
 
-        .c-nav-logo {
+        .loader.hide {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none
+        }
+
+        .loader-logo {
             font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--text-main);
-            text-decoration: none;
-            letter-spacing: 1px;
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--ink);
+            letter-spacing: -1px
         }
 
-        .c-nav-logo span {
-            color: var(--accent);
-            font-style: italic;
+        .loader-logo span {
+            color: var(--coral)
         }
 
-        .c-nav-links {
+        .loader-dots {
             display: flex;
-            gap: 40px;
-            list-style: none;
-            margin: 0;
-            padding: 0;
+            gap: 10px;
+            margin-top: 18px
         }
 
-        .c-nav-links a {
-            color: var(--text-main);
-            text-decoration: none;
-            font-size: 0.85rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
+        .loader-dots div {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background: var(--coral);
+            animation: dotBounce .6s infinite alternate
+        }
+
+        .loader-dots div:nth-child(2) {
+            animation-delay: .15s;
+            background: var(--amber)
+        }
+
+        .loader-dots div:nth-child(3) {
+            animation-delay: .3s;
+            background: var(--sage)
+        }
+
+        @keyframes dotBounce {
+            from {
+                transform: translateY(0)
+            }
+
+            to {
+                transform: translateY(-10px);
+                opacity: .5
+            }
+        }
+
+        /* SHINE EFFECT */
+        .shine-box {
             position: relative;
+            overflow: hidden;
         }
 
-        .c-nav-links a::after {
+        .shine-box::after {
             content: '';
             position: absolute;
-            width: 0;
-            height: 1px;
-            bottom: -6px;
-            left: 50%;
-            background: var(--accent);
-            transition: all 0.3s ease;
-            transform: translateX(-50%);
+            top: -50%;
+            left: -150%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to right,
+                    rgba(255, 255, 255, 0) 0%,
+                    rgba(255, 255, 255, 0.4) 50%,
+                    rgba(255, 255, 255, 0) 100%);
+            transform: rotate(30deg);
+            animation: shine-anim 4s infinite;
+            pointer-events: none;
         }
 
-        .c-nav-links a:hover::after,
-        .c-nav-links a.active::after {
-            width: 100%;
+        @keyframes shine-anim {
+            0% { left: -150%; }
+            20% { left: 150%; }
+            100% { left: 150%; }
         }
 
-        .c-nav-actions {
+        .topbar {
+            background: var(--terra);
+            color: #fff;
+            padding: 8px 0;
+            font-size: 13px;
+            font-weight: 500
+        }
+
+        .topbar .container {
             display: flex;
-            gap: 15px;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px
         }
 
-        .btn-luxury {
-            display: inline-flex;
+        .topbar-contact {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap
+        }
+
+        .topbar-contact a {
+            color: rgba(255, 255, 255, .85);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color .3s
+        }
+
+        .topbar-contact a:hover {
+            color: #fff
+        }
+
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--nav-bg);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            transition: all .3s
+        }
+
+        .nav.scrolled {
+            box-shadow: 0 4px 24px var(--shadow)
+        }
+
+        .nav .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            max-width: 1260px;
+            margin: 0 auto
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.9rem;
+            font-weight: 800;
+            color: var(--ink);
+            text-decoration: none;
+            letter-spacing: -.5px
+        }
+
+        .logo span {
+            color: var(--coral)
+        }
+
+        .nav-links {
+            display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            font-weight: 500;
-            color: var(--text-main);
-            padding: 12px 28px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-            transition: all 0.3s;
+            list-style: none
+        }
+
+        .nav-links a {
             text-decoration: none;
+            color: var(--text);
+            font-weight: 600;
+            font-size: 14.5px;
+            padding: 7px 14px;
+            border-radius: 8px;
+            transition: all .3s;
+            position: relative
         }
 
-        .btn-luxury:hover {
-            background: #fff;
-            color: var(--bg-dark);
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 14px;
+            right: 14px;
+            height: 2px;
+            background: var(--coral);
+            border-radius: 2px;
+            transform: scaleX(0);
+            transition: transform .3s
         }
 
-        .btn-luxury-solid {
-            background: var(--accent);
-            border-color: var(--accent);
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            transform: scaleX(1)
         }
 
-        .btn-luxury-solid:hover {
-            background: #005ecc;
-            border-color: #005ecc;
-            color: var(--text-main);
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--coral)
         }
 
-        /* Page Hero */
-        .page-hero {
-            padding: 15rem 0 5rem;
-            text-align: center;
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 10px
         }
 
-        .page-hero-title {
-            font-size: clamp(3rem, 7vw, 6rem);
-            line-height: 1;
-            letter-spacing: -0.02em;
-            margin-bottom: 2rem;
-            color: var(--text-main);
-            text-transform: uppercase;
-        }
-
-        .page-hero-title span {
-            color: var(--accent);
-            font-style: italic;
-        }
-
-        .page-hero-sub {
-            font-family: 'Inter', sans-serif;
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.8;
-            font-weight: 300;
-        }
-
-        /* Mission Image Reveal */
-        .reveal-sec {
-            height: 80vh;
-            margin: 5rem 0;
-            position: relative;
+        .theme-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            color: var(--amber);
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #fff;
-            color: var(--bg-dark);
+            font-size: 16px;
+            transition: all .3s
         }
 
-        .reveal-bg {
+        .theme-btn:hover {
+            background: var(--amber);
+            color: #fff;
+            transform: rotate(20deg)
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 26px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all .3s;
+            font-family: 'DM Sans', sans-serif
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid var(--coral);
+            color: var(--coral)
+        }
+
+        .btn-outline:hover {
+            background: var(--coral);
+            color: #fff
+        }
+
+        .btn-fill {
+            background: linear-gradient(135deg, var(--coral), var(--rose));
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(217, 95, 59, .3)
+        }
+
+        .btn-fill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(217, 95, 59, .4)
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px;
+            border: none;
+            background: transparent
+        }
+
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--ink);
+            border-radius: 2px;
+            transition: all .3s
+        }
+
+        .container {
+            max-width: 1260px;
+            margin: 0 auto;
+            padding: 0 24px
+        }
+
+        .section {
+            padding: 100px 0
+        }
+
+        .section-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--coral);
+            margin-bottom: 14px
+        }
+
+        .section-tag::before,
+        .section-tag::after {
+            content: '';
+            width: 28px;
+            height: 2px;
+            background: var(--coral);
+            border-radius: 2px
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.9rem, 4vw, 3rem);
+            font-weight: 800;
+            color: var(--ink);
+            line-height: 1.18;
+            letter-spacing: -.5px;
+            margin-bottom: 18px
+        }
+
+        .section-title em {
+            font-style: italic;
+            color: var(--coral)
+        }
+
+        .section-title span {
+            color: var(--amber)
+        }
+
+        .section-sub {
+            font-size: 16px;
+            color: var(--text-muted);
+            line-height: 1.75;
+            max-width: 560px
+        }
+
+        .text-center {
+            text-align: center
+        }
+
+        .text-center .section-sub {
+            margin-left: auto;
+            margin-right: auto
+        }
+
+        .text-center .section-tag {
+            justify-content: center
+        }
+
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity .7s ease, transform .7s ease
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0)
+        }
+
+        .scale-in {
+            opacity: 0;
+            transform: scale(.95);
+            transition: opacity .6s ease, transform .6s ease
+        }
+
+        .scale-in.visible {
+            opacity: 1;
+            transform: scale(1)
+        }
+
+        .stagger:nth-child(1) {
+            transition-delay: .1s
+        }
+
+        .stagger:nth-child(2) {
+            transition-delay: .2s
+        }
+
+        .stagger:nth-child(3) {
+            transition-delay: .3s
+        }
+
+        .stagger:nth-child(4) {
+            transition-delay: .4s
+        }
+
+        /* PAGE HERO */
+        .page-hero {
+            position: relative;
+            padding: 160px 0 90px;
+            overflow: hidden
+        }
+
+        .page-hero-bg {
             position: absolute;
             inset: 0;
-            overflow: hidden;
-            clip-path: inset(15% 15% 15% 15%);
+            background-image: url('https://images.unsplash.com/photo-1531482615713-2afd69097998?w=1600&q=85');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed
         }
 
-        .reveal-bg img {
+        .page-hero-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(42, 20, 8, .82) 0%, rgba(160, 82, 45, .55) 60%, rgba(90, 122, 92, .4) 100%)
+        }
+
+        .page-hero-inner {
+            position: relative;
+            z-index: 2
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            font-weight: 500
+        }
+
+        .breadcrumb a {
+            color: rgba(255, 255, 255, .7);
+            text-decoration: none;
+            transition: .3s
+        }
+
+        .breadcrumb a:hover {
+            color: var(--amber-light)
+        }
+
+        .breadcrumb span {
+            color: rgba(255, 255, 255, .4)
+        }
+
+        .breadcrumb .current {
+            color: var(--amber-light)
+        }
+
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.8rem, 6vw, 4.5rem);
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, .3)
+        }
+
+        .page-title em {
+            font-style: italic;
+            color: var(--amber-light)
+        }
+
+        /* ABOUT INTRO */
+        .about-intro {
+            background: var(--warm-white)
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center
+        }
+
+        .about-imgs {
+            position: relative;
+            height: 540px
+        }
+
+        .about-img1 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 72%;
+            height: 78%;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px var(--shadow)
+        }
+
+        .about-img1 img,
+        .about-img2 img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+
+        .about-img2 {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 52%;
+            height: 50%;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 16px 48px var(--shadow);
+            border: 4px solid var(--warm-white)
+        }
+
+        .about-badge {
+            position: absolute;
+            top: 46%;
+            left: 54%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, var(--coral), var(--rose));
+            color: #fff;
+            padding: 18px 24px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 12px 40px rgba(217, 95, 59, .35);
+            z-index: 3
+        }
+
+        .about-badge-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.4rem;
+            font-weight: 800;
+            line-height: 1
+        }
+
+        .about-badge-text {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 3px;
+            opacity: .9
+        }
+
+        .about-points {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 24px 0
+        }
+
+        .about-point {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text)
+        }
+
+        .about-point i {
+            color: var(--sage);
+            margin-top: 3px;
+            flex-shrink: 0
+        }
+
+        /* MISSION VISION */
+        .mission-vision {
+            position: relative;
+            padding: 100px 0;
+            overflow: hidden
+        }
+
+        .mv-bg {
+            position: absolute;
+            inset: 0;
+            background-image: url('https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed
+        }
+
+        .mv-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(42, 20, 8, .88), rgba(90, 122, 92, .8))
+        }
+
+        .mv-inner {
+            position: relative;
+            z-index: 2
+        }
+
+        .mv-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 36px;
+            margin-top: 56px
+        }
+
+        .mv-card {
+            background: rgba(255, 248, 240, .06);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 248, 240, .15);
+            border-radius: 24px;
+            padding: 48px 40px;
+            transition: all .4s
+        }
+
+        .mv-card:hover {
+            background: rgba(255, 248, 240, .1);
+            border-color: rgba(255, 248, 240, .25);
+            transform: translateY(-8px);
+            box-shadow: 0 24px 64px rgba(0, 0, 0, .3)
+        }
+
+        .mv-icon {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--coral), var(--amber));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 28px rgba(217, 95, 59, .35)
+        }
+
+        .mv-icon i {
+            font-size: 26px;
+            color: #fff
+        }
+
+        .mv-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 16px
+        }
+
+        .mv-card p {
+            color: rgba(255, 255, 255, .75);
+            line-height: 1.8;
+            font-size: 15px
+        }
+
+        /* WHY CHOOSE */
+        .why-choose {
+            background: var(--section-alt)
+        }
+
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-top: 52px
+        }
+
+        .why-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 36px 28px;
+            border: 1px solid var(--border);
+            transition: all .4s;
+            text-align: center;
+            position: relative;
+            overflow: hidden
+        }
+
+        .why-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--coral), var(--amber));
+            transform: scaleX(0);
+            transition: transform .4s
+        }
+
+        .why-card:hover::after {
+            transform: scaleX(1)
+        }
+
+        .why-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px var(--shadow)
+        }
+
+        .why-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(217, 95, 59, .1), rgba(200, 131, 26, .1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            border: 2px solid rgba(217, 95, 59, .15);
+            transition: .4s
+        }
+
+        .why-card:hover .why-icon {
+            background: linear-gradient(135deg, var(--coral), var(--amber));
+            border-color: transparent
+        }
+
+        .why-icon i {
+            font-size: 26px;
+            color: var(--coral);
+            transition: .4s
+        }
+
+        .why-card:hover .why-icon i {
+            color: #fff
+        }
+
+        .why-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 12px
+        }
+
+        .why-text {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.7
+        }
+
+        /* STATS */
+        .stats-bar {
+            background: linear-gradient(135deg, var(--coral) 0%, var(--rose) 50%, var(--terra) 100%);
+            padding: 64px 0
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 10px 24px;
+            border-right: 1px solid rgba(255, 255, 255, .2)
+        }
+
+        .stat-item:last-child {
+            border-right: none
+        }
+
+        .stat-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1;
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 2px
+        }
+
+        .stat-num sup {
+            font-size: 1.4rem;
+            font-weight: 700
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: rgba(255, 255, 255, .8);
+            margin-top: 6px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px
+        }
+
+        /* TEAM */
+        .team-section {
+            background: var(--warm-white)
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: 5fr 7fr;
+            gap: 72px;
+            align-items: start
+        }
+
+        .team-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px
+        }
+
+        .team-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: all .4s;
+            position: relative
+        }
+
+        .team-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 60px var(--shadow)
+        }
+
+        .team-img {
+            height: 260px;
+            overflow: hidden;
+            position: relative
+        }
+
+        .team-img img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: grayscale(20%);
+            transition: transform .6s
         }
 
-        .reveal-content {
-            z-index: 10;
-            text-align: center;
+        .team-card:hover .team-img img {
+            transform: scale(1.06)
         }
 
-        .reveal-text {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(3rem, 8vw, 8rem);
-            line-height: 0.9;
-            color: var(--text-main);
-            font-style: italic;
-            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        .team-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 40%, rgba(42, 20, 8, .8));
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 16px;
+            gap: 8px;
+            opacity: 0;
+            transition: .4s
         }
 
-        /* Marquee */
-        .marquee-container {
-            padding: 4rem 0;
-            background: var(--bg-darker);
-            overflow: hidden;
-            border-top: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
+        .team-card:hover .team-overlay {
+            opacity: 1
+        }
+
+        .team-overlay a {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .12);
+            backdrop-filter: blur(8px);
+            color: #fff;
             display: flex;
             align-items: center;
-            white-space: nowrap;
+            justify-content: center;
+            font-size: 13px;
+            transition: .3s;
+            text-decoration: none;
+            border: 1px solid rgba(255, 255, 255, .2)
         }
 
-        .marquee-inner {
-            display: flex;
+        .team-overlay a:hover {
+            background: var(--coral)
         }
 
-        .marquee-text {
+        .team-info {
+            padding: 18px 20px
+        }
+
+        .team-name {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(3rem, 6vw, 6rem);
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 3px
+        }
+
+        .team-role {
+            font-size: 12px;
+            color: var(--coral);
+            font-weight: 600;
             text-transform: uppercase;
-            font-style: italic;
-            padding: 0 2vw;
-            color: rgba(255, 255, 255, 0.8);
+            letter-spacing: .5px
         }
 
-        .sec-padding {
-            padding: 10rem 0;
+        /* PROCESS */
+        .process-section {
+            background: var(--section-alt)
         }
 
-        .sec-title {
-            font-size: clamp(2.5rem, 5vw, 4.5rem);
-            line-height: 1.1;
-            margin-bottom: 4rem;
+        .process-grid {
+            display: grid;
+            grid-template-columns: 5fr 7fr;
+            gap: 72px;
+            align-items: start
         }
 
-        .sec-title span {
-            color: var(--accent);
-            font-style: italic;
+        .process-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            margin-top: 8px
         }
 
-        /* Story Grid */
-        .story-text {
-            color: var(--text-muted);
+        .process-step {
+            display: flex;
+            gap: 24px;
+            padding: 28px 0;
+            border-bottom: 1px solid var(--border);
+            position: relative
+        }
+
+        .process-step:last-child {
+            border-bottom: none
+        }
+
+        .process-step-left {
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0
+        }
+
+        .step-num {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--coral), var(--amber));
+            color: #fff;
+            font-family: 'Playfair Display', serif;
+            font-weight: 800;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 16px rgba(217, 95, 59, .3)
+        }
+
+        .step-line {
+            width: 2px;
+            flex: 1;
+            background: linear-gradient(to bottom, rgba(217, 95, 59, .3), transparent);
+            margin-top: 8px;
+            min-height: 30px
+        }
+
+        .process-step:last-child .step-line {
+            display: none
+        }
+
+        .step-title {
+            font-family: 'Playfair Display', serif;
             font-size: 1.1rem;
-            line-height: 1.8;
-            font-weight: 300;
-            margin-bottom: 2rem;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 8px
         }
 
-        .story-grid {
+        .step-text {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.7
+        }
+
+        /* TESTIMONIALS */
+        .testi-section {
+            background: var(--warm-white)
+        }
+
+        .testi-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 52px
+        }
+
+        .testi-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 36px 30px;
+            border: 1px solid var(--border);
+            position: relative;
+            transition: all .4s
+        }
+
+        .testi-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 60px var(--shadow)
+        }
+
+        .testi-quote {
+            font-size: 2.8rem;
+            font-family: 'Playfair Display', serif;
+            color: var(--coral);
+            opacity: .3;
+            line-height: 1;
+            margin-bottom: 14px
+        }
+
+        .testi-text {
+            font-size: 15px;
+            color: var(--text);
+            line-height: 1.75;
+            font-style: italic;
+            margin-bottom: 24px
+        }
+
+        .testi-stars {
+            display: flex;
+            gap: 3px;
+            color: var(--amber);
+            margin-bottom: 16px
+        }
+
+        .testi-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-top: 1px solid var(--border);
+            padding-top: 18px
+        }
+
+        .testi-author img {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--coral)
+        }
+
+        .testi-author-name {
+            font-weight: 700;
+            color: var(--ink);
+            font-size: 15px
+        }
+
+        .testi-author-role {
+            font-size: 12px;
+            color: var(--text-muted)
+        }
+
+        /* NEWSLETTER */
+        .newsletter {
+            position: relative;
+            padding: 90px 0;
+            overflow: hidden
+        }
+
+        .nl-bg {
+            position: absolute;
+            inset: 0;
+            background-image: url('https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=1600&q=80');
+            background-size: cover;
+            background-position: center
+        }
+
+        .nl-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(160, 82, 45, .92), rgba(90, 122, 92, .85))
+        }
+
+        .nl-inner {
+            position: relative;
+            z-index: 2;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
+            gap: 64px;
+            align-items: center
         }
 
-        .story-img-wrap {
+        .nl-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.2;
+            margin-bottom: 12px
+        }
+
+        .nl-sub {
+            font-size: 15px;
+            color: rgba(255, 255, 255, .8);
+            line-height: 1.65
+        }
+
+        .nl-form {
+            display: flex;
+            gap: 12px;
+            flex-direction: column
+        }
+
+        .nl-input-wrap {
+            display: flex;
+            gap: 0;
+            background: rgba(255, 255, 255, .12);
+            border: 1px solid rgba(255, 255, 255, .25);
+            border-radius: 12px;
             overflow: hidden;
-            height: 600px;
-            position: relative;
+            backdrop-filter: blur(8px)
         }
 
-        .story-img {
-            position: absolute;
-            top: -15%;
-            width: 100%;
-            height: 130%;
-            object-fit: cover;
-            filter: grayscale(30%);
+        .nl-input {
+            flex: 1;
+            padding: 15px 20px;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #fff;
+            font-size: 14px;
+            font-family: 'DM Sans', sans-serif
         }
 
-        /* Values */
-        .value-card {
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 2rem;
-            transition: transform 0.4s;
+        .nl-input::placeholder {
+            color: rgba(255, 255, 255, .6)
         }
 
-        .value-card:hover {
-            transform: translateY(-10px);
+        .nl-submit {
+            padding: 15px 28px;
+            background: var(--amber);
+            color: #fff;
+            font-weight: 700;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            transition: .3s
         }
 
-        .value-num {
-            font-size: 0.85rem;
-            color: var(--accent);
-            letter-spacing: 0.15em;
-            margin-bottom: 1.5rem;
-            display: block;
+        .nl-submit:hover {
+            background: var(--amber-light)
         }
 
-        .value-title {
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            color: var(--text-main);
+        .nl-note {
+            font-size: 12px;
+            color: rgba(255, 255, 255, .65)
         }
 
-        .value-desc {
-            color: var(--text-muted);
-            line-height: 1.8;
-            font-weight: 300;
+        /* FOOTER */
+        .footer {
+            background: var(--footer-bg);
+            color: rgba(255, 248, 240, .75);
+            padding: 80px 0 0
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr 1fr;
+            gap: 60px;
+            padding-bottom: 60px
+        }
+
+        .footer-brand p {
+            font-size: 14px;
+            line-height: 1.75;
+            margin: 18px 0 24px;
+            color: rgba(255, 248, 240, .65)
+        }
+
+        .footer-contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 14px;
+            font-size: 13px
+        }
+
+        .footer-contact-item i {
+            color: var(--coral);
+            margin-top: 2px;
+            flex-shrink: 0
+        }
+
+        .footer-contact-item a {
+            color: rgba(255, 248, 240, .75);
+            text-decoration: none
+        }
+
+        .footer-contact-item a:hover {
+            color: var(--amber-light)
+        }
+
+        .footer-col h4 {
+            font-family: 'Playfair Display', serif;
             font-size: 1.05rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 22px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--coral);
+            display: inline-block
         }
 
-        /* Footer */
-        .c-footer {
-            padding: 8rem 0 2rem;
-            background: var(--bg-darker);
-            border-top: 1px solid var(--border-color);
-        }
-
-        .f-top {
+        .footer-links {
+            list-style: none;
             display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 6rem;
+            flex-direction: column;
+            gap: 10px
         }
 
-        .f-title {
-            font-size: clamp(2.5rem, 5vw, 5rem);
-            line-height: 1;
-        }
-
-        .f-links {
-            display: flex;
-            gap: 3rem;
-        }
-
-        .f-links-col h6 {
-            font-size: 0.85rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            margin-bottom: 2rem;
-        }
-
-        .f-links-col a {
-            display: block;
-            color: var(--text-muted);
+        .footer-links a {
+            font-size: 13.5px;
+            color: rgba(255, 248, 240, .65);
             text-decoration: none;
-            margin-bottom: 1rem;
-            font-size: 0.95rem;
-            transition: color 0.3s;
-        }
-
-        .f-links-col a:hover {
-            color: var(--accent);
-        }
-
-        .f-bottom {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            border-top: 1px solid var(--border-color);
-            padding-top: 2rem;
+            gap: 8px;
+            transition: .3s
         }
 
-        .f-socials {
+        .footer-links a::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--coral);
+            border-radius: 50%;
+            flex-shrink: 0;
+            transition: .3s
+        }
+
+        .footer-links a:hover {
+            color: var(--amber-light);
+            padding-left: 4px
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 248, 240, .08);
+            padding: 22px 0;
             display: flex;
-            gap: 1.5rem;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 14px
         }
 
-        .f-socials a {
-            color: var(--text-main);
-            opacity: 0.6;
-            transition: all 0.3s;
-            width: 20px;
+        .footer-copy {
+            font-size: 13px
         }
 
-        .f-socials a:hover {
+        .footer-copy a {
+            color: var(--amber-light);
+            text-decoration: none
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 10px
+        }
+
+        .footer-social a {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: rgba(255, 248, 240, .07);
+            color: rgba(255, 248, 240, .6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            text-decoration: none;
+            transition: .3s
+        }
+
+        .footer-social a:hover {
+            background: var(--coral);
+            color: #fff
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--coral), var(--rose));
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 6px 24px rgba(217, 95, 59, .4);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: .4s;
+            z-index: 500
+        }
+
+        .scroll-top.show {
             opacity: 1;
-            color: var(--accent);
-            transform: translateY(-2px);
+            visibility: visible;
+            transform: translateY(0)
         }
 
-        @media (max-width: 991px) {
-            .c-nav-links {
-                display: none;
+        .scroll-top:hover {
+            transform: translateY(-3px)
+        }
+
+        .mobile-nav {
+            position: fixed;
+            inset: 0;
+            background: var(--ink);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            padding: 32px 28px;
+            transform: translateX(100%);
+            transition: transform .4s cubic-bezier(.4, 0, .2, 1)
+        }
+
+        .mobile-nav.open {
+            transform: translateX(0)
+        }
+
+        .mobile-nav-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 40px
+        }
+
+        .mobile-close {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(255, 248, 240, .08);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .mobile-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 6px
+        }
+
+        .mobile-links a {
+            text-decoration: none;
+            color: rgba(255, 248, 240, .85);
+            font-size: 1.5rem;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            padding: 10px 0;
+            display: block;
+            border-bottom: 1px solid rgba(255, 248, 240, .08);
+            transition: .3s
+        }
+
+        .mobile-links a:hover {
+            color: var(--coral)
+        }
+
+        .mobile-nav-bottom {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px
+        }
+
+        @media(max-width:1024px) {
+
+            .about-grid,
+            .mv-grid,
+            .nl-inner,
+            .team-grid,
+            .process-grid {
+                grid-template-columns: 1fr
             }
 
-            .story-grid {
+            .why-grid,
+            .testi-grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .about-imgs {
+                height: 420px
+            }
+
+            .team-cards {
+                grid-template-columns: repeat(3, 1fr)
+            }
+        }
+
+        @media(max-width:768px) {
+
+            .nav-links,
+            .nav-right .btn-outline,
+            .nav-right .btn-fill {
+                display: none
+            }
+
+            .hamburger {
+                display: flex
+            }
+
+            .page-hero {
+                padding: 120px 0 60px;
+                text-align: center;
+            }
+
+            .page-hero h1 {
+                font-size: 2rem;
+            }
+
+            .process-grid,
+            .testi-grid,
+            .pricing-grid,
+            .blog-grid {
+                grid-template-columns: 1fr
+            }
+
+            .footer-grid {
                 grid-template-columns: 1fr;
+                text-align: center;
             }
 
-            .f-top {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 4rem;
+            .footer-links {
+                align-items: center;
             }
 
-            .reveal-bg {
-                clip-path: inset(5%);
+            .features-grid,
+            .team-grid {
+                grid-template-columns: 1fr
+            }
+
+            .topbar .container {
+                justify-content: center;
+                text-align: center;
+            }
+
+            .topbar-msg {
+                font-size: 11px;
+            }
+
+            .topbar-contact {
+                display: none
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .logo {
+                font-size: 1.6rem;
+            }
+        }
+
+        @media(max-width:480px) {
+            .page-hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
-
-    <!-- Prevent FOUT -> Pre-load Theme -->
-    <script>
-        (function () {
-            var saved = localStorage.getItem('conneto-theme');
-            if (saved !== 'light') {
-                document.documentElement.setAttribute('data-theme', 'dark');
+    <% if (typeof user !=='undefined' && user) { %>
+        <style>
+            @media(max-width:768px) {
+                .nav-right .btn-fill {
+                    display: inline-flex !important;
+                    padding: 8px 16px;
+                    font-size: 13px;
+                }
             }
-        })();
-    </script>
+        </style>
+        <% } %>
 </head>
 
 <body>
 
-    <!-- Nav -->
-    <header class="c-nav">
-        <div class="c-nav-inner">
-            <a href="/" class="c-nav-logo">Con<span>neto</span></a>
-            <ul class="c-nav-links">
-                <li><a href="/">Home</a></li>
-                <li><a href="/about" class="active">About</a></li>
-                <li><a href="/internships">Internships</a></li>
-                <li><a href="/contact">Contact</a></li>
-            </ul>
-            <div class="c-nav-actions">
-                <% if(user){ %>
-                    <a href="/<%= user.role %>/dashboard" class="btn-luxury btn-luxury-solid">Dashboard</a>
-                    <a href="/auth/logout" class="btn-luxury">Logout</a>
-                    <% } else { %>
-                        <a href="/auth/login" class="btn-luxury">Login</a>
-                        <a href="/auth/register" class="btn-luxury btn-luxury-solid">Get Started</a>
-                        <% } %>
+    <div class="loader" id="loader">
+        <div class="loader-logo">Conn<span>eto</span></div>
+        <div class="loader-dots">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <script>
+        (function() {
+            const entry = performance.getEntriesByType('navigation')[0];
+            const isReload = entry && entry.type === 'reload';
+            const isFirstVisit = !sessionStorage.getItem('conneto_visited');
+            if (!isReload && !isFirstVisit) {
+                const ldr = document.getElementById('loader');
+                if(ldr) { ldr.style.display = 'none'; ldr.classList.add('hide'); }
+            }
+        })();
+    </script>
 
-                            <!-- Hamburger (mobile only) -->
-                            <button class="c-hamburger-home" id="homeHamburger" onclick="openHomeDrawer()"
-                                aria-label="Open menu">
-                                <span></span><span></span><span></span>
-                            </button>
+    <div class="topbar">
+        <div class="container">
+            <span>Connecting Students with Top Companies — Start Your Journey Today</span>
+            <div class="topbar-contact">
+                <a href="mailto:connect@algoorbit.in"><i class="fas fa-envelope"></i>connect@algoorbit.in</a>
+                <a href="tel:919900000000"><i class="fas fa-phone"></i>+91 99000 00000</a>
             </div>
         </div>
-    </header>
+    </div>
 
-    <main>
-        <!-- Intro -->
-        <section class="page-hero">
-            <div class="container">
-                <h1 class="page-hero-title gsap-reveal">About <span>Us.</span></h1>
-                <p class="page-hero-sub gsap-reveal-delay">Empowering the next generation of professionals by bridging
-                    talented students with the opportunities they deserve.</p>
-            </div>
-        </section>
-
-        <!-- Image Reveal -->
-        <section class="reveal-sec">
-            <div class="reveal-bg">
-                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=2400"
-                    alt="Team">
-            </div>
-            <div class="reveal-content">
-                <div class="reveal-text">Building<br>Bridges.</div>
-            </div>
-        </section>
-
-        <!-- Our Story -->
-        <section class="sec-padding">
-            <div class="container">
-                <div class="story-grid">
-                    <div>
-                        <h2 class="sec-title gsap-up">Our <span>Story</span>.</h2>
-                        <p class="story-text gsap-up" style="transition-delay:0.1s;">At Conneto, we believe every
-                            individual possesses the potential for greatness, provided they are given the right
-                            platform. Founded on the frustration of finding quality internships in an ocean of noise, we
-                            sought to bring clarity, elegance, and efficiency to the hiring space.</p>
-                        <p class="story-text gsap-up" style="transition-delay:0.2s;">Today, we have matured into a
-                            premier network, facilitating thousands of professional connections between elite talent and
-                            verified corporate partners across India. This is just the beginning.</p>
-                    </div>
-                    <div class="story-img-wrap plx-wrapper">
-                        <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=1600"
-                            alt="Office" class="story-img plx-img">
-                    </div>
-                </div>
-            </div>
-        </section>
-
-
-        <!-- Stats -->
-        <section class="sec-padding"
-            style="background: var(--bg-darker); border-bottom: 1px solid var(--border-color);">
-            <div class="container">
-                <div class="row style=" margin-top: 2rem;"">
-                    <div class="col-md-3 text-center"
-                        style="border-right: 1px solid var(--border-color); padding: 3rem 0;">
-                        <div
-                            style="font-family:'Playfair Display', serif; font-size:4rem; color: var(--text-main); margin-bottom:1rem;">
-                            <span class="odometer" data-val="500">0</span>+</div>
-                        <div
-                            style="font-size:0.85rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted);">
-                            Verified Partners</div>
-                    </div>
-                    <div class="col-md-3 text-center"
-                        style="border-right: 1px solid var(--border-color); padding: 3rem 0;">
-                        <div
-                            style="font-family:'Playfair Display', serif; font-size:4rem; color: var(--text-main); margin-bottom:1rem;">
-                            <span class="odometer" data-val="10000">0</span>+</div>
-                        <div
-                            style="font-size:0.85rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted);">
-                            Students Placed</div>
-                    </div>
-                    <div class="col-md-3 text-center"
-                        style="border-right: 1px solid var(--border-color); padding: 3rem 0;">
-                        <div
-                            style="font-family:'Playfair Display', serif; font-size:4rem; color: var(--text-main); margin-bottom:1rem;">
-                            <span class="odometer" data-val="36">0</span></div>
-                        <div
-                            style="font-size:0.85rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted);">
-                            Global Markets</div>
-                    </div>
-                    <div class="col-md-3 text-center" style="padding: 3rem 0;">
-                        <div
-                            style="font-family:'Playfair Display', serif; font-size:4rem; color: var(--text-main); margin-bottom:1rem;">
-                            <span class="odometer" data-val="95">0</span>%</div>
-                        <div
-                            style="font-size:0.85rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted);">
-                            Success Rate</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Marquee 1 -->
-        <section class="marquee-container" style="background:var(--accent);color: var(--text-main);">
-            <div class="marquee-inner" id="mq1">
-                <div class="marquee-text" style="color: var(--text-main);">TRUST • TRANSPARENCY • QUALITY • VELOCITY •
-                </div>
-                <div class="marquee-text" style="color: var(--text-main);">TRUST • TRANSPARENCY • QUALITY • VELOCITY •
-                </div>
-                <div class="marquee-text" style="color: var(--text-main);">TRUST • TRANSPARENCY • QUALITY • VELOCITY •
-                </div>
-            </div>
-        </section>
-
-        <!-- Core Values -->
-        <section class="sec-padding">
-            <div class="container">
-                <h2 class="sec-title gsap-up text-center">Core <span>Principles</span></h2>
-                <div class="row gy-5 mt-5">
-                    <div class="col-md-4">
-                        <div class="value-card gsap-up">
-                            <span class="value-num">01 — STUDENT FIRST</span>
-                            <h4 class="value-title">Empathy</h4>
-                            <p class="value-desc">Every architectural decision in our platform prioritizes the student
-                                experience, ensuring seamless discovery.</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="value-card gsap-up" style="transition-delay: 0.1s;">
-                            <span class="value-num">02 — TRUST</span>
-                            <h4 class="value-title">Verification</h4>
-                            <p class="value-desc">Integrity is paramount. Every corporate partner undergoes rigorous
-                                manual curation before accessing our network.</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="value-card gsap-up" style="transition-delay: 0.2s;">
-                            <span class="value-num">03 — INNOVATION</span>
-                            <h4 class="value-title">Evolution</h4>
-                            <p class="value-desc">We continuously refine our algorithmic matching to ensure precision
-                                and speed in every placement.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="c-footer">
+    <nav class="nav" id="nav">
         <div class="container">
-            <div class="f-top">
-                <h2 class="f-title">Ready to<br><span>Elevate?</span></h2>
-                <div class="f-links">
-                    <div class="f-links-col">
-                        <h6>Navigation</h6>
-                        <a href="/">Home</a>
-                        <a href="/about">About</a>
-                        <a href="/internships">Internships</a>
+            <a href="/" class="logo">Conn<span>eto</span></a>
+            <ul class="nav-links">
+                <li><a href="/" class="<%= title === 'Conneto — Find Your Internship' ? 'active' : '' %>">Home</a></li>
+                <li><a href="/internships" class="<%= title.includes('Internships') ? 'active' : '' %>">Internships</a>
+                </li>
+                <li><a href="/about" class="<%= title.includes('About') ? 'active' : '' %>">About Us</a></li>
+                <li><a href="/contact" class="<%= title.includes('Contact') ? 'active' : '' %>">Contact</a></li>
+            </ul>
+            <div class="nav-right">
+                <button class="theme-btn" id="themeToggle"><i class="fas fa-moon"></i></button>
+                <a href="/auth/login" class="btn btn-outline">Login</a>
+                <a href="/auth/register" class="btn btn-fill">Sign Up</a>
+                <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mobile-nav" id="mobileNav">
+        <div class="mobile-nav-header">
+            <a href="/" class="logo" style="color:#fff">Conn<span>eto</span></a>
+            <button class="mobile-close" id="mobileClose"><i class="fas fa-times"></i></button>
+        </div>
+        <ul class="mobile-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/internships">Internships</a></li>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/contact">Contact</a></li>
+        </ul>
+        <div class="mobile-nav-bottom">
+            <a href="/auth/login" class="btn btn-outline" style="border-color:rgba(255,248,240,.3);color:#fff">Login</a>
+            <a href="/auth/register" class="btn btn-fill">Sign Up</a>
+        </div>
+    </div>
+
+    <!-- PAGE HERO -->
+    <section class="page-hero">
+        <div class="page-hero-bg"></div>
+        <div class="container">
+            <div class="page-hero-inner">
+                <div class="breadcrumb">
+                    <a href="/"><i class="fas fa-home"></i> Home</a>
+                    <span><i class="fas fa-chevron-right" style="font-size:10px"></i></span>
+                    <span class="current">About Us</span>
+                </div>
+                <h1 class="page-title">About <em>Conneto</em></h1>
+                <p style="color:rgba(255,255,255,.8);font-size:17px;max-width:520px;margin-top:14px;line-height:1.7">
+                    Empowering the next generation of professionals by bridging talent with opportunity.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT INTRO -->
+    <section class="about-intro section">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-imgs fade-up">
+                    <div class="about-img1"><img
+                            src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=800&q=80"
+                            alt="Students collaborating"></div>
+                    <div class="about-img2"><img
+                            src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&q=80"
+                            alt="Career mentoring"></div>
+                    <div class="about-badge">
+                        <div class="about-badge-num">5+</div>
+                        <div class="about-badge-text">Years of Impact</div>
                     </div>
-                    <div class="f-links-col">
-                        <h6>Network</h6>
-                        <a href="/auth/register">Join as Student</a>
-                        <a href="/auth/register">Join as Company</a>
-                        <a href="/auth/login">Client Portal</a>
+                </div>
+                <div class="fade-up">
+                    <div class="section-tag">About Us</div>
+                    <h2 class="section-title">Empowering <em>Students</em><br>& <span>Companies</span>
+                        Through<br>Opportunity</h2>
+                    <p class="section-sub">This platform connects companies with students for internship opportunities.
+                        Companies can post internships, review student profiles, and shortlist candidates for interviews
+                        — all in one place.</p>
+                    <div class="about-points">
+                        <div class="about-point"><i class="fas fa-check-circle"></i><span>Direct Connection to Top
+                                Companies</span></div>
+                        <div class="about-point"><i class="fas fa-check-circle"></i><span>Verified Student
+                                Profiles</span></div>
+                        <div class="about-point"><i class="fas fa-check-circle"></i><span>Seamless Application
+                                Management</span></div>
+                        <div class="about-point"><i class="fas fa-check-circle"></i><span>Growth-Focused
+                                Opportunities</span></div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:8px">
+                        <a href="/contact" class="btn btn-fill">Get In Touch <i class="fas fa-arrow-right"></i></a>
+                        <a href="/" class="btn btn-outline">View Internships</a>
                     </div>
                 </div>
             </div>
-            <div class="f-bottom">
-                <div style="color:var(--text-muted); font-size: 0.85rem; letter-spacing:1px;">© <%= new
-                        Date().getFullYear() %> Conneto. All Rights Reserved.</div>
-                <div class="f-socials">
-                    <a href="https://linkedin.com" target="_blank">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                        </svg>
-                    </a>
-                    <a href="https://instagram.com" target="_blank">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z" />
-                        </svg>
-                    </a>
-                    <a href="https://whatsapp.com" target="_blank">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" />
-                        </svg>
-                    </a>
+        </div>
+    </section>
+
+    <!-- MISSION & VISION -->
+    <section class="mission-vision">
+        <div class="mv-bg"></div>
+        <div class="container mv-inner">
+            <div class="text-center">
+                <div class="section-tag" style="color:rgba(255,248,240,.8)">Our Purpose</div>
+                <h2 class="section-title" style="color:#fff">Mission & <em>Vision</em></h2>
+                <p class="section-sub" style="color:rgba(255,255,255,.75);margin:0 auto">What drives us every day to
+                    build a better future for students and companies alike.</p>
+            </div>
+            <div class="mv-grid">
+                <div class="mv-card fade-up">
+                    <div class="mv-icon"><i class="fas fa-bullseye"></i></div>
+                    <h3>Our Mission</h3>
+                    <p>To empower the next generation of professionals by creating a seamless bridge between academic
+                        learning and industry experience. We strive to make internship discovery effortless for students
+                        and talent acquisition efficient for companies.</p>
+                </div>
+                <div class="mv-card fade-up">
+                    <div class="mv-icon"><i class="fas fa-eye"></i></div>
+                    <h3>Our Vision</h3>
+                    <p>To become the leading global gateway for early career opportunities, where every student can find
+                        a path to professional success and every organization can build its future with the brightest
+                        young talent from across India.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY CHOOSE US -->
+    <section class="why-choose section">
+        <div class="container">
+            <div class="text-center">
+                <div class="section-tag">Why Choose Us</div>
+                <h2 class="section-title">Empowering Your <em>Career</em><br>Journey — Future-Ready
+                    <span>Opportunities</span></h2>
+                <p class="section-sub">Four pillars that make Conneto the most trusted internship platform in India.</p>
+            </div>
+            <div class="why-grid">
+                <div class="why-card fade-up stagger">
+                    <div class="why-icon"><i class="fas fa-shield-check"></i></div>
+                    <div class="why-title">Verified Companies</div>
+                    <div class="why-text">We partner with reputable firms to ensure you get high-quality, genuine
+                        learning experiences.</div>
+                </div>
+                <div class="why-card fade-up stagger">
+                    <div class="why-icon"><i class="fas fa-brain"></i></div>
+                    <div class="why-title">Smart Matching</div>
+                    <div class="why-text">Our platform uses smart filters to match your skills, interests, and location
+                        with the right roles.</div>
+                </div>
+                <div class="why-card fade-up stagger">
+                    <div class="why-icon"><i class="fas fa-user-tie"></i></div>
+                    <div class="why-title">Expert Mentors</div>
+                    <div class="why-text">Access guidance from industry veterans to accelerate your professional growth
+                        and career clarity.</div>
+                </div>
+                <div class="why-card fade-up stagger">
+                    <div class="why-icon"><i class="fas fa-magic"></i></div>
+                    <div class="why-title">Seamless UI</div>
+                    <div class="why-text">Enjoy a smooth, beautifully designed experience built for both students and
+                        employers to save time.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS BAR -->
+    <div class="stats-bar">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item fade-up stagger">
+                    <div class="stat-num"><sup>+</sup>500</div>
+                    <div class="stat-label">Partner Companies</div>
+                </div>
+                <div class="stat-item fade-up stagger">
+                    <div class="stat-num">15<sup>K+</sup></div>
+                    <div class="stat-label">Student Users</div>
+                </div>
+                <div class="stat-item fade-up stagger">
+                    <div class="stat-num"><sup>+</sup>2000</div>
+                    <div class="stat-label">Internships Posted</div>
+                </div>
+                <div class="stat-item fade-up stagger">
+                    <div class="stat-num"><sup>+</sup>800</div>
+                    <div class="stat-label">Successful Hires</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TEAM -->
+    <section class="team-section section">
+        <div class="container">
+            <div class="team-grid">
+                <div class="fade-up">
+                    <div class="section-tag">Our Team</div>
+                    <h2 class="section-title">Meet Our <em>Talented</em><br>Team Behind <span>Conneto</span></h2>
+                    <p class="section-sub" style="margin-bottom:28px">Our dedicated team of career experts and industry
+                        mentors works tirelessly to bridge the gap between talent and opportunity.</p>
+                    <a href="contact.html" class="btn btn-fill">Get In Touch <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="team-cards fade-up">
+                    <div class="team-card stagger">
+                        <div class="team-img">
+                            <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&q=80"
+                                alt="Sophia">
+                            <div class="team-overlay">
+                                <a href="#"><i class="fab fa-linkedin"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                            </div>
+                        </div>
+                        <div class="team-info">
+                            <div class="team-name">Sophia Bennett</div>
+                            <div class="team-role">CEO & Founder</div>
+                        </div>
+                    </div>
+                    <div class="team-card stagger">
+                        <div class="team-img">
+                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80"
+                                alt="Liam">
+                            <div class="team-overlay">
+                                <a href="#"><i class="fab fa-linkedin"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                            </div>
+                        </div>
+                        <div class="team-info">
+                            <div class="team-name">Liam Johnson</div>
+                            <div class="team-role">Operations Manager</div>
+                        </div>
+                    </div>
+                    <div class="team-card stagger">
+                        <div class="team-img">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80"
+                                alt="Ethan">
+                            <div class="team-overlay">
+                                <a href="#"><i class="fab fa-linkedin"></i></a>
+                                <a href="#"><i class="fab fa-dribbble"></i></a>
+                            </div>
+                        </div>
+                        <div class="team-info">
+                            <div class="team-name">Ethan Miller</div>
+                            <div class="team-role">Lead Designer</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROCESS -->
+    <section class="process-section section">
+        <div class="container">
+            <div class="process-grid">
+                <div class="fade-up">
+                    <div class="section-tag">Working Process</div>
+                    <h2 class="section-title">How We've <em>Empowered</em><br>Students with
+                        <span>Life-Changing</span><br>Internships</h2>
+                    <p class="section-sub" style="margin-bottom:28px">From personalized profile matching to mentor
+                        support, we prioritize your career growth.</p>
+                    <a href="contact.html" class="btn btn-fill">Start Your Journey <i
+                            class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="process-steps fade-up">
+                    <div class="process-step">
+                        <div class="process-step-left">
+                            <div class="step-num">01</div>
+                            <div class="step-line"></div>
+                        </div>
+                        <div>
+                            <div class="step-title">Profile Assessment</div>
+                            <p class="step-text">We evaluate your skills and goals, match your profile with companies,
+                                and prepare you for a successful interview experience.</p>
+                        </div>
+                    </div>
+                    <div class="process-step">
+                        <div class="process-step-left">
+                            <div class="step-num">02</div>
+                            <div class="step-line"></div>
+                        </div>
+                        <div>
+                            <div class="step-title">Smart Matching & Application</div>
+                            <p class="step-text">Browse tailored listings that match your profile. Apply with one click
+                                and track your application status in real time.</p>
+                        </div>
+                    </div>
+                    <div class="process-step">
+                        <div class="process-step-left">
+                            <div class="step-num">03</div>
+                            <div class="step-line"></div>
+                        </div>
+                        <div>
+                            <div class="step-title">Interview & Offer</div>
+                            <p class="step-text">Companies shortlist, schedule interviews, and extend offers — all
+                                managed seamlessly within the Conneto platform.</p>
+                        </div>
+                    </div>
+                    <div class="process-step">
+                        <div class="process-step-left">
+                            <div class="step-num">04</div>
+                        </div>
+                        <div>
+                            <div class="step-title">Onboarding & Growth</div>
+                            <p class="step-text">Once hired, access onboarding tools, mentorship resources, and career
+                                development support to excel in your role.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="testi-section section">
+        <div class="container">
+            <div class="text-center">
+                <div class="section-tag">Testimonials</div>
+                <h2 class="section-title">Customer Experiences That<br><em>Speak Volumes</em></h2>
+            </div>
+            <div class="testi-grid">
+                <div class="testi-card fade-up stagger">
+                    <div class="testi-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                            class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <div class="testi-quote">"</div>
+                    <p class="testi-text">Conneto made finding an internship so easy! The platform is truly
+                        student-friendly and I landed an amazing role within a week. Verified listings and seamless
+                        applications — unmatched.</p>
+                    <div class="testi-author">
+                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&q=80" alt="Thomas">
+                        <div>
+                            <div class="testi-author-name">Thomas Alison</div>
+                            <div class="testi-author-role">Internship Student</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testi-card fade-up stagger">
+                    <div class="testi-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                            class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <div class="testi-quote">"</div>
+                    <p class="testi-text">We found incredible student talent through Conneto. The profiles were verified
+                        and matched our hiring requirements perfectly. It's now our go-to site for all internship
+                        recruitment.</p>
+                    <div class="testi-author">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" alt="Sarah">
+                        <div>
+                            <div class="testi-author-name">Sarah Williams</div>
+                            <div class="testi-author-role">Company Recruiter</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testi-card fade-up stagger">
+                    <div class="testi-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                            class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <div class="testi-quote">"</div>
+                    <p class="testi-text">The career guidance and profile verification gave me confidence to apply for
+                        top-tier roles. I've recommended Conneto to all my fellow students looking for quality
+                        experience.</p>
+                    <div class="testi-author">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80" alt="James">
+                        <div>
+                            <div class="testi-author-name">James Anderson</div>
+                            <div class="testi-author-role">Marketing Intern</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section class="newsletter">
+        <div class="nl-bg"></div>
+        <div class="container">
+            <div class="nl-inner">
+                <div class="fade-up">
+                    <div class="section-tag" style="color:rgba(255,248,240,.8)">Stay Updated</div>
+                    <div class="nl-title">Subscribe to Our<br><em style="font-style:italic">Newsletter</em></div>
+                    <p class="nl-sub">Get the latest internship postings and career growth tips straight to your inbox.
+                    </p>
+                </div>
+                <div class="fade-up">
+                    <div class="nl-form">
+                        <div class="nl-input-wrap">
+                            <input type="email" class="nl-input" placeholder="Enter your email address">
+                            <button class="nl-submit">Subscribe <i class="fas fa-arrow-right"></i></button>
+                        </div>
+                        <p class="nl-note"><i class="fas fa-lock" style="margin-right:5px"></i>By subscribing you accept
+                            our Privacy Policy. Unsubscribe anytime.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="/" class="logo" style="color:#fff;font-size:2rem">Conn<span
+                            style="color:var(--coral)">eto</span></a>
+                    <p>Welcome to Conneto! This platform connects companies with students for internship opportunities.
+                        Companies can post internships, review student profiles, and shortlist candidates for
+                        interviews.</p>
+                    <div class="footer-contact-item"><i class="fas fa-envelope"></i><a
+                            href="mailto:connect@algoorbit.in">connect@algoorbit.in</a></div>
+                    <div class="footer-contact-item"><i class="fas fa-phone"></i><a href="tel:919900000000">+91 99000
+                            00000</a></div>
+                    <div class="footer-contact-item"><i class="fas fa-map-marker-alt"></i><span>Karkala, Karnataka,
+                            India - 574122</span></div>
+                </div>
+                <div class="footer-col">
+                    <h4>For Students</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Browse Internships</a></li>
+                        <li><a href="#">Create Profile</a></li>
+                        <li><a href="#">Apply for Roles</a></li>
+                        <li><a href="#">Track Applications</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>For Companies</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Post Internships</a></li>
+                        <li><a href="#">Review Applicants</a></li>
+                        <li><a href="#">Schedule Interviews</a></li>
+                        <li><a href="#">Manage Shortlisting</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-copy">© 2026 <a href="/">Conneto</a>. All rights reserved. Powered by <a
+                        href="/">AlgoOrbit</a>.</div>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- GSAP & Lenis -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="https://unpkg.com/@studio-freight/lenis@1.0.35/dist/lenis.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/odometer.min.js"></script>
+    <button class="scroll-top" id="scrollTop"><i class="fas fa-arrow-up"></i></button>
 
     <script>
-        const lenis = new Lenis({ duration: 1.2, smooth: true });
-        lenis.on('scroll', ScrollTrigger.update);
-        gsap.ticker.add((t) => lenis.raf(t * 1000));
-        gsap.ticker.lagSmoothing(0);
-        gsap.registerPlugin(ScrollTrigger);
-
-        window.addEventListener('scroll', () => {
-            const nav = document.querySelector('.c-nav');
-            if (window.scrollY > 50) nav.classList.add('scrolled');
-            else nav.classList.remove('scrolled');
-        });
-
+        // LOADER Logic
         window.addEventListener('load', () => {
-            gsap.from('.gsap-reveal', { y: 100, opacity: 0, duration: 1.5, ease: "power4.out", delay: 0.2 });
-            gsap.from('.gsap-reveal-delay', { y: 50, opacity: 0, duration: 1.5, ease: "power4.out", delay: 0.4 });
-        });
+            const loader = document.getElementById('loader');
+            const entry = performance.getEntriesByType('navigation')[0];
+            const navigationType = entry ? entry.type : '';
+            const isReload = navigationType === 'reload';
+            const isFirstVisit = !sessionStorage.getItem('conneto_visited');
 
-        gsap.to(".reveal-bg", {
-            clipPath: "inset(0% 0% 0% 0%)",
-            ease: "power2.inOut",
-            scrollTrigger: { trigger: ".reveal-sec", start: "top 80%", end: "center center", scrub: 1 }
-        });
-        gsap.from(".reveal-text", {
-            y: 150, opacity: 0,
-            scrollTrigger: { trigger: ".reveal-sec", start: "top 50%", end: "center center", scrub: 1 }
-        });
-
-        gsap.to(".plx-img", {
-            yPercent: 30, ease: "none",
-            scrollTrigger: { trigger: ".plx-wrapper", start: "top bottom", end: "bottom top", scrub: true }
-        });
-
-        gsap.to("#mq1", { xPercent: -50, ease: "none", scrollTrigger: { trigger: ".marquee-container", start: "top bottom", end: "bottom top", scrub: 1 } });
-
-
-        // Odometer Logic
-        gsap.utils.toArray('.odometer').forEach(el => {
-            let odo = new Odometer({ el: el, value: 0, format: '(,ddd)', theme: 'minimal' });
-            let val = el.getAttribute('data-val');
-            ScrollTrigger.create({
-                trigger: el,
-                start: "top 90%",
-                onEnter: () => odo.update(val),
-                once: true
-            });
-        });
-
-        gsap.utils.toArray('.gsap-up').forEach(el => {
-            gsap.from(el, {
-                y: 100, opacity: 0, duration: 1, ease: "power3.out",
-                scrollTrigger: { trigger: el, start: "top 85%" }
-            });
-        });
-    </script>
-
-    <!-- Floating Theme Toggle Button -->
-    <button class="c-theme-toggle" onclick="toggleTheme()" title="Toggle dark/light mode" aria-label="Toggle theme">
-        <i class="fas fa-sun icon-sun"></i>
-        <i class="fas fa-moon icon-moon"></i>
-    </button>
-    <script>
-        
-        function toggleTheme() {
-            var html = document.documentElement;
-            var isDark = html.getAttribute('data-theme') === 'dark';
-            if (isDark) {
-                html.removeAttribute('data-theme');
-                localStorage.setItem('conneto-theme', 'light');
+            if (isReload || isFirstVisit) {
+                // Show loader for 1.2s on INITIAL START or REFRESH
+                setTimeout(() => {
+                    loader.classList.add('hide');
+                    sessionStorage.setItem('conneto_visited', 'true');
+                }, 1200);
             } else {
-                html.setAttribute('data-theme', 'dark');
-                localStorage.setItem('conneto-theme', 'dark');
+                // Direct redirect for header links
+                loader.style.display = 'none';
+                loader.classList.add('hide');
             }
-        }
-
-        function openHomeDrawer() {
-            document.getElementById('homeMobileNav').classList.add('open');
-            document.getElementById('homeMobileDrawer').classList.add('open');
-            document.body.style.overflow = 'hidden';
-        }
-        function closeHomeDrawer() {
-            document.getElementById('homeMobileNav').classList.remove('open');
-            document.getElementById('homeMobileDrawer').classList.remove('open');
-            document.body.style.overflow = '';
-        }
+        });
+        const themeToggle = document.getElementById('themeToggle'), html = document.documentElement;
+        function updateTheme() { const t = html.getAttribute('data-theme'); themeToggle.innerHTML = t === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>'; }
+        themeToggle.addEventListener('click', () => { const c = html.getAttribute('data-theme'), n = c === 'dark' ? 'light' : 'dark'; html.setAttribute('data-theme', n); localStorage.setItem('conneto-theme', n); updateTheme(); });
+        updateTheme();
+        window.addEventListener('scroll', () => { document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50); document.getElementById('scrollTop').classList.toggle('show', window.scrollY > 300); });
+        document.getElementById('hamburger').addEventListener('click', () => document.getElementById('mobileNav').classList.add('open'));
+        document.getElementById('mobileClose').addEventListener('click', () => document.getElementById('mobileNav').classList.remove('open'));
+        document.getElementById('scrollTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.12 });
+        document.querySelectorAll('.fade-up,.scale-in').forEach(el => observer.observe(el));
     </script>
-
-    <!-- Mobile Nav Drawer -->
-    <div class="home-mobile-nav" id="homeMobileNav">
-        <div class="home-mobile-overlay" onclick="closeHomeDrawer()"></div>
-        <div class="home-mobile-drawer" id="homeMobileDrawer">
-            <div class="home-drawer-header">
-                <div class="home-drawer-logo">Con<span>neto</span></div>
-                <button class="home-drawer-close" onclick="closeHomeDrawer()">✕</button>
-            </div>
-            <div class="home-drawer-links">
-                <a href="/"><i class="fas fa-home"></i> Home</a>
-                <a href="/about"><i class="fas fa-info-circle"></i> About</a>
-                <a href="/internships"><i class="fas fa-briefcase"></i> Internships</a>
-                <a href="/contact"><i class="fas fa-envelope"></i> Contact</a>
-            </div>
-            <div class="home-drawer-footer">
-                <% if(user){ %>
-                    <a href="/<%= user.role %>/dashboard" class="btn-solid-mobile"><i class="fas fa-th-large"></i>
-                        Dashboard</a>
-                    <a href="/auth/logout" class="btn-ghost-mobile"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                    <% } else { %>
-                        <a href="/auth/login" class="btn-ghost-mobile"><i class="fas fa-sign-in-alt"></i> Login</a>
-                        <a href="/auth/register" class="btn-solid-mobile"><i class="fas fa-rocket"></i> Get Started</a>
-                        <% } %>
-            </div>
-        </div>
-    </div>
 </body>
 
 </html>

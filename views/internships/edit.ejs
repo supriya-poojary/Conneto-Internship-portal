@@ -2,335 +2,243 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Internship | Conneto</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #7C3AED;
-            --primary-dark: #6D28D9;
-            --primary-light: #EDE9FE;
-            --secondary: #2563EB;
-            --text: #0F172A;
-            --text-muted: #64748B;
-            --border: #E2E8F0;
-            --bg: #F8FAFC;
-            --card-bg: #FFFFFF;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #F5F3FF 0%, #EDE9FE 100%);
-            color: var(--text);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .header {
-            background: white;
-            padding: 20px 40px;
-            border-radius: 16px;
-            margin-bottom: 24px;
-            box-shadow: var(--shadow);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .back-link {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .back-link:hover {
-            text-decoration: underline;
-        }
-
-        .form-card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: var(--shadow);
-        }
-
-        .form-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: var(--text);
-        }
-
-        .form-subtitle {
-            color: var(--text-muted);
-            margin-bottom: 32px;
-        }
-
-        .form-group {
-            margin-bottom: 24px;
-        }
-
-        .form-label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--text);
-        }
-
-        .form-label span {
-            color: var(--primary);
-        }
-
-        .form-input,
-        .form-textarea,
-        .form-select {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            font-size: 1rem;
-            font-family: inherit;
-            transition: all 0.3s ease;
-        }
-
-        .form-input:focus,
-        .form-textarea:focus,
-        .form-select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px var(--primary-light);
-        }
-
-        .form-textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        @media (max-width: 600px) {
-            .form-row {
-                grid-template-columns: 1fr;
+    <%- include('../partials/dashboard/company_head', { title: 'Edit Internship | Conneto' }) %>
+        <style>
+            .form-card {
+                background: var(--card-bg);
+                border: 1px solid var(--card-border);
+                border-radius: 24px;
+                padding: 40px;
+                max-width: 900px;
+                margin: 0 auto;
             }
-        }
 
-        .btn-submit {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(124, 58, 237, 0.4);
-        }
-
-        .toggle-group {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 24px;
-            padding: 16px;
-            background: var(--bg);
-            border-radius: 12px;
-        }
-
-        /* Switch styling */
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 26px;
-        }
-
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 34px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 18px;
-            width: 18px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked+.slider {
-            background-color: var(--primary);
-        }
-
-        input:checked+.slider:before {
-            transform: translateX(24px);
-        }
-    </style>
-
-    <!-- Prevent FOUT -> Pre-load Theme -->
-    <script>
-        (function () {
-            var saved = localStorage.getItem('conneto-theme');
-            if (saved !== 'light') {
-                document.documentElement.setAttribute('data-theme', 'dark');
+            .form-header {
+                margin-bottom: 32px;
+                border-bottom: 1px solid var(--card-border);
+                padding-bottom: 20px;
             }
-        })();
-    </script>
+
+            .form-header h2 {
+                font-size: 1.75rem;
+                font-weight: 700;
+                color: white;
+                font-family: 'Clash Display', sans-serif;
+            }
+
+            .form-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 24px;
+            }
+
+            .form-group {
+                margin-bottom: 20px;
+            }
+
+            .form-group.full {
+                grid-column: span 2;
+            }
+
+            .label {
+                display: block;
+                margin-bottom: 10px;
+                font-weight: 600;
+                color: #E2E8F0;
+                font-size: 0.95rem;
+            }
+
+            .inp,
+            .sel,
+            .txt {
+                width: 100%;
+                padding: 14px 16px;
+                background: var(--bg);
+                border: 1px solid var(--card-border);
+                border-radius: 12px;
+                color: white;
+                font-family: inherit;
+                font-size: 1rem;
+                transition: all 0.3s;
+            }
+
+            .inp:focus,
+            .sel:focus,
+            .txt:focus {
+                border-color: var(--primary);
+                outline: none;
+            }
+
+            .txt {
+                min-height: 120px;
+                resize: vertical;
+            }
+
+            .btn-save {
+                width: 100%;
+                padding: 16px;
+                background: var(--gradient-primary);
+                color: white;
+                border: none;
+                border-radius: 14px;
+                font-size: 1.1rem;
+                font-weight: 700;
+                cursor: pointer;
+                transition: all 0.3s;
+                margin-top: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+            }
+
+            .toggle-row {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                margin-top: 24px;
+                padding: 20px;
+                background: rgba(255, 255, 255, 0.02);
+                border-radius: 16px;
+                border: 1px solid var(--card-border);
+            }
+
+            /* Switch */
+            .switch {
+                position: relative;
+                display: inline-block;
+                width: 50px;
+                height: 26px;
+            }
+
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #333;
+                transition: .4s;
+                border-radius: 34px;
+            }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 18px;
+                width: 18px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                transition: .4s;
+                border-radius: 50%;
+            }
+
+            input:checked+.slider {
+                background-color: var(--primary);
+            }
+
+            input:checked+.slider:before {
+                transform: translateX(24px);
+            }
+        </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">Conneto</div>
-            <a href="/company/internships" class="back-link">
-                <i class="fas fa-arrow-left"></i> Back to Manage
-            </a>
+    <%- include('../partials/dashboard/company_sidebar', { activePage: 'internships' }) %>
+
+        <div class="page-header">
+            <h1 class="page-title">Edit Opening</h1>
+            <p class="page-subtitle">Update the details of your internship posting</p>
         </div>
 
         <div class="form-card">
-            <h1 class="form-title">Edit Internship</h1>
-            <p class="form-subtitle">Update your internship opportunity details</p>
+            <div class="form-header">
+                <h2>Internship Information</h2>
+            </div>
 
             <form action="/company/internships/<%= internship._id %>" method="POST">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Internship Title <span>*</span></label>
-                        <input type="text" name="title" class="form-input" value="<%= internship.title %>" required>
+                <div class="form-grid">
+                    <div class="form-group full">
+                        <label class="label">Internship Title</label>
+                        <input type="text" name="title" class="inp" value="<%= internship.title %>" required>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Company Name <span>*</span></label>
-                        <input type="text" name="companyName" class="form-input"
-                            value="<%= internship.companyName || '' %>" required>
-                    </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="form-label">Description <span>*</span></label>
-                    <textarea name="description" class="form-textarea" required><%= internship.description %></textarea>
-                </div>
-
-                <div class="form-row">
                     <div class="form-group">
-                        <label class="form-label">Location</label>
-                        <input type="text" name="location" class="form-input" value="<%= internship.location %>">
+                        <label class="label">Location</label>
+                        <input type="text" name="location" class="inp" value="<%= internship.location %>">
                     </div>
+
                     <div class="form-group">
-                        <label class="form-label">Work Type</label>
-                        <select name="type" class="form-select">
+                        <label class="label">Work Type</label>
+                        <select name="type" class="sel">
                             <option value="remote" <%=internship.type==='remote' ? 'selected' : '' %>>Remote</option>
                             <option value="on-site" <%=internship.type==='on-site' ? 'selected' : '' %>>On-site</option>
                             <option value="hybrid" <%=internship.type==='hybrid' ? 'selected' : '' %>>Hybrid</option>
                         </select>
                     </div>
-                </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Duration</label>
-                        <input type="text" name="duration" class="form-input" value="<%= internship.duration %>">
+                    <div class="form-group full">
+                        <label class="label">Description</label>
+                        <textarea name="description" class="txt" required><%= internship.description %></textarea>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Stipend (INR/month)</label>
-                        <input type="number" name="stipend" class="form-input" value="<%= internship.stipend %>">
-                    </div>
-                </div>
 
-                <div class="form-row">
                     <div class="form-group">
-                        <label class="form-label">Number of Openings</label>
-                        <input type="number" name="openings" class="form-input" value="<%= internship.openings %>"
-                            min="1">
+                        <label class="label">Duration</label>
+                        <input type="text" name="duration" class="inp" value="<%= internship.duration %>">
                     </div>
+
                     <div class="form-group">
-                        <label class="form-label">Application Deadline</label>
-                        <input type="date" name="deadline" class="form-input"
+                        <label class="label">Stipend (INR/Month)</label>
+                        <input type="number" name="stipend" class="inp" value="<%= internship.stipend %>">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Openings</label>
+                        <input type="number" name="openings" class="inp" value="<%= internship.openings %>" min="1">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Deadline</label>
+                        <input type="date" name="deadline" class="inp"
                             value="<%= internship.deadline ? internship.deadline.toISOString().split('T')[0] : '' %>">
                     </div>
+
+                    <div class="form-group full">
+                        <label class="label">Skills (Comma separated)</label>
+                        <input type="text" name="skills" class="inp"
+                            value="<%= internship.skills ? internship.skills.join(', ') : '' %>">
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">Required Skills</label>
-                    <input type="text" name="skills" class="form-input"
-                        value="<%= internship.skills ? internship.skills.join(', ') : '' %>">
-                </div>
-
-                <div class="toggle-group">
+                <div class="toggle-row">
                     <label class="switch">
                         <input type="checkbox" name="isActive" <%=internship.isActive ? 'checked' : '' %>>
                         <span class="slider"></span>
                     </label>
                     <div>
-                        <span style="font-weight: 600;">Active Status</span>
-                        <p style="font-size: 0.85rem; color: var(--text-muted);">Visible to students when active</p>
+                        <div style="color: white; font-weight: 600;">Active Status</div>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);">Toggle visibility of this posting
+                        </div>
                     </div>
                 </div>
 
-                <button type="submit" class="btn-submit">
+                <button type="submit" class="btn-save">
                     <i class="fas fa-save"></i> Save Changes
                 </button>
             </form>
         </div>
-    </div>
+
+        <!-- Closed by partial: </main> </div> -->
+        </main>
+        </div>
 </body>
 
 </html>

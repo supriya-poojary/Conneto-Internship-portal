@@ -2,691 +2,211 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post Internship | Conneto</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        (function () {
-            var t = localStorage.getItem('conneto-theme') || 'dark';
-            document.documentElement.setAttribute('data-theme', t);
-        })();
-    </script>
-    <style>
-        /* ===== VARIABLES ===== */
-        :root {
-            --pr: #7C3AED;
-            --pr-dk: #6D28D9;
-            --pr-lt: rgba(124, 58, 237, 0.1);
-            --sec: #2563EB;
-            --text: #0F172A;
-            --muted: #64748B;
-            --border: #E2E8F0;
-            --bg: #F1F5F9;
-            --card: #FFFFFF;
-            --input-bg: #F8FAFC;
-            --sh: 0 4px 24px rgba(0, 0, 0, 0.07);
-            --danger: #EF4444;
-        }
-
-        [data-theme="dark"] {
-            --pr: #a78bfa;
-            --pr-dk: #8b5cf6;
-            --pr-lt: rgba(167, 139, 250, 0.12);
-            --sec: #60a5fa;
-            --text: #f0f6fc;
-            --muted: #8b949e;
-            --border: rgba(255, 255, 255, 0.1);
-            --bg: #0d1117;
-            --card: #161b22;
-            --input-bg: #1c2128;
-            --sh: 0 4px 24px rgba(0, 0, 0, 0.5);
-            --danger: #f87171;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            transition: background 0.3s, color 0.3s;
-        }
-
-        /* NAV */
-        .pf-nav {
-            background: var(--card);
-            border-bottom: 1px solid var(--border);
-            padding: 0 40px;
-            height: 64px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: var(--sh);
-            transition: background 0.3s, border-color 0.3s;
-        }
-
-        .pf-logo {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.4rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--pr) 0%, var(--sec) 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-decoration: none;
-        }
-
-        .pf-back {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 9px 20px;
-            border: 1.5px solid var(--border);
-            border-radius: 50px;
-            font-size: 0.88rem;
-            font-weight: 600;
-            color: var(--text);
-            text-decoration: none;
-            background: var(--bg);
-            transition: all 0.25s;
-        }
-
-        .pf-back i {
-            color: var(--pr);
-        }
-
-        .pf-back:hover {
-            border-color: var(--pr);
-            color: var(--pr);
-            transform: translateX(-3px);
-        }
-
-        /* LAYOUT */
-        .pf-page {
-            max-width: 1150px;
-            margin: 0 auto;
-            padding: 48px 20px;
-            display: grid;
-            grid-template-columns: 1fr 350px;
-            gap: 28px;
-            align-items: start;
-        }
-
-        /* PAGE HEADING */
-        .pf-heading {
-            margin-bottom: 28px;
-        }
-
-        .pf-heading h1 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 2rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--text) 0%, var(--pr) 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 6px;
-        }
-
-        .pf-heading p {
-            color: var(--muted);
-            font-size: 0.95rem;
-        }
-
-        /* FORM CARD */
-        .pf-card {
-            background: var(--card);
-            border-radius: 20px;
-            padding: 36px;
-            border: 1px solid var(--border);
-            box-shadow: var(--sh);
-            animation: fadeUp 0.5s ease;
-            transition: background 0.3s, border-color 0.3s;
-        }
-
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
+    <%- include('../partials/dashboard/company_head', { title: 'Post Internship | Conneto' }) %>
+        <style>
+            .form-card {
+                background: var(--card-bg);
+                border: 1px solid var(--card-border);
+                border-radius: 24px;
+                padding: 40px;
+                max-width: 900px;
+                margin: 0 auto;
             }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* SECTION DIVIDER inside form */
-        .pf-form-section {
-            margin-bottom: 32px;
-            padding-bottom: 28px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .pf-form-section:last-of-type {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-
-        .pf-section-label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--pr);
-            font-weight: 700;
-            margin-bottom: 18px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .pf-section-label::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: var(--border);
-        }
-
-        /* FORM ELEMENTS */
-        .pf-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 18px;
-        }
-
-        .pf-group {
-            margin-bottom: 18px;
-        }
-
-        .pf-label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 7px;
-            color: var(--text);
-        }
-
-        .pf-label span {
-            color: var(--danger);
-            margin-left: 2px;
-        }
-
-        .pf-label small {
-            font-weight: 400;
-            color: var(--muted);
-        }
-
-        .pf-input,
-        .pf-textarea,
-        .pf-select {
-            width: 100%;
-            padding: 12px 14px;
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            font-size: 0.9rem;
-            font-family: 'Inter', sans-serif;
-            background: var(--input-bg);
-            color: var(--text);
-            transition: all 0.3s;
-        }
-
-        .pf-input:focus,
-        .pf-textarea:focus,
-        .pf-select:focus {
-            outline: none;
-            border-color: var(--pr);
-            box-shadow: 0 0 0 3px var(--pr-lt);
-            background: var(--card);
-        }
-
-        .pf-textarea {
-            min-height: 110px;
-            resize: vertical;
-        }
-
-        .pf-select {
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24'%3E%3Cpath fill='%238b949e' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 14px center;
-            padding-right: 40px;
-        }
-
-        .pf-hint {
-            font-size: 0.78rem;
-            color: var(--muted);
-            margin-top: 5px;
-        }
-
-        /* Skill tags input preview */
-        .pf-skills-wrap {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 10px;
-            min-height: 20px;
-        }
-
-        .pf-skill-tag {
-            padding: 4px 12px;
-            background: var(--pr-lt);
-            color: var(--pr);
-            border-radius: 20px;
-            font-size: 0.78rem;
-            font-weight: 600;
-        }
-
-        /* SUBMIT BUTTON */
-        .pf-btn-submit {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, var(--pr), var(--pr-dk));
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            box-shadow: 0 4px 18px rgba(124, 58, 237, 0.35);
-            transition: all 0.3s;
-            margin-top: 8px;
-        }
-
-        .pf-btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 28px rgba(124, 58, 237, 0.45);
-        }
-
-        .pf-btn-submit:active {
-            transform: scale(0.99);
-        }
-
-        /* SIDEBAR CARDS */
-        .pf-sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .pf-info-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 22px;
-            animation: fadeUp 0.6s ease;
-            transition: background 0.3s, border-color 0.3s;
-        }
-
-        .pf-info-card-title {
-            font-weight: 700;
-            font-size: 0.95rem;
-            margin-bottom: 12px;
-            color: var(--text);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .pf-info-card-title i {
-            color: var(--pr);
-        }
-
-        .pf-tip-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .pf-tip-list li {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            font-size: 0.85rem;
-            color: var(--muted);
-            line-height: 1.5;
-        }
-
-        .pf-tip-list li i {
-            color: var(--pr);
-            margin-top: 2px;
-            font-size: 0.75rem;
-            flex-shrink: 0;
-        }
-
-        .pf-steps {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        .pf-step {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-        }
-
-        .pf-step-num {
-            width: 28px;
-            height: 28px;
-            flex-shrink: 0;
-            border-radius: 50%;
-            background: var(--pr-lt);
-            color: var(--pr);
-            font-size: 0.78rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .pf-step-text {
-            font-size: 0.83rem;
-            color: var(--muted);
-            line-height: 1.5;
-            padding-top: 4px;
-        }
-
-        .pf-step-text strong {
-            color: var(--text);
-        }
-
-        /* THEME TOGGLE */
-        .c-theme-toggle {
-            position: fixed;
-            bottom: 28px;
-            right: 28px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            z-index: 9999;
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            color: #facc15;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-            transition: all 0.3s;
-        }
-
-        .c-theme-toggle:hover {
-            transform: scale(1.1);
-        }
-
-        [data-theme="light"] .c-theme-toggle {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            color: #facc15;
-        }
-
-        [data-theme="dark"] .c-theme-toggle {
-            background: linear-gradient(135deg, #fef9c3, #fde68a);
-            color: #92400e;
-        }
-
-        .c-theme-toggle .icon-sun {
-            display: none;
-        }
-
-        .c-theme-toggle .icon-moon {
-            display: block;
-        }
-
-        [data-theme="dark"] .c-theme-toggle .icon-sun {
-            display: block;
-        }
-
-        [data-theme="dark"] .c-theme-toggle .icon-moon {
-            display: none;
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 860px) {
-            .pf-page {
-                grid-template-columns: 1fr;
+            .form-header {
+                margin-bottom: 32px;
+                border-bottom: 1px solid var(--card-border);
+                padding-bottom: 20px;
             }
 
-            .pf-sidebar {
-                order: -1;
+            .form-header h2 {
+                font-size: 1.75rem;
+                font-weight: 700;
+                color: var(--text);
+                font-family: 'Clash Display', sans-serif;
+            }
+
+            .form-header p {
+                color: var(--text-muted);
+                margin-top: 4px;
+            }
+
+            .form-grid {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .pf-nav {
-                padding: 0 16px;
+                gap: 24px;
             }
 
-            .pf-page {
-                padding: 24px 14px;
+            .form-group {
+                margin-bottom: 20px;
             }
 
-            .pf-card {
-                padding: 22px;
+            .form-group.full {
+                grid-column: span 2;
             }
 
-            .pf-row {
-                grid-template-columns: 1fr;
-                gap: 0;
+            .label {
+                display: block;
+                margin-bottom: 10px;
+                font-weight: 600;
+                color: var(--text);
+                font-size: 0.95rem;
             }
 
-            .pf-sidebar {
-                grid-template-columns: 1fr;
+            .label span {
+                color: var(--primary);
             }
-        }
-    </style>
 
-    <!-- Prevent FOUT -> Pre-load Theme -->
-    <script>
-        (function () {
-            var saved = localStorage.getItem('conneto-theme');
-            if (saved !== 'light') {
-                document.documentElement.setAttribute('data-theme', 'dark');
+            .inp,
+            .sel,
+            .txt {
+                width: 100%;
+                padding: 14px 16px;
+                background: var(--bg);
+                border: 1px solid var(--card-border);
+                border-radius: 12px;
+                color: var(--text);
+                font-family: inherit;
+                font-size: 1rem;
+                transition: all 0.3s;
             }
-        })();
-    </script>
+
+            .inp:focus,
+            .sel:focus,
+            .txt:focus {
+                border-color: var(--primary);
+                outline: none;
+                box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
+            }
+
+            .txt {
+                min-height: 120px;
+                resize: vertical;
+            }
+
+            .btn-post {
+                width: 100%;
+                padding: 16px;
+                background: var(--gradient-primary);
+                color: white;
+                border: none;
+                border-radius: 14px;
+                font-size: 1.1rem;
+                font-weight: 700;
+                cursor: pointer;
+                transition: all 0.3s;
+                margin-top: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+            }
+
+            .btn-post:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 24px rgba(124, 58, 237, 0.3);
+            }
+
+            @media (max-width: 768px) {
+                .form-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .form-group.full {
+                    grid-column: span 1;
+                }
+            }
+        </style>
 </head>
 
 <body>
-    <nav class="pf-nav">
-        <a href="/" class="pf-logo">Conneto</a>
-        <a href="/company/dashboard" class="pf-back">
-            <i class="fas fa-arrow-left"></i> Back to Dashboard
-        </a>
-    </nav>
+    <%- include('../partials/dashboard/company_sidebar', { activePage: 'internships' }) %>
 
-    <div class="pf-page">
-        <!-- LEFT: Form -->
-        <div>
-            <div class="pf-heading">
-                <h1>Post a New Internship</h1>
-                <p>Fill in the details below to publish your internship listing</p>
-            </div>
-
-            <div class="pf-card">
-                <form action="/company/internships" method="POST" id="internshipForm">
-
-                    <!-- BASIC INFO -->
-                    <div class="pf-form-section">
-                        <div class="pf-section-label"><i class="fas fa-briefcase"></i> Basic Information</div>
-
-                        <div class="pf-row">
-                            <div class="pf-group">
-                                <label class="pf-label">Internship Title <span>*</span></label>
-                                <input type="text" name="title" class="pf-input"
-                                    placeholder="e.g., Frontend Developer Intern" required>
-                            </div>
-                            <div class="pf-group">
-                                <label class="pf-label">Company Name <span>*</span></label>
-                                <input type="text" name="companyName" class="pf-input"
-                                    placeholder="e.g., Conneto Technologies" required>
-                            </div>
-                        </div>
-
-                        <div class="pf-group">
-                            <label class="pf-label">Description <span>*</span></label>
-                            <textarea name="description" class="pf-textarea"
-                                placeholder="Describe the role, responsibilities, what candidates will learn, and the work culture..."
-                                required style="min-height:130px;"></textarea>
-                        </div>
-                    </div>
-
-                    <!-- LOCATION & TYPE -->
-                    <div class="pf-form-section">
-                        <div class="pf-section-label"><i class="fas fa-map-marker-alt"></i> Location & Work Type</div>
-
-                        <div class="pf-row">
-                            <div class="pf-group">
-                                <label class="pf-label">Location</label>
-                                <input type="text" name="location" class="pf-input" placeholder="e.g., Mumbai / Remote">
-                            </div>
-                            <div class="pf-group">
-                                <label class="pf-label">Work Type</label>
-                                <select name="type" class="pf-select">
-                                    <option value="remote">🌐 Remote</option>
-                                    <option value="on-site">🏢 On-site</option>
-                                    <option value="hybrid">🔀 Hybrid</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- COMPENSATION & DURATION -->
-                    <div class="pf-form-section">
-                        <div class="pf-section-label"><i class="fas fa-rupee-sign"></i> Duration & Compensation</div>
-
-                        <div class="pf-row">
-                            <div class="pf-group">
-                                <label class="pf-label">Duration</label>
-                                <input type="text" name="duration" class="pf-input"
-                                    placeholder="e.g., 3 months / 6 weeks">
-                            </div>
-                            <div class="pf-group">
-                                <label class="pf-label">Stipend <small>(INR/month)</small></label>
-                                <input type="number" name="stipend" class="pf-input" min="0"
-                                    placeholder="e.g., 10000 (0 for unpaid)">
-                            </div>
-                        </div>
-
-                        <div class="pf-row">
-                            <div class="pf-group">
-                                <label class="pf-label">Number of Openings</label>
-                                <input type="number" name="openings" class="pf-input" value="1" min="1">
-                            </div>
-                            <div class="pf-group">
-                                <label class="pf-label">Application Deadline</label>
-                                <input type="date" name="deadline" class="pf-input">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- SKILLS -->
-                    <div class="pf-form-section">
-                        <div class="pf-section-label"><i class="fas fa-code"></i> Required Skills</div>
-                        <div class="pf-group" style="margin-bottom:0;">
-                            <label class="pf-label">Skills <small>(comma separated)</small></label>
-                            <input type="text" name="skills" id="skillsInput" class="pf-input"
-                                placeholder="e.g., JavaScript, React, Node.js, MongoDB" oninput="previewSkills()">
-                            <p class="pf-hint">These will appear as tags on your listing</p>
-                            <div class="pf-skills-wrap" id="skillPreview"></div>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="pf-btn-submit">
-                        <i class="fas fa-rocket"></i> Publish Internship
-                    </button>
-                </form>
-            </div>
+        <div class="page-header">
+            <h1 class="page-title">Create New Opening</h1>
+            <p class="page-subtitle">Post a new internship opportunity to reach thousands of students</p>
         </div>
 
-        <!-- RIGHT: Sidebar Guidance -->
-        <aside class="pf-sidebar">
-            <div class="pf-info-card">
-                <div class="pf-info-card-title"><i class="fas fa-lightbulb"></i> Tips for Success</div>
-                <ul class="pf-tip-list">
-                    <li><i class="fas fa-check-circle"></i> Write a clear, detailed description that excites candidates
-                    </li>
-                    <li><i class="fas fa-check-circle"></i> Be specific about required skills to attract the right
-                        candidates</li>
-                    <li><i class="fas fa-check-circle"></i> Mention stipend amount — paid roles get 3× more applications
-                    </li>
-                    <li><i class="fas fa-check-circle"></i> Set a realistic deadline to avoid last-minute rushes</li>
-                    <li><i class="fas fa-check-circle"></i> Use a professional company name to build credibility</li>
-                </ul>
+        <div class="form-card">
+            <div class="form-header">
+                <h2>Internship Details</h2>
+                <p>Please provide comprehensive information about the role.</p>
             </div>
 
-            <div class="pf-info-card">
-                <div class="pf-info-card-title"><i class="fas fa-list-ol"></i> What Happens Next?</div>
-                <div class="pf-steps">
-                    <div class="pf-step">
-                        <div class="pf-step-num">1</div>
-                        <div class="pf-step-text">Your listing goes <strong>live immediately</strong> after you publish
-                        </div>
+            <form action="/company/internships" method="POST">
+                <div class="form-grid">
+                    <div class="form-group full">
+                        <label class="label">Internship Title <span>*</span></label>
+                        <input type="text" name="title" class="inp" placeholder="e.g. Frontend Developer Intern"
+                            required>
                     </div>
-                    <div class="pf-step">
-                        <div class="pf-step-num">2</div>
-                        <div class="pf-step-text">Students <strong>browse & apply</strong> directly through Conneto
-                        </div>
+
+                    <div class="form-group">
+                        <label class="label">Location <span>*</span></label>
+                        <input type="text" name="location" class="inp" placeholder="e.g. Mumbai, Remote" required>
                     </div>
-                    <div class="pf-step">
-                        <div class="pf-step-num">3</div>
-                        <div class="pf-step-text">Review applications in your <strong>dashboard</strong> and update
-                            statuses</div>
+
+                    <div class="form-group">
+                        <label class="label">Work Type</label>
+                        <select name="type" class="sel">
+                            <option value="remote">Remote</option>
+                            <option value="on-site">On-site</option>
+                            <option value="hybrid">Hybrid</option>
+                        </select>
                     </div>
-                    <div class="pf-step">
-                        <div class="pf-step-num">4</div>
-                        <div class="pf-step-text">Schedule interviews and <strong>select your intern</strong></div>
+
+                    <div class="form-group full">
+                        <label class="label">Role Description <span>*</span></label>
+                        <textarea name="description" class="txt"
+                            placeholder="Explain responsibilities, requirements, and benefits..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Duration <span>*</span></label>
+                        <input type="text" name="duration" class="inp" placeholder="e.g. 3 Months" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Stipend (INR/Month)</label>
+                        <input type="number" name="stipend" class="inp" placeholder="e.g. 15000">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Openings</label>
+                        <input type="number" name="openings" class="inp" value="1" min="1">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Deadline</label>
+                        <input type="date" name="deadline" class="inp">
+                    </div>
+
+                    <div class="form-group full">
+                        <label class="label">Required Skills (Comma separated)</label>
+                        <input type="text" name="skills" class="inp" placeholder="e.g. React, Node.js, TypeScript">
                     </div>
                 </div>
-            </div>
-        </aside>
-    </div>
 
-    <!-- Theme Toggle Button -->
-    <button class="c-theme-toggle" onclick="toggleTheme()" title="Toggle theme" aria-label="Toggle theme">
-        <i class="fas fa-sun icon-sun"></i>
-        <i class="fas fa-moon icon-moon"></i>
-    </button>
+                <button type="submit" class="btn-post">
+                    <i class="fas fa-paper-plane"></i> Publish Internship
+                </button>
+            </form>
+        </div>
 
-    <script>
-        function toggleTheme() {
-            var html = document.documentElement;
-            var current = html.getAttribute('data-theme') || 'dark';
-            var next = current === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-theme', next);
-            localStorage.setItem('conneto-theme', next);
-        }
-
-        function previewSkills() {
-            var val = document.getElementById('skillsInput').value;
-            var wrap = document.getElementById('skillPreview');
-            var skills = val.split(',').map(s => s.trim()).filter(s => s.length > 0);
-            wrap.innerHTML = skills.map(s => '<span class="pf-skill-tag">' + s + '</span>').join('');
-        }
-    </script>
+        <script>
+            // Tab animation
+            const formCard = document.querySelector('.form-card');
+            formCard.style.opacity = '0';
+            formCard.style.transform = 'translateY(20px)';
+            formCard.style.transition = 'all 0.6s ease';
+            setTimeout(() => {
+                formCard.style.opacity = '1';
+                formCard.style.transform = 'translateY(0)';
+            }, 100);
+        </script>
+        </script>
+        </main>
+        </div>
 </body>
 
 </html>

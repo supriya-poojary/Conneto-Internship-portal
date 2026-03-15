@@ -2,910 +2,975 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        <%= internship.title %> | Conneto
-    </title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --pr: #2563EB;
-            --pr-dk: #1D4ED8;
-            --pr-lt: #DBEAFE;
-            --sec: #7C3AED;
-            --ok: #10B981;
-            --ok-lt: #D1FAE5;
-            --warn: #F59E0B;
-            --warn-lt: #FEF3C7;
-            --danger: #EF4444;
-            --text: #0F172A;
-            --muted: #64748B;
-            --border: #E2E8F0;
-            --bg: #F1F5F9;
-            --card: #FFFFFF;
-            --sh: 0 4px 24px rgba(0, 0, 0, 0.07);
-        }
-
-        [data-theme="dark"] {
-            --pr: #60a5fa;
-            --pr-dk: #3b82f6;
-            --pr-lt: rgba(96, 165, 250, 0.12);
-            --sec: #a78bfa;
-            --ok: #34d399;
-            --ok-lt: rgba(52, 211, 153, 0.12);
-            --warn: #fbbf24;
-            --warn-lt: rgba(251, 191, 36, 0.12);
-            --danger: #f87171;
-            --text: #f0f6fc;
-            --muted: #8b949e;
-            --border: rgba(255, 255, 255, 0.1);
-            --bg: #0d1117;
-            --card: #161b22;
-            --sh: 0 4px 24px rgba(0, 0, 0, 0.4);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            transition: background 0.3s, color 0.3s;
-            min-height: 100vh;
-        }
-
-        /* NAV */
-        .d-nav {
-            background: var(--card);
-            border-bottom: 1px solid var(--border);
-            padding: 0 40px;
-            height: 64px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: var(--sh);
-            transition: background 0.3s, border-color 0.3s;
-        }
-
-        .d-nav-logo {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.4rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--pr) 0%, var(--sec) 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-decoration: none;
-        }
-
-        .d-nav-back {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 9px 20px;
-            border: 1.5px solid var(--border);
-            border-radius: 50px;
-            font-size: 0.88rem;
-            font-weight: 600;
-            color: var(--text);
-            text-decoration: none;
-            transition: all 0.25s;
-            background: var(--bg);
-        }
-
-        .d-nav-back:hover {
-            border-color: var(--pr);
-            color: var(--pr);
-            transform: translateX(-3px);
-        }
-
-        .d-nav-back i {
-            color: var(--pr);
-        }
-
-        /* MAIN LAYOUT */
-        .d-page {
-            max-width: 1060px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            display: grid;
-            grid-template-columns: 1fr 380px;
-            gap: 28px;
-            align-items: start;
-        }
-
-        /* CARD */
-        .d-card {
-            background: var(--card);
-            border-radius: 20px;
-            padding: 36px;
-            box-shadow: var(--sh);
-            border: 1px solid var(--border);
-            transition: background 0.3s, border-color 0.3s;
-            animation: fadeUp 0.5s ease;
-        }
-
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* HERO HEADER */
-        .d-hero {
-            display: flex;
-            gap: 20px;
-            align-items: flex-start;
-            margin-bottom: 32px;
-            padding-bottom: 28px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .d-logo {
-            width: 72px;
-            height: 72px;
-            border-radius: 18px;
-            background: linear-gradient(135deg, var(--pr-lt), rgba(167, 139, 250, 0.2));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--pr);
-            flex-shrink: 0;
-            border: 1px solid var(--border);
-        }
-
-        .d-hero-info h1 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.7rem;
-            font-weight: 700;
-            margin-bottom: 5px;
-            color: var(--text);
-        }
-
-        .d-company-name {
-            color: var(--muted);
-            font-size: 1rem;
-            margin-bottom: 12px;
-        }
-
-        .d-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .d-tag {
-            padding: 5px 14px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .d-tag.remote {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        .d-tag.on-site {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .d-tag.hybrid {
-            background: var(--warn-lt);
-            color: #78350f;
-        }
-
-        .d-tag.default {
-            background: var(--pr-lt);
-            color: var(--pr);
-        }
-
-        /* DETAILS GRID */
-        .d-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 14px;
-            margin-bottom: 32px;
-        }
-
-        .d-detail {
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 18px 16px;
-            transition: background 0.3s, border-color 0.3s;
-        }
-
-        .d-detail-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            background: var(--pr-lt);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--pr);
-            font-size: 0.95rem;
-            margin-bottom: 10px;
-        }
-
-        .d-detail-label {
-            font-size: 0.75rem;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 4px;
-        }
-
-        .d-detail-value {
-            font-weight: 700;
-            font-size: 1rem;
-            color: var(--text);
-        }
-
-        /* SECTIONS */
-        .d-section {
-            margin-bottom: 28px;
-        }
-
-        .d-section-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 14px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--text);
-        }
-
-        .d-section-title::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: var(--border);
-        }
-
-        .d-desc {
-            line-height: 1.8;
-            color: var(--muted);
-            font-size: 0.95rem;
-        }
-
-        .d-skills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .d-skill {
-            padding: 7px 16px;
-            background: var(--bg);
-            border: 1.5px solid var(--border);
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--text);
-            transition: all 0.2s;
-        }
-
-        .d-skill:hover {
-            border-color: var(--pr);
-            color: var(--pr);
-        }
-
-        /* SIDEBAR CARD */
-        .d-sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .d-apply-card {
-            background: var(--card);
-            border-radius: 20px;
-            padding: 28px;
-            box-shadow: var(--sh);
-            border: 1px solid var(--border);
-            animation: fadeUp 0.6s ease;
-            transition: background 0.3s, border-color 0.3s;
-        }
-
-        .d-apply-heading {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 6px;
-            color: var(--text);
-        }
-
-        .d-apply-sub {
-            color: var(--muted);
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-        }
-
-        .d-form-label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 7px;
-            color: var(--text);
-        }
-
-        .d-form-label span {
-            color: var(--danger);
-        }
-
-        .d-input,
-        .d-textarea {
-            width: 100%;
-            padding: 11px 14px;
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            font-size: 0.9rem;
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            transition: all 0.3s;
-            margin-bottom: 16px;
-        }
-
-        .d-input:focus,
-        .d-textarea:focus {
-            outline: none;
-            border-color: var(--pr);
-            box-shadow: 0 0 0 3px var(--pr-lt);
-        }
-
-        .d-textarea {
-            min-height: 90px;
-            resize: vertical;
-        }
-
-        .d-file-input {
-            width: 100%;
-            padding: 11px 14px;
-            border: 2px dashed var(--border);
-            border-radius: 10px;
-            font-size: 0.88rem;
-            margin-bottom: 16px;
-            background: var(--bg);
-            color: var(--muted);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .d-file-input:hover {
-            border-color: var(--pr);
-        }
-
-        .d-btn-apply {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, var(--pr), var(--pr-dk));
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.3s;
-            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
-        }
-
-        .d-btn-apply:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
-        }
-
-        /* Applied badge */
-        .d-applied-box {
-            background: var(--ok-lt);
-            border: 1.5px solid var(--ok);
-            border-radius: 14px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 16px;
-        }
-
-        .d-applied-box i {
-            font-size: 2.2rem;
-            color: var(--ok);
-            margin-bottom: 8px;
-        }
-
-        .d-applied-box h3 {
-            color: var(--ok);
-            font-size: 1rem;
-            margin-bottom: 4px;
-        }
-
-        .d-applied-box p {
-            font-size: 0.85rem;
-            color: var(--muted);
-        }
-
-        .d-app-detail {
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 16px;
-            margin-top: 12px;
-        }
-
-        .d-app-detail-label {
-            font-size: 0.75rem;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 4px;
-        }
-
-        .d-app-detail-value {
-            font-size: 0.9rem;
-            color: var(--text);
-            line-height: 1.6;
-        }
-
-        /* login / company banners */
-        .d-info-banner {
-            background: var(--pr-lt);
-            border: 1.5px solid rgba(37, 99, 235, 0.2);
-            border-radius: 14px;
-            padding: 24px;
-            text-align: center;
-        }
-
-        .d-info-banner h3 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 6px;
-            color: var(--text);
-        }
-
-        .d-info-banner p {
-            color: var(--muted);
-            font-size: 0.9rem;
-            margin-bottom: 16px;
-        }
-
-        .d-btn-login {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 24px;
-            background: var(--pr);
-            color: white;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-        }
-
-        .d-btn-login:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
-            color: white;
-        }
-
-        /* Theme Toggle */
-        .c-theme-toggle {
-            position: fixed;
-            bottom: 28px;
-            right: 28px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            z-index: 9999;
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            color: #facc15;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
-            transition: all 0.3s;
-        }
-
-        .c-theme-toggle:hover {
-            transform: scale(1.1);
-        }
-
-        [data-theme="dark"] .c-theme-toggle {
-            background: linear-gradient(135deg, #fef9c3, #fde68a);
-            color: #92400e;
-        }
-
-        .c-theme-toggle .icon-sun {
-            display: none;
-        }
-
-        .c-theme-toggle .icon-moon {
-            display: block;
-        }
-
-        [data-theme="dark"] .c-theme-toggle .icon-sun {
-            display: block;
-        }
-
-        [data-theme="dark"] .c-theme-toggle .icon-moon {
-            display: none;
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 900px) {
-            .d-page {
-                grid-template-columns: 1fr;
-            }
-
-            .d-sidebar {
-                order: -1;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .d-nav {
-                padding: 0 16px;
-            }
-
-            .d-page {
-                padding: 20px 14px;
-            }
-
-            .d-card {
-                padding: 22px;
-            }
-
-            .d-apply-card {
-                padding: 20px;
-            }
-
-            .d-hero h1 {
-                font-size: 1.35rem;
-            }
-
-            .d-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 400px) {
-            .d-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-
-    <!-- Apply saved theme before render to prevent flash -->
-    <script>
-        (function () {
-            var t = localStorage.getItem('conneto-theme');
-            if (t) document.documentElement.setAttribute('data-theme', t);
-        })();
-    </script>
-
-    <!-- Prevent FOUT -> Pre-load Theme -->
-    <script>
-        (function () {
-            var saved = localStorage.getItem('conneto-theme');
-            if (saved !== 'light') {
-                document.documentElement.setAttribute('data-theme', 'dark');
-            }
-        })();
-    </script>
+    <% if (user && user.role==='company' ) { %>
+        <%- include('../partials/dashboard/company_head', { title: internship.title + ' | Conneto' }) %>
+            <% } else { %>
+                <%- include('../partials/dashboard/student_head', { title: internship.title + ' | Conneto' }) %>
+                    <% } %>
+                        <style>
+                            :root {
+                                --coral: #D95F3B;
+                                --coral-light: #F07A56;
+                                --rose: #B5384A;
+                                --amber: #C8831A;
+                                --amber-light: #E8A030;
+                                --sage: #5A7A5C;
+                                --sage-light: #7A9E7C;
+                                --terra: #A0522D;
+                                --terra-light: #C4723F;
+                                --cream: #FAF3E8;
+                                --cream2: #F5EAD8;
+                                --warm-white: #FFF8F0;
+                                --ink: #2C1A0E;
+                                --ink2: #4A2E1A;
+                                --text: #3D2B1F;
+                                --text-muted: #7A5C4A;
+                                --border: rgba(160, 82, 45, 0.15);
+                                --shadow: rgba(44, 26, 14, 0.12);
+                                --card-bg: rgba(255, 248, 240, 0.95);
+                                --nav-bg: rgba(250, 243, 232, 0.97);
+                                --section-alt: #F5EAD8;
+                                --footer-bg: #1E0E05;
+                            }
+
+                            [data-theme="dark"] {
+                                --cream: #1C0F08;
+                                --cream2: #251508;
+                                --warm-white: #1A0D06;
+                                --ink: #FAF3E8;
+                                --ink2: #F0E0C8;
+                                --text: #E8D5BC;
+                                --text-muted: #B8937A;
+                                --border: rgba(200, 131, 26, 0.2);
+                                --shadow: rgba(0, 0, 0, 0.4);
+                                --card-bg: rgba(37, 21, 8, 0.95);
+                                --nav-bg: rgba(28, 15, 8, 0.98);
+                                --section-alt: #201008;
+                                --footer-bg: #0E0704;
+                            }
+
+                            *,
+                            *::before,
+                            *::after {
+                                box-sizing: border-box;
+                                margin: 0;
+                                padding: 0
+                            }
+
+                            body {
+                                font-family: 'DM Sans', sans-serif;
+                                background: var(--cream);
+                                color: var(--text);
+                                transition: all 0.4s;
+                                overflow-x: hidden
+                            }
+
+                            /* BASIC UI ELEMENTS */
+                            .loader {
+                                position: fixed;
+                                inset: 0;
+                                background: var(--cream);
+                                z-index: 9999;
+                                display: flex;
+                                flex-direction: column;
+                                align-items: center;
+                                justify-content: center;
+                                transition: opacity .5s, visibility .5s
+                            }
+
+                            .loader.hide {
+                                opacity: 0;
+                                visibility: hidden;
+                                pointer-events: none
+                            }
+
+                            .loader-logo {
+                                font-family: 'Playfair Display', serif;
+                                font-size: 3.5rem;
+                                font-weight: 800;
+                                color: var(--ink);
+                                letter-spacing: -1px
+                            }
+
+                            .loader-logo span {
+                                color: var(--coral)
+                            }
+
+                            .loader-dots {
+                                display: flex;
+                                gap: 10px;
+                                margin-top: 18px
+                            }
+
+                            .loader-dots div {
+                                width: 11px;
+                                height: 11px;
+                                border-radius: 50%;
+                                background: var(--coral);
+                                animation: dotBounce .6s infinite alternate
+                            }
+
+                            .loader-dots div:nth-child(2) {
+                                animation-delay: .15s;
+                                background: var(--amber)
+                            }
+
+                            .loader-dots div:nth-child(3) {
+                                animation-delay: .3s;
+                                background: var(--sage)
+                            }
+
+                            @keyframes dotBounce {
+                                from {
+                                    transform: translateY(0)
+                                }
+
+                                to {
+                                    transform: translateY(-10px);
+                                    opacity: .5
+                                }
+                            }
+
+                            .topbar {
+                                background: var(--terra);
+                                color: #fff;
+                                padding: 8px 0;
+                                font-size: 13px;
+                                font-weight: 500
+                            }
+
+                            .topbar .container {
+                                display: flex;
+                                align-items: center;
+                                justify-content: space-between;
+                                padding: 0 24px;
+                                max-width: 1260px;
+                                margin: 0 auto
+                            }
+
+                            .topbar-msg {
+                                letter-spacing: .3px
+                            }
+
+                            .nav {
+                                position: sticky;
+                                top: 0;
+                                z-index: 1000;
+                                background: var(--nav-bg);
+                                backdrop-filter: blur(16px);
+                                border-bottom: 1px solid var(--border);
+                                transition: all .3s
+                            }
+
+                            .nav.scrolled {
+                                box-shadow: 0 4px 24px var(--shadow)
+                            }
+
+                            .nav .container {
+                                display: flex;
+                                align-items: center;
+                                justify-content: space-between;
+                                padding: 16px 20px;
+                                max-width: 1260px;
+                                margin: 0 auto
+                            }
+
+                            .logo {
+                                font-family: 'Playfair Display', serif;
+                                font-size: 1.9rem;
+                                font-weight: 800;
+                                color: var(--ink);
+                                text-decoration: none;
+                                letter-spacing: -.5px
+                            }
+
+                            .logo span {
+                                color: var(--coral)
+                            }
+
+                            .nav-links {
+                                display: flex;
+                                align-items: center;
+                                gap: 10px;
+                                list-style: none
+                            }
+
+                            .nav-links a {
+                                text-decoration: none;
+                                color: var(--text);
+                                font-weight: 600;
+                                font-size: 14.5px;
+                                padding: 7px 14px;
+                                border-radius: 8px;
+                                transition: all .3s
+                            }
+
+                            .nav-links a:hover {
+                                color: var(--coral)
+                            }
+
+                            .nav-right {
+                                display: flex;
+                                align-items: center;
+                                gap: 10px
+                            }
+
+                            .theme-btn {
+                                width: 42px;
+                                height: 42px;
+                                border-radius: 10px;
+                                border: 1px solid var(--border);
+                                background: var(--card-bg);
+                                color: var(--amber);
+                                cursor: pointer;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                font-size: 16px;
+                                transition: all .3s
+                            }
+
+                            .theme-btn:hover {
+                                background: var(--amber);
+                                color: #fff
+                            }
+
+                            .btn {
+                                display: inline-flex;
+                                align-items: center;
+                                gap: 8px;
+                                padding: 11px 26px;
+                                border-radius: 10px;
+                                font-weight: 600;
+                                font-size: 14px;
+                                text-decoration: none;
+                                cursor: pointer;
+                                border: none;
+                                transition: all .3s
+                            }
+
+                            .btn-outline {
+                                background: transparent;
+                                border: 1.5px solid var(--coral);
+                                color: var(--coral)
+                            }
+
+                            .btn-outline:hover {
+                                background: var(--coral);
+                                color: #fff
+                            }
+
+                            .btn-fill {
+                                background: linear-gradient(135deg, var(--coral), var(--rose));
+                                color: #fff;
+                                box-shadow: 0 4px 16px rgba(217, 95, 59, .3)
+                            }
+
+                            .hamburger {
+                                display: none;
+                                flex-direction: column;
+                                gap: 5px;
+                                padding: 8px;
+                                border: none;
+                                background: transparent
+                            }
+
+                            .hamburger span {
+                                display: block;
+                                width: 24px;
+                                height: 2px;
+                                background: var(--ink);
+                                border-radius: 2px
+                            }
+
+                            .container {
+                                max-width: 1000px;
+                                margin: 0 auto;
+                                padding: 0 24px
+                            }
+
+                            /* PAGE HERO */
+                            .page-hero {
+                                position: relative;
+                                padding: 120px 0 60px;
+                                overflow: hidden;
+                                text-align: center;
+                                margin-bottom: 40px
+                            }
+
+                            .page-hero-bg {
+                                position: absolute;
+                                inset: 0;
+                                background-image: url('https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1740&q=80');
+                                background-size: cover;
+                                background-position: center;
+                                opacity: 0.3;
+                                z-index: 1;
+                            }
+
+                            [data-theme="dark"] .page-hero-bg {
+                                opacity: 0.25;
+                                filter: contrast(1.1) brightness(0.6);
+                            }
+
+                            .page-hero::before {
+                                content: '';
+                                position: absolute;
+                                inset: 0;
+                                background: linear-gradient(135deg, var(--ink) 0%, var(--terra) 100%);
+                                z-index: 0;
+                            }
+
+                            .page-hero-inner {
+                                position: relative;
+                                z-index: 2
+                            }
+
+                            .page-hero h1 {
+                                font-family: 'Playfair Display', serif;
+                                font-size: clamp(2rem, 5vw, 3rem);
+                                font-weight: 800;
+                                color: #fff;
+                                margin-bottom: 10px
+                            }
+
+                            /* DETAILS CARD */
+                            .details-card {
+                                background: var(--card-bg);
+                                border-radius: 28px;
+                                border: 1px solid var(--border);
+                                padding: 40px;
+                                margin-bottom: 32px;
+                                box-shadow: 0 10px 40px var(--shadow);
+                            }
+
+                            .comp-header {
+                                display: flex;
+                                gap: 30px;
+                                margin-bottom: 40px;
+                                padding-bottom: 40px;
+                                border-bottom: 1px solid var(--border);
+                            }
+
+                            .comp-logo {
+                                width: 90px;
+                                height: 90px;
+                                border-radius: 22px;
+                                background: linear-gradient(135deg, var(--coral), var(--rose));
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                font-size: 2.2rem;
+                                font-weight: 800;
+                                color: #fff;
+                                flex-shrink: 0;
+                            }
+
+                            .comp-info h1 {
+                                font-family: 'Playfair Display', serif;
+                                font-size: 2.4rem;
+                                font-weight: 800;
+                                color: var(--ink);
+                                margin-bottom: 8px;
+                                line-height: 1.2;
+                            }
+
+                            .comp-info .company-name {
+                                font-size: 1.2rem;
+                                color: var(--coral);
+                                font-weight: 700;
+                            }
+
+                            .grid-info {
+                                display: grid;
+                                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+                                gap: 20px;
+                                margin-bottom: 48px;
+                            }
+
+                            .info-box {
+                                padding: 24px;
+                                border-radius: 20px;
+                                background: var(--cream2);
+                                border: 1px solid var(--border);
+                                transition: .3s;
+                            }
+
+                            .info-box:hover {
+                                transform: translateY(-4px);
+                                border-color: var(--coral);
+                            }
+
+                            .info-box i {
+                                color: var(--coral);
+                                font-size: 1.4rem;
+                                margin-bottom: 14px;
+                                display: block;
+                            }
+
+                            .info-box .lbl {
+                                font-size: 0.75rem;
+                                color: var(--text-muted);
+                                font-weight: 800;
+                                text-transform: uppercase;
+                                letter-spacing: 1px;
+                                margin-bottom: 6px;
+                            }
+
+                            .info-box .val {
+                                font-size: 1.15rem;
+                                font-weight: 800;
+                                color: var(--ink);
+                            }
+
+                            .sec {
+                                margin-bottom: 48px;
+                            }
+
+                            .sec-title {
+                                font-family: 'Playfair Display', serif;
+                                font-size: 1.7rem;
+                                font-weight: 800;
+                                color: var(--ink);
+                                margin-bottom: 24px;
+                                display: flex;
+                                align-items: center;
+                                gap: 12px;
+                            }
+
+                            .sec-title::after {
+                                content: '';
+                                flex: 1;
+                                height: 1px;
+                                background: var(--border);
+                            }
+
+                            .desc {
+                                line-height: 1.8;
+                                color: var(--text);
+                                font-size: 1.1rem;
+                            }
+
+                            .tag-pill {
+                                display: inline-block;
+                                padding: 7px 18px;
+                                border-radius: 50px;
+                                background: rgba(217, 95, 59, 0.1);
+                                color: var(--coral);
+                                font-size: 0.85rem;
+                                font-weight: 700;
+                                margin: 0 10px 10px 0;
+                            }
+
+                            .form-sec {
+                                padding: 44px;
+                                border-radius: 28px;
+                                background: var(--cream2);
+                                border: 1.5px dashed var(--border);
+                            }
+
+                            .inp-field {
+                                width: 100%;
+                                padding: 15px 18px;
+                                border-radius: 14px;
+                                border: 1.5px solid var(--border);
+                                background: var(--card-bg);
+                                font-family: inherit;
+                                font-size: 15px;
+                                color: var(--text);
+                                margin-bottom: 24px;
+                                outline: none;
+                                transition: .3s;
+                            }
+
+                            .inp-field:focus {
+                                border-color: var(--coral);
+                                box-shadow: 0 0 0 5px rgba(217, 95, 59, 0.1);
+                            }
+
+                            .btn-submit {
+                                display: inline-flex;
+                                align-items: center;
+                                justify-content: center;
+                                gap: 12px;
+                                width: 100%;
+                                padding: 18px;
+                                border-radius: 16px;
+                                background: linear-gradient(135deg, var(--coral), var(--rose));
+                                color: #fff;
+                                border: none;
+                                font-size: 1.15rem;
+                                font-weight: 800;
+                                cursor: pointer;
+                                transition: .4s;
+                                box-shadow: 0 8px 30px rgba(217, 95, 59, 0.3);
+                            }
+
+                            .btn-submit:hover {
+                                transform: translateY(-3px);
+                                box-shadow: 0 12px 40px rgba(217, 95, 59, 0.4);
+                            }
+
+                            .applied-card {
+                                text-align: center;
+                                padding: 50px;
+                                border-radius: 24px;
+                                background: rgba(90, 122, 92, 0.1);
+                                border: 1px solid var(--sage);
+                                color: var(--sage);
+                            }
+
+                            /* MOBILE NAV */
+                            .mobile-nav {
+                                position: fixed;
+                                inset: 0;
+                                background: var(--ink);
+                                z-index: 2000;
+                                display: flex;
+                                flex-direction: column;
+                                padding: 32px 28px;
+                                transform: translateX(100%);
+                                transition: transform .4s cubic-bezier(0.4, 0, 0.2, 1)
+                            }
+
+                            .mobile-nav.open {
+                                transform: translateX(0)
+                            }
+
+                            .mobile-links a {
+                                text-decoration: none;
+                                color: rgba(255, 248, 240, 0.85);
+                                font-size: 1.5rem;
+                                font-family: 'Playfair Display', serif;
+                                font-weight: 700;
+                                padding: 12px 0;
+                                display: block;
+                                border-bottom: 1px solid rgba(255, 248, 240, 0.08)
+                            }
+
+                            /* RESPONSIVE */
+                            @media(max-width:768px) {
+
+                                .nav-links,
+                                .nav-right .btn {
+                                    display: none
+                                }
+
+                                .hamburger {
+                                    display: flex
+                                }
+
+                                .comp-header {
+                                    flex-direction: column;
+                                    text-align: center;
+                                    align-items: center;
+                                    gap: 20px
+                                }
+
+                                .info-box {
+                                    text-align: center
+                                }
+
+                                .info-box i {
+                                    margin: 0 auto 14px
+                                }
+
+                                .details-card {
+                                    padding: 25px
+                                }
+
+                                .form-sec {
+                                    padding: 25px
+                                }
+                            }
+                        </style>
+                        <% if (typeof user !=='undefined' && user) { %>
+                            <style>
+                                @media(max-width:768px) {
+                                    .nav-right .btn-fill {
+                                        display: inline-flex !important;
+                                        padding: 8px 16px;
+                                        font-size: 13px;
+                                    }
+                            </style>
+                            <% } %>
+                            <style>
+                                /* DARK MODE DYNAMIC BACKGROUND */
+                            .dm-bg-blobs { position: fixed; inset: 0; z-index: -1; overflow: hidden; display: none; pointer-events: none; }
+                            [data-theme="dark"] .dm-bg-blobs { display: block; }
+                            .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.12; animation: move-blobs 25s infinite alternate ease-in-out; }
+                            .blob-1 { width: 400px; height: 400px; background: var(--coral); top: -100px; left: -100px; }
+                            .blob-2 { width: 500px; height: 500px; background: var(--amber); bottom: -150px; right: 10%; }
+                            @keyframes move-blobs {
+                                0% { transform: translate(0, 0) scale(1); }
+                                50% { transform: translate(100px, 50px) scale(1.1); }
+                                100% { transform: translate(-50px, 100px) scale(0.9); }
+                            }
+                        </style>
 </head>
 
 <body>
-    <nav class="d-nav">
-        <a href="/" class="d-nav-logo">Conneto</a>
-        <a href="/internships" class="d-nav-back">
-            <i class="fas fa-arrow-left"></i> Back to Internships
-        </a>
-    </nav>
+    <div class="dm-bg-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+    <!-- LOADER -->
+    <div class="loader" id="loader">
+        <div class="loader-logo">Conn<span>eto</span></div>
+        <div class="loader-dots">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <script>
+        (function() {
+            const entry = performance.getEntriesByType('navigation')[0];
+            const isReload = entry && entry.type === 'reload';
+            const isFirstVisit = !sessionStorage.getItem('conneto_visited');
+            if (!isReload && !isFirstVisit) {
+                const ldr = document.getElementById('loader');
+                if(ldr) { ldr.style.display = 'none'; ldr.classList.add('hide'); }
+            }
+        })();
+    </script>
 
-    <div class="d-page">
-        <!-- LEFT: Main Content -->
-        <main>
-            <div class="d-card">
-                <!-- Hero -->
-                <div class="d-hero">
-                    <div class="d-logo">
-                        <% var companyName=internship.company && internship.company.companyName ?
-                            internship.company.companyName : (internship.companyName || 'C' ); %>
-                            <%= companyName.charAt(0).toUpperCase() %>
-                    </div>
-                    <div class="d-hero-info">
-                        <h1>
-                            <%= internship.title %>
-                        </h1>
-                        <p class="d-company-name"><i class="fas fa-building"
-                                style="margin-right:6px;color:var(--pr);"></i>
-                            <%= companyName %>
-                        </p>
-                        <div class="d-tags">
-                            <span class="d-tag <%= internship.type %>">
-                                <%= internship.type %>
-                            </span>
-                            <% if (internship.location) { %>
-                                <span class="d-tag default"><i class="fas fa-map-marker-alt"
-                                        style="margin-right:4px;font-size:.75rem;"></i>
-                                    <%= internship.location %>
-                                </span>
-                                <% } %>
-                        </div>
-                    </div>
-                </div>
+    <section class="page-hero" style="padding: 80px 0 40px !important;">
+        <div class="page-hero-bg"></div>
+        <div class="container page-hero-inner">
+            <h1>Internship <em>Details</em></h1>
+        </div>
+    </section>
 
-                <!-- Stats Grid -->
-                <div class="d-grid">
-                    <div class="d-detail">
-                        <div class="d-detail-icon"><i class="fas fa-map-marker-alt"></i></div>
-                        <div class="d-detail-label">Location</div>
-                        <div class="d-detail-value">
-                            <%= internship.location || 'Remote' %>
-                        </div>
-                    </div>
-                    <div class="d-detail">
-                        <div class="d-detail-icon"><i class="fas fa-clock"></i></div>
-                        <div class="d-detail-label">Duration</div>
-                        <div class="d-detail-value">
-                            <%= internship.duration || 'Flexible' %>
-                        </div>
-                    </div>
-                    <div class="d-detail">
-                        <div class="d-detail-icon"><i class="fas fa-rupee-sign"></i></div>
-                        <div class="d-detail-label">Stipend</div>
-                        <div class="d-detail-value">
-                            <%= internship.stipend ? '₹' + internship.stipend + '/mo' : 'Unpaid' %>
-                        </div>
-                    </div>
-                    <div class="d-detail">
-                        <div class="d-detail-icon"><i class="fas fa-users"></i></div>
-                        <div class="d-detail-label">Openings</div>
-                        <div class="d-detail-value">
-                            <%= internship.openings %>
-                        </div>
-                    </div>
-                    <div class="d-detail">
-                        <div class="d-detail-icon"><i class="fas fa-calendar-alt"></i></div>
-                        <div class="d-detail-label">Deadline</div>
-                        <div class="d-detail-value">
-                            <%= internship.deadline ? new Date(internship.deadline).toLocaleDateString('en-IN',
-                                {day:'numeric',month:'short',year:'numeric'}) : 'Rolling' %>
-                        </div>
-                    </div>
-                    <div class="d-detail">
-                        <div class="d-detail-icon"><i class="fas fa-industry"></i></div>
-                        <div class="d-detail-label">Industry</div>
-                        <div class="d-detail-value">
-                            <%= internship.company ? (internship.company.industry || 'N/A' ) : 'N/A' %>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- About Role -->
-                <div class="d-section">
-                    <h2 class="d-section-title">About the Role</h2>
-                    <p class="d-desc">
-                        <%= internship.description %>
-                    </p>
-                </div>
-
-                <!-- Required Skills -->
-                <% if (internship.skills && internship.skills.length> 0) { %>
-                    <div class="d-section">
-                        <h2 class="d-section-title">Required Skills</h2>
-                        <div class="d-skills">
-                            <% internship.skills.forEach(function(skill) { %>
-                                <span class="d-skill">
-                                    <%= skill %>
-                                </span>
-                                <% }); %>
-                        </div>
-                    </div>
-                    <% } %>
-
-                        <!-- About Company -->
-                        <% if (internship.company && (internship.company.description || internship.company.website)) {
-                            %>
-                            <div class="d-section">
-                                <h2 class="d-section-title">About <%= companyName %>
-                                </h2>
-                                <p class="d-desc">
-                                    <%= internship.company.description || 'No description available.' %>
-                                </p>
-                                <% if (internship.company.website) { %>
-                                    <a href="<%= internship.company.website %>" target="_blank"
-                                        style="display:inline-flex;align-items:center;gap:7px;margin-top:14px;color:var(--pr);font-weight:600;font-size:0.9rem;text-decoration:none;">
-                                        <i class="fas fa-globe"></i> Visit Company Website
-                                    </a>
-                                    <% } %>
-                            </div>
-                            <% } %>
+    <div class="container">
+        <div style="margin-bottom: 30px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
+            <a href="/internships" class="btn btn-outline" style="border-radius: 50px; padding: 10px 24px; display: inline-flex; align-items: center; gap: 10px; font-weight: 700;">
+                <i class="fas fa-arrow-left"></i> Back to Internships
+            </a>
+            <div class="breadcrumb" style="font-size: 14px; font-weight: 600; color: var(--text-muted);">
+                <a href="/" style="text-decoration: none; color: var(--coral);">Home</a> / 
+                <a href="/internships" style="text-decoration: none; color: var(--coral);">Internships</a> / 
+                <span><%= internship.title %></span>
             </div>
-        </main>
+        </div>
 
-        <!-- RIGHT: Sidebar -->
-        <aside class="d-sidebar">
-            <div class="d-apply-card">
+        <div class="details-card">
+            <div class="comp-header">
+                <div class="comp-logo">
+                    <% var cName=internship.company && internship.company.companyName ? internship.company.companyName :
+                        (internship.companyName || 'Company' ); %>
+                        <%= cName.charAt(0).toUpperCase() %>
+                </div>
+                <div class="comp-info">
+                    <h1>
+                        <%= internship.title %>
+                    </h1>
+                    <p class="company-name" style="font-size: 1.1rem; color: var(--primary); font-weight: 600;">
+                        <%= cName %>
+                    </p>
+                    <div class="tags-row" style="margin-top: 10px;">
+                        <span class="tag-pill" style="background: var(--primary-light); color: var(--primary);">
+                            <%= internship.type %>
+                        </span>
+                    </div>
+                </div>
+            </div>
 
-                <!-- STUDENT: Already Applied -->
-                <% if (user && user.role==='student' ) { %>
-                    <% if (hasApplied) { %>
-                        <div class="d-applied-box">
-                            <i class="fas fa-check-circle"></i>
-                            <h3>Application Submitted!</h3>
-                            <p>Applied on <%= new Date(myApplication.appliedAt).toLocaleDateString('en-IN',
-                                    {day:'numeric',month:'short',year:'numeric'}) %>
-                            </p>
-                        </div>
+            <div class="grid-info">
+                <div class="info-box">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div class="lbl">Location</div>
+                    <div class="val">
+                        <%= internship.location || 'Remote' %>
+                    </div>
+                </div>
+                <div class="info-box">
+                    <i class="fas fa-clock"></i>
+                    <div class="lbl">Duration</div>
+                    <div class="val">
+                        <%= internship.duration || 'Flexible' %>
+                    </div>
+                </div>
+                <div class="info-box">
+                    <i class="fas fa-rupee-sign"></i>
+                    <div class="lbl">Stipend</div>
+                    <div class="val">
+                        <%= internship.stipend ? internship.stipend + '/mo' : 'Unpaid' %>
+                    </div>
+                </div>
+                <div class="info-box">
+                    <i class="fas fa-calendar-alt"></i>
+                    <div class="lbl">Deadline</div>
+                    <div class="val">
+                        <%= internship.deadline ? new Date(internship.deadline).toLocaleDateString() : 'Rolling' %>
+                    </div>
+                </div>
+            </div>
 
-                        <% if (myApplication.studentSkills) { %>
-                            <div class="d-app-detail" style="margin-top:0;">
-                                <div class="d-app-detail-label">Skills Submitted</div>
-                                <div class="d-app-detail-value">
-                                    <%= myApplication.studentSkills %>
+            <div class="sec">
+                <h2 class="sec-title">About the Role</h2>
+                <div class="desc">
+                    <%= internship.description %>
+                </div>
+            </div>
+
+            <% if (internship.skills && internship.skills.length> 0) { %>
+                <div class="sec">
+                    <h2 class="sec-title">Required Skills</h2>
+                    <div class="skill-row">
+                        <% internship.skills.forEach(skill=> { %>
+                            <span class="tag-pill">
+                                <%= skill %>
+                            </span>
+                            <% }) %>
+                    </div>
+                </div>
+                <% } %>
+
+                    <div class="form-sec">
+                        <% if (user && user.role==='student' ) { %>
+                            <% if (hasApplied) { %>
+                                <div class="applied-card">
+                                    <i class="fas fa-check-circle" style="font-size: 3rem; margin-bottom: 20px;"></i>
+                                    <h2>Application Submitted</h2>
+                                    <p>You have already applied for this position. Check your
+                                        dashboard for updates.</p>
                                 </div>
-                            </div>
-                            <% } %>
-                                <% if (myApplication.question1Answer) { %>
-                                    <div class="d-app-detail">
-                                        <div class="d-app-detail-label">Why should you be hired?</div>
-                                        <div class="d-app-detail-value">
-                                            <%= myApplication.question1Answer %>
+                                <% } else { %>
+                                    <h2 class="sec-title" style="margin-bottom:6px">Apply to <em><%= internship.title %></em></h2>
+                                    
+                                    <!-- Portfolio Completion Gate -->
+                                    <% var pct = studentProfile ? (studentProfile.completionPercentage || 0) : 0; %>
+                                    <% if (pct < 100) { %>
+                                        <div style="background: rgba(181,56,74,0.08); border: 1.5px solid var(--rose); border-radius: 22px; padding: 32px 24px; margin-bottom: 30px; text-align:center;">
+                                            <div style="width:70px; height:70px; background:rgba(181,56,74,0.1); color:var(--rose); border-radius:20px; display:flex; align-items:center; justify-content:center; margin:0 auto 18px; font-size:2rem">
+                                                <i class="fas fa-lock"></i>
+                                            </div>
+                                            <h3 style="color:var(--rose); margin-bottom:10px; font-size:1.4rem">Portfolio Incomplete (<%= pct %>%)</h3>
+                                            <p style="color:var(--text-muted); margin-bottom:24px; font-size:14px; max-width:400px; margin-left:auto; margin-right:auto">Recruiters require <strong>100% profile completion</strong> to review your eligibility. Please complete all fields including Academic info, USN, and Location.</p>
+                                            <a href="/student/dashboard?tab=profile" class="btn-submit" style="text-decoration:none; width:auto; padding:14px 32px; font-size:15px; display:inline-flex; background:var(--rose); color:#fff">
+                                                <i class="fas fa-magic" style="margin-right:8px"></i> Complete Portfolio to Unlock
+                                            </a>
+                                        </div>
+                                    <% } else { %>
+
+                                    <!-- Profile Progress Banner -->
+                                    <% if (pct < 100) { %>
+                                    <div style="background: rgba(200,131,26,0.08); border: 1px solid var(--amber); border-radius: 16px; padding: 16px 22px; margin-bottom: 24px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+                                        <div style="flex:1; min-width:200px;">
+                                            <div style="font-size:12px; font-weight:800; color:var(--amber); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px">Profile Strength: <%= pct %>%</div>
+                                            <div style="height:6px; background:rgba(200,131,26,0.15); border-radius:10px; overflow:hidden">
+                                                <div style="width:<%= pct %>%; height:100%; background: var(--amber);"></div>
+                                            </div>
+                                        </div>
+                                        <a href="/student/dashboard?tab=profile" style="font-size:12px; font-weight:700; color:var(--amber); text-decoration:none; white-space:nowrap"><i class="fas fa-edit"></i> Complete Profile → More Visibility</a>
+                                    </div>
+                                    <% } else { %>
+                                    <div style="background: rgba(90,122,92,0.08); border: 1px solid var(--sage); border-radius: 16px; padding: 14px 22px; margin-bottom: 24px; display:flex; align-items:center; gap:10px;">
+                                        <i class="fas fa-shield-alt" style="color:var(--sage); font-size:1.4rem;"></i>
+                                        <div>
+                                            <div style="font-weight:800; color:var(--sage); font-size:13px">100% Profile Complete</div>
+                                            <div style="font-size:12px; color:var(--text-muted)">Your full profile will be sent to the recruiter automatically.</div>
                                         </div>
                                     </div>
                                     <% } %>
-                                        <% if (myApplication.question2Answer) { %>
-                                            <div class="d-app-detail">
-                                                <div class="d-app-detail-label">Availability</div>
-                                                <div class="d-app-detail-value">
-                                                    <%= myApplication.question2Answer %>
+
+                                    <form action="/internships/<%= internship._id %>/apply" method="POST" enctype="multipart/form-data">
+                                        <!-- Hidden: auto-fill from profile -->
+                                        <% if (studentProfile && studentProfile.skills && studentProfile.skills.length > 0) { %>
+                                            <input type="hidden" name="studentSkills" value="<%= studentProfile.skills.join(', ') %>">
+                                        <% } else { %>
+                                            <div style="margin-bottom:20px">
+                                                <label class="lbl" style="display:block; margin-bottom:8px; font-size:11px; font-weight:800; text-transform:uppercase; color:var(--text-muted)">Your Key Skills</label>
+                                                <input type="text" name="studentSkills" class="inp-field" placeholder="e.g. React, Python, Figma..." style="margin-bottom:0">
+                                            </div>
+                                        <% } %>
+                                        
+                                        <!-- Review Your Profile -->
+                                        <% if (studentProfile) { %>
+                                        <div style="background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 20px; padding: 24px; margin-bottom: 24px;">
+                                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+                                                <div style="font-size:11px; font-weight:900; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; border-left:3px solid var(--coral); padding-left:10px">
+                                                    <i class="fas fa-id-badge"></i> Your Info — Sent to Recruiter
+                                                </div>
+                                                <a href="/student/dashboard?tab=profile" style="font-size:11px; color:var(--coral); font-weight:700; text-decoration:none"><i class="fas fa-pen"></i> Edit Profile</a>
+                                            </div>
+                                            
+                                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size:13px;">
+                                                <!-- Basic Info Group -->
+                                                <div style="display:flex; flex-direction:column; gap:8px">
+                                                    <div style="font-size:10px; font-weight:900; color:var(--coral); text-transform:uppercase">Basic Information</div>
+                                                    <div style="display:flex; flex-direction:column; gap:4px">
+                                                        <span style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase">Full Name / USN</span>
+                                                        <span style="font-weight:700; color:var(--ink)"><%= user.name %> (<%= studentProfile.usn || 'N/A' %>)</span>
+                                                    </div>
+                                                    <div style="display:flex; flex-direction:column; gap:4px">
+                                                        <span style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase">DOB / Gender</span>
+                                                        <span style="font-weight:600; color:var(--ink)">
+                                                            <%= studentProfile.dob ? new Date(studentProfile.dob).toLocaleDateString() : 'N/A' %> | <%= studentProfile.gender || 'N/A' %>
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Academic Group -->
+                                                <div style="display:flex; flex-direction:column; gap:8px">
+                                                    <div style="font-size:10px; font-weight:900; color:var(--coral); text-transform:uppercase">Academic Details</div>
+                                                    <div style="display:flex; flex-direction:column; gap:4px">
+                                                        <span style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase">Course / Dept</span>
+                                                        <span style="font-weight:600; color:var(--ink)"><%= studentProfile.degree || 'N/A' %> - <%= studentProfile.department || 'N/A' %></span>
+                                                    </div>
+                                                    <div style="display:flex; flex-direction:column; gap:4px">
+                                                        <span style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase">Sem / GPA</span>
+                                                        <span style="font-weight:600; color:var(--ink)">Sem <%= studentProfile.semester || 'N/A' %> | GPA <%= studentProfile.gpa || 'N/A' %></span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Location Group -->
+                                                <div style="display:flex; flex-direction:column; gap:8px">
+                                                    <div style="font-size:10px; font-weight:900; color:var(--coral); text-transform:uppercase">Location</div>
+                                                    <div style="display:flex; flex-direction:column; gap:4px">
+                                                        <span style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase">Address</span>
+                                                        <span style="font-weight:600; color:var(--ink)"><%= studentProfile.address || 'N/A' %></span>
+                                                    </div>
+                                                    <div style="display:flex; flex-direction:column; gap:4px">
+                                                        <span style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase">City / State</span>
+                                                        <span style="font-weight:600; color:var(--ink)"><%= studentProfile.city || 'N/A' %>, <%= studentProfile.state || 'N/A' %></span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Additional Group -->
+                                                <div style="display:flex; flex-direction:column; gap:8px">
+                                                    <div style="font-size:10px; font-weight:900; color:var(--coral); text-transform:uppercase">Additional Info</div>
+                                                    <div style="display:flex; flex-direction:column; gap:4px">
+                                                        <span style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase">Interests</span>
+                                                        <span style="font-weight:600; color:var(--ink)"><%= studentProfile.interests && studentProfile.interests.length > 0 ? studentProfile.interests.join(', ') : 'N/A' %></span>
+                                                    </div>
+                                                    <div style="display:flex; flex-direction:column; gap:4px">
+                                                        <span style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase">College</span>
+                                                        <span style="font-weight:600; color:var(--ink)"><%= studentProfile.college || 'N/A' %></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <% if (studentProfile.skills && studentProfile.skills.length > 0) { %>
+                                            <div style="margin-top:18px; padding-top:18px; border-top: 1px solid var(--border)">
+                                                <span style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase; display:block; margin-bottom:8px">Skills Tracking</span>
+                                                <div style="display:flex; flex-wrap:wrap; gap:6px">
+                                                    <% studentProfile.skills.forEach(s => { %>
+                                                        <span style="padding:4px 12px; background:rgba(217,95,59,0.08); color:var(--coral); border-radius:8px; font-size:11px; font-weight:800"><%= s %></span>
+                                                    <% }) %>
                                                 </div>
                                             </div>
                                             <% } %>
-                                                <% if (myApplication.resumeUrl) { %>
-                                                    <a href="<%= myApplication.resumeUrl %>" target="_blank"
-                                                        style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:14px;padding:11px;background:var(--pr-lt);color:var(--pr);border-radius:10px;font-weight:600;font-size:0.88rem;text-decoration:none;transition:all 0.3s;">
-                                                        <i class="fas fa-file-pdf"></i> View Submitted Resume
-                                                    </a>
-                                                    <% } %>
+                                        </div>
+                                        <% } %>
 
-                                                        <!-- STUDENT: Apply Form -->
-                                                        <% } else { %>
-                                                            <h2 class="d-apply-heading">Apply Now</h2>
-                                                            <p class="d-apply-sub">Submit your application for this role
-                                                            </p>
-                                                            <form action="/internships/<%= internship._id %>/apply"
-                                                                method="POST" enctype="multipart/form-data">
-                                                                <label class="d-form-label">Your Skills
-                                                                    <span>*</span></label>
-                                                                <input type="text" name="studentSkills" class="d-input"
-                                                                    placeholder="e.g., HTML, CSS, JavaScript" required>
+                                        <!-- The one question student must answer -->
+                                        <div style="margin-bottom:20px">
+                                            <label class="lbl" style="display:block; margin-bottom:8px; font-size:11px; font-weight:800; text-transform:uppercase; color:var(--text-muted)">Message to Recruiter *</label>
+                                            <textarea name="question1Answer" class="inp-field" style="min-height: 130px; margin-bottom:0" placeholder="Write a short message explaining why you're a good fit for this internship..." required maxlength="1000"></textarea>
+                                            <div style="text-align:right; font-size:11px; color:var(--text-muted); margin-top:4px" id="msgCount">0/1000</div>
+                                        </div>
+                                        
+                                        <input type="hidden" name="question2Answer" value="Ready to start immediately">
 
-                                                                <label class="d-form-label">Why should you be hired?
-                                                                    <span>*</span></label>
-                                                                <textarea name="question1Answer" class="d-textarea"
-                                                                    placeholder="Describe your strengths..."
-                                                                    required></textarea>
+                                        <label class="lbl" style="display: block; margin-bottom: 8px; font-size:11px; font-weight:800; text-transform:uppercase; color:var(--text-muted)">Resume (PDF) *</label>
+                                        <% if (studentProfile && studentProfile.resumeUrl) { %>
+                                        <div style="margin-bottom:14px; display:flex; align-items:center; gap:12px">
+                                            <a href="<%= studentProfile.resumeUrl %>" target="_blank" style="font-size:13px; color:var(--sage); font-weight:700; text-decoration:none"><i class="fas fa-file-check"></i> Profile Resume Available</a>
+                                            <span style="font-size:12px; color:var(--text-muted)">or upload a new one:</span>
+                                        </div>
+                                        <input type="file" name="resume" class="inp-field" accept="application/pdf" style="margin-bottom:24px">
+                                        <% } else { %>
+                                        <input type="file" name="resume" class="inp-field" accept="application/pdf" required style="margin-bottom:24px">
+                                        <% } %>
 
-                                                                <label class="d-form-label">Are you available for the
-                                                                    duration? <span>*</span></label>
-                                                                <textarea name="question2Answer" class="d-textarea"
-                                                                    placeholder="Yes, I am available for..."
-                                                                    required></textarea>
-
-                                                                <label class="d-form-label">Cover Letter <small
-                                                                        style="font-weight:400;color:var(--muted);">(optional)</small></label>
-                                                                <textarea name="coverLetter" class="d-textarea"
-                                                                    placeholder="Write a short cover letter..."></textarea>
-
-                                                                <label class="d-form-label">Resume (PDF only)
-                                                                    <span>*</span></label>
-                                                                <input type="file" name="resume"
-                                                                    accept="application/pdf" required
-                                                                    class="d-file-input">
-
-                                                                <button type="submit" class="d-btn-apply">
-                                                                    <i class="fas fa-paper-plane"></i> Submit
-                                                                    Application
-                                                                </button>
-                                                            </form>
-                                                            <% } %>
-
-                                                                <!-- NOT LOGGED IN -->
-                                                                <% } else if (!user) { %>
-                                                                    <div class="d-info-banner">
-                                                                        <h3>Login to Apply</h3>
-                                                                        <p>Sign in with a student account to apply for
-                                                                            this internship</p>
-                                                                        <a href="/auth/login?redirect=/internships/<%= internship._id %>"
-                                                                            class="d-btn-login">
-                                                                            <i class="fas fa-sign-in-alt"></i> Login to
-                                                                            Apply
-                                                                        </a>
-                                                                    </div>
-
-                                                                    <!-- COMPANY MODE -->
-                                                                    <% } else { %>
-                                                                        <div class="d-info-banner">
-                                                                            <h3>Company View</h3>
-                                                                            <p>Switch to a student account to apply for
-                                                                                internships on Conneto</p>
-                                                                            <a href="/company/dashboard"
-                                                                                class="d-btn-login"
-                                                                                style="background: linear-gradient(135deg,var(--sec),#5b21b6);">
-                                                                                <i class="fas fa-th-large"></i> Go to
-                                                                                Dashboard
-                                                                            </a>
-                                                                        </div>
-                                                                        <% } %>
-
-            </div>
-
-            <!-- Quick info card -->
-            <div class="d-apply-card" style="padding:20px;">
-                <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
-                    <div
-                        style="width:36px;height:36px;border-radius:10px;background:var(--warn-lt);display:flex;align-items:center;justify-content:center;color:var(--warn);font-size:1rem;">
-                        <i class="fas fa-lightbulb"></i>
+                                        <button type="submit" class="btn-submit">
+                                            <i class="fas fa-paper-plane"></i> Submit Application
+                                        </button>
+                                    </form>
+                                    
+                                    <% } %> <!-- end portfolio gate -->
+                                    <% } %>
+                                        <% } else if (!user) { %>
+                                            <div style="text-align: center;">
+                                                <h2 class="sec-title">Login to Apply</h2>
+                                                <p class="desc" style="margin-bottom: 24px;">
+                                                    Please login as a student to submit your
+                                                    application.</p>
+                                                <a href="/auth/login" class="btn-submit"
+                                                    style="text-decoration: none;">Login Now</a>
+                                            </div>
+                                            <% } else { %>
+                                                <div style="text-align: center;">
+                                                    <h2 class="sec-title">Company View</h2>
+                                                    <p class="desc">You are viewing this as a
+                                                        company representative.</p>
+                                                </div>
+                                                <% } %>
                     </div>
-                    <span style="font-weight:700;font-size:0.95rem;color:var(--text);">Pro Tip</span>
-                </div>
-                <p style="font-size:0.85rem;color:var(--muted);line-height:1.7;">Tailor your application to the <strong
-                        style="color:var(--text);">specific skills</strong> listed. Companies love candidates who show
-                    genuine alignment with their needs.</p>
-            </div>
-        </aside>
+        </div>
+
     </div>
 
-    <!-- Theme Toggle -->
-    <button class="c-theme-toggle" id="themeBtn" onclick="toggleTheme()" title="Toggle theme" aria-label="Toggle theme">
-        <i class="fas fa-sun icon-sun"></i>
-        <i class="fas fa-moon icon-moon"></i>
-    </button>
-
     <script>
-        function toggleTheme() {
-            var html = document.documentElement;
-            var isDark = html.getAttribute('data-theme') === 'dark';
-            if (isDark) {
-                html.removeAttribute('data-theme');
-                localStorage.setItem('conneto-theme', 'light');
+        // Message character counter
+        const msgTextarea = document.querySelector('textarea[name="question1Answer"]');
+        const msgCount = document.getElementById('msgCount');
+        if (msgTextarea && msgCount) {
+            msgTextarea.addEventListener('input', function() {
+                msgCount.textContent = this.value.length + '/1000';
+            });
+        }
+
+        // LOADER Logic
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            const entry = performance.getEntriesByType('navigation')[0];
+            const navigationType = entry ? entry.type : '';
+            const isReload = navigationType === 'reload';
+            const isFirstVisit = !sessionStorage.getItem('conneto_visited');
+
+            if (isReload || isFirstVisit) {
+                // Show loader for 1.2s on INITIAL START or REFRESH
+                setTimeout(() => {
+                    loader.classList.add('hide');
+                    sessionStorage.setItem('conneto_visited', 'true');
+                }, 1200);
             } else {
-                html.setAttribute('data-theme', 'dark');
-                localStorage.setItem('conneto-theme', 'dark');
+                // Direct redirect for header links
+                loader.style.display = 'none';
+                loader.classList.add('hide');
+            }
+        });
+
+        // THEME
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        function updateTheme() {
+            const t = html.getAttribute('data-theme');
+            if (themeToggle) {
+                themeToggle.innerHTML = t === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
             }
         }
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                const current = html.getAttribute('data-theme');
+                const next = current === 'dark' ? 'light' : 'dark';
+                html.setAttribute('data-theme', next);
+                localStorage.setItem('conneto-theme', next);
+                updateTheme();
+            });
+        }
+        updateTheme();
+
+        // MOBILE NAV
+        const hamburger = document.getElementById('hamburger');
+        const mobileClose = document.getElementById('mobileClose');
+        const mobileNav = document.getElementById('mobileNav');
+        if (hamburger) hamburger.addEventListener('click', () => mobileNav.classList.add('open'));
+        if (mobileClose) mobileClose.addEventListener('click', () => mobileNav.classList.remove('open'));
     </script>
 </body>
 
