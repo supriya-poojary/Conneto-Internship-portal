@@ -18,8 +18,8 @@
 # Common
 --------------------------------------------------------------*/
 :root {
-  --techguru-font: "Space Grotesk", sans-serif;
-  --techguru-font-two: "Marcellus", serif;
+  --techguru-font: "Inter", sans-serif;
+  --techguru-font-two: "Outfit", sans-serif;
   --techguru-gray: #C5C8CD;
   --techguru-gray-rgb: 197, 200, 205;
   --techguru-base: #FFD25D;
@@ -304,6 +304,7 @@ ul {
   gap: 10px;
   vertical-align: middle;
   -webkit-appearance: none;
+  appearance: none;
   outline: none !important;
   background: linear-gradient(270deg, #FA5674 0%, #6065D4 100%);
   color: var(--techguru-white);
