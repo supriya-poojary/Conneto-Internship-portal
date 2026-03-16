@@ -456,21 +456,44 @@
 
     .internships-list {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 24px
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 1400px) {
+      .internships-list {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .internships-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 576px) {
+      .internships-list {
+        grid-template-columns: 1fr;
+      }
     }
 
     .int-card {
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 24px;
-      padding: 32px;
+      padding: 20px 12px;
       transition: all .4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       display: flex;
-      gap: 28px;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 15px;
       position: relative;
       overflow: hidden;
       cursor: pointer;
+      aspect-ratio: 1 / 1;
+      justify-content: center;
     }
 
     .int-card::before {
@@ -533,18 +556,26 @@
 
     .int-header {
       display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 12px
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      gap: 10px;
     }
 
     .int-title {
       font-family: 'Outfit', sans-serif;
-      font-size: 1.4rem;
+      font-size: 1.1rem;
       font-weight: 800;
       color: var(--ink);
       text-decoration: none;
-      transition: .3s
+      transition: .3s;
+      line-height: 1.2;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     .int-title:hover {
@@ -554,9 +585,9 @@
     .int-company {
       font-weight: 700;
       color: var(--coral);
-      font-size: 14px;
+      font-size: 11px;
       display: block;
-      margin-top: 4px
+      margin-top: 3px
     }
 
     .int-badge {
@@ -572,11 +603,12 @@
 
     .int-meta {
       display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      margin-bottom: 20px;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 12px;
       color: var(--text-muted);
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 500
     }
 
@@ -588,8 +620,9 @@
     .int-tags {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 24px
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 15px
     }
 
     .tag {
@@ -916,23 +949,21 @@
               </div>
               <div class="int-content">
                 <div class="int-header">
-                  <div>
                     <a href="/internships/<%= item._id %>" class="int-title">
                       <%= item.title %>
                     </a>
                     <span class="int-company">
                       <%= cmName %>
                     </span>
-                  </div>
-                  <div style="display:flex; gap:10px; align-items:center">
-                    <% if (typeof appliedIds !=='undefined' && appliedIds && appliedIds.includes(item._id.toString())) {
-                      %>
-                      <span class="int-badge" style="background:rgba(90,122,92,0.1); color:var(--sage)">Applied</span>
-                      <% } %>
-                        <span class="int-badge">
-                          <%= item.type || 'Internship' %>
-                        </span>
-                  </div>
+                    <div class="int-badge-container" style="display:flex; gap:10px; align-items:center; justify-content:center">
+                      <% if (typeof appliedIds !=='undefined' && appliedIds && appliedIds.includes(item._id.toString())) {
+                        %>
+                        <span class="int-badge" style="background:rgba(90,122,92,0.1); color:var(--sage)">Applied</span>
+                        <% } %>
+                          <span class="int-badge">
+                            <%= item.type || 'Internship' %>
+                          </span>
+                    </div>
                 </div>
 
                 <div class="int-meta">

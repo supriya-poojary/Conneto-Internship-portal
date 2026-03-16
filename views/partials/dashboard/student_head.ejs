@@ -368,6 +368,18 @@
     display: none;
   }
 
+  @media (max-width: 1400px) {
+    .internship-list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 1200px) {
+    .internship-list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
   @media (max-width: 992px) {
     .sidebar {
       left: -280px;
@@ -398,6 +410,10 @@
     .stats-grid {
       grid-template-columns: repeat(2, 1fr) !important;
     }
+
+    .internship-list {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 
   @media (max-width: 768px) {
@@ -415,6 +431,10 @@
 
     .card {
       padding: 20px !important;
+    }
+
+    .internship-list {
+      grid-template-columns: 1fr;
     }
   }
 
@@ -644,26 +664,31 @@
   }
 
   .internship-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
   }
 
   .internship-item {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 20px;
-    padding: 20px;
-    border-radius: 18px;
+    text-align: center;
+    gap: 12px;
+    padding: 20px 12px;
+    border-radius: 20px;
     border: 1px solid var(--border);
     transition: .3s;
-    background: var(--cream);
+    background: var(--card-bg);
+    aspect-ratio: 1 / 1;
+    justify-content: center;
+    overflow: hidden;
   }
 
   .internship-item:hover {
-    transform: translateX(8px);
+    transform: translateY(-8px);
     border-color: var(--coral);
-    box-shadow: 0 10px 30px var(--shadow);
+    box-shadow: 0 15px 40px var(--shadow);
   }
 
   .company-logo {
@@ -687,23 +712,45 @@
 
   .internship-details h4 {
     font-family: 'Outfit', sans-serif;
-    font-size: 1.15rem;
+    font-size: 1rem;
     font-weight: 700;
     color: var(--ink);
-    margin-bottom: 4px;
+    margin-bottom: 2px;
+    line-height: 1.2;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .company-name {
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 600;
     color: var(--coral);
-    margin-bottom: 8px;
+    margin-bottom: 5px;
   }
 
   .internship-meta {
     display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    margin-top: 5px;
+  }
+
+  .meta-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: var(--card-bg);
+    padding: 3px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    white-space: nowrap;
   }
 
   .meta-tag {
