@@ -665,13 +665,15 @@
 
   .internship-list {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 24px;
   }
 
-  /* Specific override for Dashboard Home nested grid */
+  /* Specific override for Dashboard Home (Horizontal Rows) */
   .dashboard-grid .internship-list {
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
   }
 
   .internship-item {
@@ -680,7 +682,7 @@
     align-items: center;
     text-align: center;
     gap: 12px;
-    padding: 20px 12px;
+    padding: 18px 12px;
     border-radius: 20px;
     border: 1px solid var(--border);
     transition: .3s;
@@ -688,6 +690,16 @@
     aspect-ratio: 1 / 1;
     justify-content: center;
     overflow: hidden;
+    position: relative;
+  }
+
+  /* Horizontal Row Style for Dashboard Home */
+  .dashboard-grid .internship-item {
+    flex-direction: row;
+    aspect-ratio: auto;
+    text-align: left;
+    padding: 16px 20px;
+    justify-content: flex-start;
   }
 
   .internship-item:hover {
@@ -697,19 +709,26 @@
   }
 
   .company-logo {
-    width: 70px;
-    height: 70px;
+    width: 65px;
+    height: 65px;
     border-radius: 18px;
     background: linear-gradient(135deg, var(--amber), var(--terra));
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'Outfit', sans-serif;
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 800;
     color: #fff;
     flex-shrink: 0;
     box-shadow: 0 8px 16px rgba(200, 131, 26, 0.2);
+  }
+
+  .dashboard-grid .company-logo {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    border-radius: 14px;
   }
 
   .internship-details {
@@ -745,6 +764,17 @@
     margin-top: 5px;
   }
 
+  .dashboard-grid .internship-meta {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .dashboard-grid .internship-meta .meta-tag {
+    background: rgba(255, 255, 255, 0.5);
+    border: none;
+  }
+
   .meta-tag {
     display: inline-flex;
     align-items: center;
@@ -759,21 +789,15 @@
     white-space: nowrap;
   }
 
-  .meta-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-muted);
-    background: var(--card-bg);
-    padding: 4px 10px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-  }
-
   .meta-tag i {
     color: var(--amber);
+  }
+
+  /* Specific view button placement for rows */
+  .dashboard-grid .internship-item .view-btn {
+    margin-left: auto;
+    padding: 10px 20px;
+    flex-shrink: 0;
   }
 
   .profile-card {
