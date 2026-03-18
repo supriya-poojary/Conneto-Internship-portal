@@ -669,13 +669,20 @@
     gap: 24px;
   }
 
+  /* Specific override for Dashboard Home (Horizontal Rows) */
+  .dashboard-grid .internship-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
   .internship-item {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     gap: 12px;
-    padding: 20px 12px;
+    padding: 18px 12px;
     border-radius: 20px;
     border: 1px solid var(--border);
     transition: .3s;
@@ -683,6 +690,16 @@
     aspect-ratio: 1 / 1;
     justify-content: center;
     overflow: hidden;
+    position: relative;
+  }
+
+  /* Horizontal Row Style for Dashboard Home */
+  .dashboard-grid .internship-item {
+    flex-direction: row;
+    aspect-ratio: auto;
+    text-align: left;
+    padding: 16px 20px;
+    justify-content: flex-start;
   }
 
   .internship-item:hover {
@@ -692,18 +709,26 @@
   }
 
   .company-logo {
-    width: 56px;
-    height: 56px;
-    border-radius: 14px;
+    width: 65px;
+    height: 65px;
+    border-radius: 18px;
     background: linear-gradient(135deg, var(--amber), var(--terra));
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'Outfit', sans-serif;
-    font-size: 24px;
+    font-size: 26px;
     font-weight: 800;
     color: #fff;
     flex-shrink: 0;
+    box-shadow: 0 8px 16px rgba(200, 131, 26, 0.2);
+  }
+
+  .dashboard-grid .company-logo {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    border-radius: 14px;
   }
 
   .internship-details {
@@ -712,11 +737,11 @@
 
   .internship-details h4 {
     font-family: 'Outfit', sans-serif;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: var(--ink);
-    margin-bottom: 2px;
-    line-height: 1.2;
+    margin-bottom: 4px;
+    line-height: 1.3;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     line-clamp: 2;
@@ -725,18 +750,29 @@
   }
 
   .company-name {
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 600;
     color: var(--coral);
-    margin-bottom: 5px;
+    margin-bottom: 8px;
   }
 
   .internship-meta {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
     margin-top: 5px;
+  }
+
+  .dashboard-grid .internship-meta {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .dashboard-grid .internship-meta .meta-tag {
+    background: rgba(255, 255, 255, 0.5);
+    border: none;
   }
 
   .meta-tag {
@@ -747,27 +783,21 @@
     font-weight: 600;
     color: var(--text-muted);
     background: var(--card-bg);
-    padding: 3px 8px;
-    border-radius: 6px;
+    padding: 4px 10px;
+    border-radius: 8px;
     border: 1px solid var(--border);
     white-space: nowrap;
   }
 
-  .meta-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-muted);
-    background: var(--card-bg);
-    padding: 4px 10px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-  }
-
   .meta-tag i {
     color: var(--amber);
+  }
+
+  /* Specific view button placement for rows */
+  .dashboard-grid .internship-item .view-btn {
+    margin-left: auto;
+    padding: 10px 20px;
+    flex-shrink: 0;
   }
 
   .profile-card {
