@@ -136,10 +136,69 @@
 
   body {
     font-family: 'Inter', sans-serif;
-    background: var(--cream);
+    background: transparent !important;
+    /* Made host body transparent to show pseudo-bg */
     color: var(--text);
-    transition: background 0.4s, color 0.4s;
-    overflow-x: hidden
+    transition: all 0.4s;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Boost visibility for small text components */
+  .stat-label,
+  .sidebar-title,
+  .user-role,
+  .page-subtitle {
+    color: var(--text) !important;
+    opacity: 1 !important;
+    font-weight: 600 !important;
+  }
+
+  [data-theme="light"] .stat-label,
+  [data-theme="light"] .sidebar-title {
+    color: #4A2E1A !important;
+    /* High contrast ink for light mode */
+  }
+
+  /* Full Page Moving Background (Consistent with Student) */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background-image: url('https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=2000&q=80');
+    /* Moody professional office */
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.6);
+    /* Slightly darker */
+    animation: slow-zoom 50s infinite alternate ease-in-out;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: rgba(250, 243, 232, 0.7);
+    /* Reduced light overlay opacity to show background better but kept it dark enough for contrast */
+    transition: background 0.4s;
+  }
+
+  [data-theme="dark"] body::after {
+    background: rgba(14, 7, 3, 0.85);
+    /* Darker and more focused */
+  }
+
+  @keyframes slow-zoom {
+    0% {
+      transform: scale(1) translate(0, 0);
+    }
+
+    100% {
+      transform: scale(1.1) translate(-1%, -1%);
+    }
   }
 
   .topbar {
@@ -450,12 +509,13 @@
     overflow: hidden;
   }
 
-  /* Dashboard aesthetics */
+  /* Dashboard aesthetics - Legacy Blob Container (Now Transparent) */
   .dashboard-bg {
     position: fixed;
     inset: 0;
-    z-index: -1;
-    background: var(--cream);
+    z-index: -3;
+    /* Move behind our moving bg */
+    background: transparent;
     overflow: hidden;
   }
 
@@ -463,7 +523,8 @@
     position: absolute;
     filter: blur(100px);
     border-radius: 50%;
-    opacity: 0.15;
+    opacity: 0.05;
+    /* Reduced opacity for blobs */
     transition: .5s;
     animation: move-blobs 25s infinite alternate ease-in-out;
   }

@@ -290,18 +290,14 @@
 <body>
     <%- include('../partials/dashboard/student_sidebar', { activePage: activePage }) %>
 
-        <div class="dashboard-bg">
-            <div class="blob blob-1"></div>
-            <div class="blob blob-2"></div>
-            <div class="blob blob-3"></div>
-        </div>
+
 
 
         <% if (activePage==='dashboard' ) { %>
             <header class="header">
                 <div class="header-left">
                     <h1>Member <span>Portal</span></h1>
-                    <p>Track your applications and explore new opportunities.</p>
+                    <p style="color: #000; font-weight: 500;">Track your applications and explore new opportunities.</p>
                 </div>
                 <div class="header-right">
                     <div class="search-box">
@@ -359,43 +355,60 @@
                     <div class="card reveal">
                         <div class="card-header">
                             <h2 class="card-title"><i class="fas fa-magic"></i> Recent Openings</h2>
-                            <a href="/student/dashboard?tab=browse" class="view-btn">Explore All</a>
+                            <a href="/internships" class="view-btn">Explore All</a>
                         </div>
-                        <div class="internship-list">
-                            <% if (internships && internships.length> 0) { %>
-                                <% internships.forEach(function(item) { %>
-                                    <div class="internship-item">
-                                        <div class="company-logo">
+                        <div class="internship-list recent-grid">
+                            <% const
+                                recentImages=[ 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&q=80'
+                                , 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&q=80'
+                                , 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=400&q=80'
+                                , 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=400&q=80'
+                                , 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400&q=80'
+                                , 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&q=80' ]; %>
+                                <% if (internships && internships.length> 0) { %>
+                                    <% internships.forEach(function(item, index) { %>
+                                        <div class="int-card" onclick="location.href='/internships/<%= item._id %>'">
                                             <% const cName=item.companyName || (item.company &&
                                                 (item.company.companyName || item.company.name)) || 'CO' ; %>
-                                                <%= cName.charAt(0).toUpperCase() %>
+                                                <div class="int-card-image-container">
+                                                    <img src="<%= recentImages[index % recentImages.length] %>"
+                                                        class="int-card-image" alt="Job Image">
+                                                    <div class="int-logo">
+                                                        <%= cName.charAt(0).toUpperCase() %>
+                                                    </div>
+                                                </div>
+                                                <div class="int-content">
+                                                    <h4 class="int-title">
+                                                        <%= item.title %>
+                                                    </h4>
+                                                    <div class="int-company">
+                                                        <%= cName %>
+                                                    </div>
+                                                    <div class="int-meta">
+                                                        <span><i class="fas fa-map-marker-alt"></i>
+                                                            <%= item.location || 'Remote' %>
+                                                        </span>
+                                                        <span><i class="fas fa-clock"></i>
+                                                            <%= item.duration || '3 Months' %>
+                                                        </span>
+                                                    </div>
+                                                    <div class="int-tags">
+                                                        <span class="tag">
+                                                            <%= item.category || 'Tech' %>
+                                                        </span>
+                                                        <span class="tag">Active</span>
+                                                    </div>
+                                                </div>
                                         </div>
-                                        <div class="internship-details">
-                                            <h4>
-                                                <%= item.title %>
-                                            </h4>
-                                            <div class="company-name">
-                                                <%= cName %>
-                                            </div>
-                                            <div class="internship-meta">
-                                                <span class="meta-tag"><i class="fas fa-location-arrow"></i>
-                                                    <%= item.location || 'Remote' %>
-                                                </span>
-                                                <span class="meta-tag"><i class="fas fa-calendar"></i>
-                                                    <%= item.duration || '3 Months' %>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <a href="/internships/<%= item._id %>" class="view-btn">Apply Now</a>
-                                    </div>
-                                    <% }); %>
-                                        <% } else { %>
-                                            <div style="text-align:center; padding: 50px 0; color:var(--text-muted)">
-                                                <i class="fas fa-folder-open"
-                                                    style="font-size:3rem; opacity:0.2; margin-bottom:15px"></i>
-                                                <p>No matches yet. Keep exploring!</p>
-                                            </div>
-                                            <% } %>
+                                        <% }); %>
+                                            <% } else { %>
+                                                <div
+                                                    style="text-align:center; padding: 50px 0; color:var(--text-muted)">
+                                                    <i class="fas fa-folder-open"
+                                                        style="font-size:3rem; opacity:0.2; margin-bottom:15px"></i>
+                                                    <p>No matches yet. Keep exploring!</p>
+                                                </div>
+                                                <% } %>
                         </div>
                     </div>
                 </div>
@@ -435,14 +448,16 @@
                     </div>
 
                     <div class="card reveal"
-                        style="background: linear-gradient(135deg, var(--coral), var(--rose)); border: none;">
+                        style="background: linear-gradient(135deg, rgba(90,122,92,0.1), rgba(59,130,246,0.1)); border: 1px solid var(--border); backdrop-filter: blur(10px);">
                         <h4
-                            style="color:#fff; font-family:'Playfair Display', serif; font-size:1.2rem; margin-bottom:10px">
+                            style="color:var(--ink); font-family:'Outfit', sans-serif; font-size:1.3rem; font-weight:700; margin-bottom:12px">
                             Need Assistance?</h4>
-                        <p style="color:rgba(255,255,255,0.8); font-size:13px; line-height:1.6; margin-bottom:15px">Our
-                            career experts are here to help you land your first role.</p>
+                        <p
+                            style="color:var(--text); font-size:14px; line-height:1.6; margin-bottom:18px; font-weight:500">
+                            Our
+                            career experts are here to help you land your first role. We provide 1-on-1 mentorship.</p>
                         <a href="/contact"
-                            style="display:inline-block; background:rgba(255,255,255,0.2); color:#fff; padding:10px 20px; border-radius:10px; text-decoration:none; font-weight:700; font-size:12px; border:1px solid rgba(255,255,255,0.3)">Book
+                            style="display:inline-block; background:var(--coral); color:#fff; padding:12px 24px; border-radius:12px; text-decoration:none; font-weight:700; font-size:13px; transition: .3s; text-align:center;">Book
                             Consultation</a>
                     </div>
                 </div>
@@ -463,59 +478,72 @@
 
                 <div class="card reveal" style="margin-top:20px">
                     <% if (applications && applications.length> 0) { %>
-                        <div class="internship-list">
-                            <% applications.forEach(function(app) { %>
-                                <div class="internship-item">
-                                    <div class="company-logo">
+                        <div class="internship-list applications-grid">
+                            <% const
+                                appImages=[ 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=400&q=80'
+                                , 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&q=80'
+                                , 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=400&q=80'
+                                , 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&q=80'
+                                , 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&q=80' ]; %>
+                                <% applications.forEach(function(app, index) { %>
+                                    <div class="int-card" style="cursor: default;">
                                         <% var cName=app.internship ? ((app.internship.company &&
                                             app.internship.company.companyName) ? app.internship.company.companyName :
                                             (app.internship.companyName || '' )) : '' ; %>
-                                            <%= cName ? cName.charAt(0).toUpperCase() : 'C' %>
-                                    </div>
-                                    <div class="internship-details">
-                                        <h4>
-                                            <%= app.internship ? app.internship.title : 'Internship' %>
-                                        </h4>
-                                        <div class="company-name">
-                                            <%= cName || 'Company' %>
-                                        </div>
-                                        <div class="internship-meta">
-                                            <span class="meta-tag"><i class="fas fa-calendar"></i> Applied on <%= new
-                                                    Date(app.appliedAt).toLocaleDateString() %></span>
-                                            <span class="status-badge <%= app.status %>">
-                                                <%= app.status.replace(/_/g, ' ' ) %>
-                                            </span>
-                                        </div>
-                                        <% if (app.status==='interview_scheduled' ) { %>
-                                            <div
-                                                style="margin-top:15px; background:rgba(217,95,59,0.05); padding:12px; border-radius:12px; border:1px dashed var(--coral)">
-                                                <div
-                                                    style="font-weight:700; color:var(--coral); font-size:13px; margin-bottom:4px">
-                                                    <i class="fas fa-clock"></i> INTERVIEW SCHEDULED
+                                            <div class="int-card-image-container" style="height: 100px;">
+                                                <img src="<%= appImages[index % appImages.length] %>"
+                                                    class="int-card-image" alt="Job Image">
+                                                <div class="int-logo" style="width:36px; height:36px; font-size:14px;">
+                                                    <%= cName ? cName.charAt(0).toUpperCase() : 'C' %>
                                                 </div>
-                                                <div style="font-size:14px; color:var(--ink); font-weight:600">
-                                                    <%= new Date(app.interviewDate).toLocaleString([], {
-                                                        dateStyle: 'long' , timeStyle: 'short' }) %>
-                                                </div>
-                                                <% if (app.interviewNote) { %>
-                                                    <p style="font-size:12px; color:var(--text-muted); margin-top:5px">
-                                                        <%= app.interviewNote %>
-                                                    </p>
-                                                    <% } %>
                                             </div>
-                                            <% } %>
+                                            <div class="int-content" style="padding:15px;">
+                                                <h4 class="int-title" style="font-size:15px;">
+                                                    <%= app.internship ? app.internship.title : 'Internship' %>
+                                                </h4>
+                                                <div class="int-company" style="font-size:12px; margin-bottom:8px;">
+                                                    <%= cName || 'Company' %>
+                                                </div>
+
+                                                <div class="int-meta" style="font-size:11px; gap:8px;">
+                                                    <span><i class="fas fa-calendar"></i>
+                                                        <%= new Date(app.appliedAt).toLocaleDateString() %>
+                                                    </span>
+                                                    <span class="tag <%= app.status %>"
+                                                        style="background:var(--coral); color:#fff; border:none;">
+                                                        <%= app.status.replace(/_/g, ' ' ) %>
+                                                    </span>
+                                                </div>
+
+                                                <% if (app.status==='interview_scheduled' ) { %>
+                                                    <div
+                                                        style="margin-top:10px; background:rgba(217,95,59,0.1); padding:8px; border-radius:10px; border:1px dashed var(--coral)">
+                                                        <div
+                                                            style="font-weight:700; color:var(--coral); font-size:11px;">
+                                                            <i class="fas fa-clock"></i> INTERVIEW: <%= new
+                                                                Date(app.interviewDate).toLocaleDateString() %>
+                                                        </div>
+                                                    </div>
+                                                    <% } %>
+
+                                                        <div class="action-buttons"
+                                                            style="margin-top:12px; display:flex; gap:8px;">
+                                                            <a href="/internships/browse" class="view-btn"
+                                                                style="padding:6px 12px; font-size:10px; background:var(--sage); color:#fff;">Details</a>
+                                                            <% if (app.status==='applied' || app.status==='under_review'
+                                                                ) { %>
+                                                                <form
+                                                                    action="/student/applications/<%= app._id %>/withdraw"
+                                                                    method="POST"
+                                                                    onsubmit="return confirm('Withdraw application?')">
+                                                                    <button type="submit" class="view-btn"
+                                                                        style="padding:6px 12px; font-size:10px; background:rgba(181,56,74,0.1); color:var(--rose); border:none;">Withdraw</button>
+                                                                </form>
+                                                                <% } %>
+                                                        </div>
+                                            </div>
                                     </div>
-                                    <div class="action-buttons">
-                                        <% if (app.status==='applied' || app.status==='under_review' ) { %>
-                                            <form action="/student/applications/<%= app._id %>/withdraw" method="POST"
-                                                onsubmit="return confirm('Withdraw application?')">
-                                                <button type="submit" class="view-btn"
-                                                    style="background:rgba(181,56,74,0.1); color:var(--rose)">Withdraw</button>
-                                            </form>
-                                            <% } %>
-                                    </div>
-                                </div>
-                                <% }); %>
+                                    <% }); %>
                         </div>
                         <% } else { %>
                             <div style="text-align:center; padding:60px 20px">
@@ -524,7 +552,7 @@
                                 <h2>No applications yet</h2>
                                 <p style="color:var(--text-muted); margin-bottom:30px">Start applying to see them here.
                                 </p>
-                                <a href="/student/dashboard?tab=browse" class="view-btn"
+                                <a href="/internships" class="view-btn"
                                     style="background:var(--coral); color:#fff; padding:12px 24px">Explore
                                     Internships</a>
                             </div>

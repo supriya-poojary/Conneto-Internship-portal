@@ -11,6 +11,7 @@ const internshipSchema = new mongoose.Schema({
     stipend: { type: Number },        // in INR/month; 0 = unpaid
     skills: [{ type: String }],
     openings: { type: Number, default: 1 },
+    image: { type: String },
     deadline: { type: Date },
     isActive: { type: Boolean, default: true },
     createdAt: { type: Date, default: Date.now }
