@@ -1,308 +1,646 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Account | Conneto — Internship Portal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script>
-      (function(){
-        const t = localStorage.getItem('conneto-theme') || 'light';
-        document.documentElement.setAttribute('data-theme', t);
-      })();
+        (function () {
+            const t = localStorage.getItem('conneto-theme') || 'light';
+            document.documentElement.setAttribute('data-theme', t);
+        })();
     </script>
     <style>
-    :root {
-      --coral:       #D95F3B;
-      --coral-light: #F07A56;
-      --rose:        #B5384A;
-      --amber:       #C8831A;
-      --amber-light: #E8A030;
-      --sage:        #5A7A5C;
-      --sage-light:  #7A9E7C;
-      --terra:       #A0522D;
-      --terra-light: #C4723F;
-      --cream:       #FAF3E8;
-      --cream2:      #F5EAD8;
-      --warm-white:  #FFF8F0;
-      --ink:         #2C1A0E;
-      --ink2:        #4A2E1A;
-      --text:        #3D2B1F;
-      --text-muted:  #7A5C4A;
-      --border:      rgba(160,82,45,0.15);
-      --shadow:      rgba(44,26,14,0.12);
-      --card-bg:     rgba(255,248,240,0.95);
-      --auth-overlay: linear-gradient(135deg, rgba(90,122,92,0.4) 0%, rgba(44,26,14,0.2) 100%);
-    }
-    [data-theme="dark"] {
-      --cream:       #1C0F08;
-      --cream2:      #251508;
-      --warm-white:  #1A0D06;
-      --ink:         #FAF3E8;
-      --ink2:        #F0E0C8;
-      --text:        #E8D5BC;
-      --text-muted:  #B8937A;
-      --border:      rgba(200,131,26,0.2);
-      --shadow:      rgba(0,0,0,0.4);
-      --card-bg:     rgba(37,21,8,0.95);
-      --auth-overlay: linear-gradient(135deg, rgba(20,35,22,0.85) 0%, rgba(10,5,2,0.7) 100%);
-    }
+        :root {
+            --coral: #D95F3B;
+            --coral-light: #F07A56;
+            --rose: #B5384A;
+            --amber: #C8831A;
+            --amber-light: #E8A030;
+            --sage: #5A7A5C;
+            --sage-light: #7A9E7C;
+            --terra: #A0522D;
+            --terra-light: #C4723F;
+            --cream: #FAF3E8;
+            --cream2: #F5EAD8;
+            --warm-white: #FFF8F0;
+            --ink: #2C1A0E;
+            --ink2: #4A2E1A;
+            --text: #3D2B1F;
+            --text-muted: #7A5C4A;
+            --border: rgba(160, 82, 45, 0.15);
+            --shadow: rgba(44, 26, 14, 0.12);
+            --card-bg: rgba(255, 248, 240, 0.95);
+            --auth-overlay: linear-gradient(135deg, rgba(90, 122, 92, 0.4) 0%, rgba(44, 26, 14, 0.2) 100%);
+        }
 
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--text);transition:background 0.4s,color 0.4s;min-height:100vh;display:flex}
+        [data-theme="dark"] {
+            --cream: #1C0F08;
+            --cream2: #251508;
+            --warm-white: #1A0D06;
+            --ink: #FAF3E8;
+            --ink2: #F0E0C8;
+            --text: #E8D5BC;
+            --text-muted: #B8937A;
+            --border: rgba(200, 131, 26, 0.2);
+            --shadow: rgba(0, 0, 0, 0.4);
+            --card-bg: rgba(37, 21, 8, 0.95);
+            --auth-overlay: linear-gradient(135deg, rgba(20, 35, 22, 0.85) 0%, rgba(10, 5, 2, 0.7) 100%);
+        }
 
-    .auth-container { display: flex; width: 100%; min-height: 100vh; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
 
-    .auth-left {
-      width: 40%; 
-      position: relative;
-      background: #0a0502;
-      padding: 50px; 
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      overflow: hidden;
-      border-right: 1px solid rgba(255,248,240,0.05);
-    }
-    .auth-left-bg {
-      position: absolute;
-      inset: 0;
-      background-image: url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?ixlib=rb-4.0.3&auto=format&fit=crop&w=1740&q=80');
-      background-size: cover;
-      background-position: center;
-      opacity: 0.8;
-    }
-    [data-theme="dark"] .auth-left-bg {
-      opacity: 0.5;
-      filter: contrast(1.1) brightness(0.8);
-    }
-    .auth-left-bg::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--auth-overlay);
-      transition: background 0.4s;
-    }
-    .auth-content { position: relative; z-index: 2; }
-    .auth-logo { font-family: 'Outfit', sans-serif; font-size: 2rem; font-weight: 800; color: #fff; margin-bottom: 24px; text-decoration: none; display: block; }
-    .auth-logo span { color: var(--coral-light); }
-    .auth-title { font-family: 'Outfit', sans-serif; font-size: 2.4rem; font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 20px; }
-    .feat-list { list-style: none; margin-top: 30px; }
-    .feat-item { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 18px; color: rgba(255,255,255,0.95); font-weight: 500; font-size: 15px; }
-    .feat-item i { color: var(--amber-light); font-size: 18px; margin-top: 4px; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--cream);
+            color: var(--text);
+            transition: background 0.4s, color 0.4s;
+            min-height: 100vh;
+            display: flex
+        }
 
-    .auth-right {
-      width: 60%; /* Increased from 55% */
-      background: var(--cream);
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 40px; /* Reduced from 60px */
-      overflow-y: auto;
-      position: relative;
-    }
-    .form-box { width: 100%; max-width: 440px; padding: 0; }
-    .theme-toggle-wrap { position: absolute; top: 30px; right: 30px; }
-    .theme-btn { width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--border); background: var(--card-bg); color: var(--amber); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; transition: .3s; }
-    .theme-btn:hover { background: var(--amber); color: #fff; transform: rotate(15deg); }
+        .auth-container {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
 
-    .back-home { display: flex; align-items: center; gap: 8px; color: var(--text-muted); text-decoration: none; font-weight: 700; font-size: 13px; margin-bottom: 24px; transition: .3s; }
-    .back-home:hover { color: var(--coral); transform: translateX(-5px); }
+        .auth-left {
+            width: 40%;
+            position: relative;
+            background: #0a0502;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+            border-right: 1px solid rgba(255, 248, 240, 0.05);
+        }
 
-    .form-header { margin-bottom: 30px; }
-    .form-header h2 { font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 800; color: var(--ink); margin-bottom: 8px; }
-    .form-header p { color: var(--text-muted); font-size: 15px; font-weight: 500; }
+        .auth-left-bg {
+            position: absolute;
+            inset: 0;
+            background-image: url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?ixlib=rb-4.0.3&auto=format&fit=crop&w=1740&q=80');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.8;
+        }
 
-    /* Role Selector */
-    .role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
-    .role-card {
-      background: var(--card-bg);
-      border: 2px solid var(--border);
-      padding: 20px;
-      border-radius: 18px;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      position: relative;
-      overflow: hidden;
-    }
-    .role-card:hover { transform: translateY(-3px); border-color: var(--amber); box-shadow: 0 10px 30px var(--shadow); }
-    .role-card i { font-size: 24px; color: var(--text-muted); transition: .3s; }
-    .role-card h4 { font-weight: 800; font-size: 16px; color: var(--ink); transition: .3s; }
-    .role-card p { font-size: 11px; color: var(--text-muted); line-height: 1.4; transition: .3s; }
-    .role-card input { display: none; }
-    .role-card.selected { border-color: var(--coral); background: var(--nav-bg); box-shadow: 0 15px 35px rgba(217,95,59,0.2); }
-    .role-card.selected i { color: var(--coral); transform: scale(1.1); }
-    .role-card.selected h4 { color: var(--coral); }
-    .role-card.selected p { color: var(--text); }
-    .role-card.selected::after { content: '\f058'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; top: 15px; right: 15px; color: var(--coral); font-size: 18px; }
+        .auth-left-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--auth-overlay);
+            transition: background 0.4s;
+        }
 
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .form-group { margin-bottom: 14px; } 
-    .form-group label { display: block; font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .form-input { width: 100%; padding: 12px 16px; background: var(--warm-white); border: 1.5px solid var(--border); border-radius: 12px; font-family: inherit; font-size: 14px; color: var(--ink); transition: .3s; outline: none; }
-    .form-input:focus { border-color: var(--coral); background: #fff; box-shadow: 0 0 0 4px rgba(217,95,59,0.1); }
+        .auth-content {
+            position: relative;
+            z-index: 2;
+        }
 
-    .btn-submit { width: 100%; padding: 16px; background: linear-gradient(135deg, var(--coral), var(--rose)); color: #fff; border: none; border-radius: 12px; font-family: inherit; font-size: 15px; font-weight: 800; cursor: pointer; transition: .3s; box-shadow: 0 8px 20px rgba(217,95,59,0.25); margin-top: 5px; }
-    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(217,95,59,0.35); }
+        .auth-logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 24px;
+            text-decoration: none;
+            display: block;
+        }
 
-    .form-footer { text-align: center; margin-top: 24px; font-size: 14px; font-weight: 500; color: var(--text-muted); }
-    .form-footer a { color: var(--coral); font-weight: 700; text-decoration: none; }
+        .auth-logo span {
+            color: var(--coral-light);
+        }
 
-    .error-box { padding: 12px 16px; border-radius: 10px; margin-bottom: 20px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 10px; background: rgba(181,56,74,0.1); color: var(--rose); border: 1px solid var(--rose); }
+        .auth-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
 
-    @media (max-width: 1024px) {
-      .auth-left { display: none; }
-      .auth-right { width: 100%; padding: 40px 24px; }
-    }
-    @media (max-width: 600px) {
-      .form-row { grid-template-columns: 1fr; gap: 0; }
-    }
-    /* DARK MODE DYNAMIC BACKGROUND */
-    .dm-bg-blobs { position: fixed; inset: 0; z-index: -1; overflow: hidden; display: none; pointer-events: none; }
-    [data-theme="dark"] .dm-bg-blobs { display: block; }
-    .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.12; animation: move-blobs 25s infinite alternate ease-in-out; }
-    .blob-1 { width: 400px; height: 400px; background: var(--coral); top: -100px; left: -100px; }
-    .blob-2 { width: 500px; height: 500px; background: var(--amber); bottom: -150px; right: 10%; }
-    @keyframes move-blobs {
-        0% { transform: translate(0, 0) scale(1); }
-        50% { transform: translate(100px, 50px) scale(1.1); }
-        100% { transform: translate(-50px, 100px) scale(0.9); }
-    }
+        .feat-list {
+            list-style: none;
+            margin-top: 30px;
+        }
+
+        .feat-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 18px;
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        .feat-item i {
+            color: var(--amber-light);
+            font-size: 18px;
+            margin-top: 4px;
+        }
+
+        .auth-right {
+            width: 60%;
+            background: var(--cream);
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 40px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* Moving background for auth right - Multi-color blend */
+        .auth-right::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 10% 10%, rgba(90, 122, 92, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 90% 10%, rgba(59, 130, 246, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 10% 90%, rgba(200, 131, 26, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.12) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+            animation: hue-pulse 15s infinite alternate ease-in-out;
+        }
+
+        @keyframes hue-pulse {
+            0% {
+                filter: hue-rotate(0deg);
+            }
+
+            100% {
+                filter: hue-rotate(20deg);
+            }
+        }
+
+        .moving-dots {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .dot {
+            position: absolute;
+            background: var(--sage);
+            border-radius: 50%;
+            opacity: 0.15;
+            animation: float-dots 20s infinite linear;
+        }
+
+        @keyframes float-dots {
+            0% {
+                transform: translateY(0) translateX(0);
+            }
+
+            50% {
+                transform: translateY(-40px) translateX(30px);
+            }
+
+            100% {
+                transform: translateY(0) translateX(0);
+            }
+        }
+
+        .form-box {
+            width: 100%;
+            max-width: 480px;
+            padding: 40px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            backdrop-filter: blur(15px);
+            position: relative;
+            z-index: 2;
+            margin: 40px 0;
+            overflow: hidden;
+        }
+
+        /* Box pattern & multi-color blend colors */
+        .form-box::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at 10% 10%, rgba(90, 122, 92, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 10% 90%, rgba(200, 131, 26, 0.1) 0%, transparent 40%),
+                url('https://www.transparenttextures.com/patterns/cubes.png');
+            opacity: 0.2;
+            z-index: -1;
+        }
+
+        [data-theme="dark"] .form-box::before {
+            opacity: 0.3;
+            filter: invert(1);
+        }
+
+        .theme-toggle-wrap {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            z-index: 10;
+        }
+
+        .theme-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            color: var(--amber);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: .3s;
+        }
+
+        .theme-btn:hover {
+            background: var(--amber);
+            color: #fff;
+            transform: rotate(15deg);
+        }
+
+        .back-home {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 24px;
+            transition: .3s;
+        }
+
+        .back-home:hover {
+            color: var(--coral);
+            transform: translateX(-5px);
+        }
+
+        .form-header {
+            margin-bottom: 30px;
+        }
+
+        .form-header h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--ink);
+            margin-bottom: 8px;
+        }
+
+        .form-header p {
+            color: var(--text-muted);
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        /* Role Selector */
+        .role-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        .role-card {
+            background: var(--warm-white);
+            border: 1.5px solid var(--border);
+            padding: 20px;
+            border-radius: 18px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+        }
+
+        .role-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--amber);
+        }
+
+        .role-card i {
+            font-size: 24px;
+            color: var(--text-muted);
+            transition: .3s;
+        }
+
+        .role-card h4 {
+            font-weight: 800;
+            font-size: 16px;
+            color: var(--ink);
+        }
+
+        .role-card p {
+            font-size: 11px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .role-card.selected {
+            border-color: var(--coral);
+            background: #fff;
+            box-shadow: 0 10px 20px rgba(217, 95, 59, 0.1);
+        }
+
+        .role-card.selected i {
+            color: var(--coral);
+        }
+
+        .role-card.selected::after {
+            content: '\f058';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: var(--coral);
+        }
+
+        .role-card input {
+            display: none;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--warm-white);
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 14px;
+            color: var(--ink);
+            transition: .3s;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--coral);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(217, 95, 59, 0.1);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--coral), var(--rose));
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: .3s;
+            box-shadow: 0 8px 20px rgba(217, 95, 59, 0.25);
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(217, 95, 59, 0.35);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .form-footer a {
+            color: var(--coral);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .error-box {
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(181, 56, 74, 0.1);
+            color: var(--rose);
+            border: 1px solid var(--rose);
+        }
+
+        @media (max-width: 1024px) {
+            .auth-left {
+                display: none;
+            }
+
+            .auth-right {
+                width: 100%;
+                padding: 40px 24px;
+            }
+
+            .form-box {
+                border: none;
+                background: transparent;
+                padding: 0;
+                box-shadow: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+        }
     </style>
 </head>
+
 <body>
-<div class="dm-bg-blobs">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-</div>
 
-<div class="auth-container">
-    <div class="auth-left">
-        <div class="auth-left-bg"></div>
-        <div class="auth-content">
-            <a href="/" class="auth-logo">Conn<span>eto</span></a>
-            <h1 class="auth-title">The Future of <em>Talent</em> Connection.</h1>
-            <ul class="feat-list">
-                <li class="feat-item"><i class="fas fa-check-circle"></i> Access premium internship listings.</li>
-                <li class="feat-item"><i class="fas fa-check-circle"></i> Smart matching academic profiles.</li>
-                <li class="feat-item"><i class="fas fa-check-circle"></i> Seamless application tracking.</li>
-                <li class="feat-item"><i class="fas fa-check-circle"></i> Direct contact with hiring managers.</li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="auth-right">
-        <div class="theme-toggle-wrap">
-            <button class="theme-btn" id="themeToggle"><i class="fas fa-moon"></i></button>
+    <div class="auth-container">
+        <div class="auth-left">
+            <div class="auth-left-bg"></div>
+            <div class="auth-content">
+                <a href="/" class="auth-logo">Conn<span>eto</span></a>
+                <h1 class="auth-title">The Future of <em>Talent</em> Connection.</h1>
+                <ul class="feat-list">
+                    <li class="feat-item"><i class="fas fa-check-circle"></i> Access premium internship listings.</li>
+                    <li class="feat-item"><i class="fas fa-check-circle"></i> Smart matching academic profiles.</li>
+                    <li class="feat-item"><i class="fas fa-check-circle"></i> Seamless application tracking.</li>
+                    <li class="feat-item"><i class="fas fa-check-circle"></i> Direct contact with hiring managers.</li>
+                </ul>
+            </div>
         </div>
 
-        <div class="form-box">
-            <a href="/" class="back-home"><i class="fas fa-arrow-left"></i> Back to Homepage</a>
-            
-            <div class="form-header">
-                <h2>Join Conneto</h2>
-                <p>Create your account and start exploring today.</p>
+        <div class="auth-right">
+            <div class="moving-dots">
+                <div class="dot" style="width: 100px; height:100px; top: 10%; right: 10%; animation-delay: 0s;"></div>
+                <div class="dot" style="width: 60px; height:60px; bottom: 20%; left: 5%; animation-delay: -5s;"></div>
+                <div class="dot" style="width: 120px; height:120px; top: 40%; left: 15%; animation-delay: -10s;"></div>
+                <div class="dot" style="width: 80px; height:80px; bottom: 10%; right: 5%; animation-delay: -15s;"></div>
             </div>
 
-            <% if (typeof error !== 'undefined' && error) { %>
-                <div class="error-box"><i class="fas fa-exclamation-circle"></i> <%= error %></div>
-            <% } %>
+            <div class="theme-toggle-wrap">
+                <button class="theme-btn" id="themeToggle"><i class="fas fa-moon"></i></button>
+            </div>
 
-            <form method="POST" action="/auth/register">
-                <div class="form-group">
-                    <label>Join Conneto As...</label>
-                    <div class="role-grid">
-                        <label class="role-card selected" id="roleS">
-                            <input type="radio" name="role" value="student" checked>
-                            <i class="fas fa-user-graduate"></i>
-                            <h4>Student</h4>
-                            <p>Discover internships and build your portfolio.</p>
-                        </label>
-                        <label class="role-card" id="roleC">
-                            <input type="radio" name="role" value="company">
-                            <i class="fas fa-building"></i>
-                            <h4>Company</h4>
-                            <p>Post opportunities and recruit elite talent.</p>
-                        </label>
+            <div class="form-box">
+                <a href="/" class="back-home"><i class="fas fa-arrow-left"></i> Back to Homepage</a>
+
+                <div class="form-header">
+                    <h2>Join Conneto</h2>
+                    <p>Create your account and start exploring today.</p>
+                </div>
+
+                <% if (typeof error !=='undefined' && error) { %>
+                    <div class="error-box"><i class="fas fa-exclamation-circle"></i>
+                        <%= error %>
                     </div>
-                </div>
+                    <% } %>
 
-                <div class="form-group">
-                    <label for="name">Full Professional Name</label>
-                    <input type="text" id="name" name="name" class="form-input" placeholder="e.g. Johnathan Smith" required>
-                </div>
+                        <form method="POST" action="/auth/register">
+                            <div class="form-group">
+                                <label>Join Conneto As...</label>
+                                <div class="role-grid">
+                                    <label class="role-card selected" id="roleS">
+                                        <input type="radio" name="role" value="student" checked>
+                                        <i class="fas fa-user-graduate"></i>
+                                        <h4>Student</h4>
+                                        <p>Discover internships and build your portfolio.</p>
+                                    </label>
+                                    <label class="role-card" id="roleC">
+                                        <input type="radio" name="role" value="company">
+                                        <i class="fas fa-building"></i>
+                                        <h4>Company</h4>
+                                        <p>Post opportunities and recruit elite talent.</p>
+                                    </label>
+                                </div>
+                            </div>
 
-                <div class="form-group">
-                    <label for="email">Work/University Email</label>
-                    <input type="email" id="email" name="email" class="form-input" placeholder="e.g. j.smith@university.edu" required>
-                </div>
+                            <div class="form-group">
+                                <label for="name">Full Professional Name</label>
+                                <input type="text" id="name" name="name" class="form-input"
+                                    placeholder="e.g. Johnathan Smith" required>
+                            </div>
 
-                <div class="form-group" id="companyGroup" style="display:none">
-                    <label for="companyName">Company Name</label>
-                    <input type="text" id="companyName" name="companyName" class="form-input" placeholder="e.g. Global Tech Solutions">
-                </div>
+                            <div class="form-group">
+                                <label for="email">Work/University Email</label>
+                                <input type="email" id="email" name="email" class="form-input"
+                                    placeholder="e.g. j.smith@university.edu" required>
+                            </div>
 
-                <div class="form-group">
-                    <label for="password">Security Password</label>
-                    <input type="password" id="password" name="password" class="form-input" placeholder="At least 8 characters" required>
-                </div>
+                            <div class="form-group" id="companyGroup" style="display:none">
+                                <label for="companyName">Company Name</label>
+                                <input type="text" id="companyName" name="companyName" class="form-input"
+                                    placeholder="e.g. Global Tech Solutions">
+                            </div>
 
-                <button type="submit" class="btn-submit">Create Account <i class="fas fa-rocket" style="margin-left:8px"></i></button>
+                            <div class="form-group">
+                                <label for="password">Security Password</label>
+                                <input type="password" id="password" name="password" class="form-input"
+                                    placeholder="At least 8 characters" required>
+                            </div>
 
-                <p style="font-size:11px; color:var(--text-muted); text-align:center; margin-top:14px; font-weight:500">
-                    By joining, you agree to our <a href="#" style="color:var(--coral); font-weight:700; text-decoration:none">Terms</a> and <a href="#" style="color:var(--coral); font-weight:700; text-decoration:none">Privacy Policy</a>.
-                </p>
-            </form>
+                            <button type="submit" class="btn-submit">Create Account <i class="fas fa-rocket"
+                                    style="margin-left:8px"></i></button>
 
-            <p class="form-footer">
-                Already part of the network? <a href="/auth/login">Sign in</a>
-            </p>
+                            <p
+                                style="font-size:11px; color:var(--text-muted); text-align:center; margin-top:14px; font-weight:500">
+                                By joining, you agree to our <a href="#"
+                                    style="color:var(--coral); font-weight:700; text-decoration:none">Terms</a> and <a
+                                    href="#" style="color:var(--coral); font-weight:700; text-decoration:none">Privacy
+                                    Policy</a>.
+                            </p>
+                        </form>
+
+                        <p class="form-footer">
+                            Already part of the network? <a href="/auth/login">Sign in</a>
+                        </p>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-const roleS = document.getElementById('roleS');
-const roleC = document.getElementById('roleC');
-const companyGroup = document.getElementById('companyGroup');
-const compInput = document.getElementById('companyName');
+    <script>
+        const roleS = document.getElementById('roleS');
+        const roleC = document.getElementById('roleC');
+        const companyGroup = document.getElementById('companyGroup');
+        const compInput = document.getElementById('companyName');
 
-roleS.addEventListener('click', () => {
-    roleS.classList.add('selected');
-    roleC.classList.remove('selected');
-    companyGroup.style.display = 'none';
-    compInput.required = false;
-});
+        roleS.addEventListener('click', () => {
+            roleS.classList.add('selected');
+            roleC.classList.remove('selected');
+            companyGroup.style.display = 'none';
+            compInput.required = false;
+        });
 
-roleC.addEventListener('click', () => {
-    roleC.classList.add('selected');
-    roleS.classList.remove('selected');
-    companyGroup.style.display = 'block';
-    compInput.required = true;
-});
+        roleC.addEventListener('click', () => {
+            roleC.classList.add('selected');
+            roleS.classList.remove('selected');
+            companyGroup.style.display = 'block';
+            compInput.required = true;
+        });
 
-const themeToggle = document.getElementById('themeToggle');
-const html = document.documentElement;
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
 
-function updateTheme() {
-    const t = html.getAttribute('data-theme');
-    themeToggle.innerHTML = t==='dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-}
+        function updateTheme() {
+            const t = html.getAttribute('data-theme');
+            themeToggle.innerHTML = t === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        }
 
-themeToggle.addEventListener('click', () => {
-    const current = html.getAttribute('data-theme');
-    const next = current==='dark' ? 'light' : 'dark';
-    html.setAttribute('data-theme', next);
-    localStorage.setItem('conneto-theme', next);
-    updateTheme();
-});
-updateTheme();
-</script>
+        themeToggle.addEventListener('click', () => {
+            const current = html.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('conneto-theme', next);
+            updateTheme();
+        });
+        updateTheme();
+    </script>
 </body>
+
 </html>

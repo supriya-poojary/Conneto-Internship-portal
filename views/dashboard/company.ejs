@@ -4,6 +4,67 @@
 <head>
     <%- include('../partials/dashboard/company_head', { title: 'Partner Portal | Company Dashboard' }) %>
         <style>
+            body {
+                font-family: 'Inter', sans-serif;
+                background: var(--bg);
+                color: var(--text);
+                line-height: 1.6;
+                transition: all 0.4s;
+                min-height: 100vh;
+                position: relative;
+                overflow-x: hidden;
+            }
+
+            body::before {
+                content: '';
+                position: fixed;
+                inset: 0;
+                z-index: -2;
+                background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');
+                background-size: cover;
+                background-position: center;
+                animation: slow-zoom 45s infinite alternate ease-in-out;
+            }
+
+            body::after {
+                content: '';
+                position: fixed;
+                inset: 0;
+                z-index: -1;
+                background: rgba(250, 243, 232, 0.85);
+                transition: background 0.4s;
+            }
+
+            [data-theme="dark"] body::after {
+                background: rgba(28, 15, 8, 0.9);
+            }
+
+            @keyframes slow-zoom {
+                0% {
+                    transform: scale(1) translate(0, 0);
+                }
+
+                100% {
+                    transform: scale(1.1) translate(-1%, -1%);
+                }
+            }
+
+            .card {
+                background: var(--card-bg) !important;
+                backdrop-filter: blur(12px) saturate(180%);
+                border: 1px solid var(--border);
+                border-radius: 20px;
+                padding: 24px;
+                position: relative;
+                overflow: hidden;
+                z-index: 1;
+            }
+
+            [data-theme="light"] .card {
+                background: rgba(255, 255, 255, 0.75) !important;
+                border: 1px solid rgba(160, 82, 45, 0.1);
+            }
+
             .stats-grid {
                 display: grid;
                 grid-template-columns: repeat(4, 1fr);
@@ -12,16 +73,36 @@
             }
 
             .stat-card {
-                background: var(--card-bg);
+                background: var(--card-bg) !important;
                 border: 1px solid var(--border);
                 border-radius: 24px;
                 padding: 24px;
-                box-shadow: 0 10px 30px var(--shadow);
-                transition: .3s;
+                box-shadow: none !important;
+                position: relative;
+                overflow: hidden;
+                z-index: 1;
             }
 
-            .stat-card:hover {
-                transform: translateY(-5px);
+            .stat-card::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background-image:
+                    radial-gradient(circle at 10% 10%, rgba(217, 95, 59, 0.06) 0%, transparent 50%),
+                    radial-gradient(circle at 90% 90%, rgba(90, 122, 92, 0.06) 0%, transparent 50%),
+                    url('https://www.transparenttextures.com/patterns/cubes.png');
+                opacity: 0.1;
+                pointer-events: none;
+                z-index: -1;
+            }
+
+            [data-theme="dark"] .stat-card::before {
+                opacity: 0.2;
+                filter: invert(1);
+                background-image:
+                    radial-gradient(circle at 10% 10%, rgba(217, 95, 59, 0.1) 0%, transparent 60%),
+                    radial-gradient(circle at 90% 90%, rgba(90, 122, 92, 0.1) 0%, transparent 60%),
+                    url('https://www.transparenttextures.com/patterns/cubes.png');
             }
 
             .stat-top {
@@ -169,6 +250,21 @@
                 margin-bottom: 24px;
                 position: relative;
                 overflow: hidden;
+                border: 1px solid var(--border);
+                z-index: 1;
+            }
+
+            .company-profile-card::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background-image:
+                    radial-gradient(circle at 20% 20%, rgba(217, 95, 59, 0.2) 0%, transparent 50%),
+                    url('https://www.transparenttextures.com/patterns/cubes.png');
+                opacity: 0.15;
+                filter: invert(1);
+                pointer-events: none;
+                z-index: -1;
             }
 
             .company-profile-card::after {
@@ -176,11 +272,11 @@
                 position: absolute;
                 bottom: -20px;
                 right: -20px;
-                width: 100px;
-                height: 100px;
+                width: 150px;
+                height: 150px;
                 background: var(--coral);
                 opacity: 0.2;
-                filter: blur(40px);
+                filter: blur(50px);
             }
 
             .company-avatar-lg {
