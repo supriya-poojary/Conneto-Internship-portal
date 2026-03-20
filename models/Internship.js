@@ -8,7 +8,9 @@ const internshipSchema = new mongoose.Schema({
     location: { type: String },
     type: { type: String, enum: ['remote', 'on-site', 'hybrid'], default: 'remote' },
     duration: { type: String },        // e.g. "2 months"
-    stipend: { type: Number },        // in INR/month; 0 = unpaid
+    paymentCategory: { type: String, enum: ['unpaid', 'stipend', 'paid'], default: 'unpaid' },
+    stipend: { type: Number, default: 0 },        // Company pays Student (INR/month)
+    fee: { type: Number, default: 0 },            // Student pays Company (Fee)
     skills: [{ type: String }],
     openings: { type: Number, default: 1 },
     image: { type: String },

@@ -297,7 +297,7 @@
             <header class="header">
                 <div class="header-left">
                     <h1>Member <span>Portal</span></h1>
-                    <p style="color: #000; font-weight: 500;">Track your applications and explore new opportunities.</p>
+                    <p class="header-subtitle">Track your applications and explore new opportunities.</p>
                 </div>
                 <div class="header-right">
                     <div class="search-box">
@@ -466,7 +466,7 @@
                 <header class="header">
                     <div class="header-left">
                         <h1>My Applications</h1>
-                        <p>Track all your internship applications in one place</p>
+                        <p class="header-subtitle">Track all your internship applications in one place</p>
                     </div>
                     <div class="header-right">
                         <a href="/internships" class="view-btn"
@@ -569,7 +569,7 @@
                             <header class="header">
                                 <div class="header-left">
                                     <h1>My <span>Portfolio</span></h1>
-                                    <p>Increase your visibility by completing your profile details.</p>
+                                    <p class="header-subtitle">Increase your visibility by completing your profile details.</p>
                                     <div style="display:flex; align-items:center; gap:15px; margin-top:10px">
                                         <div
                                             style="flex:1; max-width:200px; height:6px; background:var(--border); border-radius:10px; overflow:hidden">
@@ -679,32 +679,55 @@
                                         <div class="portfolio-grid" style="grid-template-columns: 1fr 1fr; gap: 30px;">
                                             <div class="portfolio-group">
                                                 <label class="portfolio-label">Degree Program</label>
-                                                <input type="text" name="degree" class="portfolio-input"
-                                                    style="padding: 15px 20px; font-size: 16px;"
-                                                    value="<%= profile.degree || '' %>"
-                                                    placeholder="e.g. Bachelor of Engineering">
+                                                <select name="degree" class="portfolio-input" style="padding: 15px 20px; font-size: 16px; height: auto;">
+                                                    <option value="">Select Degree</option>
+                                                    <option value="B.E / B.Tech" <%= profile.degree === 'B.E / B.Tech' ? 'selected' : '' %>>B.E / B.Tech</option>
+                                                    <option value="M.E / M.Tech" <%= profile.degree === 'M.E / M.Tech' ? 'selected' : '' %>>M.E / M.Tech</option>
+                                                    <option value="BCA" <%= profile.degree === 'BCA' ? 'selected' : '' %>>BCA</option>
+                                                    <option value="MCA" <%= profile.degree === 'MCA' ? 'selected' : '' %>>MCA</option>
+                                                    <option value="B.Sc" <%= profile.degree === 'B.Sc' ? 'selected' : '' %>>B.Sc</option>
+                                                    <option value="M.Sc" <%= profile.degree === 'M.Sc' ? 'selected' : '' %>>M.Sc</option>
+                                                    <option value="Diploma" <%= profile.degree === 'Diploma' ? 'selected' : '' %>>Diploma</option>
+                                                    <option value="MBA" <%= profile.degree === 'MBA' ? 'selected' : '' %>>MBA</option>
+                                                    <option value="Other" <%= profile.degree === 'Other' ? 'selected' : '' %>>Other</option>
+                                                </select>
                                             </div>
                                             <div class="portfolio-group">
                                                 <label class="portfolio-label">Department / Branch</label>
-                                                <input type="text" name="department" class="portfolio-input"
-                                                    style="padding: 15px 20px; font-size: 16px;"
-                                                    value="<%= profile.department || '' %>"
-                                                    placeholder="e.g. Computer Science & Engineering">
+                                                <select name="department" class="portfolio-input" style="padding: 15px 20px; font-size: 16px; height: auto;">
+                                                    <option value="">Select Department</option>
+                                                    <option value="Computer Science & Engineering" <%= profile.department === 'Computer Science & Engineering' ? 'selected' : '' %>>Computer Science & Engineering</option>
+                                                    <option value="Information Science & Engineering" <%= profile.department === 'Information Science & Engineering' ? 'selected' : '' %>>Information Science & Engineering</option>
+                                                    <option value="Electronics & Communication" <%= profile.department === 'Electronics & Communication' ? 'selected' : '' %>>Electronics & Communication</option>
+                                                    <option value="Mechanical Engineering" <%= profile.department === 'Mechanical Engineering' ? 'selected' : '' %>>Mechanical Engineering</option>
+                                                    <option value="Civil Engineering" <%= profile.department === 'Civil Engineering' ? 'selected' : '' %>>Civil Engineering</option>
+                                                    <option value="Electrical & Electronics" <%= profile.department === 'Electrical & Electronics' ? 'selected' : '' %>>Electrical & Electronics</option>
+                                                    <option value="Artificial Intelligence & ML" <%= profile.department === 'Artificial Intelligence & ML' ? 'selected' : '' %>>Artificial Intelligence & ML</option>
+                                                    <option value="Data Science" <%= profile.department === 'Data Science' ? 'selected' : '' %>>Data Science</option>
+                                                    <option value="Other" <%= profile.department === 'Other' ? 'selected' : '' %>>Other</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="portfolio-grid"
                                             style="grid-template-columns: 1fr 1fr 1fr; gap:30px;">
                                             <div class="portfolio-group">
                                                 <label class="portfolio-label">Current Semester</label>
-                                                <input type="number" name="semester" class="portfolio-input"
-                                                    style="padding: 15px 20px; font-size: 16px;"
-                                                    value="<%= profile.semester || '' %>" placeholder="7">
+                                                <select name="semester" class="portfolio-input" style="padding: 15px 20px; font-size: 16px; height: auto;">
+                                                    <option value="">Select Semester</option>
+                                                    <% [1,2,3,4,5,6,7,8].forEach(s => { %>
+                                                        <option value="<%= s %>" <%= (profile.semester == s) ? 'selected' : '' %>><%= s %><%= s === 1 ? 'st' : s === 2 ? 'nd' : s === 3 ? 'rd' : 'th' %> Semester</option>
+                                                    <% }) %>
+                                                </select>
                                             </div>
                                             <div class="portfolio-group">
                                                 <label class="portfolio-label">Graduation Year</label>
-                                                <input type="number" name="year" class="portfolio-input"
-                                                    style="padding: 15px 20px; font-size: 16px;"
-                                                    value="<%= profile.year || '' %>" placeholder="2024">
+                                                <select name="year" class="portfolio-input" style="padding: 15px 20px; font-size: 16px; height: auto;">
+                                                    <option value="">Select Year</option>
+                                                    <% const currentYear = new Date().getFullYear(); 
+                                                       for(let y = currentYear - 1; y <= currentYear + 6; y++) { %>
+                                                        <option value="<%= y %>" <%= (profile.year == y) ? 'selected' : '' %>><%= y %></option>
+                                                    <% } %>
+                                                </select>
                                             </div>
                                             <div class="portfolio-group">
                                                 <label class="portfolio-label">GPA / CGPA</label>
@@ -733,15 +756,20 @@
                                             </div>
                                             <div class="portfolio-group">
                                                 <label class="portfolio-label">State / Region</label>
-                                                <input type="text" name="state" class="portfolio-input"
-                                                    style="padding: 15px 20px; font-size: 16px;"
-                                                    value="<%= profile.state || '' %>" placeholder="e.g. Karnataka">
+                                                <select name="state" class="portfolio-input" style="padding: 15px 20px; font-size: 16px; height: auto;">
+                                                    <option value="">Select State</option>
+                                                    <% const states = ["Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal", "Andaman and Nicobar", "Chandigarh", "Dadra and Nagar Haveli", "Daman and Diu", "Delhi", "Lakshadweep", "Puducherry"]; 
+                                                       states.forEach(s => { %>
+                                                        <option value="<%= s %>" <%= profile.state === s ? 'selected' : '' %>><%= s %></option>
+                                                    <% }) %>
+                                                </select>
                                             </div>
                                             <div class="portfolio-group">
                                                 <label class="portfolio-label">Country</label>
-                                                <input type="text" name="country" class="portfolio-input"
-                                                    style="padding: 15px 20px; font-size: 16px;"
-                                                    value="<%= profile.country || '' %>" placeholder="e.g. India">
+                                                <select name="country" class="portfolio-input" style="padding: 15px 20px; font-size: 16px; height: auto;">
+                                                    <option value="India" <%= profile.country === 'India' || !profile.country ? 'selected' : '' %>>India</option>
+                                                    <option value="Other" <%= profile.country && profile.country !== 'India' ? 'selected' : '' %>>Other</option>
+                                                </select>
                                             </div>
                                         </div>
 

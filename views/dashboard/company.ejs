@@ -23,31 +23,17 @@
                 background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');
                 background-size: cover;
                 background-position: center;
-                animation: slow-zoom 45s infinite alternate ease-in-out;
+                filter: brightness(1);
+                animation: slow-zoom 40s infinite alternate ease-in-out;
+                transition: filter 0.4s;
             }
 
-            body::after {
-                content: '';
-                position: fixed;
-                inset: 0;
-                z-index: -1;
-                background: rgba(250, 243, 232, 0.85);
-                transition: background 0.4s;
+            [data-theme="dark"] body::before {
+                filter: brightness(0.5);
             }
 
-            [data-theme="dark"] body::after {
-                background: rgba(28, 15, 8, 0.9);
-            }
 
-            @keyframes slow-zoom {
-                0% {
-                    transform: scale(1) translate(0, 0);
-                }
 
-                100% {
-                    transform: scale(1.1) translate(-1%, -1%);
-                }
-            }
 
             .card {
                 background: var(--card-bg) !important;
@@ -580,7 +566,7 @@
                 <h1 class="page-title">Executive Sync, <span>
                         <%= user.name.split(' ')[0] %></span></h1>
             <p class="page-subtitle">Manage your internship pipeline and coordinate with top talent.</p>
-        <% } else if (activePage === ' applications') { %>
+        <% } else if (activePage === 'applications') { %>
                             <h1 class="page-title">Candidate Pipeline</h1>
                             <p class="page-subtitle">Review applications and manage recruitment stages.</p>
                             <% } %>
@@ -650,6 +636,9 @@
                                             </div>
                                             <div style="font-size:13px; color:var(--text-muted); font-weight:600">
                                                 <%= item.location || 'Remote' %> &bull; <%= item.type || 'Internship' %>
+                                                <% if (item.deadline) { %>
+                                                    &bull; Ends: <%= new Date(item.deadline).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }) %>
+                                                <% } %>
                                             </div>
                                         </div>
                                         <span class="status-pill active">
@@ -807,7 +796,7 @@
 
                                                 <script>
                                                     if (!window.candidateProfiles) window.candidateProfiles = {};
-                                                    window.candidateProfiles['<%= app._id %>'] = <% - JSON.stringify({
+                                                    window.candidateProfiles['<%= app._id %>'] = <%- JSON.stringify({
                                                         id: app._id,
                                                         status: app.status,
                                                         name: app.student ? app.student.name : '',
@@ -914,6 +903,9 @@
                                             <div style="font-size:13px; color:var(--text-muted); line-height: 1.4;">
                                                 <%= item.location || 'Remote' %> &bull; <%= item.stats ?
                                                         item.stats.total : 0 %> Applicants
+                                                <% if (item.deadline) { %>
+                                                    &bull; <i class="far fa-clock"></i> Ends: <%= new Date(item.deadline).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }) %>
+                                                <% } %>
                                             </div>
                                         </div>
                                         <div
@@ -1129,20 +1121,33 @@
                     `;
                                         }
 
-                                        if (data.status === 'shortlisted') {
+                                        if (data.status === 'shortlisted' || (data.status === 'interview_scheduled')) {
+                                            const isRescheduling = data.status === 'interview_scheduled';
                                             actionHtml += `
-                        <form action="/company/applications/${data.id}/interview" method="POST" style="display:flex; gap:10px; align-items:center; background:#fff; padding:5px 15px; border-radius:14px; border:1px solid var(--border)">
-                            <span style="font-size:12px; font-weight:800; color:var(--text-muted)">Schedule:</span>
-                            <input type="datetime-local" name="interviewDate" required style="border:none; font-size:13px; outline:none">
-                            <button class="action-btn btn-schedule"><i class="fas fa-calendar-plus"></i> Set Interview</button>
-                        </form>
-                    `;
-                                        } else if (data.interviewDate) {
-                                            actionHtml += `
-                        <div style="background:rgba(217,95,59,0.1); color:var(--coral); padding:10px 20px; border-radius:12px; font-size:13px; font-weight:700">
-                            <i class="fas fa-clock"></i> Interview: ${new Date(data.interviewDate).toLocaleString()}
+                        <div id="scheduleSection" style="${isRescheduling ? 'display:none' : 'display:block'}">
+                            <form action="/company/applications/${data.id}/interview" method="POST" style="display:flex; gap:10px; align-items:center; background:#fff; padding:5px 15px; border-radius:14px; border:1px solid var(--border)">
+                                <span style="font-size:12px; font-weight:800; color:var(--text-muted)">${isRescheduling ? 'Reschedule' : 'Schedule'}:</span>
+                                <input type="datetime-local" name="interviewDate" required style="border:none; font-size:13px; outline:none">
+                                <button class="action-btn btn-schedule"><i class="fas fa-calendar-plus"></i> ${isRescheduling ? 'Update' : 'Set Interview'}</button>
+                            </form>
                         </div>
                     `;
+                                            if (isRescheduling) {
+                                                const dateStr = new Date(data.interviewDate).toLocaleString('en-IN', { 
+                                                    day: '2-digit', 
+                                                    month: 'short', 
+                                                    year: 'numeric', 
+                                                    hour: '2-digit', 
+                                                    minute: '2-digit', 
+                                                    hour12: true 
+                                                });
+                                                actionHtml += `
+                            <div id="scheduledDisplay" style="display:flex; align-items:center; gap:15px; background:rgba(217,95,59,0.1); color:var(--coral); padding:10px 20px; border-radius:12px; font-size:13px; font-weight:700">
+                                <span><i class="fas fa-clock"></i> Interview: ${dateStr}</span>
+                                <button onclick="document.getElementById('scheduleSection').style.display='block'; document.getElementById('scheduledDisplay').style.display='none'" style="background:none; border:none; color:var(--ink); font-weight:800; cursor:pointer; text-decoration:underline; font-size:11px">Reschedule</button>
+                            </div>
+                        `;
+                                            }
                                         }
 
                                         actionHtml += `

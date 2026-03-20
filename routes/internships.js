@@ -51,7 +51,7 @@ router.get('/company/internships/create', isAuthenticated, isCompany, async (req
 // POST /company/internships - Create new internship
 router.post('/company/internships', isAuthenticated, isCompany, async (req, res) => {
     try {
-        const { title, companyName, description, location, type, duration, stipend, skills, openings, deadline } = req.body;
+        const { title, companyName, description, location, type, duration, paymentCategory, stipend, fee, skills, openings, deadline, image } = req.body;
 
         // Parse skills if it's a string
         let skillsArray = [];
@@ -71,14 +71,17 @@ router.post('/company/internships', isAuthenticated, isCompany, async (req, res)
             location,
             type: type || 'remote',
             duration,
-            stipend: stipend || 0,
+            paymentCategory: paymentCategory || 'unpaid',
+            stipend: paymentCategory === 'stipend' ? (stipend || 0) : 0,
+            fee: paymentCategory === 'paid' ? (fee || 0) : 0,
             skills: skillsArray,
             openings: openings || 1,
+            image,
             deadline: deadline ? new Date(deadline) : null,
             isActive: true
         });
 
-        console.log('Internship created:', internship._id);
+
         res.redirect('/company/dashboard?success=internship_created');
     } catch (err) {
         console.error('Error creating internship:', err);
@@ -159,7 +162,7 @@ router.get('/company/internships/:id/edit', isAuthenticated, isCompany, async (r
 // POST /company/internships/:id - Update internship
 router.post('/company/internships/:id', isAuthenticated, isCompany, async (req, res) => {
     try {
-        const { title, companyName, description, location, type, duration, stipend, skills, openings, deadline, isActive } = req.body;
+        const { title, companyName, description, location, type, duration, paymentCategory, stipend, fee, skills, openings, deadline, isActive, image } = req.body;
 
         // Parse skills if it's a string
         let skillsArray = [];
@@ -180,9 +183,12 @@ router.post('/company/internships/:id', isAuthenticated, isCompany, async (req, 
                 location,
                 type: type || 'remote',
                 duration,
-                stipend: stipend || 0,
+                paymentCategory: paymentCategory || 'unpaid',
+                stipend: paymentCategory === 'stipend' ? (stipend || 0) : 0,
+                fee: paymentCategory === 'paid' ? (fee || 0) : 0,
                 skills: skillsArray,
                 openings: openings || 1,
+                image,
                 deadline: deadline ? new Date(deadline) : null,
                 isActive: isActive === 'on' || isActive === true
             },
@@ -433,7 +439,7 @@ router.get('/internships', async (req, res) => {
 });
 
 // GET /internships/:id - View internship details
-router.get('/internships/:id', async (req, res) => {
+router.get('/internships/:id([0-9a-fA-F]{24})', async (req, res) => {
     try {
         const internship = await Internship.findById(req.params.id)
             .populate({
@@ -526,15 +532,25 @@ router.post('/internships/:id/apply', isAuthenticated, isStudent, upload.single(
             // Extract text from PDF to find skills
             try {
                 const dataBuffer = fs.readFileSync(req.file.path);
-                const data = await pdfParse(dataBuffer);
-                const text = data.text.toLowerCase();
 
-                // Common skills library to look for (simplified)
-                const commonSkills = ['javascript', 'python', 'java', 'react', 'node', 'express', 'html', 'css', 'sql', 'mongodb', 'docker', 'git', 'aws', 'communication', 'leadership', 'design'];
+                // VALIDATE PDF SIGNATURE: First 5 bytes should be %PDF-
+                if (dataBuffer.length > 5 && dataBuffer.toString('utf8', 0, 5) === '%PDF-') {
+                    const data = await pdfParse(dataBuffer);
+                    const text = data.text.toLowerCase();
 
-                extractedSkills = commonSkills.filter(skill => text.includes(skill.toLowerCase()));
+                    // Common skills library to look for (simplified)
+                    const commonSkills = ['javascript', 'python', 'java', 'react', 'node', 'express', 'html', 'css', 'sql', 'mongodb', 'docker', 'git', 'aws', 'communication', 'leadership', 'design'];
+                    extractedSkills = commonSkills.filter(skill => text.includes(skill.toLowerCase()));
+                } else {
+                    console.warn(`[Warning] Uploaded file ${req.file.filename} is not a valid PDF or is corrupted. Skill extraction skipped.`);
+                }
             } catch (pdfErr) {
-                console.error("Error parsing PDF resume:", pdfErr);
+                // If it's a known 'bad XRef entry' or similar library limitation, log a clean warning
+                if (pdfErr.message.includes('XRef') || pdfErr.details?.includes('XRef')) {
+                    console.warn(`[Warning] Parsing failed for ${req.file.filename} (Complex/Encrypted PDF format). Skill extraction skipped, but file was saved successfully.`);
+                } else {
+                    console.error("Error parsing PDF resume:", pdfErr.message);
+                }
             }
         }
 
