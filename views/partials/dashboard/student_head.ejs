@@ -517,9 +517,19 @@
   .dashboard-bg { background: transparent !important; }
 
   /* Theme-aware Text Colors (Restored) */
-  .header-left h1 { color: var(--ink) !important; }
+  .header-left h1 { color: var(--ink) !important; font-weight: 800; }
   .header-left h1 span { color: var(--coral) !important; }
-  .header-left p { color: var(--text-muted) !important; }
+  .header-subtitle { 
+    color: var(--ink) !important; 
+    opacity: 0.9;
+    font-weight: 600 !important;
+    font-size: 1.1rem;
+    margin-top: 5px;
+  }
+  [data-theme="dark"] .header-subtitle {
+     color: var(--text-muted) !important;
+     opacity: 1;
+  }
   
   .stat-value { color: var(--ink) !important; }
   .stat-label { color: var(--text-muted) !important; }
@@ -585,9 +595,9 @@
   }
 
   .stat-card {
-    background: rgba(255, 255, 255, 0.1) !important;
-    backdrop-filter: blur(16px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    background: var(--card-bg) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid var(--border) !important;
   }
 
   /* INT CARD Styles from browse page */

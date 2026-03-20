@@ -3,14 +3,23 @@
 
 <head>
     <%- include('../partials/dashboard/company_head', { title: 'Post Internship | Conneto' }) %>
-        <style>
+    <style>
+        body::before {
+            background-image: url('https://images.unsplash.com/photo-1517842645767-c639042777db?w=1600&q=80') !important;
+            filter: brightness(1) !important;
+        }
+        [data-theme="dark"] body::before {
+            filter: brightness(0.5) !important;
+        }
+
             .form-card {
                 background: var(--card-bg);
-                border: 1px solid var(--card-border);
+                border: 1px solid var(--border);
                 border-radius: 24px;
                 padding: 40px;
                 max-width: 900px;
                 margin: 0 auto;
+                box-shadow: 0 20px 60px var(--shadow);
             }
 
             .form-header {
@@ -62,13 +71,18 @@
             .txt {
                 width: 100%;
                 padding: 14px 16px;
-                background: var(--bg);
-                border: 1px solid var(--card-border);
+                background: var(--bg-alt);
+                border: 1.5px solid var(--border);
                 border-radius: 12px;
-                color: var(--text);
+                color: var(--ink);
                 font-family: inherit;
                 font-size: 1rem;
                 transition: all 0.3s;
+            }
+
+            .inp::placeholder {
+                color: var(--text-muted);
+                opacity: 0.7;
             }
 
             .inp:focus,
@@ -141,6 +155,16 @@
                             required>
                     </div>
 
+                    <div class="form-group full">
+                        <label class="label">Company Name <span>*</span></label>
+                        <input type="text" name="companyName" class="inp" value="<%= user.companyName || user.name %>" required>
+                    </div>
+
+                    <div class="form-group full">
+                        <label class="label">Internship Image URL (Unsplash recommended)</label>
+                        <input type="text" name="image" class="inp" placeholder="https://images.unsplash.com/photo-...">
+                    </div>
+
                     <div class="form-group">
                         <label class="label">Location <span>*</span></label>
                         <input type="text" name="location" class="inp" placeholder="e.g. Mumbai, Remote" required>
@@ -166,9 +190,34 @@
                         <input type="text" name="duration" class="inp" placeholder="e.g. 3 Months" required>
                     </div>
 
-                    <div class="form-group">
-                        <label class="label">Stipend (INR/Month)</label>
-                        <input type="number" name="stipend" class="inp" placeholder="e.g. 15000">
+                    <div class="form-group full">
+                        <label class="label">Internship Category <span>*</span></label>
+                        <div style="display: flex; gap: 24px; margin-top: 10px; flex-wrap: wrap;">
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--text);">
+                                <input type="radio" name="paymentCategory" value="unpaid" checked onclick="handlePaymentDisplay('unpaid')"> Unpaid
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--text);">
+                                <input type="radio" name="paymentCategory" value="stipend" onclick="handlePaymentDisplay('stipend')"> Stipend (Company pays Student)
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--text);">
+                                <input type="radio" name="paymentCategory" value="paid" onclick="handlePaymentDisplay('paid')"> Paid (Student pays Company)
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="stipendGroup" style="display: none;">
+                        <label class="label">Stipend (INR/Month) <span>*</span></label>
+                        <input type="number" name="stipend" id="stipendInput" class="inp" placeholder="e.g. 15000">
+                    </div>
+
+                    <div class="form-group" id="feeGroup" style="display: none;">
+                        <label class="label">Training/Registration Fee (INR) <span>*</span></label>
+                        <input type="number" name="fee" id="feeInput" class="inp" placeholder="e.g. 5000">
+                    </div>
+
+                    <div class="form-group full">
+                        <label class="label">Internship Image URL</label>
+                        <input type="text" name="image" class="inp" value="" placeholder="https://images.unsplash.com/...">
                     </div>
 
                     <div class="form-group">
@@ -177,8 +226,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="label">Deadline</label>
-                        <input type="date" name="deadline" class="inp">
+                        <label class="label">Application Deadline (Date & Time)</label>
+                        <input type="datetime-local" name="deadline" class="inp">
                     </div>
 
                     <div class="form-group full">
@@ -203,6 +252,31 @@
                 formCard.style.opacity = '1';
                 formCard.style.transform = 'translateY(0)';
             }, 100);
+
+            function handlePaymentDisplay(category) {
+                const stipendGroup = document.getElementById('stipendGroup');
+                const feeGroup = document.getElementById('feeGroup');
+                const stipendInput = document.getElementById('stipendInput');
+                const feeInput = document.getElementById('feeInput');
+
+                stipendGroup.style.display = 'none';
+                feeGroup.style.display = 'none';
+                stipendInput.required = false;
+                feeInput.required = false;
+
+                if (category === 'stipend') {
+                    stipendGroup.style.display = 'block';
+                    stipendInput.required = true;
+                    feeInput.value = '';
+                } else if (category === 'paid') {
+                    feeGroup.style.display = 'block';
+                    feeInput.required = true;
+                    stipendInput.value = '';
+                } else {
+                    stipendInput.value = '';
+                    feeInput.value = '';
+                }
+            }
         </script>
         </script>
         </main>

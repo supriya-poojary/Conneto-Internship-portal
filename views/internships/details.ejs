@@ -59,10 +59,12 @@
 
                             body {
                                 font-family: 'Inter', sans-serif;
-                                background: var(--cream);
+                                background: transparent !important;
                                 color: var(--text);
                                 transition: all 0.4s;
-                                overflow-x: hidden
+                                overflow-x: hidden;
+                                min-height: 100vh;
+                                position: relative;
                             }
 
                             /* BASIC UI ELEMENTS */
@@ -658,8 +660,7 @@
         <div class="details-card">
             <div class="comp-header">
                 <div class="comp-logo">
-                    <% var cName=internship.company && internship.company.companyName ? internship.company.companyName :
-                        (internship.companyName || 'Company' ); %>
+                    <% var cName=internship.companyName || (internship.company && (internship.company.companyName || internship.company.name)) || 'Company'; %>
                         <%= cName.charAt(0).toUpperCase() %>
                 </div>
                 <div class="comp-info">
@@ -694,9 +695,15 @@
                 </div>
                 <div class="info-box">
                     <i class="fas fa-rupee-sign"></i>
-                    <div class="lbl">Stipend</div>
+                    <div class="lbl">
+                        <% if (internship.paymentCategory === 'stipend') { %> Stipend 
+                        <% } else if (internship.paymentCategory === 'paid') { %> Training Fee
+                        <% } else { %> Payment <% } %>
+                    </div>
                     <div class="val">
-                        <%= internship.stipend ? internship.stipend + '/mo' : 'Unpaid' %>
+                        <% if (internship.paymentCategory === 'stipend') { %> ₹<%= internship.stipend %>/mo
+                        <% } else if (internship.paymentCategory === 'paid') { %> ₹<%= internship.fee %> (One-time)
+                        <% } else { %> Unpaid <% } %>
                     </div>
                 </div>
                 <div class="info-box">

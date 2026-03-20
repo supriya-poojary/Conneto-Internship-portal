@@ -39,7 +39,7 @@
       --text-muted: #7A5C4A;
       --border: rgba(160, 82, 45, 0.15);
       --shadow: rgba(44, 26, 14, 0.12);
-      --card-bg: rgba(255, 248, 240, 0.95);
+      --card-bg: rgba(255, 248, 240, 0.85);
       --nav-bg: rgba(250, 243, 232, 0.97);
       --section-alt: #F5EAD8;
       --footer-bg: #1E0E05;
@@ -55,7 +55,7 @@
       --text-muted: #B8937A;
       --border: rgba(200, 131, 26, 0.2);
       --shadow: rgba(0, 0, 0, 0.4);
-      --card-bg: rgba(37, 21, 8, 0.95);
+      --card-bg: rgba(37, 21, 8, 0.9);
       --nav-bg: rgba(28, 15, 8, 0.98);
       --section-alt: #201008;
       --footer-bg: #0E0704;
@@ -75,10 +75,52 @@
 
     body {
       font-family: 'DM Sans', sans-serif;
-      background: var(--cream);
+      background: transparent !important;
       color: var(--text);
       transition: background .4s, color .4s;
-      overflow-x: hidden
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background-image: url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');
+      background-size: cover;
+      background-position: center;
+      filter: brightness(1);
+      animation: slow-zoom 40s infinite alternate ease-in-out;
+      transition: filter 0.4s;
+    }
+
+    [data-theme="dark"] body::before {
+      filter: brightness(0.6);
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: rgba(250, 243, 232, 0.6);
+      transition: background 0.4s;
+    }
+
+    [data-theme="dark"] body::after {
+      background: rgba(10, 5, 2, 0.85);
+    }
+
+    @keyframes slow-zoom {
+      0% {
+        transform: scale(1) translate(0, 0);
+      }
+
+      100% {
+        transform: scale(1.15) translate(-2%, -2%);
+      }
     }
 
     /* BASIC UI ELEMENTS COPIED FROM INDEX.EJS FOR CONSISTENCY */
@@ -323,6 +365,12 @@
       box-shadow: 0 8px 24px rgba(217, 95, 59, .4)
     }
 
+    .stat-card {
+      background: var(--card-bg) !important;
+      backdrop-filter: blur(20px) !important;
+      border: 1px solid var(--border) !important;
+    }
+
     .hamburger {
       display: none;
       flex-direction: column;
@@ -472,6 +520,7 @@
 
     .int-card {
       background: var(--card-bg);
+      backdrop-filter: blur(20px);
       border: 1px solid var(--border);
       border-radius: 24px;
       padding: 0;
@@ -949,11 +998,14 @@
               <div class="int-card-image-container">
                 <% 
                   const defImgs = [
-                    'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=800&auto=format&fit=crop',
-                    'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=800&auto=format&fit=crop',
-                    'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800&auto=format&fit=crop',
-                    'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=800&auto=format&fit=crop',
-                    'https://images.unsplash.com/photo-1515169065863-228856248c33?q=80&w=800&auto=format&fit=crop'
+                    'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=800&auto=format&fit=crop', // Tech/Coding
+                    'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=800&auto=format&fit=crop', // Meeting/Strategy
+                    'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800&auto=format&fit=crop', // Teamwork
+                    'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=800&auto=format&fit=crop', // Creative/Design
+                    'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop', // Marketing/Analytics
+                    'https://images.unsplash.com/photo-1531403009284-440f080d1e12?q=80&w=800&auto=format&fit=crop', // UI/UX
+                    'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800&auto=format&fit=crop', // Professional Office
+                    'https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800&auto=format&fit=crop'  // Collaborative Space
                   ];
                   let itemIdStr = item._id ? item._id.toString() : '0';
                   let charCodeSum = 0;
@@ -964,8 +1016,8 @@
                 %>
                 <img src="<%= itemImg %>" alt="<%= item.title %>" class="int-card-image" loading="lazy">
                 <div class="int-logo">
-                  <% var cmName=(item.company && (item.company.companyName || item.company.name)) || item.companyName
-                    || 'CO' ; %>
+                  <% var cmName=item.companyName || (item.company && (item.company.companyName || item.company.name))
+                    || 'Company' ; %>
                     <%= cmName.charAt(0).toUpperCase() %>
                 </div>
               </div>
@@ -994,7 +1046,11 @@
                     <span style="display: flex; align-items: center; gap: 6px;"><i class="fas fa-clock"></i> <%= item.duration || '3 Months' %></span>
                   </div>
                   <div style="display: flex; width: 100%;">
-                    <span style="display: flex; align-items: center; gap: 6px;"><i class="fas fa-rupee-sign"></i> <%= item.stipend ? item.stipend + '/mo' : 'Unpaid' %></span>
+                    <span style="display: flex; align-items: center; gap: 6px;"><i class="fas fa-rupee-sign"></i> 
+                      <% if (item.paymentCategory === 'stipend') { %> <%= item.stipend %>/mo 
+                      <% } else if (item.paymentCategory === 'paid') { %> ₹<%= item.fee %> Fee
+                      <% } else { %> Unpaid <% } %>
+                    </span>
                   </div>
                 </div>
 

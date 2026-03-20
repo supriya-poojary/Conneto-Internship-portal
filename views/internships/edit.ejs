@@ -3,14 +3,23 @@
 
 <head>
     <%- include('../partials/dashboard/company_head', { title: 'Edit Internship | Conneto' }) %>
-        <style>
+    <style>
+        body::before {
+            background-image: url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1600&q=80') !important;
+            filter: brightness(1) !important;
+        }
+        [data-theme="dark"] body::before {
+            filter: brightness(0.5) !important;
+        }
+
             .form-card {
                 background: var(--card-bg);
-                border: 1px solid var(--card-border);
+                border: 1px solid var(--border);
                 border-radius: 24px;
                 padding: 40px;
                 max-width: 900px;
                 margin: 0 auto;
+                box-shadow: 0 20px 60px var(--shadow);
             }
 
             .form-header {
@@ -22,7 +31,7 @@
             .form-header h2 {
                 font-size: 1.75rem;
                 font-weight: 700;
-                color: white;
+                color: var(--ink);
                 font-family: 'Outfit', sans-serif;
             }
 
@@ -44,7 +53,7 @@
                 display: block;
                 margin-bottom: 10px;
                 font-weight: 600;
-                color: #E2E8F0;
+                color: var(--text);
                 font-size: 0.95rem;
             }
 
@@ -53,13 +62,18 @@
             .txt {
                 width: 100%;
                 padding: 14px 16px;
-                background: var(--bg);
-                border: 1px solid var(--card-border);
+                background: var(--bg-alt);
+                border: 1.5px solid var(--border);
                 border-radius: 12px;
-                color: white;
+                color: var(--ink);
                 font-family: inherit;
                 font-size: 1rem;
                 transition: all 0.3s;
+            }
+
+            .inp::placeholder {
+                color: var(--text-muted);
+                opacity: 0.7;
             }
 
             .inp:focus,
@@ -171,9 +185,19 @@
                         <input type="text" name="title" class="inp" value="<%= internship.title %>" required>
                     </div>
 
+                    <div class="form-group full">
+                        <label class="label">Company Name</label>
+                        <input type="text" name="companyName" class="inp" value="<%= internship.companyName %>" required>
+                    </div>
+
                     <div class="form-group">
                         <label class="label">Location</label>
                         <input type="text" name="location" class="inp" value="<%= internship.location %>">
+                    </div>
+
+                    <div class="form-group full">
+                        <label class="label">Internship Image URL</label>
+                        <input type="text" name="image" class="inp" value="<%= internship.image %>" placeholder="https://images.unsplash.com/...">
                     </div>
 
                     <div class="form-group">
@@ -195,9 +219,29 @@
                         <input type="text" name="duration" class="inp" value="<%= internship.duration %>">
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group full">
+                        <label class="label">Internship Category</label>
+                        <div style="display: flex; gap: 24px; margin-top: 10px; flex-wrap: wrap;">
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--text);">
+                                <input type="radio" name="paymentCategory" value="unpaid" <%= !internship.paymentCategory || internship.paymentCategory === 'unpaid' ? 'checked' : '' %> onclick="handlePaymentDisplay('unpaid')"> Unpaid
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--text);">
+                                <input type="radio" name="paymentCategory" value="stipend" <%= internship.paymentCategory === 'stipend' ? 'checked' : '' %> onclick="handlePaymentDisplay('stipend')"> Stipend (Company pays Student)
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--text);">
+                                <input type="radio" name="paymentCategory" value="paid" <%= internship.paymentCategory === 'paid' ? 'checked' : '' %> onclick="handlePaymentDisplay('paid')"> Paid (Student pays Company)
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="stipendGroup" style="display: <%= internship.paymentCategory === 'stipend' ? 'block' : 'none' %>;">
                         <label class="label">Stipend (INR/Month)</label>
-                        <input type="number" name="stipend" class="inp" value="<%= internship.stipend %>">
+                        <input type="number" name="stipend" id="stipendInput" class="inp" value="<%= internship.stipend %>">
+                    </div>
+
+                    <div class="form-group" id="feeGroup" style="display: <%= internship.paymentCategory === 'paid' ? 'block' : 'none' %>;">
+                        <label class="label">Training/Registration Fee (INR)</label>
+                        <input type="number" name="fee" id="feeInput" class="inp" value="<%= internship.fee %>">
                     </div>
 
                     <div class="form-group">
@@ -206,9 +250,9 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="label">Deadline</label>
-                        <input type="date" name="deadline" class="inp"
-                            value="<%= internship.deadline ? internship.deadline.toISOString().split('T')[0] : '' %>">
+                        <label class="label">Application Deadline (Date & Time)</label>
+                        <input type="datetime-local" name="deadline" class="inp"
+                            value="<%= internship.deadline ? new Date(internship.deadline.getTime() - internship.deadline.getTimezoneOffset() * 60000).toISOString().slice(0, 16) : '' %>">
                     </div>
 
                     <div class="form-group full">
@@ -239,6 +283,32 @@
         <!-- Closed by partial: </main> </div> -->
         </main>
         </div>
+        <script>
+            function handlePaymentDisplay(category) {
+                const stipendGroup = document.getElementById('stipendGroup');
+                const feeGroup = document.getElementById('feeGroup');
+                const stipendInput = document.getElementById('stipendInput');
+                const feeInput = document.getElementById('feeInput');
+
+                stipendGroup.style.display = 'none';
+                feeGroup.style.display = 'none';
+                stipendInput.required = false;
+                feeInput.required = false;
+
+                if (category === 'stipend') {
+                    stipendGroup.style.display = 'block';
+                    stipendInput.required = true;
+                    feeInput.value = '';
+                } else if (category === 'paid') {
+                    feeGroup.style.display = 'block';
+                    feeInput.required = true;
+                    stipendInput.value = '';
+                } else {
+                    stipendInput.value = '';
+                    feeInput.value = '';
+                }
+            }
+        </script>
 </body>
 
 </html>

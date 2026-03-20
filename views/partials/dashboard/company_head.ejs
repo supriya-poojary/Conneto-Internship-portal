@@ -168,12 +168,15 @@
     inset: 0;
     z-index: -2;
     background-image: url('https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=2000&q=80');
-    /* Moody professional office */
     background-size: cover;
     background-position: center;
-    filter: brightness(0.6);
-    /* Slightly darker */
-    animation: slow-zoom 50s infinite alternate ease-in-out;
+    filter: brightness(1);
+    animation: slow-zoom 40s infinite alternate ease-in-out;
+    transition: filter 0.4s;
+  }
+
+  [data-theme="dark"] body::before {
+    filter: brightness(0.5);
   }
 
   body::after {
@@ -181,14 +184,12 @@
     position: fixed;
     inset: 0;
     z-index: -1;
-    background: rgba(250, 243, 232, 0.7);
-    /* Reduced light overlay opacity to show background better but kept it dark enough for contrast */
+    background: rgba(250, 243, 232, 0.6);
     transition: background 0.4s;
   }
 
   [data-theme="dark"] body::after {
-    background: rgba(14, 7, 3, 0.85);
-    /* Darker and more focused */
+    background: rgba(10, 5, 2, 0.85);
   }
 
   @keyframes slow-zoom {
@@ -197,7 +198,7 @@
     }
 
     100% {
-      transform: scale(1.1) translate(-1%, -1%);
+      transform: scale(1.2) translate(-2%, -2%);
     }
   }
 
