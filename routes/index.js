@@ -100,7 +100,8 @@ router.get('/company/dashboard', async (req, res) => {
     const activeTab = req.query.tab || 'dashboard';
 
     try {
-        const myInternships = await Internship.find({ company: req.session.user.id });
+        const myInternships = await Internship.find({ company: req.session.user.id })
+            .sort({ updatedAt: -1 });
         const applications = await Application.find({
             internship: { $in: myInternships.map(i => i._id) }
         })
@@ -148,7 +149,8 @@ router.get('/company/dashboard', async (req, res) => {
                 active: myInternships.filter(i => i.isActive).length,
                 totalApplicants: applications.length,
                 interviews: applications.filter(app => ['interview_scheduled', 'shortlisted'].includes(app.status)).length,
-                hired: applications.filter(app => app.status === 'selected').length
+                hired: applications.filter(app => app.status === 'selected').length,
+                rescheduleRequests: applications.filter(app => app.rescheduleRequest).length
             },
             applicants: applications.slice(0, 10),
             myInternships: internshipsWithStats,
@@ -168,8 +170,45 @@ router.get('/company/applications', (req, res) => res.redirect('/company/dashboa
 router.get('/company/profile', (req, res) => res.redirect('/company/dashboard?tab=profile'));
 router.get('/company/internships', (req, res) => res.redirect('/company/dashboard?tab=internships'));
 
-// POST /student/profile/update
-router.post('/student/profile/update', async (req, res) => {
+// Setup multer for resume upload
+const multer = require('multer');
+const fs = require('fs');
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        const dir = 'public/uploads/resumes';
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
+        cb(null, dir);
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+const upload = multer({
+    storage: storage,
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype === 'application/pdf') {
+            cb(null, true);
+        } else {
+            cb(new Error('Only PDF files are allowed!'), false);
+        }
+    }
+});
+
+// POST /student/profile/update - Enhanced with error handling
+router.post('/student/profile/update', (req, res, next) => {
+    upload.single('resume')(req, res, function (err) {
+        if (err) {
+            // Flash an error message back to the dashboard
+            console.error('File Upload Error:', err.message);
+            const errMsg = err.message || 'File upload failed. Only PDFs are allowed.';
+            return res.redirect(`/student/dashboard?tab=profile&error=${encodeURIComponent(errMsg)}`);
+        }
+        next();
+    });
+}, async (req, res) => {
     if (!req.session.user || req.session.user.role !== 'student') return res.redirect('/auth/login');
 
     try {
@@ -191,7 +230,13 @@ router.post('/student/profile/update', async (req, res) => {
             }
         }
 
-        // 2. Track 25 Key Fields (4% each)
+        // 2. Resume URL
+        let resumeUrl = null;
+        if (req.file) {
+            resumeUrl = '/uploads/resumes/' + req.file.filename;
+        }
+
+        // 3. Track 25 Key Fields (4% each)
         let filledCount = 0;
         const check = (val) => (val && val.toString().trim().length > 0);
 
@@ -201,24 +246,39 @@ router.post('/student/profile/update', async (req, res) => {
                 if (check(f)) filledCount++;
             });
 
-        const strength = Math.min(filledCount * 4, 100);
-
-        // 3. Update Profile Data
+        // 4. Update Profile Data
         const skillsArr = skills ? skills.split(',').map(s => s.trim()).filter(s => s) : [];
         const interestsArr = interests ? interests.split(',').map(s => s.trim()).filter(s => s) : [];
 
+        const updateData = {
+            dob, gender, usn, college, degree, department, semester, year, gpa,
+            address, city, state, country, bio, experience, projects,
+            certifications, languages,
+            skills: skillsArr,
+            interests: interestsArr,
+            phone, linkedin, github, portfolio,
+            updatedAt: Date.now()
+        };
+
+        if (resumeUrl) {
+            updateData.resumeUrl = resumeUrl;
+        }
+
+        // Check for existing profile to get current resumeUrl if not uploaded now
+        const existingProfile = await StudentProfile.findOne({ user: req.session.user.id });
+        const finalResumeUrl = resumeUrl || (existingProfile ? existingProfile.resumeUrl : null);
+
+        // Add resume to filled count if present
+        if (check(finalResumeUrl)) filledCount++;
+
+        // Calculate strength (27 fields total: 26 + resume)
+        // Adjusting to 100% total
+        const strength = Math.min(Math.round((filledCount / 27) * 100), 100);
+        updateData.completionPercentage = strength;
+
         await StudentProfile.findOneAndUpdate(
             { user: req.session.user.id },
-            {
-                dob, gender, usn, college, degree, department, semester, year, gpa,
-                address, city, state, country, bio, experience, projects,
-                certifications, languages,
-                skills: skillsArr,
-                interests: interestsArr,
-                phone, linkedin, github, portfolio,
-                completionPercentage: strength,
-                updatedAt: Date.now()
-            },
+            updateData,
             { upsert: true, new: true }
         );
 
@@ -226,6 +286,33 @@ router.post('/student/profile/update', async (req, res) => {
     } catch (err) {
         console.error('Portfolio Save Error:', err);
         res.redirect('/student/dashboard?tab=profile&error=1');
+    }
+});
+
+// POST /student/applications/:id/reschedule - Request rescheduling
+router.post('/student/applications/:id/reschedule', async (req, res) => {
+    if (!req.session.user || req.session.user.role !== 'student') return res.redirect('/auth/login');
+
+    try {
+        const { reason, suggestedDate } = req.body;
+        const application = await Application.findById(req.params.id);
+
+        if (!application || application.student.toString() !== req.session.user.id) {
+            return res.redirect('/student/dashboard?tab=applications&error=Application not found');
+        }
+
+        application.rescheduleRequest = true;
+        application.rescheduleReason = reason || 'No reason provided';
+        application.suggestedInterviewDate = suggestedDate ? new Date(suggestedDate) : null;
+        application.rescheduleStatus = 'pending';
+        application.updatedAt = Date.now();
+
+        await application.save();
+
+        res.redirect('/student/dashboard?tab=applications&success=Rescheduling request sent successfully');
+    } catch (err) {
+        console.error('Reschedule Request Error:', err);
+        res.redirect('/student/dashboard?tab=applications&error=Failed to send request');
     }
 });
 

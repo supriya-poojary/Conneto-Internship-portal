@@ -76,7 +76,7 @@ router.post('/company/internships', isAuthenticated, isCompany, async (req, res)
             fee: paymentCategory === 'paid' ? (fee || 0) : 0,
             skills: skillsArray,
             openings: openings || 1,
-            image,
+            image: image || 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1600&q=80',
             deadline: deadline ? new Date(deadline) : null,
             isActive: true
         });
@@ -93,7 +93,7 @@ router.post('/company/internships', isAuthenticated, isCompany, async (req, res)
 router.get('/company/internships', isAuthenticated, isCompany, async (req, res) => {
     try {
         const internships = await Internship.find({ company: req.session.user.id })
-            .sort({ createdAt: -1 });
+            .sort({ updatedAt: -1 });
 
         // Get application counts for each internship
         const internshipsWithCounts = await Promise.all(internships.map(async (internship) => {
@@ -125,10 +125,11 @@ router.get('/company/internships', isAuthenticated, isCompany, async (req, res) 
             return { ...internship.toObject(), stats };
         }));
 
-        res.render('internships/manage', {
+        res.render('dashboard/company', {
             title: 'Manage Internships | Conneto',
             user: req.session.user,
-            internships: internshipsWithCounts
+            activePage: 'internships',
+            myInternships: internshipsWithCounts
         });
     } catch (err) {
         console.error('Error loading internships:', err);
@@ -188,7 +189,7 @@ router.post('/company/internships/:id', isAuthenticated, isCompany, async (req, 
                 fee: paymentCategory === 'paid' ? (fee || 0) : 0,
                 skills: skillsArray,
                 openings: openings || 1,
-                image,
+                image: image || 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1600&q=80',
                 deadline: deadline ? new Date(deadline) : null,
                 isActive: isActive === 'on' || isActive === true
             },
@@ -260,9 +261,10 @@ router.get('/company/applications', isAuthenticated, isCompany, async (req, res)
             }
         });
 
-        res.render('company/applications', {
+        res.render('dashboard/company', {
             title: 'View Applications | Conneto',
             user: req.session.user,
+            activePage: 'applications',
             groupedApplications: Object.values(groupedByInternship),
             internships
         });
@@ -318,6 +320,8 @@ router.post('/company/applications/:id/interview', isAuthenticated, isCompany, a
         application.status = 'interview_scheduled';
         application.interviewDate = interviewDate ? new Date(interviewDate) : null;
         application.interviewNote = interviewNote || '';
+        application.rescheduleRequest = false;
+        application.rescheduleStatus = 'accepted';
         application.updatedAt = new Date();
         await application.save();
 
@@ -519,7 +523,14 @@ const upload = multer({
 });
 
 // POST /internships/:id/apply - Apply for internship
-router.post('/internships/:id/apply', isAuthenticated, isStudent, upload.single('resume'), async (req, res) => {
+router.post('/internships/:id/apply', isAuthenticated, isStudent, (req, res, next) => {
+    upload.single('resume')(req, res, function (err) {
+        if (err) {
+            return res.redirect(`/internships/${req.params.id}?error=${encodeURIComponent(err.message)}`);
+        }
+        next();
+    });
+}, async (req, res) => {
     try {
         const { coverLetter, studentSkills, question1Answer, question2Answer } = req.body;
 
@@ -577,6 +588,9 @@ router.post('/internships/:id/apply', isAuthenticated, isStudent, upload.single(
             return res.redirect(`/internships/${req.params.id}?error=Your portfolio is currently at ${completionPct}%. Please reach 100% completion by filling out all profile fields to unlock the "Apply Now" button.`);
         }
 
+        // Get resume URL from profile if not uploaded now
+        const finalResumeUrl = resumeUrl || (studentProfile ? studentProfile.resumeUrl : '');
+
         // Create application
         await Application.create({
             internship: req.params.id,
@@ -585,7 +599,7 @@ router.post('/internships/:id/apply', isAuthenticated, isStudent, upload.single(
             studentSkills: studentSkills || '',
             question1Answer: question1Answer || '',
             question2Answer: question2Answer || '',
-            resumeUrl: resumeUrl,
+            resumeUrl: finalResumeUrl,
             extractedSkills: extractedSkills,
             status: 'applied'
         });
@@ -620,9 +634,10 @@ router.get('/student/applications', isAuthenticated, isStudent, async (req, res)
             rejected: applications.filter(a => a.status === 'rejected').length
         };
 
-        res.render('student/applications', {
+        res.render('dashboard/student', {
             title: 'My Applications | Conneto',
             user: req.session.user,
+            activePage: 'applications',
             applications,
             stats
         });
