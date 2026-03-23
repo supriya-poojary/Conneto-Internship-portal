@@ -16,6 +16,14 @@ const applicationSchema = new mongoose.Schema({
     extractedSkills: { type: [String], default: [] }, // auto-extracted skills
     interviewDate: { type: Date },
     interviewNote: { type: String },   // company adds notes post-review
+    rescheduleRequest: { type: Boolean, default: false },
+    rescheduleReason: { type: String },
+    suggestedInterviewDate: { type: Date },
+    rescheduleStatus: { 
+        type: String, 
+        enum: ['pending', 'accepted', 'rejected'],
+        default: 'pending'
+    },
     appliedAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
 });
