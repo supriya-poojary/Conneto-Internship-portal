@@ -762,18 +762,7 @@
                                         </div>
                                     <% } else { %>
 
-                                    <!-- Profile Progress Banner -->
-                                    <% if (pct < 100) { %>
-                                    <div style="background: rgba(200,131,26,0.08); border: 1px solid var(--amber); border-radius: 16px; padding: 16px 22px; margin-bottom: 24px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
-                                        <div style="flex:1; min-width:200px;">
-                                            <div style="font-size:12px; font-weight:800; color:var(--amber); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px">Profile Strength: <%= pct %>%</div>
-                                            <div style="height:6px; background:rgba(200,131,26,0.15); border-radius:10px; overflow:hidden">
-                                                <div style="width:<%= pct %>%; height:100%; background: var(--amber);"></div>
-                                            </div>
-                                        </div>
-                                        <a href="/student/dashboard?tab=profile" style="font-size:12px; font-weight:700; color:var(--amber); text-decoration:none; white-space:nowrap"><i class="fas fa-edit"></i> Complete Profile → More Visibility</a>
-                                    </div>
-                                    <% } else { %>
+                                    <!-- 100% Profile Complete Banner -->
                                     <div style="background: rgba(90,122,92,0.08); border: 1px solid var(--sage); border-radius: 16px; padding: 14px 22px; margin-bottom: 24px; display:flex; align-items:center; gap:10px;">
                                         <i class="fas fa-shield-alt" style="color:var(--sage); font-size:1.4rem;"></i>
                                         <div>
@@ -781,7 +770,6 @@
                                             <div style="font-size:12px; color:var(--text-muted)">Your full profile will be sent to the recruiter automatically.</div>
                                         </div>
                                     </div>
-                                    <% } %>
 
                                     <form action="/internships/<%= internship._id %>/apply" method="POST" enctype="multipart/form-data">
                                         <!-- Hidden: auto-fill from profile -->
