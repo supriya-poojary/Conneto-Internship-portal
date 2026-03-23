@@ -368,27 +368,33 @@
                 left: 0;
                 width: 100%;
                 height: 100%;
-                background: rgba(0, 0, 0, 0.7);
+                background: rgba(0, 0, 0, 0.85);
                 display: none;
                 align-items: center;
                 justify-content: center;
                 z-index: 1000;
-                backdrop-filter: blur(12px);
-                padding: 20px;
+                backdrop-filter: blur(20px);
+                padding: 0;
             }
 
             .modal-content {
                 background: var(--card-bg);
                 width: 100%;
-                max-width: 1000px;
-                height: 90vh;
-                border-radius: 32px;
+                max-width: 100%;
+                height: 100vh;
+                border-radius: 0;
                 overflow: hidden;
                 position: relative;
-                box-shadow: 0 50px 150px rgba(0, 0, 0, 0.5);
-                border: 1px solid var(--border);
+                box-shadow: none;
+                border: none;
                 display: flex;
                 flex-direction: column;
+                animation: modal-slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+
+            @keyframes modal-slide-up {
+                from { transform: translateY(100%); opacity: 0; }
+                to { transform: translateY(0); opacity: 1; }
             }
 
             .modal-body {
@@ -398,10 +404,10 @@
             }
 
             .modal-sidebar {
-                width: 320px;
+                width: 400px;
                 background: var(--nav-bg);
                 border-right: 1px solid var(--border);
-                padding: 40px 30px;
+                padding: 60px 40px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -411,23 +417,33 @@
 
             .modal-main {
                 flex: 1;
-                padding: 50px;
+                padding: 60px 80px;
                 overflow-y: auto;
             }
 
             .modal-close {
                 position: absolute;
-                top: 30px;
-                right: 30px;
-                font-size: 28px;
+                top: 40px;
+                right: 40px;
+                width: 44px;
+                height: 44px;
+                background: rgba(255,255,255,0.1);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 20px;
                 cursor: pointer;
                 color: var(--text-muted);
                 z-index: 10;
                 transition: .3s;
+                border: 1px solid var(--border);
             }
 
             .modal-close:hover {
-                color: var(--rose);
+                color: #fff;
+                background: var(--rose);
+                border-color: var(--rose);
                 transform: rotate(90deg);
             }
 
@@ -600,9 +616,9 @@
                         <span class="stat-badge">Action Req.</span>
                     </div>
                     <div class="stat-value">
-                        <%= stats ? stats.interviews : 0 %>
+                        <%= stats ? stats.rescheduleRequests : 0 %>
                     </div>
-                    <div class="stat-label">Meetings Slotted</div>
+                    <div class="stat-label">Reschedule Requests</div>
                 </div>
                 <div class="stat-card reveal">
                     <div class="stat-top">
@@ -789,6 +805,11 @@
                                                     <span class="status-pill <%= app.status %>">
                                                         <%= app.status.replace(/_/g, ' ' ) %>
                                                     </span>
+                                                    <% if (app.rescheduleRequest) { %>
+                                                        <span class="notify-badge" style="background:var(--rose); color:#fff; padding:4px 10px; border-radius:100px; font-size:10px; font-weight:800; animation: pulse 2s infinite">
+                                                            <i class="fas fa-calendar-alt"></i> RESCHEDULE
+                                                        </span>
+                                                    <% } %>
                                                     <button onclick="showProfile('<%= app._id %>')" class="view-btn">
                                                         <i class="fas fa-eye"></i> View Application
                                                     </button>
@@ -830,7 +851,10 @@
                                                         q2: app.question2Answer || '',
                                                         appliedAt: app.appliedAt,
                                                         resumeUrl: app.resumeUrl,
-                                                        interviewDate: app.interviewDate
+                                                        interviewDate: app.interviewDate,
+                                                        rescheduleRequest: app.rescheduleRequest || false,
+                                                        rescheduleReason: app.rescheduleReason || '',
+                                                        suggestedDate: app.suggestedInterviewDate
                                                     }) %>;
                                                 </script>
                                             </div>
@@ -1107,6 +1131,29 @@
 
                     ${data.experience ? `<div class="section-box"><span class="section-label"><i class="fas fa-briefcase"></i> Experience</span><p class="text-content">${data.experience}</p></div>` : ''}
                     ${data.projects ? `<div class="section-box"><span class="section-label"><i class="fas fa-code"></i> Key Projects</span><p class="text-content">${data.projects}</p></div>` : ''}
+                    
+                    ${data.rescheduleRequest ? `
+                        <div class="section-box" style="background:rgba(181,56,74,0.05); border:1px solid var(--rose); animation: pulse 2s infinite">
+                            <span class="section-label" style="color:var(--rose)"><i class="fas fa-exclamation-triangle"></i> Reschedule Requested</span>
+                            <div style="font-size:14px; color:var(--rose); font-weight:600; margin-bottom:10px">The student has requested to change the interview date.</div>
+                            <div style="background:#fff; padding:15px; border-radius:12px; margin-bottom:15px">
+                                <div style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase">Suggested New Time</div>
+                                <div style="font-size:16px; font-weight:700; color:var(--ink); margin-top:5px">
+                                    ${data.suggestedDate ? new Date(data.suggestedDate).toLocaleString('en-IN', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : 'No specific time suggested'}
+                                </div>
+                            </div>
+                            <p class="text-content" style="font-size:13px; font-weight:500; margin-bottom:15px"><strong>Reason:</strong> ${data.rescheduleReason || 'No reason specified'}</p>
+                            
+                            ${data.suggestedDate ? `
+                                <form action="/company/applications/${data.id}/interview" method="POST">
+                                    <input type="hidden" name="interviewDate" value="${new Date(new Date(data.suggestedDate).getTime() - new Date(data.suggestedDate).getTimezoneOffset() * 60000).toISOString().slice(0,16)}">
+                                    <button class="action-btn" style="background:var(--sage); color:#fff; width:100%; justify-content:center">
+                                        <i class="fas fa-check-circle"></i> Accept Student's Suggestion
+                                    </button>
+                                </form>
+                            ` : ''}
+                        </div>
+                    ` : ''}
                 </main>
             `;
 

@@ -59,6 +59,11 @@
                     class="nav-link <%= typeof activePage !== 'undefined' && activePage === 'applications' ? 'active' : '' %>">
                     <i class="fas fa-user-friends"></i>
                     <span>Candidates</span>
+                    <% if (typeof stats !== 'undefined' && stats.rescheduleRequests > 0) { %>
+                        <span style="background:var(--rose); color:#fff; padding:2px 8px; border-radius:100px; font-size:10px; font-weight:800; margin-left:auto">
+                            <%= stats.rescheduleRequests %>
+                        </span>
+                    <% } %>
                 </a>
             </div>
         </div>

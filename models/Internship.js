@@ -15,8 +15,7 @@ const internshipSchema = new mongoose.Schema({
     openings: { type: Number, default: 1 },
     image: { type: String },
     deadline: { type: Date },
-    isActive: { type: Boolean, default: true },
-    createdAt: { type: Date, default: Date.now }
-});
+    isActive: { type: Boolean, default: true }
+}, { timestamps: true });
 
 module.exports = mongoose.model('Internship', internshipSchema);
