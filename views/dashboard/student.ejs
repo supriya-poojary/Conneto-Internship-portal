@@ -616,13 +616,27 @@
                             <% } %>
                 </div>
                 <% } else if (activePage==='profile' ) { %>
-                    <% if (typeof success !=='undefined' || (typeof query !=='undefined' && query.success)) { %>
-                        <div
-                            style="background:var(--sage); color:#fff; padding:15px 25px; border-radius:15px; margin-bottom:25px; display:flex; align-items:center; gap:15px; animation: slideIn 0.4s ease-out">
-                            <i class="fas fa-check-circle" style="font-size:1.2rem"></i>
-                            <div style="font-weight:600">Portfolio Updated Successfully! All changes are now live.</div>
-                        </div>
-                        <% } %>
+                    <div id="successBanner" style="display:none; background:var(--sage); color:#fff; padding:15px 25px; border-radius:15px; margin-bottom:25px; align-items:center; gap:15px; animation: slideIn 0.4s ease-out">
+                        <i class="fas fa-check-circle" style="font-size:1.2rem"></i>
+                        <div style="font-weight:600">Portfolio Updated Successfully! All changes are now live.</div>
+                    </div>
+                    <script>
+                        (function() {
+                            const params = new URLSearchParams(window.location.search);
+                            if (params.get('success') !== null && params.get('success') !== '') {
+                                const banner = document.getElementById('successBanner');
+                                if (banner) {
+                                    banner.style.display = 'flex';
+                                    // Remove ?success=true from URL without reload
+                                    const url = new URL(window.location.href);
+                                    url.searchParams.delete('success');
+                                    window.history.replaceState({}, '', url.toString());
+                                    // Auto-hide after 4s
+                                    setTimeout(() => { banner.style.opacity = '0'; banner.style.transition = 'opacity 0.5s'; setTimeout(() => banner.style.display = 'none', 500); }, 4000);
+                                }
+                            }
+                        })();
+                    </script>
                             <header class="header">
                                 <div class="header-left">
                                     <h1>My <span>Portfolio</span></h1>
