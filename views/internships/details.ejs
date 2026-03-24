@@ -636,6 +636,64 @@
             }
         })();
     </script>
+    <% if (!(typeof user !== 'undefined' && user && user.role === 'company')) { %>
+        <!-- TOPBAR -->
+        <div class="topbar">
+            <div class="container">
+                <span class="topbar-msg">Connecting Students with Top Companies — Start Your Journey Today</span>
+                <div class="topbar-contact">
+                    <a href="mailto:connect@algoorbit.in"><i class="fas fa-envelope"></i>connect@algoorbit.in</a>
+                    <a href="tel:919900000000"><i class="fas fa-phone"></i>+91 99000 00000</a>
+                </div>
+            </div>
+        </div>
+    
+        <!-- NAV -->
+        <nav class="nav" id="nav">
+            <div class="container">
+                <a href="/" class="logo">Conn<span>eto</span></a>
+                <ul class="nav-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/internships" class="active">Internships</a></li>
+                    <li><a href="/about">About Us</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+                <div class="nav-right">
+                    <button class="theme-btn" id="themeToggle" title="Toggle theme"><i class="fas fa-moon"></i></button>
+                    <% if (typeof user !== 'undefined' && user) { %>
+                        <a href="/<%= user.role %>/dashboard" class="btn btn-fill">Dashboard</a>
+                    <% } else { %>
+                        <a href="/auth/login" class="btn btn-outline">Login</a>
+                        <a href="/auth/register" class="btn btn-fill">Sign Up</a>
+                    <% } %>
+                    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+                </div>
+            </div>
+        </nav>
+    
+        <!-- MOBILE NAV -->
+        <div class="mobile-nav" id="mobileNav">
+            <div class="mobile-nav-header">
+                <a href="/" class="logo" style="color:#fff">Conn<span>eto</span></a>
+                <button class="mobile-close" id="mobileClose"><i class="fas fa-times"></i></button>
+            </div>
+            <ul class="mobile-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/internships">Internships</a></li>
+                <li><a href="/about">About Us</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+            <div class="mobile-nav-bottom">
+                <% if (typeof user !== 'undefined' && user) { %>
+                    <a href="/<%= user.role %>/dashboard" class="btn btn-fill">Dashboard</a>
+                    <a href="/auth/logout" class="btn btn-outline" style="border-color:rgba(255,248,240,0.3);color:#fff">Logout</a>
+                <% } else { %>
+                    <a href="/auth/login" class="btn btn-outline" style="border-color:rgba(255,248,240,0.3);color:#fff">Login</a>
+                    <a href="/auth/register" class="btn btn-fill">Sign Up</a>
+                <% } %>
+            </div>
+        </div>
+    <% } %>
 
     <section class="page-hero" style="padding: 80px 0 40px !important;">
         <div class="page-hero-bg"></div>

@@ -1638,8 +1638,13 @@
             <li><a href="/contact">Contact</a></li>
         </ul>
         <div class="mobile-nav-bottom">
-            <a href="/auth/login" class="btn btn-outline" style="border-color:rgba(255,248,240,.3);color:#fff">Login</a>
-            <a href="/auth/register" class="btn btn-fill">Sign Up</a>
+            <% if (user) { %>
+                <a href="/<%= user.role %>/dashboard" class="btn btn-fill">Dashboard</a>
+                <a href="/auth/logout" class="btn btn-outline" style="border-color:rgba(255,248,240,.3);color:#fff">Logout</a>
+            <% } else { %>
+                <a href="/auth/login" class="btn btn-outline" style="border-color:rgba(255,248,240,.3);color:#fff">Login</a>
+                <a href="/auth/register" class="btn btn-fill">Sign Up</a>
+            <% } %>
         </div>
     </div>
 

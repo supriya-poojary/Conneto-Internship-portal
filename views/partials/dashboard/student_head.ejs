@@ -430,13 +430,18 @@
 
   @media (max-width: 992px) {
     .sidebar {
-      left: -280px;
-      width: 280px;
-      box-shadow: 20px 0 40px rgba(0, 0, 0, 0.2);
+      left: -280px !important;
+      transform: none !important;
+      width: 280px !important;
+      box-shadow: 20px 0 40px rgba(0, 0, 0, 0.2) !important;
+      visibility: hidden !important;
     }
 
     .sidebar.active {
-      left: 0;
+      left: 0 !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      z-index: 1500 !important;
     }
 
     .main-content {
@@ -455,18 +460,15 @@
       gap: 20px;
     }
 
-    .stats-grid {
-      grid-template-columns: repeat(2, 1fr) !important;
-    }
-
-    .internship-list {
-      grid-template-columns: repeat(2, 1fr);
+    .stats-grid, .internship-list, .recent-grid, .dashboard-grid, .applications-grid {
+      grid-template-columns: 1fr !important;
     }
   }
 
   @media (max-width: 768px) {
-    .stats-grid {
+    .stats-grid, .internship-list, .recent-grid, .dashboard-grid, .applications-grid {
       grid-template-columns: 1fr !important;
+      display: grid !important;
     }
 
     .dashboard-grid {
@@ -1218,127 +1220,77 @@
     box-shadow: 0 12px 32px rgba(217, 95, 59, 0.4);
   }
 
-  @media (max-width: 1024px) {
-    .sidebar {
-      width: 85px;
-      padding: 30px 10px;
-    }
+  .blob { display: none; }
+  .dashboard-bg { background: transparent !important; }
 
-    .logo span,
-    .nav-item span,
-    .nav-section-label,
-    .user-details {
-      display: none;
-    }
+  /* Theme-aware Text Colors (Restored) */
+  .header-left h1 { color: var(--ink) !important; font-weight: 800; }
+  .header-left h1 span { color: var(--coral) !important; }
+  .header-subtitle { 
+    color: var(--ink) !important; 
+    opacity: 0.9;
+    font-weight: 600 !important;
+    font-size: 1.1rem;
+    margin-top: 5px;
+  }
+  [data-theme="dark"] .header-subtitle {
+     color: var(--text-muted) !important;
+     opacity: 1;
+  }
+  
+  .stat-value { color: var(--ink) !important; }
+  .stat-label { color: var(--text-muted) !important; }
+  
+  .card-title { color: var(--ink) !important; }
+  .card-title i { color: var(--coral) !important; }
 
-    .logo {
-      padding: 0;
-      text-align: center;
-      font-size: 1.4rem;
-    }
+  .profile-name { color: var(--ink) !important; }
+  .profile-email { color: var(--text-muted) !important; }
+  .profile-status { color: var(--amber) !important; }
+  
+  .progress-title span:first-child { color: var(--ink) !important; }
+  .progress-title span:last-child { color: var(--coral) !important; }
+  .progress-section p { color: var(--text-muted) !important; }
 
-    .nav-item {
-      justify-content: center;
-      padding: 12px;
-      margin-bottom: 8px;
-    }
-
-    .nav-item i {
-      font-size: 18px;
-    }
-
-    .main-content {
-      margin-left: 85px;
-      padding: 30px 20px;
-    }
-
-    .user-card {
-      padding: 8px;
-      justify-content: center;
-    }
-
-    .logout-btn {
-      display: none;
-    }
+  [data-theme="dark"] .main-content div:not(.int-card):not(.card):not(.blob):not(.dashboard-bg) {
+    color: var(--text);
   }
 
-  @media (max-width: 768px) {
-    .sidebar {
-      transform: translateX(-100%);
-      width: 260px;
-    }
+  [data-theme="dark"] .card {
+    background: var(--card-bg) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid var(--border) !important;
+  }
 
-    .sidebar.open {
-      transform: translateX(0);
-    }
+  .header-left h1, .stat-value, .card-title, .profile-name, .progress-title, .sidebar-bottom h4 {
+    text-shadow: none !important;
+  }
 
-    .logo span,
-    .nav-item span,
-    .nav-section-label,
-    .user-details {
-      display: block;
-    }
+  /* Make Applications Grid cards smaller */
+  .applications-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+    gap: 15px !important;
+  }
 
-    .logo {
-      text-align: left;
-      padding: 0 10px;
-      font-size: 1.8rem;
-    }
+  .applications-grid .internship-item {
+    font-size: 13px !important;
+    padding: 12px !important;
+    min-height: auto !important;
+  }
 
-    .nav-item {
-      justify-content: flex-start;
-    }
+  .applications-grid .company-logo {
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 16px !important;
+    border-radius: 10px !important;
+  }
 
-    .main-content {
-      margin-left: 0;
-      padding: 80px 20px 40px;
-    }
+  .applications-grid .internship-details h4 {
+    font-size: 14px !important;
+  }
 
-    .logout-btn {
-      display: flex;
-    }
-
-    .mobile-toggle {
-      display: flex !important;
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      width: 45px;
-      height: 45px;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      z-index: 1100;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      color: var(--ink);
-      cursor: pointer;
-      box-shadow: 0 4px 12px var(--shadow);
-    }
+  .applications-grid .status-badge {
+    padding: 4px 8px !important;
+    font-size: 10px !important;
   }
 </style>
-
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const toggle = document.createElement('div');
-    toggle.className = 'mobile-toggle';
-    toggle.style.display = 'none';
-    toggle.innerHTML = '<i class="fas fa-bars"></i>';
-    document.body.appendChild(toggle);
-
-    const sidebar = document.querySelector('.sidebar');
-    toggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      sidebar.classList.toggle('open');
-      toggle.innerHTML = sidebar.classList.contains('open') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
-    });
-
-    document.addEventListener('click', (e) => {
-      if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && !toggle.contains(e.target)) {
-        sidebar.classList.remove('open');
-        toggle.innerHTML = '<i class="fas fa-bars"></i>';
-      }
-    });
-  });
-</script>

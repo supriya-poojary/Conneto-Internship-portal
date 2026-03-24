@@ -149,6 +149,14 @@
                     width: 100%;
                     order: -1;
                 }
+
+                .mobile-logout-only {
+                    display: flex !important;
+                }
+            }
+
+            .mobile-logout-only {
+                display: none;
             }
 
             @media (max-width: 768px) {
@@ -171,6 +179,10 @@
                 .view-btn {
                     width: 100%;
                     text-align: center;
+                }
+
+                .internship-list, .recent-grid {
+                    grid-template-columns: 1fr !important;
                 }
 
                 .header-left h1 {
@@ -390,6 +402,9 @@
                         <div class="user-avatar" title="My Portfolio">
                             <%= user.name.charAt(0).toUpperCase() %>
                         </div>
+                    </a>
+                    <a href="/auth/logout" class="header-btn mobile-logout-only" title="Logout" style="background:rgba(181, 56, 74, 0.1); color:var(--rose); border-color:rgba(181, 56, 74, 0.2)">
+                        <i class="fas fa-power-off"></i>
                     </a>
                 </div>
             </header>

@@ -1303,8 +1303,13 @@
                 <li><a href="/contact">Contact</a></li>
             </ul>
             <div class="mobile-nav-btns">
-                <a href="/auth/login" class="btn-outline" style="text-align:center">Login</a>
-                <a href="/auth/register" class="btn-solid" style="text-align:center">Sign Up</a>
+                <% if (user) { %>
+                    <a href="/<%= user.role %>/dashboard" class="btn-solid" style="text-align:center">Dashboard</a>
+                    <a href="/auth/logout" class="btn-outline" style="text-align:center">Logout</a>
+                <% } else { %>
+                    <a href="/auth/login" class="btn-outline" style="text-align:center">Login</a>
+                    <a href="/auth/register" class="btn-solid" style="text-align:center">Sign Up</a>
+                <% } %>
             </div>
         </div>
     </div>
