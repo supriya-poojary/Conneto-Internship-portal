@@ -223,11 +223,13 @@
     background: var(--nav-bg);
     backdrop-filter: blur(12px);
     border-right: 1px solid var(--border);
-    padding: 30px 20px;
+    padding: 30px 20px 80px 20px;
     display: flex;
     flex-direction: column;
     z-index: 1000;
     transition: .3s;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .logo {

@@ -416,10 +416,11 @@
     background: var(--nav-bg);
     backdrop-filter: blur(12px);
     border-right: 1px solid var(--border);
-    padding: 30px 20px;
+    padding: 30px 20px 80px 20px;
     position: fixed;
     height: calc(100vh - 70px);
     overflow-y: auto;
+    overflow-x: hidden;
     transition: .3s;
   }
 
@@ -597,82 +598,6 @@
     }
   }
 
-  @media (max-width: 768px) {
-    .sidebar {
-      transform: translateX(-100%);
-      width: 260px;
-      height: calc(100vh - 70px);
-      top: 70px;
-      z-index: 1050;
-    }
 
-    .sidebar.open {
-      transform: translateX(0);
-    }
-
-    .sidebar-title,
-    .nav-link span {
-      display: block;
-    }
-
-    .nav-link {
-      justify-content: flex-start;
-    }
-
-    .content {
-      margin-left: 0;
-      padding: 30px 20px;
-    }
-
-    .topbar {
-      padding: 0 20px;
-    }
-
-    .page-title {
-      font-size: 1.8rem;
-    }
-
-    .mobile-toggle {
-      display: flex !important;
-      width: 40px;
-      height: 40px;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      color: var(--ink);
-      cursor: pointer;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      background: var(--card-bg);
-    }
-  }
 </style>
-
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const topbarRight = document.querySelector('.topbar-right');
-    const toggle = document.createElement('div');
-    toggle.className = 'mobile-toggle';
-    toggle.style.display = 'none';
-    toggle.style.marginRight = '10px';
-    toggle.innerHTML = '<i class="fas fa-bars"></i>';
-
-    const topbar = document.querySelector('.topbar');
-    const logo = document.querySelector('.logo');
-    logo.parentNode.insertBefore(toggle, logo.nextSibling);
-
-    const sidebar = document.querySelector('.sidebar');
-    toggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      sidebar.classList.toggle('open');
-      toggle.innerHTML = sidebar.classList.contains('open') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
-    });
-
-    document.addEventListener('click', (e) => {
-      if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && !toggle.contains(e.target)) {
-        sidebar.classList.remove('open');
-        toggle.innerHTML = '<i class="fas fa-bars"></i>';
-      }
-    });
-  });
-</script>
+
