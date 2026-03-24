@@ -48,7 +48,10 @@ router.get('/student/dashboard', async (req, res) => {
 
     try {
         const applications = await Application.find({ student: req.session.user.id })
-            .populate('internship')
+            .populate({
+                path: 'internship',
+                populate: { path: 'company', select: 'companyName name' }
+            })
             .sort({ appliedAt: -1 });
 
         const stats = {
@@ -67,7 +70,12 @@ router.get('/student/dashboard', async (req, res) => {
             selectedInternships = applications.filter(app => app.status === 'selected');
             let dFilter = { student: req.session.user.id };
             if (viewInternshipId) dFilter.internship = viewInternshipId;
-            let query = DiaryEntry.find(dFilter).populate('internship').sort({ date: -1 });
+            let query = DiaryEntry.find(dFilter)
+                .populate({
+                    path: 'internship',
+                    populate: { path: 'company', select: 'companyName name' }
+                })
+                .sort({ date: -1 });
             if (activeTab === 'diary' || activeTab === 'dashboard') {
                 query = query.limit(20);
             }
@@ -283,7 +291,7 @@ router.post('/student/profile/update', (req, res, next) => {
         const {
             name, email, dob, gender, usn, college, degree, department, semester, year, gpa,
             address, city, state, country, bio, experience, projects, skills, interests,
-            certifications, languages, phone, linkedin, github, portfolio
+            certifications, languages, phone, linkedin, github, portfolio, memberStatus
         } = req.body;
 
         // 1. Update Core User (Name/Email)
@@ -304,15 +312,28 @@ router.post('/student/profile/update', (req, res, next) => {
             resumeUrl = '/uploads/resumes/' + req.file.filename;
         }
 
-        // 3. Track 25 Key Fields (4% each)
-        let filledCount = 0;
-        const check = (val) => (val && val.toString().trim().length > 0);
+        // 3. Conditional Completion Percentage (100% Target)
+        // Core Fields (Required for ALL to reach 100%)
+        const coreFields = [name, email, dob, gender, phone, address, city, state, country, 
+                          degree, department, memberStatus, skills, bio,
+                          languages, interests, linkedin, github, portfolio];
+        
+        let filledCore = coreFields.filter(val => val && val.toString().trim().length > 0).length;
+        
+        const existingProfile = await StudentProfile.findOne({ user: req.session.user.id });
+        const finalResumeUrl = resumeUrl || (existingProfile ? existingProfile.resumeUrl : null);
+        if (finalResumeUrl) filledCore++; // 19 core text/select + 1 resume = 20 fields total
 
-        [name, email, dob, gender, usn, college, degree, department, semester, year, gpa,
-            address, city, state, country, bio, experience, projects, skills, interests,
-            certifications, languages, phone, linkedin, github, portfolio].forEach(f => {
-                if (check(f)) filledCount++;
-            });
+        let finalPercent = Math.min(Math.round((filledCore / 20) * 100), 100);
+
+        // EXTRA for Students (Learning Engineers)
+        if (memberStatus === 'Student') {
+            const academicFields = [usn, college, semester, year, gpa];
+            let filledAcademic = academicFields.filter(val => val && val.toString().trim().length > 0).length;
+            
+            // For students, 100% requires all 25 fields (20 core + 5 academic)
+            finalPercent = Math.min(Math.round(((filledCore + filledAcademic) / 25) * 100), 100);
+        }
 
         // 4. Update Profile Data
         const skillsArr = skills ? skills.split(',').map(s => s.trim()).filter(s => s) : [];
@@ -320,29 +341,18 @@ router.post('/student/profile/update', (req, res, next) => {
 
         const updateData = {
             dob, gender, usn, college, degree, department, semester, year, gpa,
-            address, city, state, country, bio, experience, projects,
+            memberStatus, address, city, state, country, bio, experience, projects,
             certifications, languages,
             skills: skillsArr,
             interests: interestsArr,
             phone, linkedin, github, portfolio,
+            completionPercentage: finalPercent,
             updatedAt: Date.now()
         };
 
         if (resumeUrl) {
             updateData.resumeUrl = resumeUrl;
         }
-
-        // Check for existing profile to get current resumeUrl if not uploaded now
-        const existingProfile = await StudentProfile.findOne({ user: req.session.user.id });
-        const finalResumeUrl = resumeUrl || (existingProfile ? existingProfile.resumeUrl : null);
-
-        // Add resume to filled count if present
-        if (check(finalResumeUrl)) filledCount++;
-
-        // Calculate strength (27 fields total: 26 + resume)
-        // Adjusting to 100% total
-        const strength = Math.min(Math.round((filledCount / 27) * 100), 100);
-        updateData.completionPercentage = strength;
 
         await StudentProfile.findOneAndUpdate(
             { user: req.session.user.id },
