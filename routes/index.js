@@ -246,21 +246,18 @@ router.get('/company/applications', (req, res) => res.redirect('/company/dashboa
 router.get('/company/profile', (req, res) => res.redirect('/company/dashboard?tab=profile'));
 router.get('/company/internships', (req, res) => res.redirect('/company/dashboard?tab=internships'));
 
-// Setup multer for resume upload
+// Setup multer with Cloudinary for resume upload
 const multer = require('multer');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('cloudinary').v2;
 const fs = require('fs');
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        const dir = 'public/uploads/resumes';
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true });
-        }
-        cb(null, dir);
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'conneto_resumes',
+        format: async (req, file) => 'pdf',
     },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + path.extname(file.originalname));
-    }
 });
 const upload = multer({
     storage: storage,
@@ -309,7 +306,7 @@ router.post('/student/profile/update', (req, res, next) => {
         // 2. Resume URL
         let resumeUrl = null;
         if (req.file) {
-            resumeUrl = '/uploads/resumes/' + req.file.filename;
+            resumeUrl = req.file.path; // Cloudinary secure URL
         }
 
         // 3. Conditional Completion Percentage (100% Target)

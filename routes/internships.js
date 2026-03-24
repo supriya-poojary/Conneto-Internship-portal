@@ -508,23 +508,20 @@ router.get('/internships/:id([0-9a-fA-F]{24})', async (req, res) => {
     }
 });
 
-// Setup multer for resume upload
+// Setup multer with Cloudinary for resume upload
 const multer = require('multer');
-const path = require('path');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('cloudinary').v2;
 const fs = require('fs');
 const pdfParse = require('pdf-parse');
+const https = require('https');
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        const dir = 'public/uploads/resumes';
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true });
-        }
-        cb(null, dir);
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'conneto_resumes',
+        format: async (req, file) => 'pdf',
     },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + path.extname(file.originalname));
-    }
 });
 const upload = multer({
     storage: storage,
@@ -553,11 +550,20 @@ router.post('/internships/:id/apply', isAuthenticated, isStudent, (req, res, nex
         let extractedSkills = [];
 
         if (req.file) {
-            resumeUrl = '/uploads/resumes/' + req.file.filename;
+            resumeUrl = req.file.path; // Cloudinary secure URL
 
             // Extract text from PDF to find skills
             try {
-                const dataBuffer = fs.readFileSync(req.file.path);
+                // Fetch the PDF buffer from Cloudinary URL
+                const fetchPdf = () => new Promise((resolve, reject) => {
+                    https.get(req.file.path, (res) => {
+                        const chunks = [];
+                        res.on('data', chunk => chunks.push(chunk));
+                        res.on('end', () => resolve(Buffer.concat(chunks)));
+                    }).on('error', reject);
+                });
+                
+                const dataBuffer = await fetchPdf();
 
                 // VALIDATE PDF SIGNATURE: First 5 bytes should be %PDF-
                 if (dataBuffer.length > 5 && dataBuffer.toString('utf8', 0, 5) === '%PDF-') {
