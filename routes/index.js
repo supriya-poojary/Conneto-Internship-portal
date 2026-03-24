@@ -397,4 +397,26 @@ router.post('/student/applications/:id/reschedule', async (req, res) => {
     }
 });
 
+// GET /view-resume - Proxy for Cloudinary PDF to force inline viewing
+router.get('/view-resume', (req, res) => {
+    const { url } = req.query;
+    if (!url) return res.status(400).send('No URL provided');
+    
+    try {
+        const https = require('https');
+        https.get(url, (response) => {
+            if (response.statusCode !== 200) {
+                return res.status(response.statusCode).send('Failed to fetch resume');
+            }
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', 'inline; filename="resume.pdf"');
+            response.pipe(res);
+        }).on('error', (e) => {
+            res.status(500).send('Error loading resume');
+        });
+    } catch (err) {
+        res.status(500).send('Server error');
+    }
+});
+
 module.exports = router;

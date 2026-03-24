@@ -1079,7 +1079,7 @@
                     <div style="display:flex; justify-content:center; gap:20px; margin-bottom: 30px;">
                         ${data.linkedin ? `<a href="${data.linkedin.startsWith('http') ? data.linkedin : 'https://' + data.linkedin}" target="_blank" style="color:var(--coral); font-size:24px"><i class="fab fa-linkedin"></i></a>` : ''}
                         ${data.github ? `<a href="${data.github.startsWith('http') ? data.github : 'https://' + data.github}" target="_blank" style="color:var(--ink); font-size:24px"><i class="fab fa-github"></i></a>` : ''}
-                        ${data.resumeUrl ? `<a href="${data.resumeUrl}" target="_blank" style="color:#e74c3c; font-size:24px"><i class="fas fa-file-pdf"></i></a>` : ''}
+                        ${data.resumeUrl ? `<a href="/view-resume?url=${encodeURIComponent(data.resumeUrl)}" target="_blank" style="color:#e74c3c; font-size:24px"><i class="fas fa-file-pdf"></i></a>` : ''}
                     </div>
 
                     <div style="text-align: left; width: 100%;">
