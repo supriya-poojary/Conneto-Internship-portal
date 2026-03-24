@@ -262,7 +262,7 @@ const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
         folder: 'conneto_resumes',
-        format: async (req, file) => 'pdf',
+        resource_type: 'raw'
     },
 });
 const upload = multer({
