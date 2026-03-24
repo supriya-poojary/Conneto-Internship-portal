@@ -10,6 +10,7 @@ const studentProfileSchema = new mongoose.Schema({
     semester: { type: Number },
     year: { type: Number },
     gpa: { type: Number },
+    memberStatus: { type: String, enum: ['Student', 'Graduate', 'Professional'], default: 'Student' },
     skills: [{ type: String }],
     interests: [{ type: String }],
     bio: { type: String },
