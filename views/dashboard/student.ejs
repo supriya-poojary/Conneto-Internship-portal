@@ -349,6 +349,7 @@
             .diary-entry-card:hover .header-btn {
                 opacity: 1;
             }
+
         </style>
 </head>
 
@@ -599,6 +600,7 @@
                                                                             <input type="datetime-local" name="suggestedDate" required style="width:100%; border:1px solid var(--border); border-radius:8px; padding:6px; font-size:12px; background:var(--bg); color:var(--text);">
                                                                         </div>
                                                                         <textarea name="reason" placeholder="Reason for rescheduling..." required style="width:100%; border:1px solid var(--border); border-radius:8px; padding:6px; font-size:12px; min-height:60px; margin-bottom:8px; background:var(--bg); color:var(--text);"></textarea>
+
                                                                         <button type="submit" class="view-btn" style="background:var(--coral); color:#fff; border:none; width:100%; font-size:11px">Send Request</button>
                                                                     </form>
                                                                 </div>
@@ -1551,10 +1553,17 @@
                                                                     <form action="/student/applications/${app._id}/reschedule" method="POST">
                                                                         <div style="margin-bottom:10px">
                                                                             <label style="font-size:11px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:5px">Suggested New Time:</label>
+<<<<<<< HEAD
+                                                                            <input type="datetime-local" name="suggestedDate" required style="width:100%; border:1px solid var(--border); border-radius:10px; padding:10px; font-size:13px; background:#fff">
+                                                                        </div>
+                                                                        <textarea name="reason" placeholder="Please provide a suitable reason for rescheduling..." required 
+                                                                            style="width:100%; border:1px solid var(--border); border-radius:10px; padding:10px; font-size:13px; min-height:80px; margin-bottom:10px; background:#fff"></textarea>
+=======
                                                                             <input type="datetime-local" name="suggestedDate" required style="width:100%; border:1px solid var(--border); border-radius:10px; padding:10px; font-size:13px; background:var(--bg); color:var(--text);">
                                                                         </div>
                                                                         <textarea name="reason" placeholder="Please provide a suitable reason for rescheduling..." required 
                                                                             style="width:100%; border:1px solid var(--border); border-radius:10px; padding:10px; font-size:13px; min-height:80px; margin-bottom:10px; background:var(--bg); color:var(--text);"></textarea>
+>>>>>>> 5a236d78f16b9d8f57602e9812fc8ca68421611e
                                                                         <button type="submit" class="view-btn" style="background:var(--coral); color:#fff; border:none; padding:8px 15px; font-size:12px; cursor:pointer">Send Request</button>
                                                                     </form>
                                                                 </div>
