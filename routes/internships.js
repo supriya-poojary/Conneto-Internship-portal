@@ -516,6 +516,12 @@ const fs = require('fs');
 const pdfParse = require('pdf-parse');
 const https = require('https');
 
+cloudinary.config({
+  cloud_name: 'dqxspb6sc',
+  api_key: '221695386134532',
+  api_secret: 'xfAigpe8E_pzPzbCs1_dujgPh5I'
+});
+
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
