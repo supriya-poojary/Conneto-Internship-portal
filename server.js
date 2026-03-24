@@ -46,6 +46,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use('/', require('./routes/index'));
 app.use('/auth', require('./routes/auth'));
 app.use('/', require('./routes/internships'));
+app.use('/admin', require('./routes/admin'));
 
 // ─── 404 Handler ──────────────────────────────────────────────────────────
 app.use((req, res) => {

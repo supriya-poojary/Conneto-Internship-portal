@@ -324,6 +324,32 @@
                 padding: 20px;
                 margin-top: 20px;
             }
+
+            /* Diary Entry Enhancements */
+            .diary-entry-card:hover {
+                transform: translateY(-8px) scale(1.02);
+                border-color: var(--coral);
+                box-shadow: 0 25px 60px rgba(0,0,0,0.1) !important;
+            }
+
+            [data-theme="light"] .diary-entry-card {
+                background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
+                border-color: #eee;
+            }
+
+            [data-theme="dark"] .diary-entry-card {
+                background: var(--card-bg);
+            }
+
+            .diary-entry-card .header-btn {
+                opacity: 0.6;
+                transition: 0.3s;
+            }
+
+            .diary-entry-card:hover .header-btn {
+                opacity: 1;
+            }
+
         </style>
 </head>
 
@@ -571,9 +597,10 @@
                                                                     <form action="/student/applications/<%= app._id %>/reschedule" method="POST">
                                                                         <div style="margin-bottom:8px">
                                                                             <label style="font-size:10px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:4px">New Suggested Time:</label>
-                                                                            <input type="datetime-local" name="suggestedDate" required style="width:100%; border:1px solid var(--border); border-radius:8px; padding:6px; font-size:12px; background:#fff">
+                                                                            <input type="datetime-local" name="suggestedDate" required style="width:100%; border:1px solid var(--border); border-radius:8px; padding:6px; font-size:12px; background:var(--bg); color:var(--text);">
                                                                         </div>
-                                                                        <textarea name="reason" placeholder="Reason for rescheduling..." required style="width:100%; border:1px solid var(--border); border-radius:8px; padding:6px; font-size:12px; min-height:60px; margin-bottom:8px; background:#fff"></textarea>
+                                                                        <textarea name="reason" placeholder="Reason for rescheduling..." required style="width:100%; border:1px solid var(--border); border-radius:8px; padding:6px; font-size:12px; min-height:60px; margin-bottom:8px; background:var(--bg); color:var(--text);"></textarea>
+
                                                                         <button type="submit" class="view-btn" style="background:var(--coral); color:#fff; border:none; width:100%; font-size:11px">Send Request</button>
                                                                     </form>
                                                                 </div>
@@ -616,13 +643,27 @@
                             <% } %>
                 </div>
                 <% } else if (activePage==='profile' ) { %>
-                    <% if (typeof success !=='undefined' || (typeof query !=='undefined' && query.success)) { %>
-                        <div
-                            style="background:var(--sage); color:#fff; padding:15px 25px; border-radius:15px; margin-bottom:25px; display:flex; align-items:center; gap:15px; animation: slideIn 0.4s ease-out">
-                            <i class="fas fa-check-circle" style="font-size:1.2rem"></i>
-                            <div style="font-weight:600">Portfolio Updated Successfully! All changes are now live.</div>
-                        </div>
-                        <% } %>
+                    <div id="successBanner" style="display:none; background:var(--sage); color:#fff; padding:15px 25px; border-radius:15px; margin-bottom:25px; align-items:center; gap:15px; animation: slideIn 0.4s ease-out">
+                        <i class="fas fa-check-circle" style="font-size:1.2rem"></i>
+                        <div style="font-weight:600">Portfolio Updated Successfully! All changes are now live.</div>
+                    </div>
+                    <script>
+                        (function() {
+                            const params = new URLSearchParams(window.location.search);
+                            if (params.get('success') !== null && params.get('success') !== '') {
+                                const banner = document.getElementById('successBanner');
+                                if (banner) {
+                                    banner.style.display = 'flex';
+                                    // Remove ?success=true from URL without reload
+                                    const url = new URL(window.location.href);
+                                    url.searchParams.delete('success');
+                                    window.history.replaceState({}, '', url.toString());
+                                    // Auto-hide after 4s
+                                    setTimeout(() => { banner.style.opacity = '0'; banner.style.transition = 'opacity 0.5s'; setTimeout(() => banner.style.display = 'none', 500); }, 4000);
+                                }
+                            }
+                        })();
+                    </script>
                             <header class="header">
                                 <div class="header-left">
                                     <h1>My <span>Portfolio</span></h1>
@@ -1025,33 +1066,358 @@
                                                         <% } %>
                                     </div>
                                 </div>
-                                <% } else if (activePage==='saved' ) { %>
+                                <% } else if (activePage === 'diary') { %>
                                     <header class="header">
                                         <div class="header-left">
-                                            <h1>Saved Jobs</h1>
-                                            <p>Internships you've bookmarked for later</p>
-                                        </div>
-                                        <div class="header-right">
-                                            <a href="/internships" class="view-btn"
-                                                style="background:var(--coral); color:#fff">
-                                                <i class="fas fa-search"></i> Browse Jobs
-                                            </a>
+                                            <h1>Internship <span>Diary</span></h1>
+                                            <p>Log your daily progress and learnings for VTU assessment.</p>
                                         </div>
                                     </header>
 
-                                    <div class="card reveal"
-                                        style="margin-top:20px; text-align:center; padding:80px 40px">
-                                        <div
-                                            style="width:80px; height:80px; background:rgba(217,95,59,0.1); color:var(--coral); border-radius:20px; display:flex; align-items:center; justify-content:center; margin:0 auto 24px; font-size:2rem">
-                                            <i class="fas fa-bookmark"></i>
+                                    <div class="portfolio-grid" style="display:block; margin-top:20px;">
+                                        <div class="card reveal" style="padding:40px; border-radius:30px; margin-bottom:30px;">
+                                            <h4 class="portfolio-section-title" style="margin-top:0"><i class="fas fa-pen-nib"></i> New Diary Entry</h4>
+                                            
+                                            <% if (selectedInternships && selectedInternships.length > 0) { %>
+                                                <form action="/student/diary/add" method="POST" onsubmit="return validateDiaryDate('date')">
+                                                    <div class="portfolio-grid" style="grid-template-columns: 1fr 1fr; gap:30px;">
+                                                        <div class="portfolio-group">
+                                                            <label class="portfolio-label">Select Internship *</label>
+                                                            <select name="internshipId" class="portfolio-input" required onchange="window.location.href='/student/dashboard?tab=diary&viewInternshipId=' + this.value;">
+                                                                <option value="">-- Choose Active Internship --</option>
+                                                                <% selectedInternships.forEach(app => { %>
+                                                                    <option value="<%= app.internship._id %>" <%= typeof viewInternshipId !== 'undefined' && viewInternshipId == app.internship._id ? 'selected' : '' %>>
+                                                                        <%= app.internship.title %> at <%= app.internship.company ? app.internship.company.companyName || 'Company' : 'Company' %>
+                                                                    </option>
+                                                                <% }) %>
+                                                            </select>
+                                                        </div>
+                                                        <div class="portfolio-group">
+                                                            <label class="portfolio-label">Date of Activity *</label>
+                                                            <input type="date" id="date" name="date" class="portfolio-input" value="<%= new Date().toISOString().split('T')[0] %>" max="<%= new Date().toISOString().split('T')[0] %>" required>
+                                                            <p style="font-size:11px; color:var(--text-muted); margin-top:5px">Sundays are not permitted for internship tracking.</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <h4 class="portfolio-section-title" style="font-size:1.1rem; margin-top:10px;"><i class="fas fa-briefcase"></i> What I worked on?</h4>
+                                                    <div class="portfolio-grid" style="grid-template-columns: 3fr 1fr; gap:30px;">
+                                                        <div class="portfolio-group">
+                                                            <label class="portfolio-label">Work Summary *</label>
+                                                            <textarea name="workSummary" class="portfolio-input portfolio-textarea" placeholder="Briefly describe the work you did today..." maxlength="2000" style="min-height:80px" required></textarea>
+                                                        </div>
+                                                        <div class="portfolio-group">
+                                                            <label class="portfolio-label">Hours worked *</label>
+                                                            <input type="number" name="hoursWorked" class="portfolio-input" min="0" max="24" step="0.25" placeholder="e.g. 6.5" required>
+                                                        </div>
+                                                    </div>
+
+                                                    <h4 class="portfolio-section-title" style="font-size:1.1rem; margin-top:10px;"><i class="fas fa-link"></i> Show Your Work</h4>
+                                                    <div class="portfolio-group">
+                                                        <label class="portfolio-label">Reference Links</label>
+                                                        <textarea name="links" class="portfolio-input" placeholder="Paste one or more relevant links, separated by commas" maxlength="5000" style="min-height:50px"></textarea>
+                                                    </div>
+
+                                                    <h4 class="portfolio-section-title" style="font-size:1.1rem; margin-top:10px;"><i class="fas fa-brain"></i> Blockers & Learnings</h4>
+                                                    <div class="portfolio-grid" style="grid-template-columns: 1fr 1fr; gap:30px;">
+                                                        <div class="portfolio-group">
+                                                            <label class="portfolio-label">Learnings / Outcomes *</label>
+                                                            <textarea name="learnings" class="portfolio-input portfolio-textarea" placeholder="What did you learn or ship today?" maxlength="2000" style="min-height:80px" required></textarea>
+                                                        </div>
+                                                        <div class="portfolio-group">
+                                                            <label class="portfolio-label">Blockers / Risks</label>
+                                                            <textarea name="blockers" class="portfolio-input portfolio-textarea" placeholder="Anything that slowed you down?" maxlength="1000" style="min-height:80px"></textarea>
+                                                        </div>
+                                                    </div>
+
+                                                    <h4 class="portfolio-section-title" style="font-size:1.1rem; margin-top:10px;"><i class="fas fa-code"></i> Skills</h4>
+                                                    <div class="portfolio-group">
+                                                        <label class="portfolio-label">Skills Used *</label>
+                                                        <input type="text" name="skillsUsed" class="portfolio-input" placeholder="Add skills separated by commas (e.g. React, Node.js)" required>
+                                                    </div>
+
+                                                    <div style="text-align:right">
+                                                        <button type="submit" class="view-btn" style="background:var(--coral); color:#fff; padding:12px 30px; font-size:1rem; border-radius:12px">
+                                                            <i class="fas fa-save"></i> Save Entry
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                                
+                                                <script>
+                                                    function validateDiaryDate(elementId) {
+                                                        const dateVal = document.getElementById(elementId).value;
+                                                        if (dateVal) {
+                                                            const d = new Date(dateVal);
+                                                            if (d.getDay() === 0) {
+                                                                Swal.fire({
+                                                                    icon: 'error',
+                                                                    title: 'Invalid Date',
+                                                                    text: 'Sundays are not permitted for diary entry logging. Please choose a weekday.',
+                                                                    confirmButtonColor: '#D95F3B'
+                                                                });
+                                                                return false;
+                                                            }
+                                                        }
+                                                        return true;
+                                                    }
+                                                </script>
+                                            <% } else { %>
+                                                <div style="text-align:center; padding: 40px 0;">
+                                                    <i class="fas fa-lock" style="font-size:3rem; color:var(--border); margin-bottom:15px"></i>
+                                                    <h3 style="color:var(--ink)">Diary Locked</h3>
+                                                    <p style="color:var(--text-muted)">You need to be selected for at least one internship to start logging entries.</p>
+                                                </div>
+                                            <% } %>
                                         </div>
-                                        <h2>No saved jobs yet</h2>
-                                        <p style="color:var(--text-muted); margin-bottom:30px">Bookmark internships to
-                                            track them here.</p>
-                                        <a href="/internships" class="view-btn"
-                                            style="background:var(--coral); color:#fff; padding:12px 24px">Explore
-                                            Now</a>
                                     </div>
+                                <% } else if (activePage === 'diary_history') { %>
+                                    <header class="header">
+                                        <div class="header-left">
+                                            <h1>Diary <span>Tracking</span></h1>
+                                            <p>View your internship logs and track overall progress.</p>
+                                        </div>
+                                    </header>
+
+                                    <div class="portfolio-grid" style="display:block; margin-top:20px;">
+                                        <div class="card reveal" style="padding:40px; border-radius:30px; margin-bottom: 20px;">
+                                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                                                <h4 class="portfolio-section-title" style="margin:0"><i class="fas fa-history"></i> Track Internship Progress</h4>
+                                            </div>
+                                            
+                                            <% if (selectedInternships && selectedInternships.length > 0) { %>
+                                                <div class="portfolio-group" style="margin-bottom: 30px;">
+                                                    <label class="portfolio-label">Select Internship to View *</label>
+                                                    <select class="portfolio-input" onchange="window.location.href='/student/dashboard?tab=diary_history&viewInternshipId=' + this.value;">
+                                                        <option value="">-- View All Logs --</option>
+                                                        <% selectedInternships.forEach(app => { %>
+                                                            <option value="<%= app.internship._id %>" <%= typeof viewInternshipId !== 'undefined' && viewInternshipId == app.internship._id ? 'selected' : '' %>>
+                                                                <%= app.internship.title %> at <%= app.internship.company ? app.internship.company.companyName || 'Company' : 'Company' %>
+                                                            </option>
+                                                        <% }) %>
+                                                    </select>
+                                                </div>
+
+                                                <% if (viewInternshipId) { 
+                                                    const selectedApp = selectedInternships.find(a => a.internship._id.toString() === viewInternshipId.toString());
+                                                    if (selectedApp) {
+                                                        const durStr = selectedApp.internship.duration || "1 month";
+                                                        const numMonths = parseInt(durStr) || 1;
+                                                        const expectedDays = numMonths * 30; // approx 30 days per month
+                                                        const percentage = Math.min(Math.round((diaryEntries.length / expectedDays) * 100), 100);
+                                                %>
+                                                <div style="background: var(--bg); padding: 20px; border-radius: 15px; border: 1px solid var(--border); margin-bottom: 30px;">
+                                                    <div style="display:flex; justify-content:space-between; margin-bottom: 10px;">
+                                                        <span style="font-weight:700; color:var(--text); font-size:14px;"><i class="fas fa-flag-checkered" style="color:var(--coral)"></i> Completion Progress</span>
+                                                        <span style="color:var(--coral); font-weight:800; font-family:'Outfit'"><%= percentage %>%</span>
+                                                    </div>
+                                                    <div style="width:100%; height:10px; background:var(--border); border-radius:10px; overflow:hidden;">
+                                                        <div style="width:<%= percentage %>%; height:100%; background:linear-gradient(90deg, var(--coral), var(--rose)); border-radius:10px; transition:1s;"></div>
+                                                    </div>
+                                                    <p style="font-size:11px; color:var(--text-muted); margin-top:10px; text-align:right">
+                                                        <%= diaryEntries.length %> logs out of estimated <%= expectedDays %> days (working days may vary based on holidays).
+                                                    </p>
+                                                </div>
+                                                <% } } %>
+                                            <% } else { %>
+                                                <div style="text-align:center; padding: 40px 0;">
+                                                    <i class="fas fa-lock" style="font-size:3rem; color:var(--border); margin-bottom:15px"></i>
+                                                    <h3 style="color:var(--ink)">History Locked</h3>
+                                                    <p style="color:var(--text-muted)">You need to be selected for at least one internship to start tracking entries.</p>
+                                                </div>
+                                            <% } %>
+                                        </div>
+
+                                        <div class="card reveal" style="padding:40px; border-radius:30px;">
+                                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                                                <h4 class="portfolio-section-title" style="margin:0"><i class="fas fa-history"></i> Recent Logs (Current Internship)</h4>
+                                            </div>
+                                            <% if (diaryEntries && diaryEntries.length > 0) { %>
+                                                <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(450px, 1fr)); gap:25px;">
+                                                    <% diaryEntries.forEach(entry => { 
+                                                        const companyName = entry.internship && entry.internship.company ? (entry.internship.company.companyName || entry.internship.company.name) : 'Company' ;
+                                                    %>
+                                                        <div class="diary-entry-card" style="position:relative; background: var(--card-bg); border: 1px solid var(--border); border-radius: 25px; padding: 30px; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden; display:flex; flex-direction:column; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                                                            <!-- Decorative Accent -->
+                                                            <div style="position:absolute; top:0; left:0; width:6px; height:100%; background: linear-gradient(to bottom, var(--coral), var(--rose));"></div>
+                                                            
+                                                            <!-- Header: Date & Company -->
+                                                            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px;">
+                                                                <div style="flex:1">
+                                                                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                                                                        <span style="background:rgba(217,95,59,0.1); color:var(--coral); padding:5px 12px; border-radius:100px; font-size:12px; font-weight:800; letter-spacing:0.5px; display:inline-flex; align-items:center; gap:5px;">
+                                                                            <i class="fas fa-calendar-alt"></i> <%= new Date(entry.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) %>
+                                                                        </span>
+                                                                        <span style="background:rgba(90,122,92,0.1); color:var(--sage); padding:5px 12px; border-radius:100px; font-size:12px; font-weight:800;">
+                                                                            <i class="fas fa-city" style="margin-right:3px"></i> <%= companyName %>
+                                                                        </span>
+                                                                    </div>
+                                                                    <h3 style="font-size:1.3rem; color:var(--ink); font-family:'Outfit'; font-weight:700; line-height:1.2;">
+                                                                        <%= entry.internship ? entry.internship.title : 'Research & Development' %>
+                                                                    </h3>
+                                                                </div>
+                                                                <div style="display:flex; gap:8px;">
+                                                                    <button onclick="editDiary('<%= entry._id %>', `<%= entry.workSummary.replace(/`/g, '\\`') %>`, '<%= entry.hoursWorked %>', `<%= entry.links ? entry.links.replace(/`/g, '\\`') : '' %>`, `<%= entry.learnings.replace(/`/g, '\\`') %>`, `<%= entry.blockers ? entry.blockers.replace(/`/g, '\\`') : '' %>`, `<%= entry.skillsUsed.replace(/`/g, '\\`') %>`, '<%= new Date(entry.date).toISOString().split('T')[0] %>')" class="header-btn" style="width:36px; height:36px; font-size:14px;"><i class="fas fa-edit"></i></button>
+                                                                    <form action="/student/diary/delete/<%= entry._id %>" method="POST" onsubmit="return confirm('Delete this entry permanently?')" style="display:inline;">
+                                                                        <button type="submit" class="header-btn" style="width:36px; height:36px; font-size:14px; color:var(--rose);"><i class="fas fa-trash"></i></button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <!-- Main Content Section -->
+                                                            <div style="flex:1; display:grid; grid-template-columns: 1fr; gap:15px; margin-bottom:20px;">
+                                                                <div style="background:var(--bg); padding:18px; border-radius:18px; border:1px solid var(--border); transition: 0.3s;" onmouseover="this.style.borderColor='var(--coral)'" onmouseout="this.style.borderColor='var(--border)'">
+                                                                    <p style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">
+                                                                        <i class="fas fa-tasks" style="color:var(--coral); margin-right:5px"></i> Practical Work Summary
+                                                                    </p>
+                                                                    <p style="font-size:14px; color:var(--text); line-height:1.6; font-weight:500;"><%= entry.workSummary %></p>
+                                                                </div>
+                                                                
+                                                                <div style="background:var(--bg); padding:18px; border-radius:18px; border:1px solid var(--border); transition: 0.3s;" onmouseover="this.style.borderColor='var(--sage)'" onmouseout="this.style.borderColor='var(--border)'">
+                                                                    <p style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">
+                                                                        <i class="fas fa-lightbulb" style="color:var(--sage); margin-right:5px"></i> Key Learnings & Outcomes
+                                                                    </p>
+                                                                    <p style="font-size:14px; color:var(--text); line-height:1.6; font-weight:500;"><%= entry.learnings %></p>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Footer: Metrics & Tags -->
+                                                            <div style="margin-top:auto; padding-top:20px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
+                                                                <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                                                                    <% if (entry.skillsUsed) { %>
+                                                                        <% entry.skillsUsed.split(',').forEach(skill => { %>
+                                                                            <span style="font-size:10px; color:var(--text); font-weight:700; background:var(--border); padding:4px 10px; border-radius:8px; text-transform:uppercase;"><%= skill.trim() %></span>
+                                                                        <% }) %>
+                                                                    <% } %>
+                                                                </div>
+                                                                
+                                                                <div style="display:flex; align-items:center; gap:15px;">
+                                                                    <div style="display:flex; align-items:center; gap:5px; color:var(--sage); font-weight:800; font-size:14px; font-family:'Outfit'">
+                                                                        <i class="fas fa-stopwatch"></i> <%= entry.hoursWorked %>h
+                                                                    </div>
+                                                                    <% if (entry.links) { %>
+                                                                        <div title="Contains Assets" style="color:var(--coral); font-size:14px;"><i class="fas fa-paperclip"></i></div>
+                                                                    <% } %>
+                                                                    <% if (entry.blockers) { %>
+                                                                        <div title="Blockers Encountered" style="color:var(--rose); font-size:14px;"><i class="fas fa-exclamation-circle"></i></div>
+                                                                    <% } %>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    <% }) %>
+                                                </div>
+                                            <% } else { %>
+%>
+                                                <div style="text-align:center; padding: 40px 0; border: 1px dashed var(--border); border-radius:15px;">
+                                                    <p style="color:var(--text-muted)">No diary entries mapped for this view. Start writing above!</p>
+                                                </div>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                    <!-- Edit Diary Modal -->
+                                    <div id="editDiaryModal" class="app-modal">
+                                        <div class="app-modal-content" style="max-width: 1000px; width: 90%; max-height: 90vh; border-radius: 30px; background: var(--bg); overflow-y: auto; display: flex; flex-direction: column; padding: 0; box-shadow: 0 40px 100px rgba(0,0,0,0.5) !important;">
+                                            
+                                            <!-- Professional Header -->
+                                            <div style="background: linear-gradient(135deg, rgba(217, 95, 59, 0.08), rgba(181, 56, 74, 0.03)); padding: 40px 50px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                                                <div>
+                                                    <h2 style="font-family: 'Outfit', sans-serif; font-size: 2rem; color: var(--ink); font-weight: 800; line-height: 1; margin: 0;">
+                                                        <i class="fas fa-edit" style="color:var(--coral); margin-right:15px;"></i>Edit Diary Log
+                                                    </h2>
+                                                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 5px;">Update your technical record comprehensively.</p>
+                                                </div>
+                                                <button onclick="document.getElementById('editDiaryModal').classList.remove('active')" style="background: none; border: none; color: var(--text); font-size: 1.5rem; cursor: pointer; opacity: 0.5; transition: 0.3s;" onmouseover="this.style.opacity='1'; this.style.transform='rotate(90deg)';" onmouseout="this.style.opacity='0.5'; this.style.transform='rotate(0deg)';">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>
+
+                                            <!-- Editor Workspace -->
+                                            <div style="padding: 40px 50px;">
+                                                <form id="editDiaryForm" method="POST" onsubmit="return validateDiaryDate('editDiaryDate')">
+                                                    
+                                                    <!-- Metadata Row (Date) -->
+                                                    <div class="portfolio-grid" style="grid-template-columns: 1fr 1fr; gap:30px; margin-bottom: 25px;">
+                                                        <div class="portfolio-group">
+                                                            <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px">
+                                                                <i class="fas fa-calendar-day" style="color:var(--coral); font-size: 0.9rem;"></i>
+                                                                <label class="portfolio-label" style="margin:0">Date of Activity *</label>
+                                                            </div>
+                                                            <input type="date" id="editDiaryDate" name="date" class="portfolio-input" style="height: 50px; font-size: 1rem;" required>
+                                                            <p style="font-size:11px; color:var(--text-muted); margin-top:6px">Sundays are strictly restricted for VTU logs.</p>
+                                                        </div>
+                                                        <div class="portfolio-group" style="visibility: hidden; pointer-events: none;">
+                                                            <label class="portfolio-label">Placeholder</label>
+                                                            <div class="portfolio-input"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Work Summary & Hours -->
+                                                    <h4 class="portfolio-section-title" style="font-size:1rem; margin-bottom: 15px;"><i class="fas fa-briefcase"></i> What I worked on?</h4>
+                                                    <div class="portfolio-grid" style="grid-template-columns: 3fr 1fr; gap:30px; margin-bottom: 25px;">
+                                                        <div class="portfolio-group">
+                                                            <label class="portfolio-label">Work Summary *</label>
+                                                            <textarea id="editDiaryWorkSummary" name="workSummary" class="portfolio-input portfolio-textarea" placeholder="Briefly describe the work you did today..." maxlength="2000" style="min-height:100px; padding: 15px; font-size: 1rem;" required></textarea>
+                                                        </div>
+                                                        <div class="portfolio-group">
+                                                            <label class="portfolio-label">Hours worked *</label>
+                                                            <input type="number" id="editDiaryHours" name="hoursWorked" class="portfolio-input" min="0" max="24" step="0.25" style="height: 100px; font-size: 1.4rem; text-align: center;" required>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Links -->
+                                                    <h4 class="portfolio-section-title" style="font-size:1rem; margin-bottom: 15px;"><i class="fas fa-link"></i> Show Your Work</h4>
+                                                    <div class="portfolio-group" style="margin-bottom: 25px;">
+                                                        <label class="portfolio-label">Reference Links</label>
+                                                        <textarea id="editDiaryLinks" name="links" class="portfolio-input" placeholder="Paste links separated by commas" maxlength="5000" style="min-height:60px; padding: 15px; font-size: 1rem;"></textarea>
+                                                    </div>
+
+                                                    <!-- Learnings & Blockers -->
+                                                    <h4 class="portfolio-section-title" style="font-size:1rem; margin-bottom: 15px;"><i class="fas fa-brain"></i> Blockers & Learnings</h4>
+                                                    <div class="portfolio-grid" style="grid-template-columns: 1fr 1fr; gap:30px; margin-bottom: 25px;">
+                                                        <div class="portfolio-group">
+                                                            <label class="portfolio-label">Learnings / Outcomes *</label>
+                                                            <textarea id="editDiaryLearnings" name="learnings" class="portfolio-input portfolio-textarea" placeholder="What did you learn today?" maxlength="2000" style="min-height:100px; padding: 15px; font-size: 1rem;" required></textarea>
+                                                        </div>
+                                                        <div class="portfolio-group">
+                                                            <label class="portfolio-label">Blockers / Risks</label>
+                                                            <textarea id="editDiaryBlockers" name="blockers" class="portfolio-input portfolio-textarea" placeholder="Hurdlrs encountered?" maxlength="1000" style="min-height:100px; padding: 15px; font-size: 1rem;"></textarea>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Skills -->
+                                                    <h4 class="portfolio-section-title" style="font-size:1rem; margin-bottom: 15px;"><i class="fas fa-code"></i> Skills</h4>
+                                                    <div class="portfolio-group" style="margin-bottom: 40px;">
+                                                        <label class="portfolio-label">Skills Used *</label>
+                                                        <input type="text" id="editDiarySkills" name="skillsUsed" class="portfolio-input" placeholder="e.g. React, Node.js" style="height: 50px; font-size: 1rem; padding: 0 20px;" required>
+                                                    </div>
+
+                                                    <!-- ActionBar -->
+                                                    <div style="display: flex; justify-content: flex-end; gap: 15px; padding-top: 25px; border-top: 1px solid var(--border);">
+                                                        <button type="button" onclick="document.getElementById('editDiaryModal').classList.remove('active')" class="view-btn" style="background: none; border: 1px solid var(--border); color: var(--text); padding: 10px 25px; font-weight: 700; font-size: 0.9rem; border-radius: 12px;">Discard</button>
+                                                        <button type="submit" class="view-btn" style="background: var(--coral); border: none; color: #fff; padding: 10px 40px; font-weight: 800; font-size: 1rem; border-radius: 12px; box-shadow: 0 10px 30px rgba(217, 95, 59, 0.15) !important;">
+                                                            <i class="fas fa-save" style="margin-right:8px"></i>Save Record
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                        </div>
+                                    </div>
+                                        </div>
+                                    </div>
+                                    <script>
+                                        function editDiary(id, workSummary, hoursWorked, links, learnings, blockers, skillsUsed, date) {
+                                            const modal = document.getElementById('editDiaryModal');
+                                            document.getElementById('editDiaryForm').action = '/student/diary/edit/' + id;
+                                            document.getElementById('editDiaryDate').value = date;
+                                            document.getElementById('editDiaryHours').value = hoursWorked;
+                                            document.getElementById('editDiaryWorkSummary').value = workSummary;
+                                            document.getElementById('editDiaryLearnings').value = learnings;
+                                            document.getElementById('editDiaryBlockers').value = blockers;
+                                            document.getElementById('editDiarySkills').value = skillsUsed;
+                                            document.getElementById('editDiaryLinks').value = links;
+                                            modal.classList.add('active');
+                                        }
+                                    </script>
                                     <% } else if (activePage==='settings' ) { %>
                                         <header class="header">
                                             <div class="header-left">
@@ -1204,10 +1570,17 @@
                                                                     <form action="/student/applications/${app._id}/reschedule" method="POST">
                                                                         <div style="margin-bottom:10px">
                                                                             <label style="font-size:11px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:5px">Suggested New Time:</label>
+<<<<<<< HEAD
                                                                             <input type="datetime-local" name="suggestedDate" required style="width:100%; border:1px solid var(--border); border-radius:10px; padding:10px; font-size:13px; background:#fff">
                                                                         </div>
                                                                         <textarea name="reason" placeholder="Please provide a suitable reason for rescheduling..." required 
                                                                             style="width:100%; border:1px solid var(--border); border-radius:10px; padding:10px; font-size:13px; min-height:80px; margin-bottom:10px; background:#fff"></textarea>
+=======
+                                                                            <input type="datetime-local" name="suggestedDate" required style="width:100%; border:1px solid var(--border); border-radius:10px; padding:10px; font-size:13px; background:var(--bg); color:var(--text);">
+                                                                        </div>
+                                                                        <textarea name="reason" placeholder="Please provide a suitable reason for rescheduling..." required 
+                                                                            style="width:100%; border:1px solid var(--border); border-radius:10px; padding:10px; font-size:13px; min-height:80px; margin-bottom:10px; background:var(--bg); color:var(--text);"></textarea>
+>>>>>>> 5a236d78f16b9d8f57602e9812fc8ca68421611e
                                                                         <button type="submit" class="view-btn" style="background:var(--coral); color:#fff; border:none; padding:8px 15px; font-size:12px; cursor:pointer">Send Request</button>
                                                                     </form>
                                                                 </div>

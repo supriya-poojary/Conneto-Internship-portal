@@ -10,23 +10,79 @@ router.get('/register', (req, res) => {
 
 // POST /auth/register
 router.post('/register', async (req, res) => {
-    const { name, companyName, email, password, role } = req.body;
+    const { name, companyName, email, password, role, cin, companyAddress, phone } = req.body;
     try {
+        // --- 1. Basic Field Validation ---
+        if (!email || !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+            return res.render('auth/register', { title: 'Register — Conneto', error: 'Please enter a valid work or university email.' });
+        }
+        
+        if (!password || password.length < 6) {
+            return res.render('auth/register', { title: 'Register — Conneto', error: 'Password is too weak. Minimum 6 characters required.' });
+        }
+
+        if (!name || name.trim().length < 2) {
+            return res.render('auth/register', { title: 'Register — Conneto', error: 'Please provide your full professional name.' });
+        }
+
+        if (role === 'company') {
+            const cinRegex = /^[L|U][0-9]{5}[A-Z]{2}[0-9]{4}[A-Z]{3}[0-9]{6}$/;
+            if (!cin || !cin.match(cinRegex)) {
+                return res.render('auth/register', { title: 'Register — Conneto', error: 'Identification failed: Invalid 21-digit CIN format.' });
+            }
+            
+            if (!phone || !phone.match(/^[0-9]{10,15}$/)) {
+                return res.render('auth/register', { title: 'Register — Conneto', error: 'Please enter a valid 10-15 digit contact number.' });
+            }
+
+            if (!companyName || companyName.trim().length < 2) {
+                return res.render('auth/register', { title: 'Register — Conneto', error: 'Official company name is required to proceed.' });
+            }
+            
+            if (!companyAddress || companyAddress.trim().length < 10) {
+                return res.render('auth/register', { title: 'Register — Conneto', error: 'Please provide a complete headquarters address.' });
+            }
+        }
+
+        // --- 2. Database Integrity Check ---
         const existing = await User.findOne({ email });
         if (existing) {
-            return res.render('auth/register', { title: 'Register — Conneto', error: 'Email already registered.' });
+            if (existing.status === 'Pending') {
+                return res.render('auth/login', { 
+                    title: 'Login — Conneto', 
+                    error: 'Account already exists and is currently undergoing verification. Please check back later.', 
+                    success: null 
+                });
+            }
+            return res.render('auth/register', { title: 'Register — Conneto', error: 'This email is already registered. Please sign in.' });
         }
-        // Create the user - data will be stored in MongoDB
-        const user = await User.create({ name, companyName, email, password, role });
 
-        // Auto-login after registration - create session
-        req.session.user = { id: user._id, name: user.name, companyName: user.companyName, role: user.role };
+        // --- 3. Account Creation ---
+        const userData = { name, companyName, email, password, role };
+        
+        if (role === 'company') {
+            userData.status = 'Pending';
+            userData.cin = cin;
+            userData.companyAddress = companyAddress;
+            userData.phone = phone;
+        }
 
-        // Redirect to dashboard based on role
-        if (role === 'student') return res.redirect('/student/dashboard');
-        return res.redirect('/company/dashboard');
+        const user = await User.create(userData);
+
+        if (user.status === 'Approved') {
+            req.session.user = { id: user._id, name: user.name, companyName: user.companyName, role: user.role };
+            if (role === 'student') return res.redirect('/student/dashboard');
+            return res.redirect('/company/dashboard');
+        } else {
+            return res.render('auth/login', { 
+                title: 'Login — Conneto', 
+                error: null, 
+                success: 'Registration successful! Your credentials have been submitted for administrator review. You will gain access once verified.' 
+            });
+        }
     } catch (err) {
-        res.render('auth/register', { title: 'Register — Conneto', error: 'Something went wrong. Please try again.' });
+        console.error('Registration error:', err);
+        res.render('auth/register', { title: 'Register — Conneto', error: 'An unexpected error occurred. Please try again later.' });
     }
 });
 
@@ -45,8 +101,20 @@ router.post('/login', async (req, res) => {
         if (!user || !(await user.comparePassword(password))) {
             return res.render('auth/login', { title: 'Login — Conneto', error: 'Invalid email or password.', success: null });
         }
+
+        // Check verification status for companies
+        if (user.role === 'company' && user.status === 'Pending') {
+            return res.render('auth/login', { title: 'Login — Conneto', error: 'Your account is still pending approval by the administrator.', success: null });
+        }
+        if (user.role === 'company' && user.status === 'Rejected') {
+            const msg = `Application Declined: ${user.rejectionReason || 'Please contact support for clarification.'}`;
+            return res.render('auth/login', { title: 'Login — Conneto', error: msg, success: null });
+        }
+
         req.session.user = { id: user._id, name: user.name, companyName: user.companyName, role: user.role };
+        
         if (user.role === 'student') return res.redirect('/student/dashboard');
+        if (user.role === 'admin') return res.redirect('/admin/dashboard');
         return res.redirect('/company/dashboard');
     } catch (err) {
         res.render('auth/login', { title: 'Login — Conneto', error: 'Something went wrong. Please try again.', success: null });
