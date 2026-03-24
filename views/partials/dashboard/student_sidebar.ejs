@@ -23,6 +23,16 @@
                 <i class="fas fa-file-invoice"></i>
                 <span>My Applications</span>
             </a>
+            <a href="/student/dashboard?tab=diary"
+                class="nav-item <%= typeof activePage !== 'undefined' && activePage === 'diary' ? 'active' : '' %>">
+                <i class="fas fa-pen-nib"></i>
+                <span>Log Diary</span>
+            </a>
+            <a href="/student/dashboard?tab=diary_history"
+                class="nav-item <%= typeof activePage !== 'undefined' && activePage === 'diary_history' ? 'active' : '' %>">
+                <i class="fas fa-chart-line"></i>
+                <span>Diary Tracking</span>
+            </a>
         </nav>
     </div>
 

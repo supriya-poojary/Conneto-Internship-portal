@@ -5,12 +5,27 @@ const Application = require('../models/Application');
 const StudentProfile = require('../models/StudentProfile');
 const CompanyProfile = require('../models/CompanyProfile');
 
-// Middleware to check if user is logged in
-const isAuthenticated = (req, res, next) => {
-    if (!req.session.user) {
-        return res.redirect('/auth/login');
+// Middleware to check if user is logged in and approved
+const isAuthenticated = async (req, res, next) => {
+    try {
+        if (!req.session.user) {
+            return res.redirect('/auth/login');
+        }
+        
+        // Safety check for approval status (in case session is stale)
+        const User = require('../models/User');
+        const user = await User.findById(req.session.user.id);
+        if (!user || (user.role === 'company' && user.status !== 'Approved')) {
+            req.session.destroy(() => {
+                res.redirect('/auth/login?error=Account not approved or found.');
+            });
+            return;
+        }
+        next();
+    } catch (err) {
+        console.error('Auth middleware error:', err);
+        res.redirect('/auth/login?error=Something went wrong.');
     }
-    next();
 };
 
 // Middleware to check if user is a company
