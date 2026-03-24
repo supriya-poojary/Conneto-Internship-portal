@@ -5,6 +5,7 @@ const Application = require('../models/Application');
 const Internship = require('../models/Internship');
 const User = require('../models/User');
 const StudentProfile = require('../models/StudentProfile');
+const DiaryEntry = require('../models/DiaryEntry');
 
 // Project root directory
 const ROOT = path.resolve(__dirname, '..');
@@ -57,18 +58,34 @@ router.get('/student/dashboard', async (req, res) => {
             hired: applications.filter(app => app.status === 'selected').length
         };
 
+        const profile = await StudentProfile.findOne({ user: req.session.user.id });
+
+        let diaryEntries = [];
+        let selectedInternships = [];
+        let viewInternshipId = req.query.viewInternshipId || null;
+        if (activeTab === 'diary' || activeTab === 'diary_history' || activeTab === 'dashboard') {
+            selectedInternships = applications.filter(app => app.status === 'selected');
+            let dFilter = { student: req.session.user.id };
+            if (viewInternshipId) dFilter.internship = viewInternshipId;
+            let query = DiaryEntry.find(dFilter).populate('internship').sort({ date: -1 });
+            if (activeTab === 'diary' || activeTab === 'dashboard') {
+                query = query.limit(20);
+            }
+            diaryEntries = await query;
+        }
+
         const limit = activeTab === 'browse' ? 20 : 5;
         const internships = await Internship.find({ isActive: true })
             .populate('company', 'companyName name')
             .sort({ createdAt: -1 })
             .limit(limit);
 
-        const profile = await StudentProfile.findOne({ user: req.session.user.id });
-
         let pageTitle = 'Student Dashboard | Conneto';
         if (activeTab === 'profile') pageTitle = 'My Portfolio | Conneto';
         if (activeTab === 'browse') pageTitle = 'Explore Internships | Conneto';
         if (activeTab === 'applications') pageTitle = 'My Applications | Conneto';
+        if (activeTab === 'diary') pageTitle = 'Log Diary | Conneto';
+        if (activeTab === 'diary_history') pageTitle = 'Diary Tracking | Conneto';
 
         res.render('dashboard/student', {
             title: pageTitle,
@@ -77,6 +94,9 @@ router.get('/student/dashboard', async (req, res) => {
             stats,
             internships,
             applications,
+            selectedInternships,
+            diaryEntries,
+            viewInternshipId,
             profile: profile || {},
             success: req.query.success || null,
             error: req.query.error || null
@@ -84,6 +104,54 @@ router.get('/student/dashboard', async (req, res) => {
     } catch (err) {
         console.error('Unified dashboard error:', err);
         res.redirect('/');
+    }
+});
+
+// Diary Operations
+router.post('/student/diary/add', async (req, res) => {
+    if (!req.session.user || req.session.user.role !== 'student') return res.status(403).send('Forbidden');
+    try {
+        const { internshipId, date, hoursWorked, workSummary, links, learnings, blockers, skillsUsed } = req.body;
+        const d = new Date(date);
+        if (d.getDay() === 0) return res.redirect('/student/dashboard?tab=diary&error=Entries are not permitted on Sundays');
+        
+        await DiaryEntry.create({
+            student: req.session.user.id,
+            internship: internshipId,
+            date: d,
+            hoursWorked, workSummary, links, learnings, blockers, skillsUsed
+        });
+        res.redirect(`/student/dashboard?tab=diary&viewInternshipId=${internshipId}&success=Entry added`);
+    } catch (err) {
+        console.error('Diary Error:', err);
+        res.redirect('/student/dashboard?tab=diary&error=Failed to add entry. Date tracking must be unique.');
+    }
+});
+
+router.post('/student/diary/edit/:id', async (req, res) => {
+    if (!req.session.user || req.session.user.role !== 'student') return res.status(403).send('Forbidden');
+    try {
+        const { date, hoursWorked, workSummary, links, learnings, blockers, skillsUsed } = req.body;
+        const d = new Date(date);
+        if (d.getDay() === 0) return res.redirect('/student/dashboard?tab=diary&error=Cannot set entry to Sunday');
+
+        await DiaryEntry.findOneAndUpdate(
+            { _id: req.params.id, student: req.session.user.id },
+            { date: d, hoursWorked, workSummary, links, learnings, blockers, skillsUsed, updatedAt: Date.now() }
+        );
+        res.redirect('/student/dashboard?tab=diary_history&success=Entry updated');
+    } catch (err) {
+        res.redirect('/student/dashboard?tab=diary_history&error=Update failed');
+    }
+});
+
+router.post('/student/diary/delete/:id', async (req, res) => {
+    if (!req.session.user || req.session.user.role !== 'student') return res.status(403).send('Forbidden');
+    try {
+        await DiaryEntry.findOneAndDelete({ _id: req.params.id, student: req.session.user.id });
+        res.redirect('/student/dashboard?tab=diary_history&success=Entry deleted');
+    } catch (err) {
+        res.redirect('/student/dashboard?tab=diary_history&error=Deletion failed');
     }
 });
 

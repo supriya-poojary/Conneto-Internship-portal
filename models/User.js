@@ -6,7 +6,17 @@ const userSchema = new mongoose.Schema({
     companyName: { type: String, trim: true }, // For company users
     email: { type: String, required: true, unique: true, lowercase: true },
     password: { type: String, required: true, minlength: 6 },
-    role: { type: String, enum: ['student', 'company'], required: true },
+    role: { type: String, enum: ['student', 'company', 'admin'], required: true },
+    // New fields for company verification
+    cin: { type: String, trim: true },
+    companyAddress: { type: String, trim: true },
+    phone: { type: String, trim: true },
+    status: { 
+        type: String, 
+        enum: ['Pending', 'Approved', 'Rejected'], 
+        default: 'Approved' // Default for students; will be set to Pending for companies in route
+    },
+    rejectionReason: { type: String, default: null },
     createdAt: { type: Date, default: Date.now }
 });
 

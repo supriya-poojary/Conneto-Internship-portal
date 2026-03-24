@@ -187,8 +187,8 @@
             position: absolute;
             inset: 0;
             background-image:
-                linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+                linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
             background-size: 40px 40px;
             pointer-events: none;
             z-index: 0;
@@ -209,14 +209,22 @@
 
         [data-theme="light"] .auth-right::after {
             background-image:
-                linear-gradient(rgba(80,40,20,0.06) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(80,40,20,0.06) 1px, transparent 1px);
+                linear-gradient(rgba(80, 40, 20, 0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(80, 40, 20, 0.06) 1px, transparent 1px);
         }
 
         @keyframes orb-shift {
-            0% { filter: hue-rotate(0deg) brightness(1); }
-            50% { filter: hue-rotate(15deg) brightness(1.1); }
-            100% { filter: hue-rotate(-10deg) brightness(0.95); }
+            0% {
+                filter: hue-rotate(0deg) brightness(1);
+            }
+
+            50% {
+                filter: hue-rotate(15deg) brightness(1.1);
+            }
+
+            100% {
+                filter: hue-rotate(-10deg) brightness(0.95);
+            }
         }
 
         /* Floating glow orbs */
@@ -235,17 +243,66 @@
             opacity: 0.7;
         }
 
-        .dot:nth-child(1) { background: rgba(217,95,59,0.55); width:200px; height:200px; top:5%; right:5%; animation-duration:18s; animation-delay:0s; }
-        .dot:nth-child(2) { background: rgba(168,85,247,0.5); width:160px; height:160px; bottom:10%; left:2%; animation-duration:22s; animation-delay:-6s; }
-        .dot:nth-child(3) { background: rgba(59,130,246,0.45); width:180px; height:180px; top:45%; left:10%; animation-duration:25s; animation-delay:-12s; }
-        .dot:nth-child(4) { background: rgba(200,131,26,0.5); width:140px; height:140px; bottom:5%; right:8%; animation-duration:20s; animation-delay:-4s; }
+        .dot:nth-child(1) {
+            background: rgba(217, 95, 59, 0.55);
+            width: 200px;
+            height: 200px;
+            top: 5%;
+            right: 5%;
+            animation-duration: 18s;
+            animation-delay: 0s;
+        }
+
+        .dot:nth-child(2) {
+            background: rgba(168, 85, 247, 0.5);
+            width: 160px;
+            height: 160px;
+            bottom: 10%;
+            left: 2%;
+            animation-duration: 22s;
+            animation-delay: -6s;
+        }
+
+        .dot:nth-child(3) {
+            background: rgba(59, 130, 246, 0.45);
+            width: 180px;
+            height: 180px;
+            top: 45%;
+            left: 10%;
+            animation-duration: 25s;
+            animation-delay: -12s;
+        }
+
+        .dot:nth-child(4) {
+            background: rgba(200, 131, 26, 0.5);
+            width: 140px;
+            height: 140px;
+            bottom: 5%;
+            right: 8%;
+            animation-duration: 20s;
+            animation-delay: -4s;
+        }
 
         @keyframes float-orb {
-            0% { transform: translate(0px, 0px) scale(1); }
-            25% { transform: translate(20px, -30px) scale(1.05); }
-            50% { transform: translate(-15px, 20px) scale(0.95); }
-            75% { transform: translate(25px, 15px) scale(1.08); }
-            100% { transform: translate(0px, 0px) scale(1); }
+            0% {
+                transform: translate(0px, 0px) scale(1);
+            }
+
+            25% {
+                transform: translate(20px, -30px) scale(1.05);
+            }
+
+            50% {
+                transform: translate(-15px, 20px) scale(0.95);
+            }
+
+            75% {
+                transform: translate(25px, 15px) scale(1.08);
+            }
+
+            100% {
+                transform: translate(0px, 0px) scale(1);
+            }
         }
 
         .form-box {
@@ -253,14 +310,14 @@
             max-width: 480px;
             padding: 40px;
             background: rgba(255, 252, 248, 0.92);
-            border: 1px solid rgba(255,255,255,0.6);
+            border: 1px solid rgba(255, 255, 255, 0.6);
             border-radius: 24px;
             backdrop-filter: blur(24px) saturate(180%);
             -webkit-backdrop-filter: blur(24px) saturate(180%);
             box-shadow:
-                0 8px 48px rgba(0,0,0,0.25),
-                0 2px 8px rgba(217,95,59,0.12),
-                inset 0 1px 0 rgba(255,255,255,0.8);
+                0 8px 48px rgba(0, 0, 0, 0.25),
+                0 2px 8px rgba(217, 95, 59, 0.12),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
             position: relative;
             z-index: 2;
             margin: 40px 0;
@@ -269,11 +326,11 @@
 
         [data-theme="dark"] .form-box {
             background: rgba(28, 18, 10, 0.88);
-            border-color: rgba(255,255,255,0.08);
+            border-color: rgba(255, 255, 255, 0.08);
             box-shadow:
-                0 8px 48px rgba(0,0,0,0.5),
-                0 2px 8px rgba(217,95,59,0.15),
-                inset 0 1px 0 rgba(255,255,255,0.05);
+                0 8px 48px rgba(0, 0, 0, 0.5),
+                0 2px 8px rgba(217, 95, 59, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
 
         /* Rainbow highlight bar at top of form */
@@ -398,8 +455,18 @@
 
         .role-card.selected {
             border-color: var(--coral);
-            background: #fff;
+            background: var(--card-bg);
             box-shadow: 0 10px 20px rgba(217, 95, 59, 0.1);
+        }
+
+        [data-theme="dark"] .role-card.selected {
+            background: rgba(217, 95, 59, 0.15);
+            border-color: var(--coral);
+        }
+
+        [data-theme="dark"] .role-card.selected {
+            background: rgba(217, 95, 59, 0.15);
+            border-color: var(--coral);
         }
 
         .role-card.selected i {
@@ -457,6 +524,22 @@
             border-color: var(--coral);
             background: #fff;
             box-shadow: 0 0 0 4px rgba(217, 95, 59, 0.1);
+        }
+
+        [data-theme="dark"] .form-input {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="dark"] .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        [data-theme="dark"] .form-input:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--coral);
+            color: #fff;
         }
 
         .btn-submit {
@@ -609,16 +692,37 @@
                                     placeholder="e.g. j.smith@university.edu" required>
                             </div>
 
-                            <div class="form-group" id="companyGroup" style="display:none">
-                                <label for="companyName">Company Name</label>
-                                <input type="text" id="companyName" name="companyName" class="form-input"
-                                    placeholder="e.g. Global Tech Solutions">
+                            <div class="form-group" id="companyFields" style="display:none">
+                                <div class="form-group">
+                                    <label for="companyName">Company Name</label>
+                                    <input type="text" id="companyName" name="companyName" class="form-input"
+                                        placeholder="e.g. Global Tech Solutions">
+                                </div>
+                                <div class="form-group">
+                                    <label for="cin">CIN Number (21 digits)</label>
+                                    <input type="text" id="cin" name="cin" class="form-input"
+                                        placeholder="e.g. U12345MH2023PTC123456"
+                                        pattern="^[L|U][0-9]{5}[A-Z]{2}[0-9]{4}[A-Z]{3}[0-9]{6}$"
+                                        title="21-digit CIN, e.g., U12345MH2023PTC123456">
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Company Phone Number</label>
+                                    <input type="tel" id="phone" name="phone" class="form-input"
+                                        placeholder="e.g. 9876543210" pattern="[0-9]{10,15}"
+                                        title="Please enter a valid phone number (10-15 digits)">
+                                </div>
+                                <div class="form-group">
+                                    <label for="companyAddress">Company Office Address</label>
+                                    <textarea id="companyAddress" name="companyAddress" class="form-input"
+                                        placeholder="Full registered address of the company"
+                                        style="min-height: 100px; resize: vertical;"></textarea>
+                                </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="password">Security Password</label>
                                 <input type="password" id="password" name="password" class="form-input"
-                                    placeholder="At least 8 characters" required>
+                                    placeholder="At least 6 characters" required minlength="6">
                             </div>
 
                             <button type="submit" class="btn-submit">Create Account <i class="fas fa-rocket"
@@ -643,21 +747,33 @@
     <script>
         const roleS = document.getElementById('roleS');
         const roleC = document.getElementById('roleC');
-        const companyGroup = document.getElementById('companyGroup');
+        const companyFields = document.getElementById('companyFields');
+        const nameLabel = document.querySelector('label[for="name"]');
         const compInput = document.getElementById('companyName');
+        const cinInput = document.getElementById('cin');
+        const phoneInput = document.getElementById('phone');
+        const addrInput = document.getElementById('companyAddress');
 
         roleS.addEventListener('click', () => {
             roleS.classList.add('selected');
             roleC.classList.remove('selected');
-            companyGroup.style.display = 'none';
+            companyFields.style.display = 'none';
+            nameLabel.innerText = 'Full Professional Name';
             compInput.required = false;
+            cinInput.required = false;
+            phoneInput.required = false;
+            addrInput.required = false;
         });
 
         roleC.addEventListener('click', () => {
             roleC.classList.add('selected');
             roleS.classList.remove('selected');
-            companyGroup.style.display = 'block';
+            companyFields.style.display = 'block';
+            nameLabel.innerText = 'Person of Contact Name';
             compInput.required = true;
+            cinInput.required = true;
+            phoneInput.required = true;
+            addrInput.required = true;
         });
 
         const themeToggle = document.getElementById('themeToggle');
