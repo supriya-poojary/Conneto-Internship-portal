@@ -1229,74 +1229,57 @@
                                                 <h4 class="portfolio-section-title" style="margin:0"><i class="fas fa-history"></i> Recent Logs (Current Internship)</h4>
                                             </div>
                                             <% if (diaryEntries && diaryEntries.length > 0) { %>
-                                                <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(450px, 1fr)); gap:25px;">
+                                                <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap:20px;">
                                                     <% diaryEntries.forEach(entry => { 
                                                         const companyName = entry.internship && entry.internship.company ? (entry.internship.company.companyName || entry.internship.company.name) : 'Company' ;
                                                     %>
-                                                        <div class="diary-entry-card" style="position:relative; background: var(--card-bg); border: 1px solid var(--border); border-radius: 25px; padding: 30px; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden; display:flex; flex-direction:column; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-                                                            <!-- Decorative Accent -->
-                                                            <div style="position:absolute; top:0; left:0; width:6px; height:100%; background: linear-gradient(to bottom, var(--coral), var(--rose));"></div>
+                                                        <div class="diary-entry-card" style="position:relative; background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 20px; transition: 0.3s ease; overflow: hidden; display:flex; flex-direction:column; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+                                                            <!-- Accent Line -->
+                                                            <div style="position:absolute; top:0; left:0; width:100%; height:4px; background: linear-gradient(90deg, var(--coral), var(--rose));"></div>
                                                             
-                                                            <!-- Header: Date & Company -->
-                                                            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px;">
+                                                            <!-- Header -->
+                                                            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
                                                                 <div style="flex:1">
-                                                                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-                                                                        <span style="background:rgba(217,95,59,0.1); color:var(--coral); padding:5px 12px; border-radius:100px; font-size:12px; font-weight:800; letter-spacing:0.5px; display:inline-flex; align-items:center; gap:5px;">
-                                                                            <i class="fas fa-calendar-alt"></i> <%= new Date(entry.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) %>
-                                                                        </span>
-                                                                        <span style="background:rgba(90,122,92,0.1); color:var(--sage); padding:5px 12px; border-radius:100px; font-size:12px; font-weight:800;">
-                                                                            <i class="fas fa-city" style="margin-right:3px"></i> <%= companyName %>
-                                                                        </span>
+                                                                    <div style="font-size:11px; font-weight:800; color:var(--coral); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">
+                                                                        <%= new Date(entry.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) %>
                                                                     </div>
-                                                                    <h3 style="font-size:1.3rem; color:var(--ink); font-family:'Outfit'; font-weight:700; line-height:1.2;">
-                                                                        <%= entry.internship ? entry.internship.title : 'Research & Development' %>
-                                                                    </h3>
+                                                                    <h4 style="font-size:1.1rem; color:var(--ink); font-family:'Outfit'; font-weight:700; margin:0; line-height:1.2;">
+                                                                        <%= entry.internship ? entry.internship.title : 'R&D Session' %>
+                                                                    </h4>
+                                                                    <div style="font-size:12px; color:var(--text-muted); font-weight:600; margin-top:2px;">
+                                                                        <i class="fas fa-building" style="font-size:10px; margin-right:4px"></i><%= companyName %>
+                                                                    </div>
                                                                 </div>
-                                                                <div style="display:flex; gap:8px;">
-                                                                    <button onclick="editDiary('<%= entry._id %>', `<%= entry.workSummary.replace(/`/g, '\\`') %>`, '<%= entry.hoursWorked %>', `<%= entry.links ? entry.links.replace(/`/g, '\\`') : '' %>`, `<%= entry.learnings.replace(/`/g, '\\`') %>`, `<%= entry.blockers ? entry.blockers.replace(/`/g, '\\`') : '' %>`, `<%= entry.skillsUsed.replace(/`/g, '\\`') %>`, '<%= new Date(entry.date).toISOString().split('T')[0] %>')" class="header-btn" style="width:36px; height:36px; font-size:14px;"><i class="fas fa-edit"></i></button>
-                                                                    <form action="/student/diary/delete/<%= entry._id %>" method="POST" onsubmit="return confirm('Delete this entry permanently?')" style="display:inline;">
-                                                                        <button type="submit" class="header-btn" style="width:36px; height:36px; font-size:14px; color:var(--rose);"><i class="fas fa-trash"></i></button>
+                                                                <div style="display:flex; gap:5px;">
+                                                                    <button onclick="editDiary('<%= entry._id %>', `<%= entry.workSummary.replace(/`/g, '\\`') %>`, '<%= entry.hoursWorked %>', `<%= entry.links ? entry.links.replace(/`/g, '\\`') : '' %>`, `<%= entry.learnings.replace(/`/g, '\\`') %>`, `<%= entry.blockers ? entry.blockers.replace(/`/g, '\\`') : '' %>`, `<%= entry.skillsUsed.replace(/`/g, '\\`') %>`, '<%= new Date(entry.date).toISOString().split('T')[0] %>')" class="header-btn" style="width:28px; height:28px; font-size:11px;" title="Edit"><i class="fas fa-edit"></i></button>
+                                                                    <form action="/student/diary/delete/<%= entry._id %>" method="POST" onsubmit="return confirm('Delete this entry?')" style="display:inline;">
+                                                                        <button type="submit" class="header-btn" style="width:28px; height:28px; font-size:11px; color:var(--rose);" title="Delete"><i class="fas fa-trash"></i></button>
                                                                     </form>
                                                                 </div>
                                                             </div>
                                                             
-                                                            <!-- Main Content Section -->
-                                                            <div style="flex:1; display:grid; grid-template-columns: 1fr; gap:15px; margin-bottom:20px;">
-                                                                <div style="background:var(--bg); padding:18px; border-radius:18px; border:1px solid var(--border); transition: 0.3s;" onmouseover="this.style.borderColor='var(--coral)'" onmouseout="this.style.borderColor='var(--border)'">
-                                                                    <p style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">
-                                                                        <i class="fas fa-tasks" style="color:var(--coral); margin-right:5px"></i> Practical Work Summary
-                                                                    </p>
-                                                                    <p style="font-size:14px; color:var(--text); line-height:1.6; font-weight:500;"><%= entry.workSummary %></p>
-                                                                </div>
-                                                                
-                                                                <div style="background:var(--bg); padding:18px; border-radius:18px; border:1px solid var(--border); transition: 0.3s;" onmouseover="this.style.borderColor='var(--sage)'" onmouseout="this.style.borderColor='var(--border)'">
-                                                                    <p style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">
-                                                                        <i class="fas fa-lightbulb" style="color:var(--sage); margin-right:5px"></i> Key Learnings & Outcomes
-                                                                    </p>
-                                                                    <p style="font-size:14px; color:var(--text); line-height:1.6; font-weight:500;"><%= entry.learnings %></p>
-                                                                </div>
+                                                            <!-- Summary (Truncated) -->
+                                                            <div style="margin-bottom:15px; flex-grow:1;">
+                                                                <p style="font-size:13px; color:var(--text); line-height:1.5; font-weight:500; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                                                                    <%= entry.workSummary %>
+                                                                </p>
                                                             </div>
 
-                                                            <!-- Footer: Metrics & Tags -->
-                                                            <div style="margin-top:auto; padding-top:20px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
-                                                                <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                                                            <!-- Footer Tags -->
+                                                            <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border); padding-top:12px; margin-top:auto;">
+                                                                <div style="display:flex; gap:6px;">
+                                                                    <span style="font-size:10px; font-weight:800; color:var(--sage); background:rgba(90,122,92,0.1); padding:3px 8px; border-radius:6px;">
+                                                                        <i class="fas fa-stopwatch" style="margin-right:3px"></i><%= entry.hoursWorked %>h
+                                                                    </span>
                                                                     <% if (entry.skillsUsed) { %>
-                                                                        <% entry.skillsUsed.split(',').forEach(skill => { %>
-                                                                            <span style="font-size:10px; color:var(--text); font-weight:700; background:var(--border); padding:4px 10px; border-radius:8px; text-transform:uppercase;"><%= skill.trim() %></span>
-                                                                        <% }) %>
+                                                                        <span style="font-size:10px; font-weight:800; color:var(--text-muted); background:var(--border); padding:3px 8px; border-radius:6px; max-width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                                            <%= entry.skillsUsed.split(',')[0] %>
+                                                                        </span>
                                                                     <% } %>
                                                                 </div>
-                                                                
-                                                                <div style="display:flex; align-items:center; gap:15px;">
-                                                                    <div style="display:flex; align-items:center; gap:5px; color:var(--sage); font-weight:800; font-size:14px; font-family:'Outfit'">
-                                                                        <i class="fas fa-stopwatch"></i> <%= entry.hoursWorked %>h
-                                                                    </div>
-                                                                    <% if (entry.links) { %>
-                                                                        <div title="Contains Assets" style="color:var(--coral); font-size:14px;"><i class="fas fa-paperclip"></i></div>
-                                                                    <% } %>
-                                                                    <% if (entry.blockers) { %>
-                                                                        <div title="Blockers Encountered" style="color:var(--rose); font-size:14px;"><i class="fas fa-exclamation-circle"></i></div>
-                                                                    <% } %>
+                                                                <div style="display:flex; gap:8px;">
+                                                                    <% if (entry.links) { %><i class="fas fa-link" style="font-size:12px; color:var(--coral);" title="Has Links"></i><% } %>
+                                                                    <% if (entry.blockers) { %><i class="fas fa-exclamation-triangle" style="font-size:12px; color:var(--rose);" title="Had Blockers"></i><% } %>
                                                                 </div>
                                                             </div>
                                                         </div>
