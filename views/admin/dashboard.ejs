@@ -730,13 +730,15 @@
                 <div class="header-top" style="margin-bottom:30px">
                     <div style="flex:1">
                         <h1>Administrative Review</h1>
-                        <p style="color:var(--text-muted); font-size:13px; margin-top:5px">Manage and verify professional entities.</p>
+                        <p style="color:var(--text-muted); font-size:13px; margin-top:5px">Manage and verify
+                            professional entities.</p>
                     </div>
                     <div class="search-wrap" style="flex:1; max-width:400px; position:relative; margin:0 30px">
-                        <i class="fas fa-search" style="position:absolute; left:15px; top:50%; transform:translateY(-50%); color:var(--text-muted); font-size:13px"></i>
-                        <input type="text" id="adminSearch" placeholder="Search by name or email..." 
-                               style="width:100%; padding:12px 15px 12px 40px; background:var(--card-bg); border:1.5px solid var(--border); border-radius:12px; font-family:'Inter'; font-size:14px; color:var(--ink); outline:none;"
-                               onkeyup="handleSearch(this.value)">
+                        <i class="fas fa-search"
+                            style="position:absolute; left:15px; top:50%; transform:translateY(-50%); color:var(--text-muted); font-size:13px"></i>
+                        <input type="text" id="adminSearch" placeholder="Search by name or email..."
+                            style="width:100%; padding:12px 15px 12px 40px; background:var(--card-bg); border:1.5px solid var(--border); border-radius:12px; font-family:'Inter'; font-size:14px; color:var(--ink); outline:none;"
+                            onkeyup="handleSearch(this.value)">
                     </div>
                     <button class="theme-btn" id="themeBtn"><i class="fas fa-moon"></i></button>
                 </div>
@@ -823,13 +825,15 @@
                 <div class="header-top" style="margin-bottom:30px">
                     <div style="flex:1">
                         <h1>Active Ecosystem</h1>
-                        <p style="color:var(--text-muted); font-size:13px; margin-top:5px">Monitor and manage verified global partners.</p>
+                        <p style="color:var(--text-muted); font-size:13px; margin-top:5px">Monitor and manage verified
+                            global partners.</p>
                     </div>
                     <div class="search-wrap" style="flex:1; max-width:400px; position:relative; margin:0 30px">
-                        <i class="fas fa-search" style="position:absolute; left:15px; top:50%; transform:translateY(-50%); color:var(--text-muted); font-size:13px"></i>
-                        <input type="text" class="adminSearch" placeholder="Filter active network..." 
-                               style="width:100%; padding:12px 15px 12px 40px; background:var(--card-bg); border:1.5px solid var(--border); border-radius:12px; font-family:'Inter'; font-size:14px; color:var(--ink); outline:none;"
-                               onkeyup="handleSearch(this.value)">
+                        <i class="fas fa-search"
+                            style="position:absolute; left:15px; top:50%; transform:translateY(-50%); color:var(--text-muted); font-size:13px"></i>
+                        <input type="text" class="adminSearch" placeholder="Filter active network..."
+                            style="width:100%; padding:12px 15px 12px 40px; background:var(--card-bg); border:1.5px solid var(--border); border-radius:12px; font-family:'Inter'; font-size:14px; color:var(--ink); outline:none;"
+                            onkeyup="handleSearch(this.value)">
                     </div>
                 </div>
                 <div class="company-grid">
@@ -897,7 +901,7 @@
     </div>
 
     <script>
-        const COMPANIES = <%- JSON.stringify([...pendingCompanies, ...approvedCompanies].reduce((acc, c) => ({ ...acc, [c._id]: c }), {})) %>;
+        const COMPANIES = <% - JSON.stringify([...pendingCompanies, ...approvedCompanies].reduce((acc, c) => ({ ...acc, [c._id]: c }), {})) %>;
 
         function toggleSidebar() {
             const side = document.getElementById('sidebar');
@@ -909,7 +913,7 @@
         function showPage(id) {
             const section = document.getElementById(id + '-page');
             const nav = document.getElementById('nav-' + id);
-            
+
             if (!section || !nav) {
                 console.error(`Protocol violation: Page component '${id}' not found.`);
                 return;
@@ -917,7 +921,7 @@
 
             document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            
+
             section.classList.add('active');
             nav.classList.add('active');
         }

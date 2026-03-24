@@ -1436,43 +1436,31 @@
                                         <% if (diaryEntries && diaryEntries.length> 0) { %>
                                             <div
                                                 style="display:grid; grid-template-columns: repeat(auto-fill, minmax(30%, 1fr)); gap:25px;">
-                                                <% // Group entries by Internship ID to ensure same color for same
-                                                    company const internshipIds=[...new Set(diaryEntries.filter(e=>
-                                                    e.internship).map(e => e.internship._id.toString()))];
+                                                <% 
+                                                    // Group entries by Internship ID to ensure same color for same company
+                                                    const internshipIds = [...new Set(diaryEntries.filter(e => e.internship).map(e => e.internship._id.toString()))];
 
                                                     diaryEntries.forEach((entry, idx) => {
-                                                    const companyId = entry.internship ? entry.internship._id.toString()
-                                                    : 'default';
-                                                    const colorIdx = internshipIds.indexOf(companyId) !== -1 ?
-                                                    internshipIds.indexOf(companyId) : 0;
+                                                        const companyId = entry.internship ? entry.internship._id.toString() : 'default';
+                                                        const colorIdx = internshipIds.indexOf(companyId) !== -1 ? internshipIds.indexOf(companyId) : 0;
 
-                                                    const companyName = (entry.internship ?
-                                                    (entry.internship.companyName || (entry.internship.company ?
-                                                    (entry.internship.company.companyName ||
-                                                    entry.internship.company.name) : '')) :
-                                                    '') || 'Company';
-                                                    const role = entry.internship ? entry.internship.title : 'Software
-                                                    Developer';
-                                                    const colors = [
-                                                    { accent: '#6366F1', grad: 'linear-gradient(135deg, #6366F1,
-                                                    #4338CA)' }, // Indigo
-                                                    { accent: '#10B981', grad: 'linear-gradient(135deg, #10B981,
-                                                    #065F46)' }, // Emerald
-                                                    { accent: '#F59E0B', grad: 'linear-gradient(135deg, #F59E0B,
-                                                    #B45309)' }, // Amber
-                                                    { accent: '#EF4444', grad: 'linear-gradient(135deg, #EF4444,
-                                                    #991B1B)' }, // Crimson
-                                                    { accent: '#8B5CF6', grad: 'linear-gradient(135deg, #8B5CF6,
-                                                    #5B21B6)' }, // Violet
-                                                    { accent: '#06B6D4', grad: 'linear-gradient(135deg, #06B6D4,
-                                                    #155E75)' }, // Cyan
-                                                    { accent: '#EC4899', grad: 'linear-gradient(135deg, #EC4899,
-                                                    #9D174D)' }, // Pink
-                                                    { accent: '#64748B', grad: 'linear-gradient(135deg, #64748B,
-                                                    #334155)' } // Slate
-                                                    ];
-                                                    const color = colors[colorIdx % colors.length];
-                                                    %>
+                                                        const companyName = (entry.internship ?
+                                                            (entry.internship.companyName || (entry.internship.company ?
+                                                            (entry.internship.company.companyName || entry.internship.company.name) : '')) :
+                                                            '') || 'Company';
+                                                        const role = entry.internship ? entry.internship.title : 'Software Developer';
+                                                        const colors = [
+                                                            { accent: '#6366F1', grad: 'linear-gradient(135deg, #6366F1, #4338CA)' }, // Indigo
+                                                            { accent: '#10B981', grad: 'linear-gradient(135deg, #10B981, #065F46)' }, // Emerald
+                                                            { accent: '#F59E0B', grad: 'linear-gradient(135deg, #F59E0B, #B45309)' }, // Amber
+                                                            { accent: '#EF4444', grad: 'linear-gradient(135deg, #EF4444, #991B1B)' }, // Crimson
+                                                            { accent: '#8B5CF6', grad: 'linear-gradient(135deg, #8B5CF6, #5B21B6)' }, // Violet
+                                                            { accent: '#06B6D4', grad: 'linear-gradient(135deg, #06B6D4, #155E75)' }, // Cyan
+                                                            { accent: '#EC4899', grad: 'linear-gradient(135deg, #EC4899, #9D174D)' }, // Pink
+                                                            { accent: '#64748B', grad: 'linear-gradient(135deg, #64748B, #334155)' }  // Slate
+                                                        ];
+                                                        const color = colors[colorIdx % colors.length];
+                                                %>
                                                     <div class="diary-entry-card"
                                                         style="position:relative; background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 28px; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden; display:flex; flex-direction:column; box-shadow: 0 10px 30px rgba(0,0,0,0.03); height: 100%;">
 
