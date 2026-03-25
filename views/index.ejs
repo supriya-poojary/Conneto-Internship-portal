@@ -318,16 +318,34 @@
         }
 
         .topbar-contact a {
-            color: rgba(255, 255, 255, 0.85);
-            text-decoration: none;
+            color: #fff !important;
+            text-decoration: none !important;
             display: flex;
             align-items: center;
             gap: 5px;
-            transition: color .3s
+            transition: color .3s;
+            outline: none !important;
+            border: none !important;
         }
 
         .topbar-contact a:hover {
-            color: #fff
+            color: var(--amber-light) !important;
+        }
+
+        .topbar-contacts a {
+            color: #fff !important;
+            text-decoration: none !important;
+            outline: none !important;
+            border: none !important;
+        }
+
+        .topbar-contacts a:hover {
+            color: var(--coral) !important;
+        }
+
+        button:focus, a:focus {
+            outline: none !important;
+            box-shadow: none !important;
         }
 
         .topbar-contact i {
@@ -502,7 +520,7 @@
             display: block;
             width: 24px;
             height: 2px;
-            background: var(--ink);
+            background: var(--coral);
             border-radius: 2px;
             transition: all .3s
         }
@@ -2029,7 +2047,7 @@
         .mobile-nav {
             position: fixed;
             inset: 0;
-            background: var(--ink);
+            background: #1C0F08;
             z-index: 2000;
             display: flex;
             flex-direction: column;

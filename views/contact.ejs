@@ -165,20 +165,30 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
         .topbar-contacts {
             display: flex;
             gap: 24px;
+            flex-wrap: wrap;
         }
 
         .topbar-contacts a {
-            color: rgba(255, 255, 255, 0.85);
-            text-decoration: none;
+            color: #fff !important;
+            text-decoration: none !important;
+            outline: none !important;
+            border: none !important;
         }
 
         .topbar-contacts a:hover {
-            color: var(--coral);
+            color: var(--coral) !important;
+        }
+
+        button:focus, a:focus {
+            outline: none !important;
+            box-shadow: none !important;
         }
 
         nav {
@@ -290,13 +300,23 @@
             transform: rotate(20deg);
         }
 
-        .mobile-menu-btn {
+        .hamburger {
             display: none;
-            background: none;
-            border: none;
-            color: var(--text);
-            font-size: 22px;
+            flex-direction: column;
+            gap: 5px;
             cursor: pointer;
+            padding: 8px;
+            border: none;
+            background: transparent;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--coral);
+            border-radius: 2px;
+            transition: all .3s;
         }
 
         /* PAGE HERO */
@@ -1176,7 +1196,7 @@
                 grid-template-columns: repeat(2, 1fr);
             }
 
-            .contact-wrapper {
+            .contact-main-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -1189,11 +1209,15 @@
                 display: none;
             }
 
-            .mobile-menu-btn {
-                display: block;
+            .hamburger {
+                display: flex;
             }
 
             .contact-info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
                 grid-template-columns: 1fr;
             }
 
@@ -1286,8 +1310,7 @@
                 <button class="theme-btn" id="themeBtn"><i class="fas fa-moon"></i></button>
                 <a href="/auth/login" class="btn-outline">Login</a>
                 <a href="/auth/register" class="btn-solid">Sign Up</a>
-                <button class="mobile-menu-btn" onclick="document.getElementById('mobileNav').classList.add('open')"><i
-                        class="fas fa-bars"></i></button>
+                <button class="hamburger" id="hamburger" onclick="document.getElementById('mobileNav').classList.add('open')"><span></span><span></span><span></span></button>
             </div>
         </div>
     </nav>

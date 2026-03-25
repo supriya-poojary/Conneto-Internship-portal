@@ -38,38 +38,40 @@
       btn.addEventListener('click', toggleTheme);
     });
 
-    // Mobile Sidebar Toggle
+    // Mobile Sidebar Toggle - ONLY inject if sidebar exists
     const sidebar = document.querySelector('.sidebar');
-    const mobileMenuBtn = document.createElement('button');
-    mobileMenuBtn.className = 'mobile-menu-btn';
-    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+    if (sidebar) {
+      const mobileMenuBtn = document.createElement('button');
+      mobileMenuBtn.className = 'mobile-menu-btn';
+      mobileMenuBtn.innerHTML = '<span></span><span></span><span></span>';
 
-    // Insert after logo in topbar
-    const logo = document.querySelector('.logo');
-    if (logo && logo.parentNode) {
-      logo.parentNode.insertBefore(mobileMenuBtn, logo.nextSibling);
-    }
-
-    mobileMenuBtn.addEventListener('click', () => {
-      sidebar.classList.toggle('active');
-      const isActive = sidebar.classList.contains('active');
-      mobileMenuBtn.innerHTML = isActive ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
-
-      if (isActive) {
-        const overlay = document.createElement('div');
-        overlay.className = 'sidebar-overlay';
-        document.body.appendChild(overlay);
-        overlay.style.display = 'block';
-        overlay.addEventListener('click', () => {
-          sidebar.classList.remove('active');
-          mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
-          overlay.remove();
-        });
-      } else {
-        const overlay = document.querySelector('.sidebar-overlay');
-        if (overlay) overlay.remove();
+      // Insert after logo in topbar
+      const logo = document.querySelector('.logo');
+      if (logo && logo.parentNode) {
+        logo.parentNode.insertBefore(mobileMenuBtn, logo.nextSibling);
       }
-    });
+
+      mobileMenuBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+        const isActive = sidebar.classList.contains('active');
+        mobileMenuBtn.innerHTML = isActive ? '<i class="fas fa-times"></i>' : '<span></span><span></span><span></span>';
+
+        if (isActive) {
+          const overlay = document.createElement('div');
+          overlay.className = 'sidebar-overlay';
+          document.body.appendChild(overlay);
+          overlay.style.display = 'block';
+          overlay.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            mobileMenuBtn.innerHTML = '<span></span><span></span><span></span>';
+            overlay.remove();
+          });
+        } else {
+          const overlay = document.querySelector('.sidebar-overlay');
+          if (overlay) overlay.remove();
+        }
+      });
+    }
   });
 </script>
 <style>
@@ -241,10 +243,21 @@
     color: #fff;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
+    gap: 4px;
     font-size: 20px;
     border: none;
     cursor: pointer;
     transition: .3s;
+  }
+
+  .mobile-menu-btn span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: #fff;
+    border-radius: 2px;
+    transition: all .3s;
   }
 
   .sidebar-overlay {
@@ -299,6 +312,7 @@
 
     .content {
       padding: 20px !important;
+      margin-left: 0 !important;
     }
 
     .mobile-menu-btn {
