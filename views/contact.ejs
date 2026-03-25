@@ -176,12 +176,19 @@
         }
 
         .topbar-contacts a {
-            color: rgba(255, 255, 255, 0.85);
-            text-decoration: none;
+            color: #fff !important;
+            text-decoration: none !important;
+            outline: none !important;
+            border: none !important;
         }
 
         .topbar-contacts a:hover {
-            color: var(--coral);
+            color: var(--coral) !important;
+        }
+
+        button:focus, a:focus {
+            outline: none !important;
+            box-shadow: none !important;
         }
 
         nav {

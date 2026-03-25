@@ -371,6 +371,91 @@
             .diary-entry-card:hover .header-btn {
                 opacity: 1;
             }
+
+            /* Diary Grid & Forms Responsiveness */
+            .diary-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
+                gap: 25px;
+            }
+
+            .diary-form-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+
+            .diary-form-grid-3-1 {
+                display: grid;
+                grid-template-columns: 3fr 1fr;
+                gap: 30px;
+            }
+
+            .diary-card-main {
+                padding: 40px;
+                border-radius: 30px;
+                margin-bottom: 30px;
+            }
+
+            .diary-modal-header {
+                padding: 40px 50px;
+            }
+
+            .diary-modal-body {
+                padding: 40px 50px;
+            }
+
+            @media (max-width: 1200px) {
+                .diary-grid {
+                    grid-template-columns: repeat(auto-fill, minmax(45%, 1fr));
+                }
+            }
+
+            @media (max-width: 768px) {
+                .diary-grid {
+                    grid-template-columns: 1fr !important;
+                }
+
+                .diary-form-grid,
+                .diary-form-grid-3-1 {
+                    grid-template-columns: 1fr !important;
+                    gap: 15px !important;
+                }
+
+                .diary-entry-card {
+                    padding: 20px !important;
+                }
+
+                .diary-card-main {
+                    padding: 25px 20px !important;
+                    border-radius: 20px !important;
+                }
+
+                .diary-modal-header {
+                    padding: 30px 20px !important;
+                }
+
+                .diary-modal-body {
+                    padding: 30px 20px !important;
+                }
+
+                .diary-card-header,
+                .diary-card-footer {
+                    flex-direction: column !important;
+                    align-items: flex-start !important;
+                    gap: 15px !important;
+                }
+
+                .diary-card-logo {
+                    width: 45px !important;
+                    height: 45px !important;
+                    font-size: 18px !important;
+                }
+
+                .portfolio-section-title {
+                    font-size: 1.2rem !important;
+                }
+            }
         </style>
 </head>
 
@@ -1210,15 +1295,14 @@
                             </header>
 
                             <div class="portfolio-grid" style="display:block; margin-top:20px;">
-                                <div class="card reveal" style="padding:40px; border-radius:30px; margin-bottom:30px;">
+                                <div class="card reveal diary-card-main">
                                     <h4 class="portfolio-section-title" style="margin-top:0"><i
                                             class="fas fa-pen-nib"></i> New Diary Entry</h4>
 
                                     <% if (selectedInternships && selectedInternships.length> 0) { %>
                                         <form action="/student/diary/add" method="POST"
                                             onsubmit="return validateDiaryDate('date')">
-                                            <div class="portfolio-grid"
-                                                style="grid-template-columns: 1fr 1fr; gap:30px;">
+                                            <div class="diary-form-grid">
                                                 <div class="portfolio-group">
                                                     <label class="portfolio-label">Select Internship *</label>
                                                     <select name="internshipId" class="portfolio-input" required
@@ -1250,8 +1334,7 @@
                                             <h4 class="portfolio-section-title"
                                                 style="font-size:1.1rem; margin-top:10px;"><i
                                                     class="fas fa-briefcase"></i> What I worked on?</h4>
-                                            <div class="portfolio-grid"
-                                                style="grid-template-columns: 3fr 1fr; gap:30px;">
+                                            <div class="diary-form-grid-3-1">
                                                 <div class="portfolio-group">
                                                     <label class="portfolio-label">Work Summary *</label>
                                                     <textarea name="workSummary"
@@ -1279,8 +1362,7 @@
                                             <h4 class="portfolio-section-title"
                                                 style="font-size:1.1rem; margin-top:10px;"><i class="fas fa-brain"></i>
                                                 Blockers & Learnings</h4>
-                                            <div class="portfolio-grid"
-                                                style="grid-template-columns: 1fr 1fr; gap:30px;">
+                                            <div class="diary-form-grid">
                                                 <div class="portfolio-group">
                                                     <label class="portfolio-label">Learnings / Outcomes *</label>
                                                     <textarea name="learnings"
@@ -1352,8 +1434,7 @@
                                 </header>
 
                                 <div class="portfolio-grid" style="display:block; margin-top:20px;">
-                                    <div class="card reveal"
-                                        style="padding:40px; border-radius:30px; margin-bottom: 20px;">
+                                    <div class="card reveal diary-card-main">
                                         <div
                                             style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
                                             <h4 class="portfolio-section-title" style="margin:0"><i
@@ -1387,8 +1468,8 @@
                                                 const percentage = Math.min(Math.round((diaryEntries.length /
                                                 expectedDays) * 100), 100);
                                                 %>
-                                                <div
-                                                    style="background: var(--bg); padding: 25px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 35px; box-shadow: 0 10px 25px rgba(0,0,0,0.02);">
+                                                <div class="diary-card-main"
+                                                    style="background: var(--bg); border: 1px solid var(--border); margin-bottom: 35px; box-shadow: 0 10px 25px rgba(0,0,0,0.02);">
                                                     <div style="margin-bottom: 15px;">
                                                         <div
                                                             style="font-size: 11px; font-weight: 800; color: var(--coral); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">
@@ -1449,8 +1530,7 @@
                                                     class="fas fa-history"></i> Recent Logs (Current Internship)</h4>
                                         </div>
                                         <% if (diaryEntries && diaryEntries.length> 0) { %>
-                                            <div
-                                                style="display:grid; grid-template-columns: repeat(auto-fill, minmax(30%, 1fr)); gap:25px;">
+                                            <div class="diary-grid">
                                                 <% 
                                                     // Group entries by Internship ID to ensure same color for same company
                                                     const internshipIds = [...new Set(diaryEntries.filter(e => e.internship).map(e => e.internship._id.toString()))];
@@ -1484,13 +1564,13 @@
                                                             style="position:absolute; top:0; left:0; width:6px; height:100%; background:<%= color.grad %>">
                                                         </div>
 
-                                                        <div
+                                                        <div class="diary-card-header"
                                                             style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:18px;">
                                                             <div
                                                                 style="display:flex; align-items:center; gap:15px; padding-left:12px;">
                                                                 <!-- Company Symbol Header -->
-                                                                <div
-                                                                    style="width:55px; height:55px; border-radius:18px; background:<%= color.grad %>; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:900; font-size:22px; box-shadow: 0 12px 25px <%= color.accent %>4D; flex-shrink:0; font-family:'Outfit';">
+                                                                <div class="diary-card-logo"
+                                                                    style="border-radius:18px; background:<%= color.grad %>; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:900; box-shadow: 0 12px 25px <%= color.accent %>4D; flex-shrink:0; font-family:'Outfit';">
                                                                     <%= companyName.charAt(0).toUpperCase() %>
                                                                 </div>
                                                                 <div>
@@ -1531,7 +1611,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div
+                                                        <div class="diary-card-footer"
                                                             style="padding-left:12px; margin-top:auto; display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border); padding-top:15px;">
                                                             <div style="display:flex; flex-direction:column; gap:2px;">
                                                                 <div
@@ -1572,8 +1652,8 @@
                                         style="max-width: 1000px; width: 90%; max-height: 90vh; border-radius: 30px; background: var(--bg); overflow-y: auto; display: flex; flex-direction: column; padding: 0; box-shadow: 0 40px 100px rgba(0,0,0,0.5) !important;">
 
                                         <!-- Professional Header -->
-                                        <div
-                                            style="background: linear-gradient(135deg, rgba(217, 95, 59, 0.08), rgba(181, 56, 74, 0.03)); padding: 40px 50px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                                        <div class="diary-modal-header"
+                                            style="background: linear-gradient(135deg, rgba(217, 95, 59, 0.08), rgba(181, 56, 74, 0.03)); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
                                             <div>
                                                 <h2
                                                     style="font-family: 'Outfit', sans-serif; font-size: 2rem; color: var(--ink); font-weight: 800; line-height: 1; margin: 0;">
@@ -1595,7 +1675,7 @@
                                         </div>
 
                                         <!-- Editor Workspace -->
-                                        <div style="padding: 40px 50px;">
+                                        <div class="diary-modal-body">
                                             <form id="editDiaryForm" method="POST"
                                                 onsubmit="return validateDiaryDate('editDiaryDate')">
 

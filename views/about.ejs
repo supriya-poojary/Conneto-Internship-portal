@@ -203,16 +203,23 @@
         }
 
         .topbar-contact a {
-            color: rgba(255, 255, 255, .85);
-            text-decoration: none;
+            color: #fff !important;
+            text-decoration: none !important;
             display: flex;
             align-items: center;
             gap: 5px;
-            transition: color .3s
+            transition: color .3s;
+            outline: none !important;
+            border: none !important;
         }
 
         .topbar-contact a:hover {
-            color: #fff
+            color: var(--amber-light) !important;
+        }
+
+        button:focus, a:focus {
+            outline: none !important;
+            box-shadow: none !important;
         }
 
         .nav {

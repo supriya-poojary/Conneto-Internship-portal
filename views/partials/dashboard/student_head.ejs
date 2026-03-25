@@ -38,34 +38,36 @@
       btn.addEventListener('click', toggleTheme);
     });
 
-    // Mobile Sidebar Toggle
+    // Mobile Sidebar Toggle - ONLY inject if sidebar exists
     const sidebar = document.querySelector('.sidebar');
-    const mainContent = document.querySelector('.main-content');
-    const mobileToggle = document.createElement('button');
-    mobileToggle.className = 'mobile-toggle';
-    mobileToggle.innerHTML = '<span></span><span></span><span></span>';
-    document.body.appendChild(mobileToggle);
+    if (sidebar) {
+      const mainContent = document.querySelector('.main-content');
+      const mobileToggle = document.createElement('button');
+      mobileToggle.className = 'mobile-toggle';
+      mobileToggle.innerHTML = '<span></span><span></span><span></span>';
+      document.body.appendChild(mobileToggle);
 
-    mobileToggle.addEventListener('click', () => {
-      sidebar.classList.toggle('active');
-      const isActive = sidebar.classList.contains('active');
-      mobileToggle.innerHTML = isActive ? '<i class="fas fa-times"></i>' : '<span></span><span></span><span></span>';
+      mobileToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+        const isActive = sidebar.classList.contains('active');
+        mobileToggle.innerHTML = isActive ? '<i class="fas fa-times"></i>' : '<span></span><span></span><span></span>';
 
-      if (isActive) {
-        const overlay = document.createElement('div');
-        overlay.className = 'sidebar-overlay';
-        document.body.appendChild(overlay);
-        overlay.style.display = 'block';
-        overlay.addEventListener('click', () => {
-          sidebar.classList.remove('active');
-          mobileToggle.innerHTML = '<span></span><span></span><span></span>';
-          overlay.remove();
-        });
-      } else {
-        const overlay = document.querySelector('.sidebar-overlay');
-        if (overlay) overlay.remove();
-      }
-    });
+        if (isActive) {
+          const overlay = document.createElement('div');
+          overlay.className = 'sidebar-overlay';
+          document.body.appendChild(overlay);
+          overlay.style.display = 'block';
+          overlay.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            mobileToggle.innerHTML = '<span></span><span></span><span></span>';
+            overlay.remove();
+          });
+        } else {
+          const overlay = document.querySelector('.sidebar-overlay');
+          if (overlay) overlay.remove();
+        }
+      });
+    }
   });
 </script>
 <style>

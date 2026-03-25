@@ -156,18 +156,41 @@
                                 letter-spacing: .3px
                             }
 
+                            .topbar-contact a {
+                                color: #fff !important;
+                                text-decoration: none !important;
+                                display: inline-flex;
+                                align-items: center;
+                                gap: 6px;
+                                margin-left: 20px;
+                                transition: .3s;
+                                border: none !important;
+                                outline: none !important;
+                            }
+
+                            .topbar-contact a:hover {
+                                color: var(--amber) !important;
+                                transform: translateY(-1px);
+                            }
+
                             .nav {
                                 position: sticky;
                                 top: 0;
                                 z-index: 1000;
                                 background: var(--nav-bg);
                                 backdrop-filter: blur(16px);
-                                border-bottom: 1px solid var(--border);
-                                transition: all .3s
+                                border-bottom: 1.5px solid var(--border) !important;
+                                transition: all .3s;
+                                box-shadow: none !important;
                             }
 
                             .nav.scrolled {
-                                box-shadow: 0 4px 24px var(--shadow)
+                                box-shadow: 0 4px 24px var(--shadow) !important;
+                            }
+                            
+                            button:focus, a:focus {
+                                outline: none !important;
+                                box-shadow: none !important;
                             }
 
                             .nav .container {
@@ -599,19 +622,59 @@
                                 }
                             </style>
                             <% } %>
-                            <style>
-                                /* DARK MODE DYNAMIC BACKGROUND */
-                            .dm-bg-blobs { position: fixed; inset: 0; z-index: -1; overflow: hidden; display: none; pointer-events: none; }
-                            [data-theme="dark"] .dm-bg-blobs { display: block; }
-                            .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.12; animation: move-blobs 25s infinite alternate ease-in-out; }
-                            .blob-1 { width: 400px; height: 400px; background: var(--coral); top: -100px; left: -100px; }
-                            .blob-2 { width: 500px; height: 500px; background: var(--amber); bottom: -150px; right: 10%; }
-                            @keyframes move-blobs {
-                                0% { transform: translate(0, 0) scale(1); }
-                                50% { transform: translate(100px, 50px) scale(1.1); }
-                                100% { transform: translate(-50px, 100px) scale(0.9); }
-                            }
-                        </style>
+                                <style>
+                                    /* DARK MODE DYNAMIC BACKGROUND */
+                                    .dm-bg-blobs {
+                                        position: fixed;
+                                        inset: 0;
+                                        z-index: -1;
+                                        overflow: hidden;
+                                        display: none;
+                                        pointer-events: none;
+                                    }
+
+                                    [data-theme="dark"] .dm-bg-blobs {
+                                        display: block;
+                                    }
+
+                                    .blob {
+                                        position: absolute;
+                                        border-radius: 50%;
+                                        filter: blur(80px);
+                                        opacity: 0.12;
+                                        animation: move-blobs 25s infinite alternate ease-in-out;
+                                    }
+
+                                    .blob-1 {
+                                        width: 400px;
+                                        height: 400px;
+                                        background: var(--coral);
+                                        top: -100px;
+                                        left: -100px;
+                                    }
+
+                                    .blob-2 {
+                                        width: 500px;
+                                        height: 500px;
+                                        background: var(--amber);
+                                        bottom: -150px;
+                                        right: 10%;
+                                    }
+
+                                    @keyframes move-blobs {
+                                        0% {
+                                            transform: translate(0, 0) scale(1);
+                                        }
+
+                                        50% {
+                                            transform: translate(100px, 50px) scale(1.1);
+                                        }
+
+                                        100% {
+                                            transform: translate(-50px, 100px) scale(0.9);
+                                        }
+                                    }
+                                </style>
 </head>
 
 <body>
@@ -629,17 +692,17 @@
         </div>
     </div>
     <script>
-        (function() {
+        (function () {
             const entry = performance.getEntriesByType('navigation')[0];
             const isReload = entry && entry.type === 'reload';
             const isFirstVisit = !sessionStorage.getItem('conneto_visited');
             if (!isReload && !isFirstVisit) {
                 const ldr = document.getElementById('loader');
-                if(ldr) { ldr.style.display = 'none'; ldr.classList.add('hide'); }
+                if (ldr) { ldr.style.display = 'none'; ldr.classList.add('hide'); }
             }
         })();
     </script>
-    <% if (!(typeof user !== 'undefined' && user && user.role === 'company')) { %>
+    <% if (!(typeof user !=='undefined' && user && user.role==='company' )) { %>
         <!-- TOPBAR -->
         <div class="topbar">
             <div class="container">
@@ -650,7 +713,7 @@
                 </div>
             </div>
         </div>
-    
+
         <!-- NAV -->
         <nav class="nav" id="nav">
             <div class="container">
@@ -663,17 +726,18 @@
                 </ul>
                 <div class="nav-right">
                     <button class="theme-btn" id="themeToggle" title="Toggle theme"><i class="fas fa-moon"></i></button>
-                    <% if (typeof user !== 'undefined' && user) { %>
+                    <% if (typeof user !=='undefined' && user) { %>
                         <a href="/<%= user.role %>/dashboard" class="btn btn-fill">Dashboard</a>
-                    <% } else { %>
-                        <a href="/auth/login" class="btn btn-outline">Login</a>
-                        <a href="/auth/register" class="btn btn-fill">Sign Up</a>
-                    <% } %>
-                    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+                        <% } else { %>
+                            <a href="/auth/login" class="btn btn-outline">Login</a>
+                            <a href="/auth/register" class="btn btn-fill">Sign Up</a>
+                            <% } %>
+                                <button class="hamburger"
+                                    id="hamburger"><span></span><span></span><span></span></button>
                 </div>
             </div>
         </nav>
-    
+
         <!-- MOBILE NAV -->
         <div class="mobile-nav" id="mobileNav">
             <div class="mobile-nav-header">
@@ -687,347 +751,510 @@
                 <li><a href="/contact">Contact</a></li>
             </ul>
             <div class="mobile-nav-bottom">
-                <% if (typeof user !== 'undefined' && user) { %>
+                <% if (typeof user !=='undefined' && user) { %>
                     <a href="/<%= user.role %>/dashboard" class="btn btn-fill">Dashboard</a>
-                    <a href="/auth/logout" class="btn btn-outline" style="border-color:rgba(255,248,240,0.3);color:#fff">Logout</a>
-                <% } else { %>
-                    <a href="/auth/login" class="btn btn-outline" style="border-color:rgba(255,248,240,0.3);color:#fff">Login</a>
-                    <a href="/auth/register" class="btn btn-fill">Sign Up</a>
-                <% } %>
+                    <a href="/auth/logout" class="btn btn-outline"
+                        style="border-color:rgba(255,248,240,0.3);color:#fff">Logout</a>
+                    <% } else { %>
+                        <a href="/auth/login" class="btn btn-outline"
+                            style="border-color:rgba(255,248,240,0.3);color:#fff">Login</a>
+                        <a href="/auth/register" class="btn btn-fill">Sign Up</a>
+                        <% } %>
             </div>
         </div>
-    <% } %>
+        <% } %>
 
-    <section class="page-hero" style="padding: 80px 0 40px !important;">
-        <div class="page-hero-bg"></div>
-        <div class="container page-hero-inner">
-            <h1>Internship <em>Details</em></h1>
-        </div>
-    </section>
-
-
-    <div class="container">
-        <div style="margin-bottom: 30px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
-            <a href="/internships" class="btn btn-outline" style="border-radius: 50px; padding: 10px 24px; display: inline-flex; align-items: center; gap: 10px; font-weight: 700;">
-                <i class="fas fa-arrow-left"></i> Back to Internships
-            </a>
-            <div class="breadcrumb" style="font-size: 14px; font-weight: 600; color: var(--text-muted);">
-                <a href="/" style="text-decoration: none; color: var(--coral);">Home</a> / 
-                <a href="/internships" style="text-decoration: none; color: var(--coral);">Internships</a> / 
-                <span><%= internship.title %></span>
-            </div>
-        </div>
-
-        <div class="details-card">
-            <div class="comp-header">
-                <div class="comp-logo">
-                    <% var cName=internship.companyName || (internship.company && (internship.company.companyName || internship.company.name)) || 'Company'; %>
-                        <%= cName.charAt(0).toUpperCase() %>
+            <section class="page-hero" style="padding: 80px 0 40px !important;">
+                <div class="page-hero-bg"></div>
+                <div class="container page-hero-inner">
+                    <h1>Internship <em>Details</em></h1>
                 </div>
-                <div class="comp-info">
-                    <h1>
-                        <%= internship.title %>
-                    </h1>
-                    <p class="company-name" style="font-size: 1.1rem; color: var(--primary); font-weight: 600;">
-                        <%= cName %>
-                    </p>
-                    <div class="tags-row" style="margin-top: 10px;">
-                        <span class="tag-pill" style="background: var(--primary-light); color: var(--primary);">
-                            <%= internship.type %>
+            </section>
+
+
+            <div class="container">
+                <div
+                    style="margin-bottom: 30px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
+                    <a href="/internships" class="btn btn-outline"
+                        style="border-radius: 50px; padding: 10px 24px; display: inline-flex; align-items: center; gap: 10px; font-weight: 700;">
+                        <i class="fas fa-arrow-left"></i> Back to Internships
+                    </a>
+                    <div class="breadcrumb" style="font-size: 14px; font-weight: 600; color: var(--text-muted);">
+                        <a href="/" style="text-decoration: none; color: var(--coral);">Home</a> /
+                        <a href="/internships" style="text-decoration: none; color: var(--coral);">Internships</a> /
+                        <span>
+                            <%= internship.title %>
                         </span>
                     </div>
                 </div>
-            </div>
 
-            <div class="grid-info">
-                <div class="info-box">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <div class="lbl">Location</div>
-                    <div class="val">
-                        <%= internship.location || 'Remote' %>
+                <div class="details-card">
+                    <div class="comp-header">
+                        <div class="comp-logo">
+                            <% var cName=internship.companyName || (internship.company &&
+                                (internship.company.companyName || internship.company.name)) || 'Company' ; %>
+                                <%= cName.charAt(0).toUpperCase() %>
+                        </div>
+                        <div class="comp-info">
+                            <h1>
+                                <%= internship.title %>
+                            </h1>
+                            <p class="company-name" style="font-size: 1.1rem; color: var(--primary); font-weight: 600;">
+                                <%= cName %>
+                            </p>
+                            <div class="tags-row" style="margin-top: 10px;">
+                                <span class="tag-pill" style="background: var(--primary-light); color: var(--primary);">
+                                    <%= internship.type %>
+                                </span>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="info-box">
-                    <i class="fas fa-clock"></i>
-                    <div class="lbl">Duration</div>
-                    <div class="val">
-                        <%= internship.duration || 'Flexible' %>
-                    </div>
-                </div>
-                <div class="info-box">
-                    <i class="fas fa-rupee-sign"></i>
-                    <div class="lbl">
-                        <% if (internship.paymentCategory === 'stipend') { %> Stipend 
-                        <% } else if (internship.paymentCategory === 'paid') { %> Training Fee
-                        <% } else { %> Payment <% } %>
-                    </div>
-                    <div class="val">
-                        <% if (internship.paymentCategory === 'stipend') { %> ₹<%= internship.stipend %>/mo
-                        <% } else if (internship.paymentCategory === 'paid') { %> ₹<%= internship.fee %> (One-time)
-                        <% } else { %> Unpaid <% } %>
-                    </div>
-                </div>
-                <div class="info-box">
-                    <i class="fas fa-calendar-alt"></i>
-                    <div class="lbl">Deadline</div>
-                    <div class="val">
-                        <%= internship.deadline ? new Date(internship.deadline).toLocaleDateString() : 'Rolling' %>
-                    </div>
-                </div>
-            </div>
 
-            <div class="sec">
-                <h2 class="sec-title">About the Role</h2>
-                <div class="desc">
-                    <%= internship.description %>
-                </div>
-            </div>
-
-            <% if (internship.skills && internship.skills.length> 0) { %>
-                <div class="sec">
-                    <h2 class="sec-title">Required Skills</h2>
-                    <div class="skill-row">
-                        <% internship.skills.forEach(skill=> { %>
-                            <span class="tag-pill">
-                                <%= skill %>
-                            </span>
-                            <% }) %>
+                    <div class="grid-info">
+                        <div class="info-box">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div class="lbl">Location</div>
+                            <div class="val">
+                                <%= internship.location || 'Remote' %>
+                            </div>
+                        </div>
+                        <div class="info-box">
+                            <i class="fas fa-clock"></i>
+                            <div class="lbl">Duration</div>
+                            <div class="val">
+                                <%= internship.duration || 'Flexible' %>
+                            </div>
+                        </div>
+                        <div class="info-box">
+                            <i class="fas fa-rupee-sign"></i>
+                            <div class="lbl">
+                                <% if (internship.paymentCategory==='stipend' ) { %> Stipend
+                                    <% } else if (internship.paymentCategory==='paid' ) { %> Training Fee
+                                        <% } else { %> Payment <% } %>
+                            </div>
+                            <div class="val">
+                                <% if (internship.paymentCategory==='stipend' ) { %> ₹<%= internship.stipend %>/mo
+                                        <% } else if (internship.paymentCategory==='paid' ) { %> ₹<%= internship.fee %>
+                                                (One-time)
+                                                <% } else { %> Unpaid <% } %>
+                            </div>
+                        </div>
+                        <div class="info-box">
+                            <i class="fas fa-calendar-alt"></i>
+                            <div class="lbl">Deadline</div>
+                            <div class="val">
+                                <%= internship.deadline ? new Date(internship.deadline).toLocaleDateString() : 'Rolling'
+                                    %>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <% } %>
 
-                    <div class="form-sec">
-                        <% if (user && user.role==='student' ) { %>
-                            <% if (hasApplied) { %>
-                                <div class="applied-card">
-                                    <i class="fas fa-check-circle" style="font-size: 3rem; margin-bottom: 20px;"></i>
-                                    <h2>Application Submitted</h2>
-                                    <p>You have already applied for this position. Check your
-                                        dashboard for updates.</p>
-                                </div>
-                                <% } else { %>
-                                    <h2 class="sec-title" style="margin-bottom:6px">Apply to <em><%= internship.title %></em></h2>
-                                    
-                                    <!-- Portfolio Completion Gate -->
-                                    <% var pct = studentProfile ? (studentProfile.completionPercentage || 0) : 0; %>
-                                    <% if (pct < 100) { %>
-                                        <div style="background: rgba(181,56,74,0.08); border: 1.5px solid var(--rose); border-radius: 22px; padding: 32px 24px; margin-bottom: 30px; text-align:center;">
-                                            <div style="width:70px; height:70px; background:rgba(181,56,74,0.1); color:var(--rose); border-radius:20px; display:flex; align-items:center; justify-content:center; margin:0 auto 18px; font-size:2rem">
-                                                <i class="fas fa-lock"></i>
-                                            </div>
-                                            <h3 style="color:var(--rose); margin-bottom:10px; font-size:1.4rem">Portfolio Incomplete (<%= pct %>%)</h3>
-                                            <p style="color:var(--text-muted); margin-bottom:24px; font-size:14px; max-width:400px; margin-left:auto; margin-right:auto">Recruiters require <strong>100% profile completion</strong> to review your eligibility. Please complete all fields including Academic info, USN, and Location.</p>
-                                            <a href="/student/dashboard?tab=profile" class="btn-submit" style="text-decoration:none; width:auto; padding:14px 32px; font-size:15px; display:inline-flex; background:var(--rose); color:#fff">
-                                                <i class="fas fa-magic" style="margin-right:8px"></i> Complete Portfolio to Unlock
-                                            </a>
+                    <div class="sec">
+                        <h2 class="sec-title">About the Role</h2>
+                        <div class="desc">
+                            <%= internship.description %>
+                        </div>
+                    </div>
+
+                    <% if (internship.skills && internship.skills.length> 0) { %>
+                        <div class="sec">
+                            <h2 class="sec-title">Required Skills</h2>
+                            <div class="skill-row">
+                                <% internship.skills.forEach(skill=> { %>
+                                    <span class="tag-pill">
+                                        <%= skill %>
+                                    </span>
+                                    <% }) %>
+                            </div>
+                        </div>
+                        <% } %>
+
+                            <div class="form-sec">
+                                <% if (user && user.role==='student' ) { %>
+                                    <% if (hasApplied) { %>
+                                        <div class="applied-card">
+                                            <i class="fas fa-check-circle"
+                                                style="font-size: 3rem; margin-bottom: 20px;"></i>
+                                            <h2>Application Submitted</h2>
+                                            <p>You have already applied for this position. Check your
+                                                dashboard for updates.</p>
                                         </div>
-                                    <% } else { %>
-
-                                    <!-- 100% Profile Complete Banner -->
-                                    <div style="background: rgba(90,122,92,0.08); border: 1px solid var(--sage); border-radius: 16px; padding: 14px 22px; margin-bottom: 24px; display:flex; align-items:center; gap:10px;">
-                                        <i class="fas fa-shield-alt" style="color:var(--sage); font-size:1.4rem;"></i>
-                                        <div>
-                                            <div style="font-weight:800; color:var(--sage); font-size:13px">100% Profile Complete</div>
-                                            <div style="font-size:12px; color:var(--text-muted)">Your full profile will be sent to the recruiter automatically.</div>
-                                        </div>
-                                    </div>
-
-                                    <form action="/internships/<%= internship._id %>/apply" method="POST" enctype="multipart/form-data">
-                                        <!-- Hidden: auto-fill from profile -->
-                                        <% if (studentProfile && studentProfile.skills && studentProfile.skills.length > 0) { %>
-                                            <input type="hidden" name="studentSkills" value="<%= studentProfile.skills.join(', ') %>">
                                         <% } else { %>
-                                            <div style="margin-bottom:20px">
-                                                <label class="lbl" style="display:block; margin-bottom:8px; font-size:11px; font-weight:800; text-transform:uppercase; color:var(--text-muted)">Your Key Skills</label>
-                                                <input type="text" name="studentSkills" class="inp-field" placeholder="e.g. React, Python, Figma..." style="margin-bottom:0">
-                                            </div>
-                                        <% } %>
-                                        
-                                        <!-- Review Your Profile -->
-                                        <% if (studentProfile) { %>
-                                        <div style="background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 20px; padding: 24px; margin-bottom: 24px;">
-                                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
-                                                <div style="font-size:11px; font-weight:900; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; border-left:3px solid var(--coral); padding-left:10px">
-                                                    <i class="fas fa-id-badge"></i> Your Info — Sent to Recruiter
-                                                </div>
-                                                <a href="/student/dashboard?tab=profile" style="font-size:11px; color:var(--coral); font-weight:700; text-decoration:none"><i class="fas fa-pen"></i> Edit Profile</a>
-                                            </div>
-                                            
-                                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size:13px;">
-                                                <!-- Basic Info Group -->
-                                                <div style="display:flex; flex-direction:column; gap:8px">
-                                                    <div style="font-size:10px; font-weight:900; color:var(--coral); text-transform:uppercase">Basic Information</div>
-                                                    <div style="display:flex; flex-direction:column; gap:4px">
-                                                        <span style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase">Full Name / USN</span>
-                                                        <span style="font-weight:700; color:var(--ink)"><%= user.name %> (<%= studentProfile.usn || 'N/A' %>)</span>
+                                            <h2 class="sec-title" style="margin-bottom:6px">Apply to <em>
+                                                    <%= internship.title %>
+                                                </em></h2>
+
+                                            <!-- Portfolio Completion Gate -->
+                                            <% var pct=studentProfile ? (studentProfile.completionPercentage || 0) : 0;
+                                                %>
+                                                <% if (pct < 100) { %>
+                                                    <div
+                                                        style="background: rgba(181,56,74,0.08); border: 1.5px solid var(--rose); border-radius: 22px; padding: 32px 24px; margin-bottom: 30px; text-align:center;">
+                                                        <div
+                                                            style="width:70px; height:70px; background:rgba(181,56,74,0.1); color:var(--rose); border-radius:20px; display:flex; align-items:center; justify-content:center; margin:0 auto 18px; font-size:2rem">
+                                                            <i class="fas fa-lock"></i>
+                                                        </div>
+                                                        <h3
+                                                            style="color:var(--rose); margin-bottom:10px; font-size:1.4rem">
+                                                            Portfolio Incomplete (<%= pct %>%)</h3>
+                                                        <p
+                                                            style="color:var(--text-muted); margin-bottom:24px; font-size:14px; max-width:400px; margin-left:auto; margin-right:auto">
+                                                            Recruiters require <strong>100% profile completion</strong>
+                                                            to review your eligibility. Please complete all fields
+                                                            including Academic info, USN, and Location.</p>
+                                                        <a href="/student/dashboard?tab=profile" class="btn-submit"
+                                                            style="text-decoration:none; width:auto; padding:14px 32px; font-size:15px; display:inline-flex; background:var(--rose); color:#fff">
+                                                            <i class="fas fa-magic" style="margin-right:8px"></i>
+                                                            Complete Portfolio to Unlock
+                                                        </a>
                                                     </div>
-                                                    <div style="display:flex; flex-direction:column; gap:4px">
-                                                        <span style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase">DOB / Gender</span>
-                                                        <span style="font-weight:600; color:var(--ink)">
-                                                            <%= studentProfile.dob ? new Date(studentProfile.dob).toLocaleDateString() : 'N/A' %> | <%= studentProfile.gender || 'N/A' %>
-                                                        </span>
-                                                    </div>
-                                                </div>
+                                                    <% } else { %>
 
-                                                <!-- Academic Group -->
-                                                <div style="display:flex; flex-direction:column; gap:8px">
-                                                    <div style="font-size:10px; font-weight:900; color:var(--coral); text-transform:uppercase">Academic Details</div>
-                                                    <div style="display:flex; flex-direction:column; gap:4px">
-                                                        <span style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase">Course / Dept</span>
-                                                        <span style="font-weight:600; color:var(--ink)"><%= studentProfile.degree || 'N/A' %> - <%= studentProfile.department || 'N/A' %></span>
-                                                    </div>
-                                                    <div style="display:flex; flex-direction:column; gap:4px">
-                                                        <span style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase">Sem / GPA</span>
-                                                        <span style="font-weight:600; color:var(--ink)">Sem <%= studentProfile.semester || 'N/A' %> | GPA <%= studentProfile.gpa || 'N/A' %></span>
-                                                    </div>
-                                                </div>
+                                                        <!-- 100% Profile Complete Banner -->
+                                                        <div
+                                                            style="background: rgba(90,122,92,0.08); border: 1px solid var(--sage); border-radius: 16px; padding: 14px 22px; margin-bottom: 24px; display:flex; align-items:center; gap:10px;">
+                                                            <i class="fas fa-shield-alt"
+                                                                style="color:var(--sage); font-size:1.4rem;"></i>
+                                                            <div>
+                                                                <div
+                                                                    style="font-weight:800; color:var(--sage); font-size:13px">
+                                                                    100% Profile Complete</div>
+                                                                <div style="font-size:12px; color:var(--text-muted)">
+                                                                    Your full profile will be sent to the recruiter
+                                                                    automatically.</div>
+                                                            </div>
+                                                        </div>
 
-                                                <!-- Location Group -->
-                                                <div style="display:flex; flex-direction:column; gap:8px">
-                                                    <div style="font-size:10px; font-weight:900; color:var(--coral); text-transform:uppercase">Location</div>
-                                                    <div style="display:flex; flex-direction:column; gap:4px">
-                                                        <span style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase">Address</span>
-                                                        <span style="font-weight:600; color:var(--ink)"><%= studentProfile.address || 'N/A' %></span>
-                                                    </div>
-                                                    <div style="display:flex; flex-direction:column; gap:4px">
-                                                        <span style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase">City / State</span>
-                                                        <span style="font-weight:600; color:var(--ink)"><%= studentProfile.city || 'N/A' %>, <%= studentProfile.state || 'N/A' %></span>
-                                                    </div>
-                                                </div>
+                                                        <form action="/internships/<%= internship._id %>/apply"
+                                                            method="POST" enctype="multipart/form-data">
+                                                            <!-- Hidden: auto-fill from profile -->
+                                                            <% if (studentProfile && studentProfile.skills &&
+                                                                studentProfile.skills.length> 0) { %>
+                                                                <input type="hidden" name="studentSkills"
+                                                                    value="<%= studentProfile.skills.join(', ') %>">
+                                                                <% } else { %>
+                                                                    <div style="margin-bottom:20px">
+                                                                        <label class="lbl"
+                                                                            style="display:block; margin-bottom:8px; font-size:11px; font-weight:800; text-transform:uppercase; color:var(--text-muted)">Your
+                                                                            Key Skills</label>
+                                                                        <input type="text" name="studentSkills"
+                                                                            class="inp-field"
+                                                                            placeholder="e.g. React, Python, Figma..."
+                                                                            style="margin-bottom:0">
+                                                                    </div>
+                                                                    <% } %>
 
-                                                <!-- Additional Group -->
-                                                <div style="display:flex; flex-direction:column; gap:8px">
-                                                    <div style="font-size:10px; font-weight:900; color:var(--coral); text-transform:uppercase">Additional Info</div>
-                                                    <div style="display:flex; flex-direction:column; gap:4px">
-                                                        <span style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase">Interests</span>
-                                                        <span style="font-weight:600; color:var(--ink)"><%= studentProfile.interests && studentProfile.interests.length > 0 ? studentProfile.interests.join(', ') : 'N/A' %></span>
-                                                    </div>
-                                                    <div style="display:flex; flex-direction:column; gap:4px">
-                                                        <span style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase">College</span>
-                                                        <span style="font-weight:600; color:var(--ink)"><%= studentProfile.college || 'N/A' %></span>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                                        <!-- Review Your Profile -->
+                                                                        <% if (studentProfile) { %>
+                                                                            <div
+                                                                                style="background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 20px; padding: 24px; margin-bottom: 24px;">
+                                                                                <div
+                                                                                    style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+                                                                                    <div
+                                                                                        style="font-size:11px; font-weight:900; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; border-left:3px solid var(--coral); padding-left:10px">
+                                                                                        <i class="fas fa-id-badge"></i>
+                                                                                        Your Info — Sent to Recruiter
+                                                                                    </div>
+                                                                                    <a href="/student/dashboard?tab=profile"
+                                                                                        style="font-size:11px; color:var(--coral); font-weight:700; text-decoration:none"><i
+                                                                                            class="fas fa-pen"></i> Edit
+                                                                                        Profile</a>
+                                                                                </div>
 
-                                            <% if (studentProfile.skills && studentProfile.skills.length > 0) { %>
-                                            <div style="margin-top:18px; padding-top:18px; border-top: 1px solid var(--border)">
-                                                <span style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase; display:block; margin-bottom:8px">Skills Tracking</span>
-                                                <div style="display:flex; flex-wrap:wrap; gap:6px">
-                                                    <% studentProfile.skills.forEach(s => { %>
-                                                        <span style="padding:4px 12px; background:rgba(217,95,59,0.08); color:var(--coral); border-radius:8px; font-size:11px; font-weight:800"><%= s %></span>
-                                                    <% }) %>
-                                                </div>
-                                            </div>
-                                            <% } %>
-                                        </div>
-                                        <% } %>
+                                                                                <div
+                                                                                    style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size:13px;">
+                                                                                    <!-- Basic Info Group -->
+                                                                                    <div
+                                                                                        style="display:flex; flex-direction:column; gap:8px">
+                                                                                        <div
+                                                                                            style="font-size:10px; font-weight:900; color:var(--coral); text-transform:uppercase">
+                                                                                            Basic Information</div>
+                                                                                        <div
+                                                                                            style="display:flex; flex-direction:column; gap:4px">
+                                                                                            <span
+                                                                                                style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase">Full
+                                                                                                Name / USN</span>
+                                                                                            <span
+                                                                                                style="font-weight:700; color:var(--ink)">
+                                                                                                <%= user.name %> (<%=
+                                                                                                        studentProfile.usn
+                                                                                                        || 'N/A' %>)
+                                                                                            </span>
+                                                                                        </div>
+                                                                                        <div
+                                                                                            style="display:flex; flex-direction:column; gap:4px">
+                                                                                            <span
+                                                                                                style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase">DOB
+                                                                                                / Gender</span>
+                                                                                            <span
+                                                                                                style="font-weight:600; color:var(--ink)">
+                                                                                                <%= studentProfile.dob ?
+                                                                                                    new
+                                                                                                    Date(studentProfile.dob).toLocaleDateString()
+                                                                                                    : 'N/A' %> | <%=
+                                                                                                        studentProfile.gender
+                                                                                                        || 'N/A' %>
+                                                                                            </span>
+                                                                                        </div>
+                                                                                    </div>
 
-                                        <!-- The one question student must answer -->
-                                        <div style="margin-bottom:20px">
-                                            <label class="lbl" style="display:block; margin-bottom:8px; font-size:11px; font-weight:800; text-transform:uppercase; color:var(--text-muted)">Message to Recruiter *</label>
-                                            <textarea name="question1Answer" class="inp-field" style="min-height: 130px; margin-bottom:0" placeholder="Write a short message explaining why you're a good fit for this internship..." required maxlength="1000"></textarea>
-                                            <div style="text-align:right; font-size:11px; color:var(--text-muted); margin-top:4px" id="msgCount">0/1000</div>
-                                        </div>
-                                        
-                                        <input type="hidden" name="question2Answer" value="Ready to start immediately">
+                                                                                    <!-- Academic Group -->
+                                                                                    <div
+                                                                                        style="display:flex; flex-direction:column; gap:8px">
+                                                                                        <div
+                                                                                            style="font-size:10px; font-weight:900; color:var(--coral); text-transform:uppercase">
+                                                                                            Academic Details</div>
+                                                                                        <div
+                                                                                            style="display:flex; flex-direction:column; gap:4px">
+                                                                                            <span
+                                                                                                style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase">Course
+                                                                                                / Dept</span>
+                                                                                            <span
+                                                                                                style="font-weight:600; color:var(--ink)">
+                                                                                                <%= studentProfile.degree
+                                                                                                    || 'N/A' %> - <%=
+                                                                                                        studentProfile.department
+                                                                                                        || 'N/A' %>
+                                                                                            </span>
+                                                                                        </div>
+                                                                                        <div
+                                                                                            style="display:flex; flex-direction:column; gap:4px">
+                                                                                            <span
+                                                                                                style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase">Sem
+                                                                                                / GPA</span>
+                                                                                            <span
+                                                                                                style="font-weight:600; color:var(--ink)">Sem
+                                                                                                <%= studentProfile.semester
+                                                                                                    || 'N/A' %> | GPA
+                                                                                                    <%= studentProfile.gpa
+                                                                                                        || 'N/A' %>
+                                                                                                        </span>
+                                                                                        </div>
+                                                                                    </div>
 
-                                        <label class="lbl" style="display: block; margin-bottom: 8px; font-size:11px; font-weight:800; text-transform:uppercase; color:var(--text-muted)">Resume (PDF) *</label>
-                                        <% if (studentProfile && studentProfile.resumeUrl) { %>
-                                        <div style="margin-bottom:14px; display:flex; align-items:center; gap:12px">
-                                            <a href="/view-resume?url=<%= encodeURIComponent(studentProfile.resumeUrl) %>" target="_blank" style="font-size:13px; color:var(--sage); font-weight:700; text-decoration:none"><i class="fas fa-file-check"></i> Profile Resume Available</a>
-                                            <span style="font-size:12px; color:var(--text-muted)">or upload a new one:</span>
-                                        </div>
-                                        <input type="file" name="resume" class="inp-field" accept="application/pdf" style="margin-bottom:24px">
-                                        <% } else { %>
-                                        <input type="file" name="resume" class="inp-field" accept="application/pdf" required style="margin-bottom:24px">
-                                        <% } %>
+                                                                                    <!-- Location Group -->
+                                                                                    <div
+                                                                                        style="display:flex; flex-direction:column; gap:8px">
+                                                                                        <div
+                                                                                            style="font-size:10px; font-weight:900; color:var(--coral); text-transform:uppercase">
+                                                                                            Location</div>
+                                                                                        <div
+                                                                                            style="display:flex; flex-direction:column; gap:4px">
+                                                                                            <span
+                                                                                                style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase">Address</span>
+                                                                                            <span
+                                                                                                style="font-weight:600; color:var(--ink)">
+                                                                                                <%= studentProfile.address
+                                                                                                    || 'N/A' %>
+                                                                                            </span>
+                                                                                        </div>
+                                                                                        <div
+                                                                                            style="display:flex; flex-direction:column; gap:4px">
+                                                                                            <span
+                                                                                                style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase">City
+                                                                                                / State</span>
+                                                                                            <span
+                                                                                                style="font-weight:600; color:var(--ink)">
+                                                                                                <%= studentProfile.city
+                                                                                                    || 'N/A' %>, <%=
+                                                                                                        studentProfile.state
+                                                                                                        || 'N/A' %>
+                                                                                            </span>
+                                                                                        </div>
+                                                                                    </div>
 
-                                        <button type="submit" class="btn-submit">
-                                            <i class="fas fa-paper-plane"></i> Submit Application
-                                        </button>
-                                    </form>
-                                    
-                                    <% } %> <!-- end portfolio gate -->
-                                    <% } %>
-                                        <% } else if (!user) { %>
-                                            <div style="text-align: center;">
-                                                <h2 class="sec-title">Login to Apply</h2>
-                                                <p class="desc" style="margin-bottom: 24px;">
-                                                    Please login as a student to submit your
-                                                    application.</p>
-                                                <a href="/auth/login" class="btn-submit"
-                                                    style="text-decoration: none;">Login Now</a>
-                                            </div>
-                                            <% } else { %>
-                                                <div style="text-align: center;">
-                                                    <h2 class="sec-title">Company View</h2>
-                                                    <p class="desc">You are viewing this as a
-                                                        company representative.</p>
-                                                </div>
-                                                <% } %>
-                    </div>
-        </div>
+                                                                                    <!-- Additional Group -->
+                                                                                    <div
+                                                                                        style="display:flex; flex-direction:column; gap:8px">
+                                                                                        <div
+                                                                                            style="font-size:10px; font-weight:900; color:var(--coral); text-transform:uppercase">
+                                                                                            Additional Info</div>
+                                                                                        <div
+                                                                                            style="display:flex; flex-direction:column; gap:4px">
+                                                                                            <span
+                                                                                                style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase">Interests</span>
+                                                                                            <span
+                                                                                                style="font-weight:600; color:var(--ink)">
+                                                                                                <%= studentProfile.interests
+                                                                                                    &&
+                                                                                                    studentProfile.interests.length>
+                                                                                                    0 ?
+                                                                                                    studentProfile.interests.join(', ') : 'N/A' %>
+                                                                                            </span>
+                                                                                        </div>
+                                                                                        <div
+                                                                                            style="display:flex; flex-direction:column; gap:4px">
+                                                                                            <span
+                                                                                                style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase">College</span>
+                                                                                            <span
+                                                                                                style="font-weight:600; color:var(--ink)">
+                                                                                                <%= studentProfile.college
+                                                                                                    || 'N/A' %>
+                                                                                            </span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
 
-    </div>
+                                                                                <% if (studentProfile.skills &&
+                                                                                    studentProfile.skills.length> 0) {
+                                                                                    %>
+                                                                                    <div
+                                                                                        style="margin-top:18px; padding-top:18px; border-top: 1px solid var(--border)">
+                                                                                        <span
+                                                                                            style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase; display:block; margin-bottom:8px">Skills
+                                                                                            Tracking</span>
+                                                                                        <div
+                                                                                            style="display:flex; flex-wrap:wrap; gap:6px">
+                                                                                            <%
+                                                                                                studentProfile.skills.forEach(s=>
+                                                                                                { %>
+                                                                                                <span
+                                                                                                    style="padding:4px 12px; background:rgba(217,95,59,0.08); color:var(--coral); border-radius:8px; font-size:11px; font-weight:800">
+                                                                                                    <%= s %>
+                                                                                                </span>
+                                                                                                <% }) %>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <% } %>
+                                                                            </div>
+                                                                            <% } %>
 
-    <script>
-        // Message character counter
-        const msgTextarea = document.querySelector('textarea[name="question1Answer"]');
-        const msgCount = document.getElementById('msgCount');
-        if (msgTextarea && msgCount) {
-            msgTextarea.addEventListener('input', function() {
-                msgCount.textContent = this.value.length + '/1000';
-            });
-        }
+                                                                                <!-- The one question student must answer -->
+                                                                                <div style="margin-bottom:20px">
+                                                                                    <label class="lbl"
+                                                                                        style="display:block; margin-bottom:8px; font-size:11px; font-weight:800; text-transform:uppercase; color:var(--text-muted)">Message
+                                                                                        to Recruiter *</label>
+                                                                                    <textarea name="question1Answer"
+                                                                                        class="inp-field"
+                                                                                        style="min-height: 130px; margin-bottom:0"
+                                                                                        placeholder="Write a short message explaining why you're a good fit for this internship..."
+                                                                                        required
+                                                                                        maxlength="1000"></textarea>
+                                                                                    <div style="text-align:right; font-size:11px; color:var(--text-muted); margin-top:4px"
+                                                                                        id="msgCount">0/1000</div>
+                                                                                </div>
 
-        // LOADER Logic
-        window.addEventListener('load', () => {
-            const loader = document.getElementById('loader');
-            const entry = performance.getEntriesByType('navigation')[0];
-            const navigationType = entry ? entry.type : '';
-            const isReload = navigationType === 'reload';
-            const isFirstVisit = !sessionStorage.getItem('conneto_visited');
+                                                                                <input type="hidden"
+                                                                                    name="question2Answer"
+                                                                                    value="Ready to start immediately">
 
-            if (isReload || isFirstVisit) {
-                // Show loader for 1.2s on INITIAL START or REFRESH
-                setTimeout(() => {
-                    loader.classList.add('hide');
-                    sessionStorage.setItem('conneto_visited', 'true');
-                }, 1200);
-            } else {
-                // Direct redirect for header links
-                loader.style.display = 'none';
-                loader.classList.add('hide');
-            }
-        });
+                                                                                <label class="lbl"
+                                                                                    style="display: block; margin-bottom: 8px; font-size:11px; font-weight:800; text-transform:uppercase; color:var(--text-muted)">Resume
+                                                                                    (PDF) *</label>
+                                                                                <% if (studentProfile &&
+                                                                                    studentProfile.resumeUrl) { %>
+                                                                                    <div
+                                                                                        style="margin-bottom:14px; display:flex; align-items:center; gap:12px">
+                                                                                        <a href="/view-resume?url=<%= encodeURIComponent(studentProfile.resumeUrl) %>"
+                                                                                            target="_blank"
+                                                                                            style="font-size:13px; color:var(--sage); font-weight:700; text-decoration:none"><i
+                                                                                                class="fas fa-file-check"></i>
+                                                                                            Profile Resume Available</a>
+                                                                                        <span
+                                                                                            style="font-size:12px; color:var(--text-muted)">or
+                                                                                            upload a new one:</span>
+                                                                                    </div>
+                                                                                    <input type="file" name="resume"
+                                                                                        class="inp-field"
+                                                                                        accept="application/pdf"
+                                                                                        style="margin-bottom:24px">
+                                                                                    <% } else { %>
+                                                                                        <input type="file" name="resume"
+                                                                                            class="inp-field"
+                                                                                            accept="application/pdf"
+                                                                                            required
+                                                                                            style="margin-bottom:24px">
+                                                                                        <% } %>
 
-        // THEME
-        const themeToggle = document.getElementById('themeToggle');
-        const html = document.documentElement;
-        function updateTheme() {
-            const t = html.getAttribute('data-theme');
-            if (themeToggle) {
-                themeToggle.innerHTML = t === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-            }
-        }
-        if (themeToggle) {
-            themeToggle.addEventListener('click', () => {
-                const current = html.getAttribute('data-theme');
-                const next = current === 'dark' ? 'light' : 'dark';
-                html.setAttribute('data-theme', next);
-                localStorage.setItem('conneto-theme', next);
+                                                                                            <button type="submit"
+                                                                                                class="btn-submit">
+                                                                                                <i
+                                                                                                    class="fas fa-paper-plane"></i>
+                                                                                                Submit Application
+                                                                                            </button>
+                                                        </form>
+
+                                                        <% } %> <!-- end portfolio gate -->
+                                                            <% } %>
+                                                                <% } else if (!user) { %>
+                                                                    <div style="text-align: center;">
+                                                                        <h2 class="sec-title">Login to Apply</h2>
+                                                                        <p class="desc" style="margin-bottom: 24px;">
+                                                                            Please login as a student to submit your
+                                                                            application.</p>
+                                                                        <a href="/auth/login" class="btn-submit"
+                                                                            style="text-decoration: none;">Login Now</a>
+                                                                    </div>
+                                                                    <% } else { %>
+                                                                        <div style="text-align: center;">
+                                                                            <h2 class="sec-title">Company View</h2>
+                                                                            <p class="desc">You are viewing this as a
+                                                                                company representative.</p>
+                                                                        </div>
+                                                                        <% } %>
+                            </div>
+                </div>
+
+            </div>
+
+            <script>
+                // Message character counter
+                const msgTextarea = document.querySelector('textarea[name="question1Answer"]');
+                const msgCount = document.getElementById('msgCount');
+                if (msgTextarea && msgCount) {
+                    msgTextarea.addEventListener('input', function () {
+                        msgCount.textContent = this.value.length + '/1000';
+                    });
+                }
+
+                // LOADER Logic
+                window.addEventListener('load', () => {
+                    const loader = document.getElementById('loader');
+                    const entry = performance.getEntriesByType('navigation')[0];
+                    const navigationType = entry ? entry.type : '';
+                    const isReload = navigationType === 'reload';
+                    const isFirstVisit = !sessionStorage.getItem('conneto_visited');
+
+                    if (isReload || isFirstVisit) {
+                        // Show loader for 1.2s on INITIAL START or REFRESH
+                        setTimeout(() => {
+                            loader.classList.add('hide');
+                            sessionStorage.setItem('conneto_visited', 'true');
+                        }, 1200);
+                    } else {
+                        // Direct redirect for header links
+                        loader.style.display = 'none';
+                        loader.classList.add('hide');
+                    }
+                });
+
+                // THEME
+                const themeToggle = document.getElementById('themeToggle');
+                const html = document.documentElement;
+                function updateTheme() {
+                    const t = html.getAttribute('data-theme');
+                    if (themeToggle) {
+                        themeToggle.innerHTML = t === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+                    }
+                }
+                if (themeToggle) {
+                    themeToggle.addEventListener('click', () => {
+                        const current = html.getAttribute('data-theme');
+                        const next = current === 'dark' ? 'light' : 'dark';
+                        html.setAttribute('data-theme', next);
+                        localStorage.setItem('conneto-theme', next);
+                        updateTheme();
+                    });
+                }
                 updateTheme();
-            });
-        }
-        updateTheme();
 
-        // MOBILE NAV
-        const hamburger = document.getElementById('hamburger');
-        const mobileClose = document.getElementById('mobileClose');
-        const mobileNav = document.getElementById('mobileNav');
-        if (hamburger) hamburger.addEventListener('click', () => mobileNav.classList.add('open'));
-        if (mobileClose) mobileClose.addEventListener('click', () => mobileNav.classList.remove('open'));
-    </script>
+                // MOBILE NAV
+                const hamburger = document.getElementById('hamburger');
+                const mobileClose = document.getElementById('mobileClose');
+                const mobileNav = document.getElementById('mobileNav');
+                if (hamburger) hamburger.addEventListener('click', () => mobileNav.classList.add('open'));
+                if (mobileClose) mobileClose.addEventListener('click', () => mobileNav.classList.remove('open'));
+            </script>
 </body>
 
 </html>
