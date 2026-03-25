@@ -147,7 +147,9 @@
                                 justify-content: space-between;
                                 padding: 0 24px;
                                 max-width: 1260px;
-                                margin: 0 auto
+                                margin: 0 auto;
+                                flex-wrap: wrap;
+                                gap: 8px;
                             }
 
                             .topbar-msg {
@@ -281,7 +283,7 @@
                                 display: block;
                                 width: 24px;
                                 height: 2px;
-                                background: var(--ink);
+                                background: var(--coral);
                                 border-radius: 2px
                             }
 
@@ -526,7 +528,7 @@
                             .mobile-nav {
                                 position: fixed;
                                 inset: 0;
-                                background: var(--ink);
+                                background: #1C0F08;
                                 z-index: 2000;
                                 display: flex;
                                 flex-direction: column;
@@ -594,6 +596,7 @@
                                         padding: 8px 16px;
                                         font-size: 13px;
                                     }
+                                }
                             </style>
                             <% } %>
                             <style>

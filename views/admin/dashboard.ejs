@@ -687,6 +687,176 @@
                 opacity: 1;
             }
         }
+
+        /* Mobile Overlay Sidebar */
+        .sidebar-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 999;
+            display: none;
+        }
+
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1100;
+            background: var(--coral);
+            color: #fff;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(217, 95, 59, 0.3);
+            border: none;
+            transition: .3s;
+        }
+
+        .mobile-toggle span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: #fff;
+            border-radius: 2px;
+            transition: all .3s;
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                left: -320px !important;
+                position: fixed !important;
+                height: 100vh !important;
+                z-index: 1000 !important;
+                width: 280px !important;
+                box-shadow: 20px 0 40px rgba(0, 0, 0, 0.2) !important;
+                visibility: hidden !important;
+            }
+
+            .sidebar.mobile-active {
+                left: 0 !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+            }
+
+            .mobile-toggle {
+                display: flex;
+            }
+
+            .main-panel {
+                margin-left: 0 !important;
+                padding: 20px !important;
+                padding-top: 80px !important;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .header-top {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+            .search-wrap {
+                margin: 0 !important;
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+            .theme-btn {
+                position: absolute;
+                top: 20px;
+                right: 75px; 
+            }
+            .company-card {
+                flex-direction: column;
+                align-items: flex-start;
+                padding-bottom: 20px;
+                gap: 15px;
+            }
+            .card-body {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .card-header-vibrant {
+                margin-right: 0;
+            }
+            .card-footer {
+                margin-left: 0;
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .overlay-content {
+                padding: 60px 15px !important;
+                max-width: 100% !important;
+            }
+
+            /* Dossier Responsive Fixes */
+            .dossier-container {
+                flex-direction: column !important;
+                min-height: auto !important;
+                margin: 0 !important;
+                border-radius: 0 !important;
+                width: 100% !important;
+            }
+            .dossier-sidebar {
+                width: 100% !important;
+                border-right: none !important;
+                border-bottom: 1px solid var(--border) !important;
+                padding: 40px 20px !important;
+            }
+            .dossier-main {
+                padding: 30px 20px !important;
+            }
+            .dossier-grid {
+                grid-template-columns: 1fr !important;
+            }
+            .module-row {
+                flex-direction: column !important;
+                gap: 15px !important;
+                padding: 15px 20px !important;
+            }
+            .close-btn {
+                top: 15px !important;
+                right: 15px !important;
+                width: 40px !important;
+                height: 40px !important;
+                font-size: 16px !important;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+            }
+            .dialog-box {
+                padding: 30px 20px !important;
+                border-radius: 24px !important;
+            }
+
+            /* Eye Icon / View Button Improvements */
+            .btn-view {
+                background: var(--coral) !important;
+                color: #fff !important;
+                border: none !important;
+                box-shadow: 0 4px 10px rgba(217,95,59,0.2) !important;
+            }
+
+            .card-footer {
+                display: flex !important;
+                flex-wrap: wrap !important;
+                gap: 10px !important;
+            }
+            .card-footer form {
+                flex: 1;
+                min-width: 120px;
+            }
+            .card-footer .btn-approve {
+                width: 100% !important;
+            }
+        }
     </style>
 </head>
 
@@ -932,10 +1102,10 @@
             const c = COMPANIES[id];
             if (!c) return;
             const content = `
-                <div style="max-width: 1100px; margin: 40px auto; background: var(--card-bg); border-radius: 40px; overflow: hidden; box-shadow: 0 80px 160px rgba(0,0,0,0.5); border: 1.5px solid var(--border); display: flex; min-height: 700px; animation: slideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1); backdrop-filter: blur(50px);">
+                <div class="dossier-container" style="max-width: 1100px; margin: 40px auto; background: var(--card-bg); border-radius: 40px; overflow: hidden; box-shadow: 0 80px 160px rgba(0,0,0,0.5); border: 1.5px solid var(--border); display: flex; min-height: 700px; animation: slideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1); backdrop-filter: blur(50px);">
                     
                     <!-- Side navigation / Intelligence Sidebar -->
-                    <div style="width: 300px; background: rgba(0,0,0,0.02); border-right: 1px solid var(--border); padding: 50px 30px; display: flex; flex-direction: column; align-items: center; text-align: center;">
+                    <div class="dossier-sidebar" style="width: 300px; background: rgba(0,0,0,0.02); border-right: 1px solid var(--border); padding: 50px 30px; display: flex; flex-direction: column; align-items: center; text-align: center;">
                         <div style="width: 110px; height: 110px; border-radius: 35px; background: linear-gradient(135deg, var(--coral), var(--rose)); display: flex; align-items: center; justify-content: center; font-size: 50px; color: #fff; font-family: 'Outfit'; font-weight: 800; box-shadow: 0 30px 60px rgba(217, 95, 59, 0.3); margin-bottom: 25px; border: 3px solid rgba(255,255,255,0.1);">
                             ${(c.companyName || 'C').charAt(0).toUpperCase()}
                         </div>
@@ -960,7 +1130,7 @@
                     </div>
 
                     <!-- Main Dossier Content -->
-                    <div style="flex: 1; padding: 50px 60px; position: relative;">
+                    <div class="dossier-main" style="flex: 1; padding: 50px 60px; position: relative;">
                         <!-- Top Header Navigation -->
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 50px;">
                             <div style="display:flex; align-items:center; gap:12px">
@@ -978,7 +1148,7 @@
                                 <h4 style="font-size: 10px; color: var(--text-muted); font-weight: 900; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;">
                                     Corporate DNA <div style="flex: 1; height: 1px; background: var(--border); opacity: 0.5;"></div>
                                 </h4>
-                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                                <div class="dossier-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
                                     <div style="padding: 24px; background: rgba(0,0,0,0.01); border: 2px solid var(--border); border-radius: 24px;">
                                         <span style="font-size: 10px; color: var(--text-muted); font-weight: 800; text-transform: uppercase; margin-bottom: 8px; display: block;">CIN Number</span>
                                         <div style="font-size: 1.25rem; font-weight: 800; color: var(--ink); font-family: 'Outfit';">${c.cin || 'N/A'}</div>
@@ -996,21 +1166,21 @@
                                     Communication Layer <div style="flex: 1; height: 1px; background: var(--border); opacity: 0.5;"></div>
                                 </h4>
                                 <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
-                                    <div style="display: flex; align-items: center; gap: 24px; padding: 18px 30px; background: rgba(217,95,59,0.02); border-radius: 20px; border: 1px solid rgba(217,95,59,0.08);">
+                                    <div class="module-row" style="display: flex; align-items: center; gap: 24px; padding: 18px 30px; background: rgba(217,95,59,0.02); border-radius: 20px; border: 1px solid rgba(217,95,59,0.08);">
                                         <i class="fas fa-envelope-open-text" style="font-size: 20px; color: var(--coral);"></i>
                                         <div style="flex: 1;">
                                             <span style="font-size: 9px; color: var(--text-muted); font-weight: 800; text-transform: uppercase; display: block; margin-bottom: 3px;">Registry Email</span>
                                             <div style="font-size: 1.1rem; font-weight: 700; color: var(--ink);">${c.email}</div>
                                         </div>
                                     </div>
-                                    <div style="display: flex; align-items: center; gap: 24px; padding: 18px 30px; background: rgba(200,131,26,0.02); border-radius: 20px; border: 1px solid rgba(200,131,26,0.08);">
+                                    <div class="module-row" style="display: flex; align-items: center; gap: 24px; padding: 18px 30px; background: rgba(200,131,26,0.02); border-radius: 20px; border: 1px solid rgba(200,131,26,0.08);">
                                         <i class="fas fa-phone-volume" style="font-size: 20px; color: var(--amber);"></i>
                                         <div style="flex: 1;">
                                             <span style="font-size: 9px; color: var(--text-muted); font-weight: 800; text-transform: uppercase; display: block; margin-bottom: 3px;">Registry Phone</span>
                                             <div style="font-size: 1.1rem; font-weight: 700; color: var(--ink);">${c.phone || 'N/A'}</div>
                                         </div>
                                     </div>
-                                    <div style="display: flex; align-items: center; gap: 24px; padding: 18px 30px; background: rgba(90,122,92,0.02); border-radius: 20px; border: 1px solid rgba(90,122,92,0.08);">
+                                    <div class="module-row" style="display: flex; align-items: center; gap: 24px; padding: 18px 30px; background: rgba(90,122,92,0.02); border-radius: 20px; border: 1px solid rgba(90,122,92,0.08);">
                                         <i class="fas fa-map-marked-alt" style="font-size: 20px; color: var(--sage);"></i>
                                         <div style="flex: 1;">
                                             <span style="font-size: 9px; color: var(--text-muted); font-weight: 800; text-transform: uppercase; display: block; margin-bottom: 3px;">Business Headquarters</span>
@@ -1052,6 +1222,36 @@
             updateThemeIcon();
         });
         updateThemeIcon();
+
+        // Mobile Toggle Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.getElementById('sidebar');
+            const mobileToggle = document.createElement('button');
+            mobileToggle.className = 'mobile-toggle';
+            mobileToggle.innerHTML = '<span></span><span></span><span></span>';
+            document.body.appendChild(mobileToggle);
+
+            mobileToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('mobile-active');
+                const isActive = sidebar.classList.contains('mobile-active');
+                mobileToggle.innerHTML = isActive ? '<i class="fas fa-times" style="font-size:20px;color:#fff;"></i>' : '<span></span><span></span><span></span>';
+
+                if (isActive) {
+                    const overlay = document.createElement('div');
+                    overlay.className = 'sidebar-overlay';
+                    document.body.appendChild(overlay);
+                    overlay.style.display = 'block';
+                    overlay.addEventListener('click', () => {
+                        sidebar.classList.remove('mobile-active');
+                        mobileToggle.innerHTML = '<span></span><span></span><span></span>';
+                        overlay.remove();
+                    });
+                } else {
+                    const overlay = document.querySelector('.sidebar-overlay');
+                    if (overlay) overlay.remove();
+                }
+            });
+        });
     </script>
 </body>
 
