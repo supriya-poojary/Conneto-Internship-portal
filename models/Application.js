@@ -25,7 +25,11 @@ const applicationSchema = new mongoose.Schema({
         default: 'pending'
     },
     appliedAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now }
+    updatedAt: { type: Date, default: Date.now },
+    certificateReleased: { type: Boolean, default: false },
+    certificateDate: { type: Date },
+    certificateId: { type: String }, // unique ID for verification
+    certificateUrl: { type: String } // path to the uploaded certificate (PDF/Image)
 });
 
 // Each student can apply only once per internship

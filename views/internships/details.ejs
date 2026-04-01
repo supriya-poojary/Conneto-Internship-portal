@@ -619,6 +619,24 @@
                                         padding: 8px 16px;
                                         font-size: 13px;
                                     }
+
+                                    .profile-review-grid {
+                                        grid-template-columns: 1fr !important;
+                                        gap: 15px !important;
+                                    }
+
+                                    .comp-info h1 {
+                                        font-size: 1.8rem !important;
+                                    }
+
+                                    .form-sec h2 {
+                                        font-size: 1.5rem !important;
+                                    }
+
+                                    .btn-submit {
+                                        font-size: 1rem !important;
+                                        padding: 15px !important;
+                                    }
                                 }
                             </style>
                             <% } %>
@@ -961,7 +979,10 @@
                                                                                         Profile</a>
                                                                                 </div>
 
-                                                                                <div
+                                                                                <style>
+                                                                                    @media (max-width: 768px) { .profile-review-grid { grid-template-columns: 1fr !important; } }
+                                                                                </style>
+                                                                                <div class="profile-review-grid"
                                                                                     style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size:13px;">
                                                                                     <!-- Basic Info Group -->
                                                                                     <div

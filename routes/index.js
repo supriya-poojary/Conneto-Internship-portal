@@ -102,7 +102,17 @@ router.get('/student/dashboard', async (req, res) => {
             stats,
             internships,
             applications,
-            selectedInternships,
+            selectedInternships: selectedInternships.map(app => {
+                // Attach total/approved diary counts for certificate logic in view
+                const myEntries = diaryEntries.filter(e => e.internship._id.toString() === app.internship._id.toString());
+                return {
+                    ...app.toObject(),
+                    totalDiaries: myEntries.length,
+                    approvedDiaries: myEntries.filter(e => e.status === 'approved').length,
+                    rejectedDiaries: myEntries.filter(e => e.status === 'rejected').length,
+                    pendingDiaries: myEntries.filter(e => e.status === 'pending').length
+                };
+            }),
             diaryEntries,
             viewInternshipId,
             profile: profile || {},
@@ -129,10 +139,15 @@ router.post('/student/diary/add', async (req, res) => {
             date: d,
             hoursWorked, workSummary, links, learnings, blockers, skillsUsed
         });
-        res.redirect(`/student/dashboard?tab=diary&viewInternshipId=${internshipId}&success=Entry added`);
+        res.redirect(`/student/dashboard?tab=diary&viewInternshipId=${internshipId}&success=Entry+successfully+saved`);
     } catch (err) {
-        console.error('Diary Error:', err);
-        res.redirect('/student/dashboard?tab=diary&error=Failed to add entry. Date tracking must be unique.');
+        if (err.code === 11000) {
+            console.log('Diary Entry: Duplicate log submission prevented for date.');
+            res.redirect('/student/dashboard?tab=diary&error=You+have+already+submitted+a+diary+log+for+this+date.+Please+edit+the+existing+one.');
+        } else {
+            console.error('Diary Error:', err);
+            res.redirect('/student/dashboard?tab=diary&error=Failed+to+save+entry.+Please+try+again.');
+        }
     }
 });
 
@@ -145,9 +160,13 @@ router.post('/student/diary/edit/:id', async (req, res) => {
 
         await DiaryEntry.findOneAndUpdate(
             { _id: req.params.id, student: req.session.user.id },
-            { date: d, hoursWorked, workSummary, links, learnings, blockers, skillsUsed, updatedAt: Date.now() }
+            { 
+                date: d, hoursWorked, workSummary, links, learnings, blockers, skillsUsed, 
+                status: 'pending', // Reset status on edit
+                updatedAt: Date.now() 
+            }
         );
-        res.redirect('/student/dashboard?tab=diary_history&success=Entry updated');
+        res.redirect('/student/dashboard?tab=diary_history&success=Entry updated and sent for re-evaluation');
     } catch (err) {
         res.redirect('/student/dashboard?tab=diary_history&error=Update failed');
     }
@@ -160,6 +179,83 @@ router.post('/student/diary/delete/:id', async (req, res) => {
         res.redirect('/student/dashboard?tab=diary_history&success=Entry deleted');
     } catch (err) {
         res.redirect('/student/dashboard?tab=diary_history&error=Deletion failed');
+    }
+});
+
+// Company Evaluation Routes
+router.post('/company/diary/evaluate/:id', async (req, res) => {
+    if (!req.session.user || req.session.user.role !== 'company') return res.status(403).send('Forbidden');
+    try {
+        const { status, remarks } = req.body;
+        if (!['approved', 'rejected'].includes(status)) {
+            return res.status(400).send('Invalid status');
+        }
+
+        await DiaryEntry.findByIdAndUpdate(req.params.id, {
+            status,
+            remarks,
+            evaluatedAt: Date.now(),
+            updatedAt: Date.now()
+        });
+
+        res.redirect('/company/dashboard?tab=evaluations&success=Manual evaluation recorded');
+    } catch (err) {
+        console.error('Evaluation error:', err);
+        res.redirect('/company/dashboard?tab=evaluations&error=Evaluation failed');
+    }
+});
+
+router.post('/company/internship/certificate/:applicationId', async (req, res) => {
+    if (!req.session.user || req.session.user.role !== 'company') return res.status(403).send('Forbidden');
+    try {
+        const app = await Application.findById(req.params.applicationId);
+        if (!app) return res.status(404).send('Application not found');
+
+        // Verify company owns internship
+        const internship = await Internship.findById(app.internship);
+        if (internship.company.toString() !== req.session.user.id) {
+            return res.status(403).send('Unauthorized');
+        }
+
+        app.certificateReleased = true;
+        app.certificateDate = Date.now();
+        // Generate a simple unique ID for verification
+        app.certificateId = 'CERT-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        await app.save();
+
+        res.redirect('/company/dashboard?tab=evaluations&success=Manual certificate released');
+    } catch (err) {
+        console.error('Certificate release error:', err);
+        res.redirect('/company/dashboard?tab=evaluations&error=Failed to release certificate');
+    }
+});
+router.post('/company/internship/certificate/upload/:applicationId', (req, res, next) => {
+    upload.single('certificate')(req, res, function (err) {
+        if (err) return res.redirect(`/company/dashboard?tab=evaluations&error=${encodeURIComponent(err.message)}`);
+        next();
+    });
+}, async (req, res) => {
+    if (!req.session.user || req.session.user.role !== 'company') return res.status(403).send('Forbidden');
+    try {
+        const app = await Application.findById(req.params.applicationId);
+        if (!app) return res.status(404).send('Application not found');
+
+        // Verify company ownership
+        const internship = await Internship.findById(app.internship);
+        if (internship.company.toString() !== req.session.user.id) return res.status(403).send('Unauthorized');
+
+        if (!req.file) return res.redirect('/company/dashboard?tab=evaluations&error=No certificate file uploaded');
+
+        app.certificateReleased = true;
+        app.certificateDate = Date.now();
+        app.certificateUrl = req.file.path; // Cloudinary URL
+        app.certificateId = 'CERT-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        await app.save();
+
+        res.redirect('/company/dashboard?tab=evaluations&success=Professional certificate uploaded and released to student');
+    } catch (err) {
+        console.error('Certificate upload error:', err);
+        res.redirect('/company/dashboard?tab=evaluations&error=Upload failed');
     }
 });
 
@@ -217,6 +313,31 @@ router.get('/company/dashboard', async (req, res) => {
             }
         });
 
+        // Diary Evaluation Data: Fetch all 'selected' students for company's internships
+        const selectedApplications = applications.filter(app => app.status === 'selected');
+        const evaluationData = [];
+
+        for (const app of selectedApplications) {
+            const diEntries = await DiaryEntry.find({ 
+                student: app.student._id, 
+                internship: app.internship._id 
+            }).sort({ date: -1 });
+
+            evaluationData.push({
+                applicationId: app._id,
+                student: app.student,
+                internship: app.internship,
+                profile: app.profile,
+                entries: diEntries,
+                pendingCount: diEntries.filter(e => e.status === 'pending').length,
+                approvedCount: diEntries.filter(e => e.status === 'approved').length,
+                totalEntries: diEntries.length,
+                requiredDiaries: app.internship.requiredDiaries || 30, // Default to 30 if not set
+                isCertificateReleased: app.certificateReleased,
+                certificateUrl: app.certificateUrl
+            });
+        }
+
         res.render('dashboard/company', {
             title: 'Company Dashboard | Conneto',
             user: req.session.user,
@@ -226,11 +347,13 @@ router.get('/company/dashboard', async (req, res) => {
                 totalApplicants: applications.length,
                 interviews: applications.filter(app => ['interview_scheduled', 'shortlisted'].includes(app.status)).length,
                 hired: applications.filter(app => app.status === 'selected').length,
-                rescheduleRequests: applications.filter(app => app.rescheduleRequest).length
+                rescheduleRequests: applications.filter(app => app.rescheduleRequest).length,
+                pendingEvaluations: evaluationData.reduce((acc, curr) => acc + curr.pendingCount, 0)
             },
             applicants: applications.slice(0, 10),
             myInternships: internshipsWithStats,
             groupedApplications: Object.values(grouped),
+            evaluationData, // For the new 'Diary evaluation' tab
             totalApplications: applications.length,
             success: req.query.success || null,
             error: req.query.error || null
