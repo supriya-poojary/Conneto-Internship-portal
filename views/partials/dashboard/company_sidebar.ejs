@@ -55,6 +55,16 @@
                     <i class="fas fa-briefcase"></i>
                     <span>Postings</span>
                 </a>
+                <a href="/company/dashboard?tab=evaluations"
+                    class="nav-link <%= typeof activePage !== 'undefined' && activePage === 'evaluations' ? 'active' : '' %>">
+                    <i class="fas fa-book-reader"></i>
+                    <span>Diary evaluation</span>
+                    <% if (typeof stats !== 'undefined' && stats.pendingEvaluations > 0) { %>
+                        <span style="background:var(--amber); color:#fff; padding:2px 8px; border-radius:100px; font-size:10px; font-weight:800; margin-left:auto">
+                            <%= stats.pendingEvaluations %>
+                        </span>
+                    <% } %>
+                </a>
                 <a href="/company/dashboard?tab=applications"
                     class="nav-link <%= typeof activePage !== 'undefined' && activePage === 'applications' ? 'active' : '' %>">
                     <i class="fas fa-user-friends"></i>

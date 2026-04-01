@@ -10,6 +10,13 @@ const diaryEntrySchema = new mongoose.Schema({
     learnings: { type: String, required: true, maxlength: 2000 },
     blockers: { type: String, maxlength: 1000 },
     skillsUsed: { type: String, required: true },
+    status: { 
+        type: String, 
+        enum: ['pending', 'approved', 'rejected'], 
+        default: 'pending' 
+    },
+    remarks: { type: String, maxlength: 1000 },
+    evaluatedAt: { type: Date },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
 });
