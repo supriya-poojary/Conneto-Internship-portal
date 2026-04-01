@@ -229,33 +229,45 @@ router.post('/company/internship/certificate/:applicationId', async (req, res) =
         res.redirect('/company/dashboard?tab=evaluations&error=Failed to release certificate');
     }
 });
+
 router.post('/company/internship/certificate/upload/:applicationId', (req, res, next) => {
     upload.single('certificate')(req, res, function (err) {
         if (err) return res.redirect(`/company/dashboard?tab=evaluations&error=${encodeURIComponent(err.message)}`);
         next();
     });
 }, async (req, res) => {
-    if (!req.session.user || req.session.user.role !== 'company') return res.status(403).send('Forbidden');
+    if (!req.session.user || req.session.user.role !== 'company') {
+        return res.redirect('/auth/login');
+    }
+    
     try {
         const app = await Application.findById(req.params.applicationId);
-        if (!app) return res.status(404).send('Application not found');
+        if (!app) {
+            return res.redirect('/company/dashboard?tab=evaluations&error=Application record not found');
+        }
 
-        // Verify company ownership
+        // Verify company ownership via internship
         const internship = await Internship.findById(app.internship);
-        if (internship.company.toString() !== req.session.user.id) return res.status(403).send('Unauthorized');
+        if (!internship || internship.company.toString() !== req.session.user.id) {
+            return res.redirect('/company/dashboard?tab=evaluations&error=Unauthorized access');
+        }
 
-        if (!req.file) return res.redirect('/company/dashboard?tab=evaluations&error=No certificate file uploaded');
+        if (!req.file) {
+            return res.redirect('/company/dashboard?tab=evaluations&error=No certificate file selected');
+        }
 
+        // Overwrite existing certificate data (Support Re-upload)
         app.certificateReleased = true;
         app.certificateDate = Date.now();
         app.certificateUrl = req.file.path; // Cloudinary URL
-        app.certificateId = 'CERT-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        app.certificateId = app.certificateId || 'CERT-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        
         await app.save();
 
-        res.redirect('/company/dashboard?tab=evaluations&success=Professional certificate uploaded and released to student');
+        res.redirect('/company/dashboard?tab=evaluations&success=Professionally updated certificate has been released successfully');
     } catch (err) {
         console.error('Certificate upload error:', err);
-        res.redirect('/company/dashboard?tab=evaluations&error=Upload failed');
+        res.redirect('/company/dashboard?tab=evaluations&error=An unexpected error occurred during upload. Please try again.');
     }
 });
 
@@ -391,10 +403,11 @@ const storage = new CloudinaryStorage({
 const upload = multer({
     storage: storage,
     fileFilter: (req, file, cb) => {
-        if (file.mimetype === 'application/pdf') {
+        const allowedMimeTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp'];
+        if (allowedMimeTypes.includes(file.mimetype)) {
             cb(null, true);
         } else {
-            cb(new Error('Only PDF files are allowed!'), false);
+            cb(new Error('Invalid file type. Only PDFs and images (JPG, PNG) are allowed!'), false);
         }
     }
 });
@@ -521,25 +534,44 @@ router.post('/student/applications/:id/reschedule', async (req, res) => {
 });
 
 // GET /view-resume - Proxy for Cloudinary PDF to force inline viewing
-router.get('/view-resume', (req, res) => {
-    const { url } = req.query;
+// GET /view-document - Proxy to force inline viewing of Cloudinary PDFs/Images
+router.get('/view-document', (req, res) => {
+    const { url, name } = req.query;
     if (!url) return res.status(400).send('No URL provided');
     
     try {
         const https = require('https');
         https.get(url, (response) => {
             if (response.statusCode !== 200) {
-                return res.status(response.statusCode).send('Failed to fetch resume');
+                return res.status(response.statusCode).send('Failed to fetch document');
             }
-            res.setHeader('Content-Type', 'application/pdf');
-            res.setHeader('Content-Disposition', 'inline; filename="resume.pdf"');
+            
+            // Passthrough Content-Type from Cloudinary
+            const contentType = response.headers['content-type'];
+            res.setHeader('Content-Type', contentType || 'application/pdf');
+            
+            // Determine extension from content-type or fallback to .pdf
+            let ext = '.pdf';
+            if (contentType && contentType.includes('image/')) {
+                ext = '.' + contentType.split('/')[1];
+            }
+            
+            const filename = name ? `${name}${ext}` : `document${ext}`;
+            res.setHeader('Content-Disposition', `inline; filename="${filename}"`);
             response.pipe(res);
         }).on('error', (e) => {
-            res.status(500).send('Error loading resume');
+            res.status(500).send('Error loading document');
         });
     } catch (err) {
         res.status(500).send('Server error');
     }
+});
+
+// Alias for backwards compatibility
+router.get('/view-resume', (req, res) => {
+    const url = req.query.url;
+    if (!url) return res.status(400).send('No URL provided');
+    res.redirect(`/view-document?url=${encodeURIComponent(url)}&name=resume`);
 });
 
 module.exports = router;

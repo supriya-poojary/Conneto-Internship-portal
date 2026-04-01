@@ -807,17 +807,34 @@
                                                                 <% } %>
                                                     </div>
                                                     <% } else if (app.status==='selected' ) { %>
-                                                        <div
-                                                            style="margin-top:12px; background:rgba(90,122,92,0.1); padding:12px; border-radius:12px; border:1px solid var(--sage); text-align:center">
-                                                            <div
-                                                                style="color:var(--sage); font-weight:800; font-size:13px">
-                                                                <i class="fas fa-trophy"></i> Congratulations!
+                                                        <div style="margin-top:15px; background:rgba(90,122,92,0.05); padding:15px; border-radius:16px; border:1.5px solid var(--sage); text-align:center; transition: 0.3s;" onmouseover="this.style.background='rgba(90,122,92,0.1)'">
+                                                            <div style="color:var(--sage); font-weight:800; font-size:14px; margin-bottom:5px">
+                                                                <i class="fas fa-trophy"></i> Hired & Active
                                                             </div>
-                                                            <div
-                                                                style="font-size:11px; color:var(--text-muted); margin-top:4px">
-                                                                You have been selected for this role.</div>
+                                                            <% if (app.certificateReleased) { %>
+                                                                <div style="background:var(--card-bg); padding:15px; border-radius:12px; margin-top:10px; border:1px dashed var(--sage); animation: pulse 2s infinite">
+                                                                    <div style="font-size:12px; font-weight:700; color:var(--ink); margin-bottom:10px">
+                                                                        <i class="fas fa-award" style="color:var(--amber)"></i> Completion Certificate Ready!
+                                                                    </div>
+                                                                    <div style="display:flex; flex-direction:column; gap:8px">
+                                                                        <a href="/view-document?url=<%= encodeURIComponent(app.certificateUrl) %>&name=Internship_Certificate_<%= app.internship.title.replace(/\s+/g, '_') %>" target="_blank" class="view-btn" style="background:var(--sage); color:#fff; border:none; width:100%; justify-content:center; padding:10px; font-size:12px">
+                                                                            <i class="fas fa-eye"></i> View Certificate
+                                                                        </a>
+                                                                        <a href="<%= app.certificateUrl %>" download class="view-btn" style="background:rgba(90,122,92,0.1); color:var(--sage); border:1px solid var(--sage); width:100%; justify-content:center; padding:10px; font-size:11px">
+                                                                            <i class="fas fa-download"></i> Download Original
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            <% } else { %>
+                                                                <div style="font-size:11px; color:var(--text-muted); line-height:1.4">
+                                                                    You are currently interning at this company. Keep your diary updated to receive your completion certificate.
+                                                                </div>
+                                                                <a href="/student/dashboard?tab=diary_history&viewInternshipId=<%= app.internship._id %>" class="view-btn" style="margin-top:10px; background:none; border:1px solid var(--sage); color:var(--sage); font-size:11px; width:100%; justify-content:center">
+                                                                    <i class="fas fa-chart-line"></i> View Progress
+                                                                </a>
+                                                            <% } %>
                                                         </div>
-                                                        <% } %>
+                                                    <% } %>
 
                                                             <div class="action-buttons"
                                                                 style="margin-top:12px; display:flex; gap:8px;">
@@ -1565,8 +1582,13 @@
                                                         </div>
                                                     </div>
                                                     <p
-                                                        style="font-size:11px; color:var(--text-muted); margin-top:10px; text-align:right">
-                                                        <%= approvedEntries.length %> logs formally approved out of <%= requiredDays %> required working days.
+                                                        style="font-size:11px; color:var(--text-muted); margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
+                                                        <span><%= approvedEntries.length %> logs formally approved out of <%= requiredDays %> required.</span>
+                                                        <% if (selectedApp.certificateReleased) { %>
+                                                            <a href="/view-document?url=<%= encodeURIComponent(selectedApp.certificateUrl) %>&name=Internship_Certificate_<%= selectedApp.internship.title.replace(/\s+/g, '_') %>" target="_blank" style="background:var(--sage); color:#fff; padding:4px 10px; border-radius:6px; text-decoration:none; font-size:10px; font-weight:700">
+                                                                <i class="fas fa-award"></i> Certificate Available
+                                                            </a>
+                                                        <% } %>
                                                     </p>
                                                 </div>
                                                 <% } } %>
