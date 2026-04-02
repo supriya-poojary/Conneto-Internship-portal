@@ -6,6 +6,7 @@ const Internship = require('../models/Internship');
 const User = require('../models/User');
 const StudentProfile = require('../models/StudentProfile');
 const DiaryEntry = require('../models/DiaryEntry');
+const { generateCertificate } = require('../utils/certificateGenerator');
 
 // Project root directory
 const ROOT = path.resolve(__dirname, '..');
@@ -536,7 +537,7 @@ router.post('/student/applications/:id/reschedule', async (req, res) => {
 // GET /view-resume - Proxy for Cloudinary PDF to force inline viewing
 // GET /view-document - Proxy to force inline viewing of Cloudinary PDFs/Images
 router.get('/view-document', (req, res) => {
-    const { url, name } = req.query;
+    const { url, name, download } = req.query;
     if (!url) return res.status(400).send('No URL provided');
     
     try {
@@ -557,13 +558,61 @@ router.get('/view-document', (req, res) => {
             }
             
             const filename = name ? `${name}${ext}` : `document${ext}`;
-            res.setHeader('Content-Disposition', `inline; filename="${filename}"`);
+            const disposition = download === 'true' ? 'attachment' : 'inline';
+            res.setHeader('Content-Disposition', `${disposition}; filename="${filename}"`);
+            
             response.pipe(res);
         }).on('error', (e) => {
             res.status(500).send('Error loading document');
         });
     } catch (err) {
         res.status(500).send('Server error');
+    }
+});
+
+// GET /student/certificate/:id/download - Professional dynamic PDF generation or Cloudinary proxy
+router.get('/student/certificate/:id/download', async (req, res) => {
+    if (!req.session.user) return res.redirect('/auth/login');
+    
+    try {
+        const app = await Application.findById(req.params.id)
+            .populate('student', 'name')
+            .populate({
+                path: 'internship',
+                populate: { path: 'company', select: 'companyName name' }
+            });
+
+        if (!app) return res.status(404).send('Application not found');
+        
+        // Security: Only the student themselves or the company can download
+        if (req.session.user.role === 'student' && app.student._id.toString() !== req.session.user.id) {
+            return res.status(403).send('Unauthorized to access this certificate');
+        }
+
+        if (!app.certificateReleased) {
+            return res.status(403).send('Certificate has not been released for this internship yet.');
+        }
+
+        // Case 1: Company uploaded a custom PDF certificate to Cloudinary
+        if (app.certificateUrl) {
+            const fileName = `Certificate_${app.student.name.replace(/\s+/g, '_')}_${app.certificateId || 'ID'}`;
+            return res.redirect(`/view-document?url=${encodeURIComponent(app.certificateUrl)}&name=${encodeURIComponent(fileName)}&download=true`);
+        }
+
+        // Case 2: Platform-generated dynamic certificate (Manual Release)
+        const certData = {
+            studentName: app.student.name,
+            internshipTitle: app.internship.title,
+            companyName: (app.internship.company ? (app.internship.company.companyName || app.internship.company.name) : app.internship.companyName) || 'Company',
+            date: app.certificateDate || Date.now(),
+            certificateId: app.certificateId || 'CERT-PREMIUM-' + Math.random().toString(36).substr(2, 9).toUpperCase()
+        };
+
+        generateCertificate(certData, res);
+
+    } catch (err) {
+        console.error('Certificate Download Error:', err);
+        res.status(500).send('An error occurred while generating your certificate.');
     }
 });
 
