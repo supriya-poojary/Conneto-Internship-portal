@@ -717,142 +717,190 @@
 
                 <div class="card reveal" style="margin-top:20px">
                     <% if (applications && applications.length> 0) { %>
-                        <div class="internship-list applications-grid">
-                            <% const
-                                appImages=[ 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=400&q=80'
-                                , 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&q=80'
-                                , 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=400&q=80'
-                                , 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&q=80'
-                                , 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&q=80' ]; %>
-                                <% applications.forEach(function(app, index) { %>
-                                    <div class="int-card" style="cursor: default;">
-                                        <% var cName=app.internship ? ((app.internship.company &&
-                                            app.internship.company.companyName) ? app.internship.company.companyName :
-                                            (app.internship.companyName || '' )) : '' ; %>
-                                            <div class="int-card-image-container" style="height: 100px;">
-                                                <img src="<%= appImages[index % appImages.length] %>"
-                                                    class="int-card-image" alt="Job Image">
-                                                <div class="int-logo" style="width:36px; height:36px; font-size:14px;">
-                                                    <%= cName ? cName.charAt(0).toUpperCase() : 'C' %>
-                                                </div>
-                                            </div>
-                                            <div class="int-content" style="padding:15px;">
-                                                <h4 class="int-title" style="font-size:15px;">
-                                                    <%= app.internship ? app.internship.title : 'Internship' %>
-                                                </h4>
-                                                <div class="int-company" style="font-size:12px; margin-bottom:8px;">
-                                                    <%= cName || 'Company' %>
-                                                </div>
+                        <style>
+                        /* Responsive Table CSS for "My Applications" */
+                        @media (max-width: 768px) {
+                            .app-table-container table, 
+                            .app-table-container thead, 
+                            .app-table-container tbody, 
+                            .app-table-container th, 
+                            .app-table-container td, 
+                            .app-table-container tr {
+                                display: block !important;
+                            }
+                            
+                            .app-table-container table {
+                                min-width: 100% !important;
+                            }
 
-                                                <div class="int-meta" style="font-size:11px; gap:8px;">
-                                                    <span><i class="fas fa-calendar"></i>
-                                                        <%= new Date(app.appliedAt).toLocaleDateString() %>
-                                                    </span>
-                                                    <span class="tag <%= app.status %>"
-                                                        style="<%= app.status === 'selected' ? 'background:var(--sage)' : 'background:var(--coral)' %>; color:#fff; border:none; padding:4px 10px;">
-                                                        <%= app.status==='applied' ? 'In Processing' :
-                                                            app.status.replace(/_/g, ' ' ) %>
-                                                    </span>
-                                                </div>
+                            .app-table-container {
+                                border: none !important;
+                                box-shadow: none !important;
+                                background: transparent !important;
+                                overflow: visible !important;
+                            }
 
-                                                <% if (app.status==='interview_scheduled' ) { %>
-                                                    <div
-                                                        style="margin-top:15px; background:rgba(217,95,59,0.05); padding:12px; border-radius:12px; border:1px solid var(--coral)">
-                                                        <div
-                                                            style="font-weight:800; color:var(--coral); font-size:12px; margin-bottom:5px">
-                                                            <i class="fas fa-calendar-alt"></i> INTERVIEW SCHEDULED
-                                                        </div>
-                                                        <div style="font-size:14px; font-weight:700; color:var(--ink)">
-                                                            <%= new Date(app.interviewDate).toLocaleString('en-IN', {
-                                                                day:'2-digit', month:'short', year:'numeric',
-                                                                hour:'2-digit', minute:'2-digit' }) %>
-                                                        </div>
+                            .reschedule-popup {
+                                position: static !important;
+                                width: 100% !important;
+                                padding: 15px !important;
+                                margin-top: 15px !important;
+                                box-shadow: none !important;
+                                border: 1px dashed var(--amber) !important;
+                            }
 
-                                                        <% if (!app.rescheduleRequest) { %>
-                                                            <div
-                                                                style="margin-top:10px; border-top:1px solid var(--border); padding-top:10px">
-                                                                <button
-                                                                    onclick="this.nextElementSibling.style.display='block'; this.style.display='none'"
-                                                                    class="view-btn"
-                                                                    style="background:none; color:var(--coral); border:1px solid var(--coral); width:100%; font-size:10px">Request
-                                                                    Reschedule</button>
-                                                                <div style="display:none; margin-top:10px">
-                                                                    <form
-                                                                        action="/student/applications/<%= app._id %>/reschedule"
-                                                                        method="POST">
-                                                                        <div style="margin-bottom:8px">
-                                                                            <label
-                                                                                style="font-size:10px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:4px">New
-                                                                                Suggested Time:</label>
-                                                                            <input type="datetime-local"
-                                                                                name="suggestedDate" required
-                                                                                style="width:100%; border:1px solid var(--border); border-radius:8px; padding:6px; font-size:12px; background:var(--bg); color:var(--text);">
-                                                                        </div>
-                                                                        <textarea name="reason"
-                                                                            placeholder="Reason for rescheduling..."
-                                                                            required
-                                                                            style="width:100%; border:1px solid var(--border); border-radius:8px; padding:6px; font-size:12px; min-height:60px; margin-bottom:8px; background:var(--bg); color:var(--text);"></textarea>
-                                                                        <button type="submit" class="view-btn"
-                                                                            style="background:var(--coral); color:#fff; border:none; width:100%; font-size:11px">Send
-                                                                            Request</button>
-                                                                    </form>
-                                                                </div>
-                                                            </div>
-                                                            <% } else { %>
-                                                                <div
-                                                                    style="margin-top:10px; background:rgba(181,56,74,0.1); padding:8px; border-radius:8px; font-size:10px; color:var(--rose); font-weight:600">
-                                                                    <i class="fas fa-history"></i> Reschedule Pending
-                                                                    Review
-                                                                </div>
-                                                                <% } %>
+                            /* Hide table headers */
+                            .app-table-container thead tr {
+                                position: absolute;
+                                top: -9999px;
+                                left: -9999px;
+                            }
+
+                            .app-table-container tr {
+                                border: 1px solid var(--border) !important;
+                                background: var(--card-bg);
+                                border-radius: 12px;
+                                margin-bottom: 20px;
+                                padding-top: 5px;
+                                padding-bottom: 10px;
+                            }
+
+                            .app-table-container td {
+                                border: none !important;
+                                border-bottom: 1px solid rgba(0,0,0,0.03) !important;
+                                position: relative;
+                                padding: 15px 20px !important;
+                            }
+                            
+                            .app-table-container td:last-child {
+                                border-bottom: none !important;
+                            }
+                            
+                            .app-table-container td:before {
+                                display: block;
+                                margin-bottom: 10px;
+                                font-weight: 800;
+                                color: var(--text-muted);
+                                text-transform: uppercase;
+                                font-size: 11px;
+                                letter-spacing: 0.5px;
+                            }
+
+                            /* Provide mobile labels */
+                            .app-table-container td:nth-of-type(1):before { content: "Role & Company"; }
+                            .app-table-container td:nth-of-type(2):before { content: "Applied Date"; }
+                            .app-table-container td:nth-of-type(3):before { content: "Application Progress"; }
+                            .app-table-container td:nth-of-type(4):before { content: "Actions"; }
+                        }
+                        </style>
+                        <div class="app-table-container" style="overflow-x:auto; background:var(--card-bg); border-radius:15px; border:1px solid var(--border); box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+                            <table style="width:100%; border-collapse:collapse; text-align:left; min-width:800px;">
+                                <thead>
+                                    <tr style="background:rgba(0,0,0,0.02); border-bottom:1px solid var(--border); font-size:12px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px;">
+                                        <th style="padding:15px 20px; font-weight:700;">Role & Company</th>
+                                        <th style="padding:15px 20px; font-weight:700;">Applied Date</th>
+                                        <th style="padding:15px 20px; font-weight:700;">Application Progress</th>
+                                        <th style="padding:15px 20px; font-weight:700;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% applications.forEach(function(app) { %>
+                                        <% 
+                                        var cName = app.internship ? ((app.internship.company && app.internship.company.companyName) ? app.internship.company.companyName : (app.internship.companyName || '')) : ''; 
+                                        
+                                        let statusColor = "var(--text-muted)";
+                                        let statusBg = "rgba(0,0,0,0.05)";
+                                        let statusIcon = "fas fa-paper-plane";
+                                        let statusText = "Applied";
+                                        let progressPercent = 25;
+                                        let progressLabel = "1 / 4";
+
+                                        if (app.status === 'under_review') {
+                                            statusColor = "var(--coral)"; statusBg = "rgba(217,95,59,0.1)"; statusIcon = "fas fa-search"; statusText = "Under Review"; progressPercent = 50; progressLabel = "2 / 4";
+                                        } else if (app.status === 'shortlisted') {
+                                            statusColor = "var(--amber)"; statusBg = "rgba(245,158,11,0.1)"; statusIcon = "fas fa-star"; statusText = "Shortlisted"; progressPercent = 50; progressLabel = "2 / 4";
+                                        } else if (app.status === 'interview_scheduled') {
+                                            statusColor = "var(--amber)"; statusBg = "rgba(245,158,11,0.1)"; statusIcon = "fas fa-calendar-alt"; statusText = "Interview Scheduled"; progressPercent = 75; progressLabel = "3 / 4";
+                                        } else if (app.status === 'selected') {
+                                            statusColor = "var(--sage)"; statusBg = "rgba(90,122,92,0.1)"; statusIcon = "fas fa-check-circle"; statusText = "Selected & Ready to Write Diary"; progressPercent = 100; progressLabel = "4 / 4";
+                                        } else if (app.status === 'rejected') {
+                                            statusColor = "var(--rose)"; statusBg = "rgba(181,56,74,0.1)"; statusIcon = "fas fa-times-circle"; statusText = "Rejected"; progressPercent = 100; progressLabel = "0 / 4";
+                                        }
+                                        %>
+                                        <tr style="border-bottom:1px solid var(--border); transition:0.3s;" onmouseover="this.style.background='rgba(0,0,0,0.02)'" onmouseout="this.style.background='transparent'">
+                                            <td style="padding:20px; vertical-align:middle;">
+                                                <div style="display:flex; align-items:center; gap:15px;">
+                                                    <div style="width:45px; height:45px; flex-shrink:0; border-radius:12px; background:linear-gradient(135deg, var(--coral), #ff8a65); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:20px; box-shadow:0 4px 10px rgba(217,95,59,0.2);">
+                                                        <%= cName ? cName.charAt(0).toUpperCase() : 'C' %>
                                                     </div>
-                                                    <% } else if (app.status==='selected' ) { %>
-                                                        <div style="margin-top:15px; background:rgba(90,122,92,0.05); padding:15px; border-radius:16px; border:1.5px solid var(--sage); text-align:center; transition: 0.3s;" onmouseover="this.style.background='rgba(90,122,92,0.1)'">
-                                                            <div style="color:var(--sage); font-weight:800; font-size:14px; margin-bottom:5px">
-                                                                <i class="fas fa-trophy"></i> Hired & Active
-                                                            </div>
-                                                            <% if (app.certificateReleased) { %>
-                                                                <div style="background:var(--card-bg); padding:15px; border-radius:12px; margin-top:10px; border:1px dashed var(--sage); animation: pulse 2s infinite">
-                                                                    <div style="font-size:12px; font-weight:700; color:var(--ink); margin-bottom:10px">
-                                                                        <i class="fas fa-award" style="color:var(--amber)"></i> Completion Certificate Ready!
-                                                                    </div>
-                                                                    <div style="display:flex; flex-direction:column; gap:8px">
-                                                                        <a href="/view-document?url=<%= encodeURIComponent(app.certificateUrl) %>&name=Internship_Certificate_<%= app.internship.title.replace(/\s+/g, '_') %>" target="_blank" class="view-btn" style="background:var(--sage); color:#fff; border:none; width:100%; justify-content:center; padding:10px; font-size:12px">
-                                                                            <i class="fas fa-eye"></i> View Certificate
-                                                                        </a>
-                                                                        <a href="<%= app.certificateUrl %>" download class="view-btn" style="background:rgba(90,122,92,0.1); color:var(--sage); border:1px solid var(--sage); width:100%; justify-content:center; padding:10px; font-size:11px">
-                                                                            <i class="fas fa-download"></i> Download Original
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-                                                            <% } else { %>
-                                                                <div style="font-size:11px; color:var(--text-muted); line-height:1.4">
-                                                                    You are currently interning at this company. Keep your diary updated to receive your completion certificate.
-                                                                </div>
-                                                                <a href="/student/dashboard?tab=diary_history&viewInternshipId=<%= app.internship._id %>" class="view-btn" style="margin-top:10px; background:none; border:1px solid var(--sage); color:var(--sage); font-size:11px; width:100%; justify-content:center">
-                                                                    <i class="fas fa-chart-line"></i> View Progress
-                                                                </a>
-                                                            <% } %>
+                                                    <div>
+                                                        <div style="font-weight:800; color:var(--ink); font-size:15px; margin-bottom:4px;"><%= app.internship ? app.internship.title : 'Internship' %></div>
+                                                        <div style="color:var(--text-muted); font-size:13px; font-weight:600;"><i class="fas fa-building" style="margin-right:6px;"></i><%= cName || 'Company' %></div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td style="padding:20px; vertical-align:middle; color:var(--ink); font-size:14px; font-weight:600;">
+                                                <div style="display:flex; align-items:center; gap:8px;">
+                                                    <div style="width:30px; height:30px; border-radius:8px; background:rgba(0,0,0,0.03); display:flex; align-items:center; justify-content:center; color:var(--text-muted)">
+                                                        <i class="far fa-calendar-alt"></i>
+                                                    </div>
+                                                    <%= new Date(app.appliedAt).toLocaleDateString('en-US', { day:'numeric', month:'short', year:'numeric' }) %>
+                                                </div>
+                                            </td>
+                                            <td style="padding:20px; vertical-align:middle;">
+                                                <div style="display:flex; flex-direction:column; gap:10px; min-width:200px; max-width:260px;">
+                                                    <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px;">
+                                                        <span style="font-weight:800; color:<%= statusColor %>; background:<%= statusBg %>; padding:6px 14px; border-radius:100px;">
+                                                            <i class="<%= statusIcon %>" style="margin-right:6px;"></i><%= statusText %>
+                                                        </span>
+                                                        <span style="font-weight:800; color:<%= statusColor %>;"><%= progressLabel %></span>
+                                                    </div>
+                                                    <div style="width:100%; height:8px; background:rgba(0,0,0,0.05); border-radius:10px; overflow:hidden;">
+                                                        <div style="width:<%= progressPercent %>%; height:100%; background:<%= statusColor %>; border-radius:10px; transition:width 1.5s cubic-bezier(0.1,0,0,1);"></div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td style="padding:20px; vertical-align:middle;">
+                                                <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">
+                                                    <% if (app.status === 'interview_scheduled') { %>
+                                                        <div style="font-size:12px; font-weight:700; color:var(--ink); background:rgba(245,158,11,0.05); padding:8px 12px; border-radius:8px; border:1px dashed var(--amber);">
+                                                            <i class="fas fa-clock" style="color:var(--amber); margin-right:6px;"></i> <%= new Date(app.interviewDate).toLocaleString('en-IN', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' }) %>
                                                         </div>
-                                                    <% } %>
-
-                                                            <div class="action-buttons"
-                                                                style="margin-top:12px; display:flex; gap:8px;">
-                                                                <% if (['applied', 'under_review' , 'shortlisted'
-                                                                    ].includes(app.status)) { %>
-                                                                    <form
-                                                                        action="/student/applications/<%= app._id %>/withdraw"
-                                                                        method="POST"
-                                                                        onsubmit="return confirm('Withdraw application?')">
-                                                                        <button type="submit" class="view-btn"
-                                                                            style="padding:6px 12px; font-size:10px; background:rgba(181,56,74,0.1); color:var(--rose); border:none; width:100%">Withdraw
-                                                                            Application</button>
+                                                        <% if (!app.rescheduleRequest) { %>
+                                                            <div class="reschedule-wrapper" style="position:relative;">
+                                                                <button onclick="this.nextElementSibling.style.display='block'; this.style.display='none'" class="view-btn reschedule-trigger" style="background:none; color:var(--amber); border:1px solid var(--amber); padding:8px 14px; font-size:12px; border-radius:8px; font-weight:700; transition:0.3s; cursor:pointer;" onmouseover="this.style.background='var(--amber)'; this.style.color='#fff'" onmouseout="this.style.background='none'; this.style.color='var(--amber)'">Request Reschedule</button>
+                                                                <div class="reschedule-popup" style="display:none; position:absolute; right:0; top:100%; background:var(--card-bg); padding:18px; border-radius:14px; border:1px solid var(--border); box-shadow:0 15px 50px rgba(0,0,0,0.15); z-index:1000; width:280px; margin-top:10px;">
+                                                                    <form action="/student/applications/<%= app._id %>/reschedule" method="POST">
+                                                                        <label style="font-size:12px; font-weight:800; color:var(--ink); display:block; margin-bottom:8px;">Suggest New Time:</label>
+                                                                        <input type="datetime-local" name="suggestedDate" required style="width:100%; border:1px solid var(--border); border-radius:10px; padding:10px; font-size:13px; margin-bottom:12px; background:var(--bg); color:var(--text); outline:none; transition:0.3s;" onfocus="this.style.borderColor='var(--amber)'" onblur="this.style.borderColor='var(--border)'">
+                                                                        <textarea name="reason" placeholder="Reason for rescheduling..." required style="width:100%; border:1px solid var(--border); border-radius:10px; padding:10px; font-size:13px; min-height:80px; margin-bottom:12px; background:var(--bg); color:var(--text); font-family:inherit; outline:none; transition:0.3s; resize:vertical;" onfocus="this.style.borderColor='var(--amber)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+                                                                        <div style="display:flex; gap:10px;">
+                                                                            <button type="submit" style="background:var(--amber); color:#fff; border:none; border-radius:10px; padding:10px; font-size:12px; font-weight:800; flex:1; cursor:pointer; transition:0.3s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">Send Request</button>
+                                                                            <button type="button" onclick="const w = this.closest('.reschedule-wrapper'); w.querySelector('.reschedule-popup').style.display='none'; w.querySelector('.reschedule-trigger').style.display='inline-flex';" style="background:var(--bg); border:1px solid var(--border); color:var(--text); border-radius:10px; padding:10px 14px; font-size:12px; font-weight:800; cursor:pointer; transition:0.3s;" onmouseover="this.style.background='var(--border)'" onmouseout="this.style.background='var(--bg)'">Cancel</button>
+                                                                        </div>
                                                                     </form>
-                                                                    <% } %>
+                                                                </div>
                                                             </div>
-                                            </div>
-                                    </div>
+                                                        <% } else { %>
+                                                            <span style="font-size:12px; color:var(--amber); background:rgba(245,158,11,0.1); padding:8px 12px; border-radius:8px; font-weight:800;"><i class="fas fa-history" style="margin-right:6px;"></i> Reschedule Pending</span>
+                                                        <% } %>
+                                                    <% } else if (app.status === 'selected') { %>
+                                                        <% if (app.certificateReleased) { %>
+                                                            <a href="<%= app.certificateUrl %>" download class="view-btn" style="background:var(--sage); color:#fff; border:none; padding:10px 18px; font-size:13px; border-radius:100px; box-shadow:0 6px 20px rgba(90,122,92,0.3); font-weight:700; transition:0.3s;" onmouseover="this.style.transform='translateY(-2px)';" onmouseout="this.style.transform='translateY(0)';"><i class="fas fa-download" style="margin-right:8px;"></i> Download Certificate</a>
+                                                        <% } else { %>
+                                                            <a href="/student/dashboard?tab=diary_history&viewInternshipId=<%= app.internship._id %>" class="view-btn" style="background:rgba(90,122,92,0.1); border:1px solid var(--sage); color:var(--sage); padding:10px 18px; font-size:13px; border-radius:100px; font-weight:700; transition:0.3s;" onmouseover="this.style.background='var(--sage)'; this.style.color='#fff';" onmouseout="this.style.background='rgba(90,122,92,0.1)'; this.style.color='var(--sage)';"><i class="fas fa-chart-line" style="margin-right:8px;"></i> View Progress</a>
+                                                        <% } %>
+                                                    <% } else if (['applied', 'under_review', 'shortlisted'].includes(app.status)) { %>
+                                                        <form action="/student/applications/<%= app._id %>/withdraw" method="POST" onsubmit="return confirm('Are you sure you want to withdraw this application?')">
+                                                            <button type="submit" class="view-btn" style="background:rgba(181,56,74,0.1); color:var(--rose); border:none; padding:8px 14px; font-size:12px; border-radius:8px; font-weight:700; transition:0.3s; cursor:pointer;" onmouseover="this.style.background='var(--rose)'; this.style.color='#fff';" onmouseout="this.style.background='rgba(181,56,74,0.1)'; this.style.color='var(--rose)';"><i class="fas fa-times" style="margin-right:6px;"></i> Withdraw</button>
+                                                        </form>
+                                                    <% } %>
+                                                </div>
+                                            </td>
+                                        </tr>
                                     <% }); %>
+                                </tbody>
+                            </table>
                         </div>
                         <% } else { %>
                             <div style="text-align:center; padding:60px 20px">
