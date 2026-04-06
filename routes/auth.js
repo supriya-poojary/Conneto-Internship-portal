@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
 const User = require('../models/User');
+const { upload } = require('../config/upload');
 
 // GET /auth/register
 router.get('/register', (req, res) => {
@@ -9,14 +11,14 @@ router.get('/register', (req, res) => {
 });
 
 // POST /auth/register
-router.post('/register', async (req, res) => {
-    const { name, companyName, email, password, role, cin, companyAddress, phone } = req.body;
+router.post('/register', upload.any(), async (req, res) => {
+    const { name, companyName, email, password, role, cin, companyAddress, phone, companyType } = req.body;
     try {
         // --- 1. Basic Field Validation ---
         if (!email || !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
             return res.render('auth/register', { title: 'Register — Conneto', error: 'Please enter a valid work or university email.' });
         }
-        
+
         if (!password || password.length < 6) {
             return res.render('auth/register', { title: 'Register — Conneto', error: 'Password is too weak. Minimum 6 characters required.' });
         }
@@ -30,7 +32,7 @@ router.post('/register', async (req, res) => {
             if (!cin || !cin.match(cinRegex)) {
                 return res.render('auth/register', { title: 'Register — Conneto', error: 'Identification failed: Invalid 21-digit CIN format.' });
             }
-            
+
             if (!phone || !phone.match(/^[0-9]{10,15}$/)) {
                 return res.render('auth/register', { title: 'Register — Conneto', error: 'Please enter a valid 10-15 digit contact number.' });
             }
@@ -38,7 +40,7 @@ router.post('/register', async (req, res) => {
             if (!companyName || companyName.trim().length < 2) {
                 return res.render('auth/register', { title: 'Register — Conneto', error: 'Official company name is required to proceed.' });
             }
-            
+
             if (!companyAddress || companyAddress.trim().length < 10) {
                 return res.render('auth/register', { title: 'Register — Conneto', error: 'Please provide a complete headquarters address.' });
             }
@@ -48,10 +50,10 @@ router.post('/register', async (req, res) => {
         const existing = await User.findOne({ email });
         if (existing) {
             if (existing.status === 'Pending') {
-                return res.render('auth/login', { 
-                    title: 'Login — Conneto', 
-                    error: 'Account already exists and is currently undergoing verification. Please check back later.', 
-                    success: null 
+                return res.render('auth/login', {
+                    title: 'Login — Conneto',
+                    error: 'Account already exists and is currently undergoing verification. Please check back later.',
+                    success: null
                 });
             }
             return res.render('auth/register', { title: 'Register — Conneto', error: 'This email is already registered. Please sign in.' });
@@ -59,13 +61,26 @@ router.post('/register', async (req, res) => {
 
         // --- 3. Account Creation ---
         const userData = { name, companyName, email, password, role };
-        
+
         if (role === 'company') {
             userData.status = 'Pending';
             userData.cin = cin;
             userData.companyAddress = companyAddress;
             userData.phone = phone;
+            userData.companyType = companyType;
+
+            // Map uploaded files to companyDocuments model (Direct Binary Storage)
+            if (req.files && req.files.length > 0) {
+                userData.companyDocuments = req.files.map(file => ({
+                    docName: file.fieldname,
+                    docData: file.buffer,
+                    contentType: file.mimetype
+                }));
+            }
+        } else if (role === 'student') {
+            userData.status = 'Approved';
         }
+
 
         const user = await User.create(userData);
 
@@ -74,10 +89,10 @@ router.post('/register', async (req, res) => {
             if (role === 'student') return res.redirect('/student/dashboard');
             return res.redirect('/company/dashboard');
         } else {
-            return res.render('auth/login', { 
-                title: 'Login — Conneto', 
-                error: null, 
-                success: 'Registration successful! Your credentials have been submitted for administrator review. You will gain access once verified.' 
+            return res.render('auth/login', {
+                title: 'Login — Conneto',
+                error: null,
+                success: 'Registration successful! Your credentials have been submitted for administrator review. You will gain access once verified.'
             });
         }
     } catch (err) {
@@ -90,7 +105,20 @@ router.post('/register', async (req, res) => {
 router.get('/login', (req, res) => {
     if (req.session.user) return res.redirect('/');
     const registered = req.query.registered === 'true';
-    res.render('auth/login', { title: 'Login — Conneto', error: null, success: registered ? 'Account created successfully! Please sign in to continue.' : null });
+    let error = req.query.error || null;
+
+    // Google Auth error handling
+    if (req.query.auth_error === 'google') {
+        error = 'Identity Verification Denied: We could not verify your Google credentials. Please ensure your account has a primary email or try traditional sign-in.';
+    } else if (req.query.auth_error === 'no_user') {
+        error = 'Identity Sync Error: Authentication succeeded via Google but we could not establish a session. Please try again.';
+    }
+
+    res.render('auth/login', {
+        title: 'Login — Conneto',
+        error: error,
+        success: registered ? 'Account created successfully! Please sign in to continue.' : null
+    });
 });
 
 // POST /auth/login
@@ -112,7 +140,7 @@ router.post('/login', async (req, res) => {
         }
 
         req.session.user = { id: user._id, name: user.name, companyName: user.companyName, role: user.role };
-        
+
         if (user.role === 'student') return res.redirect('/student/dashboard');
         if (user.role === 'admin') return res.redirect('/admin/dashboard');
         return res.redirect('/company/dashboard');
@@ -185,5 +213,30 @@ router.post('/change-password', async (req, res) => {
 router.get('/logout', (req, res) => {
     req.session.destroy(() => res.redirect('/'));
 });
+
+// GET /auth/google
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+// GET /auth/google/callback
+router.get('/google/callback',
+    passport.authenticate('google', { failureRedirect: '/auth/login?auth_error=google' }),
+    (req, res) => {
+        // Successful authentication
+        if (!req.user) return res.redirect('/auth/login?auth_error=no_user');
+
+        req.session.user = {
+            id: req.user._id,
+            name: req.user.name,
+            companyName: req.user.companyName,
+            role: req.user.role
+        };
+
+        console.log('Google login sync successful for:', req.user.email);
+
+        if (req.user.role === 'student') return res.redirect('/student/dashboard');
+        if (req.user.role === 'admin') return res.redirect('/admin/dashboard');
+        return res.redirect('/company/dashboard');
+    }
+);
 
 module.exports = router;

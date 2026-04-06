@@ -497,9 +497,9 @@
         }
 
         .overlay-content {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 100px 40px;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
             position: relative;
         }
 
@@ -685,6 +685,35 @@
             100% {
                 transform: scale(1.1);
                 opacity: 1;
+            }
+        }
+
+        .dossier-responsive {
+            display: flex;
+            flex-direction: row;
+        }
+        @media (max-width: 900px) {
+            .dossier-responsive {
+                flex-direction: column !important;
+                overflow-y: auto !important;
+            }
+            .dossier-sidebar {
+                width: 100% !important;
+                border-right: none !important;
+                border-bottom: 1px solid var(--border);
+                padding: 30px 20px !important;
+            }
+            .dossier-main {
+                padding: 30px 20px !important;
+                overflow-y: visible !important;
+            }
+            .dossier-grid {
+                grid-template-columns: 1fr !important;
+            }
+            .module-row {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 15px !important;
             }
         }
 
@@ -924,6 +953,8 @@
                     </div>
                 </div>
 
+
+
                 <div class="company-grid">
                     <% if (pendingCompanies.length===0) { %>
                         <div
@@ -1050,6 +1081,10 @@
         </div>
     </div>
 
+<!-- Leave Tracking Section Removed by Admin Order -->
+
+
+
     <script>
         const COMPANIES = <%- JSON.stringify([...pendingCompanies, ...approvedCompanies].reduce((acc, c) => ({ ...acc, [c._id]: c }), {})) %>;
 
@@ -1102,7 +1137,7 @@
             const c = COMPANIES[id];
             if (!c) return;
             const content = `
-                <div class="dossier-container" style="max-width: 1100px; margin: 40px auto; background: var(--card-bg); border-radius: 40px; overflow: hidden; box-shadow: 0 80px 160px rgba(0,0,0,0.5); border: 1.5px solid var(--border); display: flex; min-height: 700px; animation: slideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1); backdrop-filter: blur(50px);">
+                <div class="dossier-container dossier-responsive" style="width: 100%; min-height: 100vh; margin: 0; background: var(--bg); border-radius: 0; border: none; animation: overlayEnter 0.6s cubic-bezier(0.23, 1, 0.32, 1);">
                     
                     <!-- Side navigation / Intelligence Sidebar -->
                     <div class="dossier-sidebar" style="width: 300px; background: rgba(0,0,0,0.02); border-right: 1px solid var(--border); padding: 50px 30px; display: flex; flex-direction: column; align-items: center; text-align: center;">
@@ -1143,10 +1178,10 @@
                         <!-- Data Modules -->
                         <div style="display: flex; flex-direction: column; gap: 40px;">
                             
-                            <!-- Module 1: Corporate Identity -->
+                            <!-- Module 1: Corporate Identity & Credentials -->
                             <div>
                                 <h4 style="font-size: 10px; color: var(--text-muted); font-weight: 900; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;">
-                                    Corporate DNA <div style="flex: 1; height: 1px; background: var(--border); opacity: 0.5;"></div>
+                                    Corporate Identification <div style="flex: 1; height: 1px; background: var(--border); opacity: 0.5;"></div>
                                 </h4>
                                 <div class="dossier-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
                                     <div style="padding: 24px; background: rgba(0,0,0,0.01); border: 2px solid var(--border); border-radius: 24px;">
@@ -1154,11 +1189,34 @@
                                         <div style="font-size: 1.25rem; font-weight: 800; color: var(--ink); font-family: 'Outfit';">${c.cin || 'N/A'}</div>
                                     </div>
                                     <div style="padding: 24px; background: rgba(0,0,0,0.01); border: 2px solid var(--border); border-radius: 24px;">
+                                        <span style="font-size: 10px; color: var(--text-muted); font-weight: 800; text-transform: uppercase; margin-bottom: 8px; display: block;">Registration Type</span>
+                                        <div style="font-size: 1.25rem; font-weight: 800; color: var(--ink); font-family: 'Outfit';">${c.companyType || 'Standard'}</div>
+                                    </div>
+                                    <div style="grid-column: 1 / -1; padding: 24px; background: rgba(217,95,59,0.05); border: 2px dashed var(--coral); border-radius: 24px;">
+                                        <span style="font-size: 10px; color: var(--coral); font-weight: 900; text-transform: uppercase; margin-bottom: 15px; display: block;">Legal Verification Document(s)</span>
+                                        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                                            ${c.companyDocuments && c.companyDocuments.length > 0 ? 
+                                                c.companyDocuments.map(doc => {
+                                                    const label = (doc.docName || 'DOCUMENT').replace(/_/g, ' ');
+                                                    return `
+                                                    <a href="/view-document?type=company&docId=${doc._id}" target="_blank" style="display: flex; align-items: center; gap: 15px; background: var(--ink); color: var(--bg); padding: 15px 25px; border-radius: 15px; text-decoration: none; font-weight: 800; font-size: 14px; width: fit-content; transition: 0.3s; text-transform: uppercase;">
+                                                        <i class="fas fa-eye" style="font-size: 20px;"></i> OPEN ${label}
+                                                    </a>
+                                                    `;
+                                                }).join('') : 
+                                                `<div style="color: var(--rose); font-weight: 700; display: flex; align-items: center; gap: 10px;">
+                                                    <i class="fas fa-exclamation-triangle"></i> NO LEGAL DOCUMENT UPLOADED
+                                                </div>`
+                                            }
+                                        </div>
+                                    </div>
+                                    <div style="grid-column: 1 / -1; padding: 24px; background: rgba(0,0,0,0.01); border: 2px solid var(--border); border-radius: 24px;">
                                         <span style="font-size: 10px; color: var(--text-muted); font-weight: 800; text-transform: uppercase; margin-bottom: 8px; display: block;">Authorized Representative</span>
                                         <div style="font-size: 1.25rem; font-weight: 800; color: var(--ink); font-family: 'Outfit';">${c.name || 'N/A'}</div>
                                     </div>
                                 </div>
                             </div>
+
 
                             <!-- Module 2: Access Points -->
                             <div>

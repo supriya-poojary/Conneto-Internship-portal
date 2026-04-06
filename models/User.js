@@ -7,14 +7,28 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true, lowercase: true },
     password: { type: String, required: true, minlength: 6 },
     role: { type: String, enum: ['student', 'company', 'admin'], required: true },
-    // New fields for company verification
+    googleId: { type: String, unique: true, sparse: true },
     cin: { type: String, trim: true },
+    companyType: { 
+        type: String, 
+        enum: ['Private Limited', 'Public Limited', 'Proprietorship', 'Partnership', 'Branch Office', 'Other'],
+        trim: true 
+    },
+    companyDocuments: [
+        {
+            docName: { type: String },
+            docUrl: { type: String },
+            docData: { type: Buffer },
+            contentType: { type: String },
+            uploadedAt: { type: Date, default: Date.now }
+        }
+    ],
     companyAddress: { type: String, trim: true },
     phone: { type: String, trim: true },
     status: { 
         type: String, 
         enum: ['Pending', 'Approved', 'Rejected'], 
-        default: 'Approved' // Default for students; will be set to Pending for companies in route
+        default: 'Pending' // Default for everyone now; we need to decide if students should be approved automatically
     },
     rejectionReason: { type: String, default: null },
     createdAt: { type: Date, default: Date.now }
