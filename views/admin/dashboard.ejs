@@ -1199,7 +1199,7 @@
                                                 c.companyDocuments.map(doc => {
                                                     const label = (doc.docName || 'DOCUMENT').replace(/_/g, ' ');
                                                     return `
-                                                    <a href="/view-document?type=company&docId=${doc._id}" target="_blank" style="display: flex; align-items: center; gap: 15px; background: var(--ink); color: #fff; padding: 15px 25px; border-radius: 15px; text-decoration: none; font-weight: 800; font-size: 14px; width: fit-content; transition: 0.3s; text-transform: uppercase;">
+                                                    <a href="/view-document?type=company&docId=${doc._id}" target="_blank" style="display: flex; align-items: center; gap: 15px; background: var(--ink); color: var(--bg); padding: 15px 25px; border-radius: 15px; text-decoration: none; font-weight: 800; font-size: 14px; width: fit-content; transition: 0.3s; text-transform: uppercase;">
                                                         <i class="fas fa-eye" style="font-size: 20px;"></i> OPEN ${label}
                                                     </a>
                                                     `;

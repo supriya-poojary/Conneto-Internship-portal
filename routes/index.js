@@ -592,16 +592,24 @@ router.get('/view-document', async (req, res) => {
                 mimeType = doc.contentType || 'application/pdf';
                 fileName = name || (doc.docName ? doc.docName.replace(/_/g, ' ') : 'legal_doc');
             } else if (doc.docUrl) {
-                // Asset proxy for external/legacy URLs to prevent 401 on redirects
+                const targetUrl = doc.docUrl;
+                if (targetUrl.startsWith('/uploads/')) {
+                    const filePath = path.join(__dirname, '../public', targetUrl);
+                    if (fs.existsSync(filePath)) {
+                        return res.download(filePath, name || 'document.pdf');
+                    }
+                }
+                
+                // Asset proxy for external/legacy URLs
                 try {
-                    const response = await fetch(doc.docUrl);
+                    const response = await fetch(targetUrl);
                     if (!response.ok) throw new Error(`Fetch failed: ${response.status}`);
                     fileBuffer = Buffer.from(await response.arrayBuffer());
                     mimeType = response.headers.get('content-type') || 'application/pdf';
                     fileName = name || 'legal_doc';
                 } catch (err) {
                     console.error('Proxy Fetch Error:', err);
-                    return res.redirect(doc.docUrl); // Last resort fallback
+                    return res.status(404).send(`<html><body style="font-family:sans-serif;text-align:center;padding:50px;"><h2>Document Unavailable</h2><p>This legacy document is no longer accessible from its original host (Authorization Expired/401). Please request the company to re-upload it.</p></body></html>`);
                 }
             }
         } else if (type === 'resume' && docId) {
