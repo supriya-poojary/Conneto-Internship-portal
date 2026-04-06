@@ -14,8 +14,6 @@ router.get('/register', (req, res) => {
 router.post('/register', upload.any(), async (req, res) => {
     const { name, companyName, email, password, role, cin, companyAddress, phone, companyType } = req.body;
     try {
-        console.log('Files received:', req.files);
-
         // --- 1. Basic Field Validation ---
         if (!email || !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
             return res.render('auth/register', { title: 'Register — Conneto', error: 'Please enter a valid work or university email.' });
