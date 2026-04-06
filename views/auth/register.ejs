@@ -78,10 +78,7 @@
 
         .auth-left {
             width: 40%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
+            min-height: 100vh;
             background: #0a0502;
             padding: 50px;
             display: flex;
@@ -89,7 +86,7 @@
             justify-content: center;
             overflow: hidden;
             border-right: 1px solid rgba(255, 248, 240, 0.05);
-            z-index: 10;
+            position: relative;
         }
 
         .auth-left-bg {
@@ -160,7 +157,6 @@
 
         .auth-right {
             width: 60%;
-            margin-left: 40%;
             min-height: 100vh;
             display: flex;
             align-items: flex-start;
@@ -168,7 +164,6 @@
             padding: 40px;
             position: relative;
             background: #0d0a1a;
-            z-index: 5;
         }
 
         @media (max-width: 1024px) {
@@ -178,12 +173,7 @@
 
             .auth-right {
                 width: 100%;
-                margin-left: 0;
                 padding: 40px 24px;
-            }
-
-            .form-box {
-                margin: 20px 0;
             }
         }
 
