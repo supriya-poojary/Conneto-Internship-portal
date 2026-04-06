@@ -1,9 +1,38 @@
 <div class="dashboard-bg dark-moving-bg">
 </div>
 
+<!-- Topbar -->
+<nav class="topbar">
+    <a href="/" class="logo" style="margin-bottom:0; padding:0">Conn<span>eto</span></a>
+
+    <div class="topbar-right">
+        <button class="topbar-btn" id="themeToggle" title="Toggle Theme">
+            <i class="fas fa-moon"></i>
+        </button>
+        <button class="topbar-btn">
+            <i class="fas fa-search"></i>
+        </button>
+        <div class="user-menu">
+            <div class="user-avatar" style="width:34px; height:34px; font-size:16px">
+                <%= user.name.charAt(0).toUpperCase() %>
+            </div>
+            <div class="user-info">
+                <div class="user-name" style="font-size:13px">
+                    <%= user.name.split(' ')[0] %>
+                </div>
+                <div class="user-role" style="font-size:9px">
+                    Scholar
+                </div>
+            </div>
+            <a href="/auth/logout" class="topbar-btn" style="width: 32px; height: 32px; margin-left:8px; border:none; background:rgba(181, 56, 74, 0.1); color:var(--rose)">
+                <i class="fas fa-power-off" style="font-size:14px"></i>
+            </a>
+        </div>
+    </div>
+</nav>
+
 <!-- Sidebar -->
-<aside class="sidebar">
-    <a href="/" class="logo">Conn<span>eto</span></a>
+<aside class="sidebar" style="top:70px; height:calc(100vh - 70px); padding-top:20px">
 
     <div class="nav-section">
         <div class="nav-section-label">Opportunity Hub</div>
@@ -33,6 +62,16 @@
                 <i class="fas fa-chart-line"></i>
                 <span>Diary Tracking</span>
             </a>
+            <a href="/student/dashboard?tab=leaves"
+                class="nav-item <%= typeof activePage !== 'undefined' && activePage === 'leaves' ? 'active' : '' %>">
+                <i class="fas fa-calendar-plus"></i>
+                <span>Apply for Leave</span>
+            </a>
+            <a href="/student/dashboard?tab=leave_history"
+                class="nav-item <%= typeof activePage !== 'undefined' && activePage === 'leave_history' ? 'active' : '' %>">
+                <i class="fas fa-history"></i>
+                <span>Leave Status</span>
+            </a>
         </nav>
     </div>
 
@@ -53,27 +92,6 @@
         </nav>
     </div>
 
-    <div class="sidebar-footer">
-        <div class="user-card">
-            <div class="user-avatar">
-                <%= user.name.charAt(0).toUpperCase() %>
-            </div>
-            <div class="user-details">
-                <div class="user-name">
-                    <%= user.name %>
-                </div>
-                <div style="display:flex; align-items:center; gap:6px; margin-top:2px">
-                    <div class="user-role" style="margin:0">Intern</div>
-                    <span
-                        style="font-size:9px; background:rgba(217,95,59,0.15); color:var(--coral); padding:1px 6px; border-radius:100px; font-weight:800; letter-spacing:0.3px">
-                        <%= profile && profile.completionPercentage ? profile.completionPercentage : 0 %>% Strength
-                    </span>
-                </div>
-            </div>
-            <a href="/auth/logout" class="logout-btn" title="Logout">
-                <i class="fas fa-power-off"></i>
-            </a>
-        </div>
     </div>
 </aside>
 

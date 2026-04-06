@@ -65,6 +65,16 @@
                         </span>
                     <% } %>
                 </a>
+                <a href="/company/dashboard?tab=leaves"
+                    class="nav-link <%= typeof activePage !== 'undefined' && activePage === 'leaves' ? 'active' : '' %>">
+                    <i class="fas fa-calendar-times"></i>
+                    <span>Leave requests</span>
+                    <% if (typeof stats !== 'undefined' && stats.pendingLeaves > 0) { %>
+                        <span style="background:var(--coral); color:#fff; padding:2px 8px; border-radius:100px; font-size:10px; font-weight:800; margin-left:auto">
+                            <%= stats.pendingLeaves %>
+                        </span>
+                    <% } %>
+                </a>
                 <a href="/company/dashboard?tab=applications"
                     class="nav-link <%= typeof activePage !== 'undefined' && activePage === 'applications' ? 'active' : '' %>">
                     <i class="fas fa-user-friends"></i>

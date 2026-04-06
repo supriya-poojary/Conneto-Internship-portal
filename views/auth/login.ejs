@@ -614,6 +614,7 @@
                 background: rgba(255, 252, 248, 0.95);
                 box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
             }
+
             [data-theme="dark"] .form-box {
                 background: rgba(28, 18, 10, 0.95);
                 border-color: rgba(255, 255, 255, 0.08);
@@ -713,10 +714,12 @@
 
                                 <div class="divider">or continue with</div>
 
-                                <button class="google-btn">
-                                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google">
-                                    Sign in with Google
-                                </button>
+                                <a href="/auth/google" style="text-decoration: none;">
+                                    <div class="google-btn">
+                                        <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google">
+                                        Sign in with Google
+                                    </div>
+                                </a>
 
                                 <p class="form-footer">
                                     New to Conneto? <a href="/auth/register">Create a free account</a>

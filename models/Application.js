@@ -9,7 +9,9 @@ const applicationSchema = new mongoose.Schema({
         default: 'applied'
     },
     coverLetter: { type: String },
-    resumeUrl: { type: String }, // path to the uploaded PDF file
+    resumeUrl: { type: String }, // legacy
+    resumeData: { type: Buffer }, // Binary content
+    resumeType: { type: String }, // Mime type
     studentSkills: { type: String }, // user input skills
     question1Answer: { type: String },
     question2Answer: { type: String },
@@ -29,7 +31,9 @@ const applicationSchema = new mongoose.Schema({
     certificateReleased: { type: Boolean, default: false },
     certificateDate: { type: Date },
     certificateId: { type: String }, // unique ID for verification
-    certificateUrl: { type: String } // path to the uploaded certificate (PDF/Image)
+    certificateUrl: { type: String }, // legacy
+    certificateData: { type: Buffer }, // Binary content
+    certificateType: { type: String } // Mime type
 });
 
 // Each student can apply only once per internship

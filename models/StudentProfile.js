@@ -14,7 +14,9 @@ const studentProfileSchema = new mongoose.Schema({
     skills: [{ type: String }],
     interests: [{ type: String }],
     bio: { type: String },
-    resumeUrl: { type: String },
+    resumeUrl: { type: String }, // legacy
+    resumeData: { type: Buffer }, // Binary content
+    resumeType: { type: String }, // Mime type
     phone: { type: String },
     dob: { type: Date },
     gender: { type: String },

@@ -4,6 +4,7 @@ const Internship = require('../models/Internship');
 const Application = require('../models/Application');
 const StudentProfile = require('../models/StudentProfile');
 const CompanyProfile = require('../models/CompanyProfile');
+const Leave = require('../models/Leave');
 
 // Middleware to check if user is logged in and approved
 const isAuthenticated = async (req, res, next) => {
@@ -11,7 +12,7 @@ const isAuthenticated = async (req, res, next) => {
         if (!req.session.user) {
             return res.redirect('/auth/login');
         }
-        
+
         // Safety check for approval status (in case session is stale)
         const User = require('../models/User');
         const user = await User.findById(req.session.user.id);
@@ -145,7 +146,10 @@ router.get('/company/internships', isAuthenticated, isCompany, async (req, res) 
             title: 'Manage Internships | Conneto',
             user: req.session.user,
             activePage: 'internships',
-            myInternships: internshipsWithCounts
+            myInternships: internshipsWithCounts,
+            leaves: await Leave.find({
+                internship: { $in: internships.map(i => i._id) }
+            }).populate('student').populate('internship').sort({ createdAt: -1 })
         });
     } catch (err) {
         console.error('Error loading internships:', err);
@@ -283,7 +287,10 @@ router.get('/company/applications', isAuthenticated, isCompany, async (req, res)
             user: req.session.user,
             activePage: 'applications',
             groupedApplications: Object.values(groupedByInternship),
-            internships
+            internships,
+            leaves: await Leave.find({
+                internship: { $in: internshipIds }
+            }).populate('student').populate('internship').sort({ createdAt: -1 })
         });
     } catch (err) {
         console.error('Error loading applications:', err);
@@ -510,37 +517,12 @@ router.get('/internships/:id([0-9a-fA-F]{24})', async (req, res) => {
     }
 });
 
-// Setup multer with Cloudinary for resume upload
-const multer = require('multer');
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
-const cloudinary = require('cloudinary').v2;
+// Setup local multer for resume upload
 const fs = require('fs');
+const path = require('path');
 const pdfParse = require('pdf-parse');
-const https = require('https');
 
-cloudinary.config({
-  cloud_name: 'dqxspb6sc',
-  api_key: '221695386134532',
-  api_secret: 'xfAigpe8E_pzPzbCs1_dujgPh5I'
-});
-
-const storage = new CloudinaryStorage({
-    cloudinary: cloudinary,
-    params: {
-        folder: 'conneto_resumes',
-        resource_type: 'raw'
-    },
-});
-const upload = multer({
-    storage: storage,
-    fileFilter: (req, file, cb) => {
-        if (file.mimetype === 'application/pdf') {
-            cb(null, true);
-        } else {
-            cb(new Error('Only PDF files are allowed!'), false);
-        }
-    }
-});
+const { upload } = require('../config/upload');
 
 // POST /internships/:id/apply - Apply for internship
 router.post('/internships/:id/apply', isAuthenticated, isStudent, (req, res, next) => {
@@ -558,24 +540,13 @@ router.post('/internships/:id/apply', isAuthenticated, isStudent, (req, res, nex
         let extractedSkills = [];
 
         if (req.file) {
-            resumeUrl = req.file.path; // Cloudinary secure URL
+            resumeUrl = '/uploads/' + req.file.filename;
 
-            // Extract text from PDF to find skills
+            // Extract text from memory buffer to find skills
             try {
-                // Fetch the PDF buffer from Cloudinary URL
-                const fetchPdf = () => new Promise((resolve, reject) => {
-                    https.get(req.file.path, (res) => {
-                        const chunks = [];
-                        res.on('data', chunk => chunks.push(chunk));
-                        res.on('end', () => resolve(Buffer.concat(chunks)));
-                    }).on('error', reject);
-                });
-                
-                const dataBuffer = await fetchPdf();
-
                 // VALIDATE PDF SIGNATURE: First 5 bytes should be %PDF-
-                if (dataBuffer.length > 5 && dataBuffer.toString('utf8', 0, 5) === '%PDF-') {
-                    const data = await pdfParse(dataBuffer);
+                if (req.file.buffer.length > 5 && req.file.buffer.toString('utf8', 0, 5) === '%PDF-') {
+                    const data = await pdfParse(req.file.buffer);
                     const text = data.text.toLowerCase();
 
                     // Common skills library to look for (simplified)
@@ -620,7 +591,7 @@ router.post('/internships/:id/apply', isAuthenticated, isStudent, (req, res, nex
         // Get resume URL from profile if not uploaded now
         const finalResumeUrl = resumeUrl || (studentProfile ? studentProfile.resumeUrl : '');
 
-        // Create application
+        // Create application (Binary Storage)
         await Application.create({
             internship: req.params.id,
             student: req.session.user.id,
@@ -628,7 +599,8 @@ router.post('/internships/:id/apply', isAuthenticated, isStudent, (req, res, nex
             studentSkills: studentSkills || '',
             question1Answer: question1Answer || '',
             question2Answer: question2Answer || '',
-            resumeUrl: finalResumeUrl,
+            resumeData: req.file ? req.file.buffer : null,
+            resumeType: req.file ? req.file.mimetype : null,
             extractedSkills: extractedSkills,
             status: 'applied'
         });

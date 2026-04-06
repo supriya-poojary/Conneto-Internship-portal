@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
+const Leave = require('../models/Leave');
 
 // Middleware to check if user is admin
 const isAdmin = (req, res, next) => {
@@ -13,8 +14,8 @@ const isAdmin = (req, res, next) => {
 // GET /admin/dashboard
 router.get('/dashboard', isAdmin, async (req, res) => {
     try {
-        const pendingCompanies = await User.find({ role: 'company', status: 'Pending' }).sort({ createdAt: -1 });
-        const approvedCompanies = await User.find({ role: 'company', status: 'Approved' }).sort({ createdAt: -1 });
+        const pendingCompanies = await User.find({ role: 'company', status: 'Pending' }, '-companyDocuments.docData').sort({ createdAt: -1 });
+        const approvedCompanies = await User.find({ role: 'company', status: 'Approved' }, '-companyDocuments.docData').sort({ createdAt: -1 });
         
         res.render('admin/dashboard', { 
             title: 'Admin Dashboard — Conneto',
@@ -22,6 +23,7 @@ router.get('/dashboard', isAdmin, async (req, res) => {
             approvedCompanies,
             user: req.session.user
         });
+
     } catch (err) {
         console.error('Admin dashboard error:', err);
         res.status(500).send('Internal Server Error');

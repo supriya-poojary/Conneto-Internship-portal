@@ -1,12 +1,16 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const path = require('path');
+const fs = require('fs');
 const Application = require('../models/Application');
 const Internship = require('../models/Internship');
 const User = require('../models/User');
 const StudentProfile = require('../models/StudentProfile');
 const DiaryEntry = require('../models/DiaryEntry');
+const Leave = require('../models/Leave');
 const { generateCertificate } = require('../utils/certificateGenerator');
+const { upload } = require('../config/upload');
 
 // Project root directory
 const ROOT = path.resolve(__dirname, '..');
@@ -55,20 +59,24 @@ router.get('/student/dashboard', async (req, res) => {
             })
             .sort({ appliedAt: -1 });
 
+        // NEW: Calculate unreadLogs from diaryEntries
+        const totalDiaryCount = await DiaryEntry.countDocuments({ student: req.session.user.id });
+
         const stats = {
             total: applications.length,
             interviews: applications.filter(app => ['interview_scheduled', 'shortlisted'].includes(app.status)).length,
             pending: applications.filter(app => ['applied', 'under_review'].includes(app.status)).length,
-            hired: applications.filter(app => app.status === 'selected').length
+            hired: applications.filter(app => app.status === 'selected').length,
+            unreadLogs: totalDiaryCount
         };
 
         const profile = await StudentProfile.findOne({ user: req.session.user.id });
 
         let diaryEntries = [];
-        let selectedInternships = [];
         let viewInternshipId = req.query.viewInternshipId || null;
-        if (activeTab === 'diary' || activeTab === 'diary_history' || activeTab === 'dashboard') {
-            selectedInternships = applications.filter(app => app.status === 'selected');
+        let selectedInternships = applications.filter(app => app.status === 'selected');
+
+        if (activeTab === 'diary' || activeTab === 'diary_history' || activeTab === 'dashboard' || activeTab === 'leaves' || activeTab === 'leave_history') {
             let dFilter = { student: req.session.user.id };
             if (viewInternshipId) dFilter.internship = viewInternshipId;
             let query = DiaryEntry.find(dFilter)
@@ -95,6 +103,8 @@ router.get('/student/dashboard', async (req, res) => {
         if (activeTab === 'applications') pageTitle = 'My Applications | Conneto';
         if (activeTab === 'diary') pageTitle = 'Log Diary | Conneto';
         if (activeTab === 'diary_history') pageTitle = 'Diary Tracking | Conneto';
+        if (activeTab === 'leaves') pageTitle = 'Apply for Leave | Conneto';
+        if (activeTab === 'leave_history') pageTitle = 'Leave Status Tracking | Conneto';
 
         res.render('dashboard/student', {
             title: pageTitle,
@@ -117,9 +127,18 @@ router.get('/student/dashboard', async (req, res) => {
             diaryEntries,
             viewInternshipId,
             profile: profile || {},
+            leaves: await Leave.find({
+                student: req.session.user.id,
+                ...(viewInternshipId ? { internship: viewInternshipId } : {})
+            })
+                .populate({
+                    path: 'internship',
+                    populate: { path: 'company', select: 'companyName name' }
+                }).sort({ createdAt: -1 }),
             success: req.query.success || null,
             error: req.query.error || null
         });
+
     } catch (err) {
         console.error('Unified dashboard error:', err);
         res.redirect('/');
@@ -133,8 +152,22 @@ router.post('/student/diary/add', async (req, res) => {
         const { internshipId, date, hoursWorked, workSummary, links, learnings, blockers, skillsUsed } = req.body;
         const d = new Date(date);
         if (d.getDay() === 0) return res.redirect('/student/dashboard?tab=diary&error=Entries are not permitted on Sundays');
-        
+
+        // Check for approved leave on this date
+        const leave = await Leave.findOne({
+            student: req.session.user.id,
+            internship: internshipId,
+            status: 'Approved',
+            startDate: { $lte: d },
+            endDate: { $gte: d }
+        });
+
+        if (leave) {
+            return res.redirect(`/student/dashboard?tab=diary&viewInternshipId=${internshipId}&error=You are on leave for this date. Diary entries are not permitted.`);
+        }
+
         await DiaryEntry.create({
+
             student: req.session.user.id,
             internship: internshipId,
             date: d,
@@ -161,10 +194,10 @@ router.post('/student/diary/edit/:id', async (req, res) => {
 
         await DiaryEntry.findOneAndUpdate(
             { _id: req.params.id, student: req.session.user.id },
-            { 
-                date: d, hoursWorked, workSummary, links, learnings, blockers, skillsUsed, 
+            {
+                date: d, hoursWorked, workSummary, links, learnings, blockers, skillsUsed,
                 status: 'pending', // Reset status on edit
-                updatedAt: Date.now() 
+                updatedAt: Date.now()
             }
         );
         res.redirect('/student/dashboard?tab=diary_history&success=Entry updated and sent for re-evaluation');
@@ -240,7 +273,7 @@ router.post('/company/internship/certificate/upload/:applicationId', (req, res, 
     if (!req.session.user || req.session.user.role !== 'company') {
         return res.redirect('/auth/login');
     }
-    
+
     try {
         const app = await Application.findById(req.params.applicationId);
         if (!app) {
@@ -257,12 +290,13 @@ router.post('/company/internship/certificate/upload/:applicationId', (req, res, 
             return res.redirect('/company/dashboard?tab=evaluations&error=No certificate file selected');
         }
 
-        // Overwrite existing certificate data (Support Re-upload)
+        // Overwrite existing certificate data (Binary Storage)
         app.certificateReleased = true;
         app.certificateDate = Date.now();
-        app.certificateUrl = req.file.path; // Cloudinary URL
+        app.certificateData = req.file.buffer;
+        app.certificateType = req.file.mimetype;
         app.certificateId = app.certificateId || 'CERT-' + Math.random().toString(36).substr(2, 9).toUpperCase();
-        
+
         await app.save();
 
         res.redirect('/company/dashboard?tab=evaluations&success=Professionally updated certificate has been released successfully');
@@ -283,6 +317,7 @@ router.get('/company/dashboard', async (req, res) => {
     if (req.session.user.role !== 'company') return res.redirect('/');
 
     const activeTab = req.query.tab || 'dashboard';
+    const viewInternshipId = req.query.viewInternshipId || null;
 
     try {
         const myInternships = await Internship.find({ company: req.session.user.id })
@@ -318,7 +353,9 @@ router.get('/company/dashboard', async (req, res) => {
         // Group applications by internship for the 'Applications' tab
         const grouped = {};
         myInternships.forEach(int => {
-            grouped[int._id] = { internship: int, applications: [] };
+            if (!viewInternshipId || viewInternshipId === int._id.toString()) {
+                grouped[int._id] = { internship: int, applications: [] };
+            }
         });
         applications.forEach(app => {
             if (app.internship && grouped[app.internship._id]) {
@@ -327,13 +364,16 @@ router.get('/company/dashboard', async (req, res) => {
         });
 
         // Diary Evaluation Data: Fetch all 'selected' students for company's internships
-        const selectedApplications = applications.filter(app => app.status === 'selected');
+        let selectedApplications = applications.filter(app => app.status === 'selected');
+        if (viewInternshipId) {
+            selectedApplications = selectedApplications.filter(app => app.internship && app.internship._id.toString() === viewInternshipId);
+        }
         const evaluationData = [];
 
         for (const app of selectedApplications) {
-            const diEntries = await DiaryEntry.find({ 
-                student: app.student._id, 
-                internship: app.internship._id 
+            const diEntries = await DiaryEntry.find({
+                student: app.student._id,
+                internship: app.internship._id
             }).sort({ date: -1 });
 
             evaluationData.push({
@@ -351,23 +391,31 @@ router.get('/company/dashboard', async (req, res) => {
             });
         }
 
+        // Fetch leaves
+        const leaves = await Leave.find({
+            internship: viewInternshipId ? viewInternshipId : { $in: myInternships.map(i => i._id) }
+        }).populate('student').populate('internship').sort({ createdAt: -1 });
+
         res.render('dashboard/company', {
             title: 'Company Dashboard | Conneto',
             user: req.session.user,
             activePage: activeTab,
+            viewInternshipId,
             stats: {
                 active: myInternships.filter(i => i.isActive).length,
                 totalApplicants: applications.length,
                 interviews: applications.filter(app => ['interview_scheduled', 'shortlisted'].includes(app.status)).length,
                 hired: applications.filter(app => app.status === 'selected').length,
                 rescheduleRequests: applications.filter(app => app.rescheduleRequest).length,
-                pendingEvaluations: evaluationData.reduce((acc, curr) => acc + curr.pendingCount, 0)
+                pendingEvaluations: evaluationData.reduce((acc, curr) => acc + curr.pendingCount, 0),
+                pendingLeaves: leaves.filter(l => l.status === 'Pending').length
             },
             applicants: applications.slice(0, 10),
             myInternships: internshipsWithStats,
             groupedApplications: Object.values(grouped),
-            evaluationData, // For the new 'Diary evaluation' tab
+            evaluationData,
             totalApplications: applications.length,
+            leaves,
             success: req.query.success || null,
             error: req.query.error || null
         });
@@ -382,36 +430,7 @@ router.get('/company/applications', (req, res) => res.redirect('/company/dashboa
 router.get('/company/profile', (req, res) => res.redirect('/company/dashboard?tab=profile'));
 router.get('/company/internships', (req, res) => res.redirect('/company/dashboard?tab=internships'));
 
-// Setup multer with Cloudinary for resume upload
-const multer = require('multer');
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
-const cloudinary = require('cloudinary').v2;
-const fs = require('fs');
-
-cloudinary.config({
-  cloud_name: 'dqxspb6sc',
-  api_key: '221695386134532',
-  api_secret: 'xfAigpe8E_pzPzbCs1_dujgPh5I'
-});
-
-const storage = new CloudinaryStorage({
-    cloudinary: cloudinary,
-    params: {
-        folder: 'conneto_resumes',
-        resource_type: 'raw'
-    },
-});
-const upload = multer({
-    storage: storage,
-    fileFilter: (req, file, cb) => {
-        const allowedMimeTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp'];
-        if (allowedMimeTypes.includes(file.mimetype)) {
-            cb(null, true);
-        } else {
-            cb(new Error('Invalid file type. Only PDFs and images (JPG, PNG) are allowed!'), false);
-        }
-    }
-});
+// The upload middleware is now imported from config/cloudinary.js at the top of the file
 
 // POST /student/profile/update - Enhanced with error handling
 router.post('/student/profile/update', (req, res, next) => {
@@ -446,20 +465,25 @@ router.post('/student/profile/update', (req, res, next) => {
             }
         }
 
-        // 2. Resume URL
+        // 2. Resume Update (Binary & Legacy)
+        let resumeData = null;
+        let resumeType = null;
         let resumeUrl = null;
+
         if (req.file) {
-            resumeUrl = req.file.path; // Cloudinary secure URL
+            resumeData = req.file.buffer;
+            resumeType = req.file.mimetype;
+            resumeUrl = '/view-document?type=resume&docId=' + req.session.user.id; // Corrected ID-based proxy
         }
 
         // 3. Conditional Completion Percentage (100% Target)
         // Core Fields (Required for ALL to reach 100%)
-        const coreFields = [name, email, dob, gender, phone, address, city, state, country, 
-                          degree, department, memberStatus, skills, bio,
-                          languages, interests, linkedin, github, portfolio];
-        
+        const coreFields = [name, email, dob, gender, phone, address, city, state, country,
+            degree, department, memberStatus, skills, bio,
+            languages, interests, linkedin, github, portfolio];
+
         let filledCore = coreFields.filter(val => val && val.toString().trim().length > 0).length;
-        
+
         const existingProfile = await StudentProfile.findOne({ user: req.session.user.id });
         const finalResumeUrl = resumeUrl || (existingProfile ? existingProfile.resumeUrl : null);
         if (finalResumeUrl) filledCore++; // 19 core text/select + 1 resume = 20 fields total
@@ -470,7 +494,7 @@ router.post('/student/profile/update', (req, res, next) => {
         if (memberStatus === 'Student') {
             const academicFields = [usn, college, semester, year, gpa];
             let filledAcademic = academicFields.filter(val => val && val.toString().trim().length > 0).length;
-            
+
             // For students, 100% requires all 25 fields (20 core + 5 academic)
             finalPercent = Math.min(Math.round(((filledCore + filledAcademic) / 25) * 100), 100);
         }
@@ -490,8 +514,9 @@ router.post('/student/profile/update', (req, res, next) => {
             updatedAt: Date.now()
         };
 
-        if (resumeUrl) {
-            updateData.resumeUrl = resumeUrl;
+        if (req.file) {
+            updateData.resumeData = req.file.buffer;
+            updateData.resumeType = req.file.mimetype;
         }
 
         await StudentProfile.findOneAndUpdate(
@@ -534,46 +559,158 @@ router.post('/student/applications/:id/reschedule', async (req, res) => {
     }
 });
 
-// GET /view-resume - Proxy for Cloudinary PDF to force inline viewing
-// GET /view-document - Proxy to force inline viewing of Cloudinary PDFs/Images
-router.get('/view-document', (req, res) => {
-    const { url, name, download } = req.query;
-    if (!url) return res.status(400).send('No URL provided');
+// GET /view-document - Proxy to force inline viewing/downloading of PDFs/Images
+router.get('/view-document', async (req, res) => {
+    const { type, userId, docId, name, download, url: targetUrl } = req.query;
+    
+    // Security: Only logged in users (Passport req.isAuthenticated() or Legacy session) can access
+    const isAuthed = (req.session && req.session.user) || (typeof req.isAuthenticated === 'function' && req.isAuthenticated());
+    
+    if (!isAuthed) {
+        return res.redirect('/auth/login?error=Session expired. Please sign in again.');
+    }
     
     try {
-        const https = require('https');
-        https.get(url, (response) => {
-            if (response.statusCode !== 200) {
-                return res.status(response.statusCode).send('Failed to fetch document');
+        let fileBuffer, mimeType, fileName;
+
+        if (type === 'company' && docId) {
+            let docOwner;
+            const docObjectId = mongoose.Types.ObjectId.isValid(docId) ? new mongoose.Types.ObjectId(docId) : null;
+            
+            if (!docObjectId) return res.status(400).send('Invalid document reference format');
+
+            // 1. Precise lookup via nested ObjectId
+            docOwner = await User.findOne({ "companyDocuments._id": docObjectId });
+
+            if (!docOwner) return res.status(404).send('Document not found in Conneto archives');
+            
+            const doc = docOwner.companyDocuments.id(docObjectId);
+            if (!doc) return res.status(404).send('Document record corrupted');
+            
+            if (doc.docData) {
+                fileBuffer = doc.docData;
+                mimeType = doc.contentType || 'application/pdf';
+                fileName = name || (doc.docName ? doc.docName.replace(/_/g, ' ') : 'legal_doc');
+            } else if (doc.docUrl) {
+                // Asset proxy for external/legacy URLs to prevent 401 on redirects
+                try {
+                    const response = await fetch(doc.docUrl);
+                    if (!response.ok) throw new Error(`Fetch failed: ${response.status}`);
+                    fileBuffer = Buffer.from(await response.arrayBuffer());
+                    mimeType = response.headers.get('content-type') || 'application/pdf';
+                    fileName = name || 'legal_doc';
+                } catch (err) {
+                    console.error('Proxy Fetch Error:', err);
+                    return res.redirect(doc.docUrl); // Last resort fallback
+                }
             }
-            
-            // Passthrough Content-Type from Cloudinary
-            const contentType = response.headers['content-type'];
-            res.setHeader('Content-Type', contentType || 'application/pdf');
-            
-            // Determine extension from content-type or fallback to .pdf
-            let ext = '.pdf';
-            if (contentType && contentType.includes('image/')) {
-                ext = '.' + contentType.split('/')[1];
+        } else if (type === 'resume' && docId) {
+            const app = await Application.findById(docId);
+            if (app && app.resumeData) {
+                fileBuffer = app.resumeData;
+                mimeType = app.resumeType || 'application/pdf';
+            } else {
+                // Priority 2: Try to find a StudentProfile by the student's User ID (docId)
+                let profile = await StudentProfile.findOne({ user: docId });
+                
+                // Priority 3: If still not found, and we found an app, try student's ID from that app
+                if (!profile && app && app.student) {
+                    profile = await StudentProfile.findOne({ user: app.student });
+                }
+
+                if (profile && profile.resumeData) {
+                    fileBuffer = profile.resumeData;
+                    mimeType = profile.resumeType || 'application/pdf';
+                } else if (profile && profile.resumeUrl) {
+                    // Fallback for legacy profile with only URLs
+                    if (targetUrl.startsWith('/uploads/')) {
+                        const filePath = path.join(__dirname, '../public', targetUrl);
+                        if (fs.existsSync(filePath)) {
+                            return res.download(filePath, name || 'resume.pdf');
+                        }
+                    }
+                    
+                    // Asset proxy for external/legacy URLs to prevent 401 on redirects
+                    try {
+                        const response = await fetch(targetUrl);
+                        if (!response.ok) throw new Error(`Fetch failed: ${response.status}`);
+                        fileBuffer = Buffer.from(await response.arrayBuffer());
+                        mimeType = response.headers.get('content-type') || 'application/pdf';
+                    } catch (err) {
+                        console.error('Resume Proxy Error:', err);
+                        return res.redirect(targetUrl);
+                    }
+                } else if (app && app.resumeUrl) {
+                    // Fallback for legacy application with only URLs
+                    const targetUrl = app.resumeUrl;
+                    if (targetUrl.startsWith('/uploads/')) {
+                        const filePath = path.join(__dirname, '../public', targetUrl);
+                        if (fs.existsSync(filePath)) {
+                            return res.download(filePath, name || 'resume.pdf');
+                        }
+                    }
+                    
+                    try {
+                        const response = await fetch(targetUrl);
+                        if (!response.ok) throw new Error(`Fetch failed: ${response.status}`);
+                        fileBuffer = Buffer.from(await response.arrayBuffer());
+                        mimeType = response.headers.get('content-type') || 'application/pdf';
+                    } catch (err) {
+                        return res.redirect(targetUrl);
+                    }
+                }
             }
-            
-            const filename = name ? `${name}${ext}` : `document${ext}`;
-            const disposition = download === 'true' ? 'attachment' : 'inline';
-            res.setHeader('Content-Disposition', `${disposition}; filename="${filename}"`);
-            
-            response.pipe(res);
-        }).on('error', (e) => {
-            res.status(500).send('Error loading document');
-        });
-    } catch (err) {
-        res.status(500).send('Server error');
+            fileName = name || 'resume';
+        } else if (type === 'certificate' && docId) {
+            const app = await Application.findById(docId);
+            if (!app) return res.status(404).send('Application not found');
+            fileBuffer = app.certificateData;
+            mimeType = app.certificateType || 'application/pdf';
+            fileName = name || 'certificate';
+        } else {
+            // Fallback for legacy local files or URLs
+            if (targetUrl) {
+                if (targetUrl.startsWith('/uploads/')) {
+                    const filePath = path.join(__dirname, '../public', targetUrl);
+                    if (fs.existsSync(filePath)) {
+                        return res.download(filePath, name || path.basename(filePath), (err) => {
+                            if (err && !res.headersSent) {
+                                console.error('Download Error:', err);
+                                res.status(404).send('File no longer exists or is inaccessible.');
+                            }
+                        });
+                    } else {
+                        console.warn(`[Warning] Legacy redirect record points to missing path: ${filePath}`);
+                        return res.status(404).send('Document not found in storage. Please re-upload.');
+                    }
+                }
+                return res.redirect(targetUrl);
+            }
+            return res.status(400).send('Invalid request parameters');
+        }
+
+        if (!fileBuffer) return res.status(404).send('File data missing');
+
+        // Set Headers
+        res.set('Content-Type', mimeType);
+        if (download === 'true') {
+            const safeName = fileName.endsWith('.pdf') ? fileName : `${fileName}.pdf`;
+            res.set('Content-Disposition', `attachment; filename="${encodeURIComponent(safeName)}"`);
+        } else {
+            res.set('Content-Disposition', 'inline');
+        }
+
+        return res.send(fileBuffer);
+    } catch (e) {
+        console.error('Document View Logic Error:', e);
+        res.status(500).send('Internal Server Error processing document');
     }
 });
 
 // GET /student/certificate/:id/download - Professional dynamic PDF generation or Cloudinary proxy
 router.get('/student/certificate/:id/download', async (req, res) => {
     if (!req.session.user) return res.redirect('/auth/login');
-    
+
     try {
         const app = await Application.findById(req.params.id)
             .populate('student', 'name')
@@ -583,7 +720,7 @@ router.get('/student/certificate/:id/download', async (req, res) => {
             });
 
         if (!app) return res.status(404).send('Application not found');
-        
+
         // Security: Only the student themselves or the company can download
         if (req.session.user.role === 'student' && app.student._id.toString() !== req.session.user.id) {
             return res.status(403).send('Unauthorized to access this certificate');
@@ -593,13 +730,21 @@ router.get('/student/certificate/:id/download', async (req, res) => {
             return res.status(403).send('Certificate has not been released for this internship yet.');
         }
 
-        // Case 1: Company uploaded a custom PDF certificate to Cloudinary
+        // Case 1: Company uploaded a custom binary certificate to MongoDB (Direct Download)
+        if (app.certificateData) {
+            res.set('Content-Type', app.certificateType || 'application/pdf');
+            const fileName = `Certificate_${app.student.name.replace(/\s+/g, '_')}.pdf`;
+            res.set('Content-Disposition', `attachment; filename="${fileName}"`);
+            return res.send(app.certificateData);
+        }
+
+        // Case 2: Company uploaded a custom PDF certificate to Cloudinary or legacy URL
         if (app.certificateUrl) {
             const fileName = `Certificate_${app.student.name.replace(/\s+/g, '_')}_${app.certificateId || 'ID'}`;
             return res.redirect(`/view-document?url=${encodeURIComponent(app.certificateUrl)}&name=${encodeURIComponent(fileName)}&download=true`);
         }
 
-        // Case 2: Platform-generated dynamic certificate (Manual Release)
+        // Case 3: Platform-generated dynamic certificate (Manual Release)
         const certData = {
             studentName: app.student.name,
             internshipTitle: app.internship.title,
