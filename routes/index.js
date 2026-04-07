@@ -699,9 +699,25 @@ router.get('/view-document', async (req, res) => {
                         return res.status(404).send('Document not found in storage. Please re-upload.');
                     }
                 }
-                return res.redirect(targetUrl);
+                
+                // If the client requested a download, fetch the file and pipe it through with the correct filename header
+                // instead of redirecting directly to a potentially extensionless Cloudinary URL
+                if (download === 'true') {
+                    try {
+                        const response = await fetch(targetUrl);
+                        if (!response.ok) throw new Error(`Fetch failed: ${response.status}`);
+                        fileBuffer = Buffer.from(await response.arrayBuffer());
+                        mimeType = response.headers.get('content-type') || 'application/pdf';
+                    } catch (err) {
+                        console.error('Fetch Error for Document:', err);
+                        return res.redirect(targetUrl);
+                    }
+                } else {
+                    return res.redirect(targetUrl);
+                }
+            } else {
+                return res.status(400).send('Invalid request parameters');
             }
-            return res.status(400).send('Invalid request parameters');
         }
 
         if (!fileBuffer) return res.status(404).send('File data missing');

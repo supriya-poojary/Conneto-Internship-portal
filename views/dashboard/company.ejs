@@ -2396,9 +2396,11 @@
                 `;
             }
 
-            statusEl.style.display = 'none';
-            hoursEl.style.display = 'none';
-            document.getElementById('diaryModalFooter').style.display = 'none';
+            // Optional cleanups for old elements if any exist
+            if (statusEl) statusEl.style.display = 'none';
+            if (hoursEl) hoursEl.style.display = 'none';
+            const footer = document.getElementById('diaryModalFooter');
+            if (footer) footer.style.display = 'none';
             
             modal.classList.add('active');
             document.body.style.overflow = 'hidden'; // Lock Body Scroll
