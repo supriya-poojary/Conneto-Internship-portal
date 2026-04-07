@@ -6,6 +6,27 @@ const StudentProfile = require('../models/StudentProfile');
 const CompanyProfile = require('../models/CompanyProfile');
 const Leave = require('../models/Leave');
 
+const getCompanyDashboardRedirect = (req, fallback) => {
+    const candidate = req.body.redirectTo || req.get('Referrer');
+    if (candidate) {
+        try {
+            if (candidate.startsWith('/company/dashboard')) {
+                return candidate;
+            }
+            const parsed = new URL(candidate, 'http://localhost');
+            const pathWithQuery = `${parsed.pathname}${parsed.search || ''}`;
+            if (pathWithQuery.startsWith('/company/dashboard')) {
+                return pathWithQuery;
+            }
+        } catch (err) {
+            if (candidate.startsWith('/company/dashboard')) {
+                return candidate;
+            }
+        }
+    }
+    return fallback;
+};
+
 // Middleware to check if user is logged in and approved
 const isAuthenticated = async (req, res, next) => {
     try {
@@ -108,53 +129,7 @@ router.post('/company/internships', isAuthenticated, isCompany, async (req, res)
 
 // GET /company/internships - List company's internships
 router.get('/company/internships', isAuthenticated, isCompany, async (req, res) => {
-    try {
-        const internships = await Internship.find({ company: req.session.user.id })
-            .sort({ updatedAt: -1 });
-
-        // Get application counts for each internship
-        const internshipsWithCounts = await Promise.all(internships.map(async (internship) => {
-            const counts = await Application.aggregate([
-                { $match: { internship: internship._id } },
-                {
-                    $group: {
-                        _id: '$status',
-                        count: { $sum: 1 }
-                    }
-                }
-            ]);
-
-            const stats = {
-                total: 0,
-                applied: 0,
-                under_review: 0,
-                shortlisted: 0,
-                interview_scheduled: 0,
-                selected: 0,
-                rejected: 0
-            };
-
-            counts.forEach(c => {
-                stats[c._id] = c.count;
-                stats.total += c.count;
-            });
-
-            return { ...internship.toObject(), stats };
-        }));
-
-        res.render('dashboard/company', {
-            title: 'Manage Internships | Conneto',
-            user: req.session.user,
-            activePage: 'internships',
-            myInternships: internshipsWithCounts,
-            leaves: await Leave.find({
-                internship: { $in: internships.map(i => i._id) }
-            }).populate('student').populate('internship').sort({ createdAt: -1 })
-        });
-    } catch (err) {
-        console.error('Error loading internships:', err);
-        res.redirect('/company/dashboard');
-    }
+    res.redirect('/company/dashboard?tab=internships');
 });
 
 // GET /company/internships/:id/edit - Show edit internship form
@@ -252,80 +227,39 @@ router.post('/company/internships/:id/delete', isAuthenticated, isCompany, async
 
 // GET /company/applications - View all applications to company's internships
 router.get('/company/applications', isAuthenticated, isCompany, async (req, res) => {
-    try {
-        // Get all internships by this company
-        const internships = await Internship.find({ company: req.session.user.id });
-        const internshipIds = internships.map(i => i._id);
-
-        // Get all applications for company's internships
-        const applications = await Application.find({ internship: { $in: internshipIds } })
-            .populate('student')
-            .populate({
-                path: 'internship',
-                select: 'title company'
-            })
-            .sort({ appliedAt: -1 });
-
-        // Group by internship
-        const groupedByInternship = {};
-        internships.forEach(i => {
-            groupedByInternship[i._id.toString()] = {
-                internship: i,
-                applications: []
-            };
-        });
-
-        applications.forEach(app => {
-            const key = app.internship._id.toString();
-            if (groupedByInternship[key]) {
-                groupedByInternship[key].applications.push(app);
-            }
-        });
-
-        res.render('dashboard/company', {
-            title: 'View Applications | Conneto',
-            user: req.session.user,
-            activePage: 'applications',
-            groupedApplications: Object.values(groupedByInternship),
-            internships,
-            leaves: await Leave.find({
-                internship: { $in: internshipIds }
-            }).populate('student').populate('internship').sort({ createdAt: -1 })
-        });
-    } catch (err) {
-        console.error('Error loading applications:', err);
-        res.redirect('/company/dashboard');
-    }
+    res.redirect('/company/dashboard?tab=applications');
 });
 
 // POST /company/applications/:id/shortlist - Shortlist a candidate
 router.post('/company/applications/:id/shortlist', isAuthenticated, isCompany, async (req, res) => {
+    const redirectTo = getCompanyDashboardRedirect(req, '/company/dashboard?tab=applications');
     try {
         const application = await Application.findById(req.params.id)
             .populate('internship');
 
         if (!application) {
-            return res.redirect('/company/applications?error=Application not found');
+            return res.redirect(`${redirectTo}${redirectTo.includes('?') ? '&' : '?'}error=Application not found`);
         }
 
         // Verify company owns this internship
         if (application.internship.company.toString() !== req.session.user.id) {
-            return res.redirect('/company/applications?error=Unauthorized');
+            return res.redirect(`${redirectTo}${redirectTo.includes('?') ? '&' : '?'}error=Unauthorized`);
         }
 
         application.status = 'shortlisted';
         application.updatedAt = new Date();
         await application.save();
 
-        res.redirect('/company/dashboard?tab=applications&success=Student shortlisted');
+        res.redirect(`${redirectTo}${redirectTo.includes('?') ? '&' : '?'}success=Student shortlisted`);
     } catch (err) {
         console.error('Error shortlisting:', err);
-        res.redirect('/company/applications?error=Failed to shortlist');
+        res.redirect(`${redirectTo}${redirectTo.includes('?') ? '&' : '?'}error=Failed to shortlist`);
     }
 });
 
 // POST /company/applications/:id/interview - Schedule interview
 router.post('/company/applications/:id/interview', isAuthenticated, isCompany, async (req, res) => {
+    const redirectTo = getCompanyDashboardRedirect(req, '/company/dashboard?tab=applications');
     try {
         const { interviewDate, interviewNote } = req.body;
 
@@ -333,12 +267,12 @@ router.post('/company/applications/:id/interview', isAuthenticated, isCompany, a
             .populate('internship');
 
         if (!application) {
-            return res.redirect('/company/applications?error=Application not found');
+            return res.redirect(`${redirectTo}${redirectTo.includes('?') ? '&' : '?'}error=Application not found`);
         }
 
         // Verify company owns this internship
         if (application.internship.company.toString() !== req.session.user.id) {
-            return res.redirect('/company/applications?error=Unauthorized');
+            return res.redirect(`${redirectTo}${redirectTo.includes('?') ? '&' : '?'}error=Unauthorized`);
         }
 
         application.status = 'interview_scheduled';
@@ -349,62 +283,64 @@ router.post('/company/applications/:id/interview', isAuthenticated, isCompany, a
         application.updatedAt = new Date();
         await application.save();
 
-        res.redirect('/company/dashboard?tab=applications&success=Interview scheduled');
+        res.redirect(`${redirectTo}${redirectTo.includes('?') ? '&' : '?'}success=Interview scheduled`);
     } catch (err) {
         console.error('Error scheduling interview:', err);
-        res.redirect('/company/applications?error=Failed to schedule interview');
+        res.redirect(`${redirectTo}${redirectTo.includes('?') ? '&' : '?'}error=Failed to schedule interview`);
     }
 });
 
 // POST /company/applications/:id/select - Select/Hire candidate
 router.post('/company/applications/:id/select', isAuthenticated, isCompany, async (req, res) => {
+    const redirectTo = getCompanyDashboardRedirect(req, '/company/dashboard?tab=applications');
     try {
         const application = await Application.findById(req.params.id)
             .populate('internship');
 
         if (!application) {
-            return res.redirect('/company/applications?error=Application not found');
+            return res.redirect(`${redirectTo}${redirectTo.includes('?') ? '&' : '?'}error=Application not found`);
         }
 
         // Verify company owns this internship
         if (application.internship.company.toString() !== req.session.user.id) {
-            return res.redirect('/company/applications?error=Unauthorized');
+            return res.redirect(`${redirectTo}${redirectTo.includes('?') ? '&' : '?'}error=Unauthorized`);
         }
 
         application.status = 'selected';
         application.updatedAt = new Date();
         await application.save();
 
-        res.redirect('/company/dashboard?tab=applications&success=Student selected/hired');
+        res.redirect(`${redirectTo}${redirectTo.includes('?') ? '&' : '?'}success=Student selected/hired`);
     } catch (err) {
         console.error('Error selecting:', err);
-        res.redirect('/company/applications?error=Failed to select');
+        res.redirect(`${redirectTo}${redirectTo.includes('?') ? '&' : '?'}error=Failed to select`);
     }
 });
 
 // POST /company/applications/:id/reject - Reject candidate
 router.post('/company/applications/:id/reject', isAuthenticated, isCompany, async (req, res) => {
+    const redirectTo = getCompanyDashboardRedirect(req, '/company/dashboard?tab=applications');
     try {
         const application = await Application.findById(req.params.id)
             .populate('internship');
 
         if (!application) {
-            return res.redirect('/company/applications?error=Application not found');
+            return res.redirect(`${redirectTo}${redirectTo.includes('?') ? '&' : '?'}error=Application not found`);
         }
 
         // Verify company owns this internship
         if (application.internship.company.toString() !== req.session.user.id) {
-            return res.redirect('/company/applications?error=Unauthorized');
+            return res.redirect(`${redirectTo}${redirectTo.includes('?') ? '&' : '?'}error=Unauthorized`);
         }
 
         application.status = 'rejected';
         application.updatedAt = new Date();
         await application.save();
 
-        res.redirect('/company/dashboard?tab=applications&success=Application rejected');
+        res.redirect(`${redirectTo}${redirectTo.includes('?') ? '&' : '?'}success=Application rejected`);
     } catch (err) {
         console.error('Error rejecting:', err);
-        res.redirect('/company/applications?error=Failed to reject');
+        res.redirect(`${redirectTo}${redirectTo.includes('?') ? '&' : '?'}error=Failed to reject`);
     }
 });
 
@@ -667,3 +603,4 @@ router.post('/student/applications/:id/withdraw', isAuthenticated, isStudent, as
 });
 
 module.exports = router;
+

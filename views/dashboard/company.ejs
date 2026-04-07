@@ -1,9 +1,21 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 
-<% if (typeof viewInternshipId==='undefined' ) { var viewInternshipId=null; } if (typeof myInternships==='undefined' &&
-    typeof internships !=='undefined' ) { var myInternships=internships; } else if (typeof myInternships==='undefined' )
-    { var myInternships=[]; } %>
+<%
+if (typeof activePage === 'undefined' || !activePage) { var activePage = 'dashboard'; }
+if (activePage === 'profile') { activePage = 'settings'; }
+if (typeof viewInternshipId === 'undefined') { var viewInternshipId = null; }
+if (typeof myInternships === 'undefined' && typeof internships !== 'undefined') {
+    var myInternships = internships;
+} else if (typeof myInternships === 'undefined') {
+    var myInternships = [];
+}
+if (typeof groupedApplications === 'undefined') { var groupedApplications = []; }
+if (typeof evaluationData === 'undefined') { var evaluationData = []; }
+if (typeof applicants === 'undefined') { var applicants = []; }
+if (typeof leaves === 'undefined') { var leaves = []; }
+if (typeof stats === 'undefined' || !stats) { var stats = {}; }
+%>
 
     <head>
         <%- include('../partials/dashboard/company_head', { title: 'Partner Portal | Company Dashboard' }) %>
@@ -305,6 +317,27 @@
                     gap: 30px;
                 }
 
+                .dashboard-toolbar {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin: 20px 0;
+                    flex-wrap: wrap;
+                    gap: 20px;
+                }
+
+                .dashboard-toolbar-actions {
+                    min-width: 300px;
+                    max-width: 100%;
+                    flex: 1;
+                    display: flex;
+                    justify-content: flex-end;
+                }
+
+                .dashboard-toolbar-actions>select {
+                    width: 100%;
+                }
+
                 .column {
                     display: flex;
                     flex-direction: column;
@@ -477,9 +510,24 @@
                     transform: translateY(-2px);
                 }
 
+                .candidate-row-actions,
+                .posting-row-actions {
+                    display: flex;
+                    align-items: center;
+                    gap: 15px;
+                    justify-content: flex-end;
+                    flex: 1;
+                    min-width: 100px;
+                    flex-wrap: wrap;
+                }
+
+                .leave-table-container {
+                    width: 100%;
+                }
+
                 .reveal {
-                    opacity: 0;
-                    transform: translateY(20px);
+                    opacity: 1;
+                    transform: translateY(0);
                     transition: .6s cubic-bezier(0.1, 0, 0, 1);
                 }
 
@@ -511,17 +559,124 @@
 
                     .card {
                         padding: 20px !important;
+                        border-radius: 18px;
                     }
 
                     .item-row {
                         flex-direction: column;
                         align-items: flex-start;
                         gap: 16px;
+                        padding: 14px;
+                    }
+
+                    .item-row:hover {
+                        transform: none;
                     }
 
                     .item-row>div:last-of-type {
                         width: 100%;
                         flex-wrap: wrap;
+                    }
+
+                    .item-icon {
+                        width: 42px;
+                        height: 42px;
+                        border-radius: 12px;
+                        font-size: 0.95rem;
+                    }
+
+                    .company-profile-card {
+                        padding: 22px;
+                    }
+
+                    .company-display-name {
+                        font-size: 1.2rem;
+                    }
+
+                    .company-display-email {
+                        font-size: 13px;
+                        word-break: break-word;
+                    }
+
+                    .stat-value {
+                        font-size: 1.7rem;
+                    }
+
+                    .dashboard-toolbar {
+                        align-items: stretch;
+                        margin: 16px 0;
+                        gap: 14px;
+                    }
+
+                    .dashboard-toolbar-actions {
+                        min-width: 0;
+                        width: 100%;
+                    }
+
+                    .dashboard-toolbar-actions>select {
+                        min-width: 0;
+                    }
+
+                    .candidate-row-actions,
+                    .posting-row-actions {
+                        width: 100%;
+                        justify-content: flex-start;
+                        gap: 12px;
+                    }
+
+                    .btn-action-group {
+                        width: 100%;
+                        justify-content: flex-start;
+                        flex-wrap: wrap;
+                    }
+
+                    .view-btn,
+                    .action-btn {
+                        width: 100%;
+                        justify-content: center;
+                        text-align: center;
+                    }
+
+                    .modal-actions {
+                        flex-direction: column;
+                        align-items: stretch;
+                    }
+
+                    .modal-actions form {
+                        width: 100%;
+                    }
+
+                    .modal-actions .action-btn {
+                        width: 100%;
+                    }
+
+                    .section-box {
+                        padding: 20px;
+                        border-radius: 18px;
+                    }
+
+                    .filter-buttons {
+                        width: 100%;
+                        overflow-x: auto;
+                        white-space: nowrap;
+                        padding-bottom: 6px;
+                    }
+
+                    .filter-buttons .filter-btn {
+                        flex: 0 0 auto;
+                    }
+
+                    .upload-section {
+                        padding: 20px;
+                    }
+
+                    .upload-section form>div {
+                        flex-direction: column !important;
+                        align-items: stretch !important;
+                    }
+
+                    .upload-section input[type="file"] {
+                        width: 100%;
                     }
 
                     /* Leave Table Mobile Styles */
@@ -551,16 +706,17 @@
                         border: none;
                         border-bottom: 1px solid rgba(0, 0, 0, 0.05);
                         position: relative;
-                        padding-left: 50% !important;
+                        padding: 14px 14px 14px 44% !important;
                         text-align: right !important;
+                        min-height: 58px;
                     }
 
                     .leave-table-container td:before {
                         position: absolute;
                         left: 15px;
-                        width: 45%;
+                        width: 34%;
                         padding-right: 10px;
-                        white-space: nowrap;
+                        white-space: normal;
                         font-weight: 800;
                         text-align: left;
                         font-size: 11px;
@@ -581,20 +737,30 @@
                     }
 
                     .leave-table-container td:nth-of-type(4):before {
-                        content: "Reason";
-                    }
-
-                    .leave-table-container td:nth-of-type(5):before {
                         content: "Status";
                     }
 
-                    .leave-table-container td:nth-of-type(6):before {
+                    .leave-table-container td:nth-of-type(5):before {
                         content: "Action";
                     }
 
                     .leave-table-container td:last-child {
                         border-bottom: none;
                         background: rgba(0, 0, 0, 0.02);
+                    }
+
+                    .leave-table-container tr[id^="reject-row-"] td {
+                        padding: 16px !important;
+                        text-align: left !important;
+                    }
+
+                    .leave-table-container tr[id^="reject-row-"] td:before {
+                        display: none;
+                    }
+
+                    .leave-table-container tr[id^="reject-row-"] form {
+                        flex-direction: column;
+                        align-items: stretch !important;
                     }
                 }
 
@@ -843,6 +1009,14 @@
                     .info-grid {
                         grid-template-columns: 1fr;
                     }
+
+                    .modal-main {
+                        padding: 24px 18px !important;
+                    }
+
+                    .modal-sidebar {
+                        padding: 28px 18px !important;
+                    }
                 }
 
                 .app-modal {
@@ -1018,6 +1192,11 @@
                         padding-top: 15px;
                         width: 100%;
                     }
+
+                    .diary-review-panel {
+                        padding: 18px !important;
+                        border-radius: 18px !important;
+                    }
                 }
             </style>
     </head>
@@ -1031,9 +1210,21 @@
                     <h1 class="page-title">Executive Sync, <span>
                             <%= user.name.split(' ')[0] %></span></h1>
             <p class="page-subtitle">Manage your internship pipeline and coordinate with top talent.</p>
-        <% } else if (activePage === ' applications') { %>
+        <% } else if (activePage === 'applications') { %>
                                 <h1 class="page-title">Candidate Pipeline</h1>
                                 <p class="page-subtitle">Review applications and manage recruitment stages.</p>
+                                <% } else if (activePage === 'internships') { %>
+                                <h1 class="page-title">Posting Control Center</h1>
+                                <p class="page-subtitle">Create, update, and track all internship listings from one place.</p>
+                                <% } else if (activePage === 'evaluations') { %>
+                                <h1 class="page-title">Diary Evaluation</h1>
+                                <p class="page-subtitle">Review intern logs, approve entries, and release certificates.</p>
+                                <% } else if (activePage === 'leaves') { %>
+                                <h1 class="page-title">Leave Requests</h1>
+                                <p class="page-subtitle">Review student time-off requests and respond with context.</p>
+                                <% } else if (activePage === 'settings') { %>
+                                <h1 class="page-title">Security Settings</h1>
+                                <p class="page-subtitle">Manage account protection and password updates.</p>
                                 <% } %>
             </div>
 
@@ -1133,7 +1324,7 @@
                                                     <p>You haven't posted any roles yet.</p>
                                                     <a href="/company/internships/create"
                                                         style="color:var(--coral); font-weight:700; text-decoration:none; margin-top:10px; display:inline-block">Click
-                                                        here to start →</a>
+                                                        here to start</a>
                                                 </div>
                                                 <% } %>
                             </div>
@@ -1237,10 +1428,9 @@
                 </div>
 
                 <% } else if (activePage==='applications' ) { %>
-                    <div
-                        style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0; flex-wrap: wrap; gap: 20px;">
+                    <div class="dashboard-toolbar">
                         <h1 class="page-title" style="margin:0">Active Pipeline</h1>
-                        <div style="min-width: 300px;">
+                        <div class="dashboard-toolbar-actions">
                             <select
                                 onchange="window.location.href='/company/dashboard?tab=applications&viewInternshipId=' + this.value"
                                 style="width: 100%; padding:14px 20px; border-radius:12px; border:2px solid var(--border); background:var(--card-bg); color:var(--text); font-family:inherit; outline:none; cursor:pointer; font-weight:700;">
@@ -1287,7 +1477,7 @@
                                                                     p.degree || 'Degree Unknown' %>
                                                         </div>
                                                     </div>
-                                                    <div style="display:flex; align-items: center; gap: 20px;">
+                                                    <div class="candidate-row-actions">
                                                         <span class="status-pill <%= app.status %>">
                                                             <%= app.status.replace(/_/g, ' ' ) %>
                                                         </span>
@@ -1305,7 +1495,7 @@
 
                                                     <script>
                                                         if (!window.candidateProfiles) window.candidateProfiles = {};
-                                                        window.candidateProfiles['<%= app._id %>'] = <% - JSON.stringify({
+                                                        window.candidateProfiles['<%= app._id %>'] = <%- JSON.stringify({
                                                             id: app._id,
                                                             status: app.status,
                                                             name: app.student ? app.student.name : '',
@@ -1394,8 +1584,7 @@
                         </style>
 
                         <div class="card reveal" style="margin-top: 20px;">
-                            <div
-                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                            <div class="dashboard-toolbar" style="margin-bottom: 24px;">
                                 <h2 class="card-title"><i class="fas fa-briefcase"></i> Managed Postings</h2>
                                 <a href="/company/internships/create" class="view-btn"
                                     style="background: var(--coral); color: #fff;">+ Post New</a>
@@ -1423,8 +1612,7 @@
                                                                     <% } %>
                                                 </div>
                                             </div>
-                                            <div
-                                                style="display:flex; gap: 15px; align-items: center; justify-content: flex-end; flex: 1; min-width: 100px;">
+                                            <div class="posting-row-actions">
                                                 <span
                                                     class="status-pill <%= item.isActive ? 'status-active' : 'status-draft' %>">
                                                     <%= item.isActive ? 'Active' : 'Draft' %>
@@ -1449,7 +1637,7 @@
                                                     <h2>No postings yet</h2>
                                                     <a href="/company/internships/create"
                                                         style="color: var(--coral); font-weight: 700;">Post your first
-                                                        internship →</a>
+                                                        internship</a>
                                                 </div>
                                                 <% } %>
                             </div>
@@ -1463,11 +1651,10 @@
                             : null;
                             %>
                             <script>window.diariesData = window.diariesData || {};</script>
-                            <div
-                                style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0; flex-wrap: wrap; gap: 20px;">
+                            <div class="dashboard-toolbar">
                                 <h2 class="card-title" style="margin:0"><i class="fas fa-book-open"></i> Evaluation
                                     Pipeline</h2>
-                                <div style="min-width: 300px;">
+                                <div class="dashboard-toolbar-actions">
                                     <select
                                         onchange="window.location.href='/company/dashboard?tab=evaluations&viewInternshipId=' + this.value"
                                         style="width: 100%; padding:14px 20px; border-radius:12px; border:2px solid var(--border); background:var(--card-bg); color:var(--text); font-family:inherit; outline:none; cursor:pointer; font-weight:700;">
@@ -1605,12 +1792,12 @@
                                                             <script>
                                                                 window.diariesData["<%= entry._id %>"] = {
                                                                     id: "<%= entry._id %>",
-                                                                    summary: <% - JSON.stringify(entry.workSummary || '') %>,
-                                                                    learnings: <% - JSON.stringify(entry.learnings || '') %>,
+                                                                    summary: <%- JSON.stringify(entry.workSummary || '') %>,
+                                                                    learnings: <%- JSON.stringify(entry.learnings || '') %>,
                                                                     hours: <%= entry.hoursWorked || 0 %>,
                                                                     status: "<%= entry.status || 'pending' %>",
-                                                                    remarks: <% - JSON.stringify(entry.remarks || '') %>,
-                                                                    skills: <% - JSON.stringify(entry.skillsUsed || '') %>
+                                                                    remarks: <%- JSON.stringify(entry.remarks || '') %>,
+                                                                    skills: <%- JSON.stringify(entry.skillsUsed || '') %>
                                                                         };
                                                             </script>
                                                             <div class="diary-row-item"
@@ -1778,6 +1965,8 @@
                                                                             <form
                                                                                 action="/company/diary/evaluate/<%= entry._id %>"
                                                                                 method="POST" style="margin:0;">
+                                                                                <input type="hidden" name="redirectTo"
+                                                                                    value="/company/dashboard?tab=evaluations<%= viewInternshipId ? `&viewInternshipId=${viewInternshipId}` : '' %>&focusApplicationId=<%= studentData.applicationId %>&openDiaryId=<%= entry._id %>">
                                                                                 <input type="hidden" name="status"
                                                                                     value="approved">
                                                                                 <input type="hidden" name="remarks"
@@ -1802,6 +1991,8 @@
                                                                             action="/company/diary/evaluate/<%= entry._id %>"
                                                                             method="POST"
                                                                             style="display:none; margin-top:16px; border-top:1px dashed var(--border); padding-top:16px;">
+                                                                            <input type="hidden" name="redirectTo"
+                                                                                value="/company/dashboard?tab=evaluations<%= viewInternshipId ? `&viewInternshipId=${viewInternshipId}` : '' %>&focusApplicationId=<%= studentData.applicationId %>&openDiaryId=<%= entry._id %>">
                                                                             <input type="hidden" name="status"
                                                                                 value="rejected">
                                                                             <div
@@ -1896,6 +2087,8 @@
                                                                     action="/company/internship/certificate/upload/<%= studentData.applicationId %>"
                                                                     method="POST" enctype="multipart/form-data"
                                                                     style="background: white; padding: 25px; border-radius: 16px; border: 1px solid var(--border);">
+                                                                    <input type="hidden" name="redirectTo"
+                                                                        value="/company/dashboard?tab=evaluations<%= viewInternshipId ? `&viewInternshipId=${viewInternshipId}` : '' %>&focusApplicationId=<%= studentData.applicationId %>">
                                                                     <div
                                                                         style="display:flex; justify-content:center; align-items:center; gap:20px; flex-wrap: wrap;">
                                                                         <div style="text-align: left;">
@@ -1929,13 +2122,12 @@
                                 </div>
                             </div>
                             <% } else if (activePage==='leaves' ) { %>
-                                <header class="header"
-                                    style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;">
+                                <header class="header dashboard-toolbar">
                                     <div>
                                         <h1 class="page-title">Leave Applications</h1>
                                         <p class="page-subtitle">Manage student leave requests for your internships</p>
                                     </div>
-                                    <div style="min-width: 300px;">
+                                    <div class="dashboard-toolbar-actions">
                                         <select
                                             onchange="window.location.href='/company/dashboard?tab=leaves&viewInternshipId=' + this.value"
                                             style="width: 100%; padding:14px 20px; border-radius:12px; border:2px solid var(--border); background:var(--card-bg); color:var(--text); font-family:inherit; outline:none; cursor:pointer; font-weight:700;">
@@ -2027,6 +2219,8 @@
                                                                             <form
                                                                                 action="/leaves/approve/<%= leave._id %>"
                                                                                 method="POST" style="display:inline;">
+                                                                                <input type="hidden" name="redirectTo"
+                                                                                    value="/company/dashboard?tab=leaves<%= viewInternshipId ? `&viewInternshipId=${viewInternshipId}` : '' %>">
                                                                                 <button type="submit" class="view-btn"
                                                                                     style="background:var(--sage); color:white; border:none; cursor:pointer; padding:5px 12px; font-size:12px;">Approve</button>
                                                                             </form>
@@ -2048,7 +2242,7 @@
                                                                 </div>
                                                                 <script>
                                                                     if (!window.leavesData) window.leavesData = {};
-                                                                    window.leavesData['<%= leave._id %>'] = <% - JSON.stringify({
+                                                                    window.leavesData['<%= leave._id %>'] = <%- JSON.stringify({
                                                                         id: leave._id,
                                                                         studentName: leave.student.name,
                                                                         studentEmail: leave.student.email,
@@ -2071,6 +2265,8 @@
                                                                 <form action="/leaves/reject/<%= leave._id %>"
                                                                     method="POST"
                                                                     style="display:flex; gap:15px; align-items:center;">
+                                                                    <input type="hidden" name="redirectTo"
+                                                                        value="/company/dashboard?tab=leaves<%= viewInternshipId ? `&viewInternshipId=${viewInternshipId}` : '' %>">
                                                                     <label
                                                                         style="font-size:12px; font-weight:800; color:var(--rose); text-transform:uppercase;">Reason
                                                                         for Rejection:</label>
@@ -2287,6 +2483,7 @@
                             
                             ${data.suggestedDate ? `
                                 <form action="/company/applications/${data.id}/interview" method="POST">
+                                    <input type="hidden" name="redirectTo" value="${window.location.pathname + window.location.search}">
                                     <input type="hidden" name="interviewDate" value="${new Date(new Date(data.suggestedDate).getTime() - new Date(data.suggestedDate).getTimezoneOffset() * 60000).toISOString().slice(0, 16)}">
                                     <button class="action-btn" style="background:var(--sage); color:#fff; width:100%; justify-content:center">
                                         <i class="fas fa-check-circle"></i> Accept Student's Suggestion
@@ -2304,6 +2501,7 @@
                                                     if (data.status === 'applied' || data.status === 'under_review') {
                                                         actionHtml += `
                         <form action="/company/applications/${data.id}/shortlist" method="POST">
+                            <input type="hidden" name="redirectTo" value="${window.location.pathname + window.location.search}">
                             <button class="action-btn btn-schedule" style="background:var(--amber)"><i class="fas fa-star"></i> Shortlist</button>
                         </form>
                     `;
@@ -2314,6 +2512,7 @@
                                                         actionHtml += `
                         <div id="scheduleSection" style="${isRescheduling ? 'display:none' : 'display:block'}">
                             <form action="/company/applications/${data.id}/interview" method="POST" style="display:flex; gap:10px; align-items:center; background:#fff; padding:5px 15px; border-radius:14px; border:1px solid var(--border)">
+                                <input type="hidden" name="redirectTo" value="${window.location.pathname + window.location.search}">
                                 <span style="font-size:12px; font-weight:800; color:var(--text-muted)">${isRescheduling ? 'Reschedule' : 'Schedule'}:</span>
                                 <input type="datetime-local" name="interviewDate" required style="border:none; font-size:13px; outline:none">
                                 <button class="action-btn btn-schedule"><i class="fas fa-calendar-plus"></i> ${isRescheduling ? 'Update' : 'Set Interview'}</button>
@@ -2340,9 +2539,11 @@
 
                                                     actionHtml += `
                     <form action="/company/applications/${data.id}/reject" method="POST" onsubmit="return confirm('Reject this application?')">
+                        <input type="hidden" name="redirectTo" value="${window.location.pathname + window.location.search}">
                         <button class="action-btn btn-reject"><i class="fas fa-times-circle"></i> Reject</button>
                     </form>
                     <form action="/company/applications/${data.id}/select" method="POST" onsubmit="return confirm('Mark as Hired?')">
+                        <input type="hidden" name="redirectTo" value="${window.location.pathname + window.location.search}">
                         <button class="action-btn btn-hire"><i class="fas fa-check-double"></i> Hire Candidate</button>
                     </form>
                 `;
@@ -2482,7 +2683,7 @@
 
                                             // Auto-select last one or first pending on load if applicable
                                             window.addEventListener('DOMContentLoaded', () => {
-                                                const requestedApplicationId = <% - JSON.stringify(typeof focusApplicationId !== 'undefined' ? focusApplicationId : null) %>;
+                                                const requestedApplicationId = <%- JSON.stringify(typeof focusApplicationId !== 'undefined' ? focusApplicationId : null) %>;
                                                 const lastId = sessionStorage.getItem('lastSelectedDiaryId');
                                                 const dropdown = document.getElementById('diaryStudentSelect');
 
@@ -2528,6 +2729,10 @@
                                                 }
                                             });
 
+                                            window.showProfile = showProfile;
+                                            window.closeModal = closeModal;
+                                            window.selectStudentDiary = selectStudentDiary;
+                                            window.filterLogs = filterLogs;
                                             window.toggleDiaryDetails = toggleDiaryDetails;
                                             window.toggleRejectFeedback = toggleRejectFeedback;
                                         </script>
@@ -2820,6 +3025,9 @@
                                                         document.body.style.overflow = 'auto';
                                                     }, 300);
                                                 }
+
+                                                window.showLeaveDetails = showLeaveDetails;
+                                                window.closeLeaveModal = closeLeaveModal;
                                             </script>
                                             <!-- Diary Details Modal -->
                                             <div id="diaryModal" class="app-modal">
