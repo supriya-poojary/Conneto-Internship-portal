@@ -747,8 +747,14 @@ router.get('/student/certificate/:id/download', async (req, res) => {
 
         // Case 1: Company uploaded a custom binary certificate to MongoDB (Direct Download)
         if (app.certificateData) {
-            res.set('Content-Type', app.certificateType || 'application/pdf');
-            const fileName = `Certificate_${app.student.name.replace(/\s+/g, '_')}.pdf`;
+            const mimeType = app.certificateType || 'application/pdf';
+            res.set('Content-Type', mimeType);
+            
+            let ext = '.pdf';
+            if (mimeType.includes('jpeg') || mimeType.includes('jpg')) ext = '.jpg';
+            else if (mimeType.includes('png')) ext = '.png';
+            
+            const fileName = `Certificate_${app.student.name.replace(/\s+/g, '_')}${ext}`;
             res.set('Content-Disposition', `attachment; filename="${fileName}"`);
             return res.send(app.certificateData);
         }
