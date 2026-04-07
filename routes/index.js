@@ -708,6 +708,7 @@ router.get('/view-document', async (req, res) => {
                         if (!response.ok) throw new Error(`Fetch failed: ${response.status}`);
                         fileBuffer = Buffer.from(await response.arrayBuffer());
                         mimeType = response.headers.get('content-type') || 'application/pdf';
+                        fileName = name || 'document.pdf';
                     } catch (err) {
                         console.error('Fetch Error for Document:', err);
                         return res.redirect(targetUrl);
