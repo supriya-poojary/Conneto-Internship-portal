@@ -401,6 +401,8 @@ router.get('/company/dashboard', async (req, res) => {
             user: req.session.user,
             activePage: activeTab,
             viewInternshipId,
+            openDiaryId: req.query.openDiaryId || null,
+            focusApplicationId: req.query.focusApplicationId || null,
             stats: {
                 active: myInternships.filter(i => i.isActive).length,
                 totalApplicants: applications.length,

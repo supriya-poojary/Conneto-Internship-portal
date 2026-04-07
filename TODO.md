@@ -1,22 +1,12 @@
-# TODO - UI/UX Changes for Conneto Internship Portal
+# Eye Symbol Fix - Diary Modal (Company Dashboard)
+Status: ✅ In Progress
 
-## Task 1: Add Animations to Home Page
-- **File**: public/css/landi.css
-- **Changes**: Added CSS keyframe animations (float, slide-up-fade, scale-in, pulse-glow) for hero section, service cards, stats, and testimonials
-- **Status**: COMPLETED
-
-## Task 2: Update About Us Page Background
-- **File**: public/css/landi.css
-- **Changes**: Replaced white/cream background colors with blue gradient themes (.section-cream, .section-white, .section-gray)
-- **Status**: COMPLETED
-
-## Task 3: Remove Quick Actions from Company Dashboard
-- **File**: views/dashboard/company.ejs
-- **Changes**: Removed Quick Actions CSS styles (was not present in HTML)
-- **Status**: COMPLETED
-
-## Task 4: Fix Company Display in Student Dashboard
-- **File**: views/dashboard/student.ejs, routes/index.js
-- **Changes**: Verified and confirmed proper company name display logic exists - template handles both internship.companyName and internship.company.companyName/name
-- **Status**: COMPLETED
+## Steps:
+- [x] 1. Analyze files & confirm issue (data-payload/parse error likely)
+- [x] 2. Create this TODO.md
+- [x] 3. Add console.debug to openDiaryModal() 
+- [ ] 4. Fix data-payload escaping (double-encode safe)
+- [ ] 5. Force modal visibility (z-index 9999, !important)
+- [ ] 6. Add form success handler (SweetAlert)
+- [ ] 7. Test & attempt_completion
 
