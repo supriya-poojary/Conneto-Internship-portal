@@ -294,6 +294,7 @@
     text-decoration: none;
     margin-bottom: 40px;
     padding: 0 10px;
+    white-space: nowrap;
   }
 
   .logo span {
@@ -494,6 +495,33 @@
   }
 
   @media (max-width: 992px) {
+    .topbar {
+      padding: 0 84px 0 20px;
+    }
+
+    .topbar-right {
+      gap: 12px;
+    }
+
+    .topbar-right > .topbar-btn:nth-child(2) {
+      display: none;
+    }
+
+    .topbar-btn {
+      width: 40px;
+      height: 40px;
+      font-size: 16px;
+    }
+
+    .user-info {
+      display: none;
+    }
+
+    .user-menu {
+      padding: 4px 8px;
+      gap: 8px;
+    }
+
     .sidebar {
       left: -280px !important;
       transform: none !important;
@@ -531,6 +559,46 @@
   }
 
   @media (max-width: 768px) {
+    .topbar {
+      height: 64px;
+      padding: 0 76px 0 16px;
+    }
+
+    .logo {
+      font-size: 1.45rem;
+      padding: 0;
+      margin-bottom: 0;
+    }
+
+    .topbar-right {
+      gap: 8px;
+    }
+
+    .user-menu {
+      padding: 0;
+      gap: 6px;
+      border: none;
+      background: transparent;
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    .mobile-toggle {
+      top: 12px;
+      right: 16px;
+      width: 40px;
+      height: 40px;
+    }
+
+    .main-content {
+      padding-top: 76px !important;
+    }
+
     .stats-grid, .internship-list, .recent-grid, .dashboard-grid, .applications-grid {
       grid-template-columns: 1fr !important;
       display: grid !important;
