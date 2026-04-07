@@ -579,12 +579,17 @@ router.get('/view-document', async (req, res) => {
             
             if (!docObjectId) return res.status(400).send('Invalid document reference format');
 
-            // 1. Precise lookup via nested ObjectId
-            docOwner = await User.findOne({ "companyDocuments._id": docObjectId });
+            // 1. Optimized lookup via projection: only fetch the matching document subdocument
+            docOwner = await User.findOne(
+                { "companyDocuments._id": docObjectId },
+                { "companyDocuments.$": 1 } 
+            );
 
-            if (!docOwner) return res.status(404).send('Document not found in Conneto archives');
+            if (!docOwner || !docOwner.companyDocuments || docOwner.companyDocuments.length === 0) {
+                return res.status(404).send('Document not found in Conneto archives');
+            }
             
-            const doc = docOwner.companyDocuments.id(docObjectId);
+            const doc = docOwner.companyDocuments[0];
             if (!doc) return res.status(404).send('Document record corrupted');
             
             if (doc.docData) {
@@ -613,23 +618,21 @@ router.get('/view-document', async (req, res) => {
                 }
             }
         } else if (type === 'resume' && docId) {
-            const app = await Application.findById(docId);
+            // Optimized Resume Fetch (using ID from app or user)
+            const app = await Application.findById(docId, 'resumeData resumeType resumeUrl student');
             if (app && app.resumeData) {
                 fileBuffer = app.resumeData;
                 mimeType = app.resumeType || 'application/pdf';
             } else {
-                // Priority 2: Try to find a StudentProfile by the student's User ID (docId)
-                let profile = await StudentProfile.findOne({ user: docId });
-                
-                // Priority 3: If still not found, and we found an app, try student's ID from that app
-                if (!profile && app && app.student) {
-                    profile = await StudentProfile.findOne({ user: app.student });
-                }
+                // Try student profile
+                const studentId = (app && app.student) ? app.student : docId;
+                const profile = await StudentProfile.findOne({ user: studentId }, 'resumeData resumeType resumeUrl');
 
                 if (profile && profile.resumeData) {
                     fileBuffer = profile.resumeData;
                     mimeType = profile.resumeType || 'application/pdf';
                 } else if (profile && profile.resumeUrl) {
+                    const targetUrl = profile.resumeUrl;
                     // Fallback for legacy profile with only URLs
                     if (targetUrl.startsWith('/uploads/')) {
                         const filePath = path.join(__dirname, '../public', targetUrl);
@@ -670,11 +673,15 @@ router.get('/view-document', async (req, res) => {
             }
             fileName = name || 'resume';
         } else if (type === 'certificate' && docId) {
-            const app = await Application.findById(docId);
-            if (!app) return res.status(404).send('Application not found');
-            fileBuffer = app.certificateData;
-            mimeType = app.certificateType || 'application/pdf';
-            fileName = name || 'certificate';
+            // Optimized Certificate Fetch
+            const app = await Application.findById(docId, 'certificateData certificateType');
+            if (app && app.certificateData) {
+                fileBuffer = app.certificateData;
+                mimeType = app.certificateType || 'application/pdf';
+                fileName = name || 'Internship_Completion_Certificate.pdf';
+            } else {
+                return res.status(404).send('Certificate data not found for this submission');
+            }
         } else {
             // Fallback for legacy local files or URLs
             if (targetUrl) {

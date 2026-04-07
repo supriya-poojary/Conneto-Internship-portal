@@ -483,6 +483,7 @@
 
         .role-card.selected i {
             color: var(--coral);
+            transform: scale(1.1);
         }
 
         .role-card.selected::after {
@@ -493,10 +494,29 @@
             top: 15px;
             right: 15px;
             color: var(--coral);
+            animation: bounceIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
         }
 
         .role-card input {
             display: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--coral);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(217, 95, 59, 0.1);
+        }
+
+        /* Smooth Reveal */
+        #companyFields {
+            display: none;
+            margin-top: 20px;
         }
 
         .form-row {
@@ -685,7 +705,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">
+                             <div class="form-group">
                                 <label for="name">Full Professional Name</label>
                                 <input type="text" id="name" name="name" class="form-input"
                                     placeholder="e.g. Johnathan Smith" required>
@@ -697,7 +717,7 @@
                                     placeholder="e.g. j.smith@university.edu" required>
                             </div>
 
-                            <div class="form-group" id="companyFields" style="display:none">
+                            <div id="companyFields">
                                 <div class="form-group">
                                     <label for="companyName">Company Name</label>
                                     <input type="text" id="companyName" name="companyName" class="form-input"
@@ -818,7 +838,6 @@
         });
 
         roleS.addEventListener('click', () => {
-
             roleS.classList.add('selected');
             roleC.classList.remove('selected');
             companyFields.style.display = 'none';

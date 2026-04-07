@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ quiet: true });
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
@@ -14,7 +14,7 @@ app.set('trust proxy', 1);
 
 // ─── Connect to MongoDB Atlas ──────────────────────────────────────────────
 let dbConnected = false;
-const mongodb_uri = 'mongodb+srv://akankshaa412_db_user:VHGVJhg4hasdhaj@mongocluster.3whtc05.mongodb.net/conneto?retryWrites=true&w=majority&appName=Mongocluster';
+const mongodb_uri = process.env.MONGODB_URI || 'mongodb+srv://akankshaa412_db_user:VHGVJhg4hasdhaj@mongocluster.3whtc05.mongodb.net/conneto?retryWrites=true&w=majority&appName=Mongocluster';
 mongoose.connect(mongodb_uri)
     .then(() => { console.log('✅ Connected to MongoDB Atlas'); dbConnected = true; })
     .catch(err => console.error('⚠️  MongoDB unavailable:', err.message));
@@ -29,7 +29,7 @@ const sessionConfig = {
     secret: 'conneto_premium_portal_secure_vault_2026',
     resave: false,
     saveUninitialized: false,
-    cookie: { 
+    cookie: {
         maxAge: 1000 * 60 * 60 * 24, // 1 day
         secure: false, // Set to true if using HTTPS
         sameSite: 'lax'
