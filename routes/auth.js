@@ -231,6 +231,11 @@ router.get('/google/callback',
         // Successful authentication
         if (!req.user) return res.redirect('/auth/login?auth_error=no_user');
 
+        // Check if user is a new Google user (passed from passport strategy)
+        if (req.user.isNewGoogleUser) {
+            return res.redirect('/auth/google/complete');
+        }
+
         // Enforcement: Ensure approved companies can login, others are blocked
         if (req.user.role === 'company') {
             if (req.user.status === 'Pending') {
@@ -248,6 +253,7 @@ router.get('/google/callback',
             }
         }
 
+        // Existing user: create session
         req.session.user = {
             id: req.user._id,
             name: req.user.name,
@@ -262,5 +268,88 @@ router.get('/google/callback',
         return res.redirect('/company/dashboard');
     }
 );
+
+// GET /auth/google/complete
+router.get('/google/complete', (req, res) => {
+    // If not authenticated via passport as a new user, redirect to login
+    if (!req.user || !req.user.isNew) return res.redirect('/auth/login');
+    
+    res.render('auth/google-complete', { 
+        title: 'Complete Profile — Conneto', 
+        profile: req.user.profile,
+        error: null 
+    });
+});
+
+// POST /auth/google/complete
+router.post('/google/complete', upload.any(), async (req, res) => {
+    if (!req.user || !req.user.isNew) return res.redirect('/auth/login');
+    
+    const { role, companyName, cin, companyAddress, phone, companyType } = req.body;
+    const { id: googleId, displayName: name, emails } = req.user.profile;
+    const email = emails[0].value;
+
+    try {
+        // Quick verification for company role
+        if (role === 'company') {
+            if (!cin || !phone || !companyName || !companyAddress) {
+                return res.render('auth/google-complete', { 
+                    title: 'Complete Profile — Conneto', 
+                    profile: req.user.profile,
+                    error: 'All company fields are required for verification.' 
+                });
+            }
+        }
+
+        const userData = {
+            name,
+            email,
+            role,
+            googleId,
+            status: role === 'student' ? 'Approved' : 'Pending'
+        };
+
+        if (role === 'company') {
+            userData.companyName = companyName;
+            userData.cin = cin;
+            userData.companyAddress = companyAddress;
+            userData.phone = phone;
+            userData.companyType = companyType;
+
+            // Handle uploaded company documents
+            if (req.files && req.files.length > 0) {
+                userData.companyDocuments = req.files.map(file => ({
+                    docName: file.fieldname,
+                    docData: file.buffer,
+                    contentType: file.mimetype
+                }));
+            }
+        }
+
+        const user = await User.create(userData);
+
+        // For student, log in directly and redirect to dashboard
+        if (user.status === 'Approved') {
+            req.session.user = { id: user._id, name: user.name, companyName: user.companyName, role: user.role };
+            return res.redirect(role === 'student' ? '/student/dashboard' : '/company/dashboard');
+        } else {
+            // For companies, redirect to login with pending message
+            req.logout(() => {
+                res.render('auth/login', {
+                    title: 'Login — Conneto',
+                    error: null,
+                    success: 'Profile submitted! Your company account is now undergoing administrator review.'
+                });
+            });
+        }
+    } catch (err) {
+        console.error('Google profile completion error:', err);
+        res.render('auth/google-complete', { 
+            title: 'Complete Profile — Conneto', 
+            profile: req.user.profile,
+            error: 'Database Sync Error: Could not save your profile. Please try again.' 
+        });
+    }
+});
 
 module.exports = router;

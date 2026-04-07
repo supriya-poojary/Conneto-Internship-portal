@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // ─── Sessions ─────────────────────────────────────────────────────────────
 const sessionConfig = {
-    secret: 'conneto_premium_portal_secure_vault_2026',
+    secret: process.env.SESSION_SECRET || 'conneto_premium_portal_secure_vault_2026',
     resave: false,
     saveUninitialized: false,
     cookie: {

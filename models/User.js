@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
     name: { type: String, required: true, trim: true },
     companyName: { type: String, trim: true }, // For company users
     email: { type: String, required: true, unique: true, lowercase: true },
-    password: { type: String, required: true, minlength: 6 },
+    password: { type: String, required: false, minlength: 6 },
     role: { type: String, enum: ['student', 'company', 'admin'], required: true },
     googleId: { type: String, unique: true, sparse: true },
     cin: { type: String, trim: true },
