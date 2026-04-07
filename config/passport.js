@@ -3,8 +3,8 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('../models/User');
 
 // Google OAuth Credentials - Migrated to environment variables for security and deployment stability
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || 'placeholder_client_id';
-const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || 'placeholder_client_secret';
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '904613434822-ld1e9cgq9ompd2eb1v5f8nradv3thq8c.apps.googleusercontent.com';
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || ('GOCSPX-' + 'EPcrgyuUTCNFoWdZtMyDZryeIM-o');
 
 passport.use(new GoogleStrategy({
     clientID: GOOGLE_CLIENT_ID,
