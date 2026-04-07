@@ -49,11 +49,18 @@ router.post('/register', upload.any(), async (req, res) => {
         // --- 2. Database Integrity Check ---
         const existing = await User.findOne({ email });
         if (existing) {
-            if (existing.status === 'Pending') {
+            if (existing.role === 'company' && existing.status === 'Pending') {
                 return res.render('auth/login', {
                     title: 'Login — Conneto',
                     error: 'Account already exists and is currently undergoing verification. Please check back later.',
                     success: null
+                });
+            }
+            if (existing.role === 'company' && existing.status === 'Approved') {
+                return res.render('auth/login', {
+                    title: 'Login — Conneto',
+                    error: null,
+                    success: 'Your company is already verified. Please sign in directly.'
                 });
             }
             return res.render('auth/register', { title: 'Register — Conneto', error: 'This email is already registered. Please sign in.' });
@@ -220,9 +227,26 @@ router.get('/google', passport.authenticate('google', { scope: ['profile', 'emai
 // GET /auth/google/callback
 router.get('/google/callback',
     passport.authenticate('google', { failureRedirect: '/auth/login?auth_error=google' }),
-    (req, res) => {
+    async (req, res) => {
         // Successful authentication
         if (!req.user) return res.redirect('/auth/login?auth_error=no_user');
+
+        // Enforcement: Ensure approved companies can login, others are blocked
+        if (req.user.role === 'company') {
+            if (req.user.status === 'Pending') {
+                req.logout(() => {}); // Logout from passport session
+                return res.render('auth/login', { 
+                    title: 'Login — Conneto', 
+                    error: 'Authentication successful, but your company account is still awaiting administrator approval.', 
+                    success: null 
+                });
+            }
+            if (req.user.status === 'Rejected') {
+                req.logout(() => {});
+                const msg = `Access Denied: ${req.user.rejectionReason || 'Your application was not approved.'}`;
+                return res.render('auth/login', { title: 'Login — Conneto', error: msg, success: null });
+            }
+        }
 
         req.session.user = {
             id: req.user._id,

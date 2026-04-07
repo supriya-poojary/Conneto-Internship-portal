@@ -2,10 +2,9 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('../models/User');
 
-// Google OAuth Credentials - Hardcoded as requested
-const GOOGLE_CLIENT_ID = '';
-// Split string to prevent GitHub from incorrectly rejecting the push due to its strict regex scanners
-const GOOGLE_CLIENT_SECRET = '';
+// Google OAuth Credentials - Migrated to environment variables for security and deployment stability
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '';
 
 if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
     passport.use(new GoogleStrategy({
