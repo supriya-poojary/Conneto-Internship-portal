@@ -44,6 +44,16 @@
       const mobileMenuBtn = document.createElement('button');
       mobileMenuBtn.className = 'mobile-menu-btn';
       mobileMenuBtn.innerHTML = '<span></span><span></span><span></span>';
+      let sidebarOverlay = null;
+
+      const closeSidebar = () => {
+        sidebar.classList.remove('active');
+        mobileMenuBtn.innerHTML = '<span></span><span></span><span></span>';
+        if (sidebarOverlay) {
+          sidebarOverlay.remove();
+          sidebarOverlay = null;
+        }
+      };
 
       // Insert after logo in topbar
       const logo = document.querySelector('.logo');
@@ -57,18 +67,27 @@
         mobileMenuBtn.innerHTML = isActive ? '<i class="fas fa-times"></i>' : '<span></span><span></span><span></span>';
 
         if (isActive) {
-          const overlay = document.createElement('div');
-          overlay.className = 'sidebar-overlay';
-          document.body.appendChild(overlay);
-          overlay.style.display = 'block';
-          overlay.addEventListener('click', () => {
-            sidebar.classList.remove('active');
-            mobileMenuBtn.innerHTML = '<span></span><span></span><span></span>';
-            overlay.remove();
-          });
+          sidebarOverlay = document.createElement('div');
+          sidebarOverlay.className = 'sidebar-overlay';
+          document.body.appendChild(sidebarOverlay);
+          sidebarOverlay.style.display = 'block';
+          sidebarOverlay.addEventListener('click', closeSidebar);
         } else {
-          const overlay = document.querySelector('.sidebar-overlay');
-          if (overlay) overlay.remove();
+          closeSidebar();
+        }
+      });
+
+      sidebar.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+          if (window.innerWidth <= 992) {
+            closeSidebar();
+          }
+        });
+      });
+
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 992) {
+          closeSidebar();
         }
       });
     }
@@ -289,14 +308,15 @@
     }
 
     .sidebar {
-      left: -280px !important;
+      left: -100% !important;
       transform: none !important;
       z-index: 1501 !important;
       height: 100vh !important;
       top: 0 !important;
-      width: 280px !important;
+      width: min(320px, 86vw) !important;
       box-shadow: 20px 0 40px rgba(0, 0, 0, 0.2) !important;
       visibility: hidden !important;
+      opacity: 0 !important;
     }
 
     .sidebar.active {
@@ -313,6 +333,7 @@
     .content {
       padding: 20px !important;
       margin-left: 0 !important;
+      width: 100%;
     }
 
     .mobile-menu-btn {
@@ -327,6 +348,42 @@
   }
 
   @media (max-width: 768px) {
+    .topbar {
+      height: 64px;
+      padding: 0 14px;
+    }
+
+    .logo {
+      font-size: 1.45rem;
+    }
+
+    .topbar-right {
+      gap: 10px;
+    }
+
+    .topbar-btn,
+    .mobile-menu-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+    }
+
+    .mobile-menu-btn {
+      margin-left: 10px;
+    }
+
+    .user-menu {
+      padding: 4px 8px;
+      gap: 8px;
+    }
+
+    .user-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      font-size: 0.95rem;
+    }
+
     .stats-grid, .dashboard-grid, .internship-list, .recent-grid {
       grid-template-columns: 1fr !important;
       display: grid !important;
@@ -334,11 +391,22 @@
 
     .page-header {
       text-align: left;
-      padding: 0 20px;
+      padding: 0;
+      margin-bottom: 24px;
     }
 
     .page-title {
-      font-size: 1.8rem;
+      font-size: 1.7rem;
+      line-height: 1.15;
+    }
+
+    .page-subtitle {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .content {
+      padding: 16px !important;
     }
   }
 
@@ -599,4 +667,4 @@
   }
 
 </style>
-
+

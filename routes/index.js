@@ -12,6 +12,27 @@ const Leave = require('../models/Leave');
 const { generateCertificate } = require('../utils/certificateGenerator');
 const { upload } = require('../config/upload');
 
+const getCompanyDashboardRedirect = (req, fallback) => {
+    const candidate = req.body.redirectTo || req.get('Referrer');
+    if (candidate) {
+        try {
+            if (candidate.startsWith('/company/dashboard')) {
+                return candidate;
+            }
+            const parsed = new URL(candidate, 'http://localhost');
+            const pathWithQuery = `${parsed.pathname}${parsed.search || ''}`;
+            if (pathWithQuery.startsWith('/company/dashboard')) {
+                return pathWithQuery;
+            }
+        } catch (err) {
+            if (candidate.startsWith('/company/dashboard')) {
+                return candidate;
+            }
+        }
+    }
+    return fallback;
+};
+
 // Project root directory
 const ROOT = path.resolve(__dirname, '..');
 
@@ -219,6 +240,7 @@ router.post('/student/diary/delete/:id', async (req, res) => {
 // Company Evaluation Routes
 router.post('/company/diary/evaluate/:id', async (req, res) => {
     if (!req.session.user || req.session.user.role !== 'company') return res.status(403).send('Forbidden');
+    const redirectTo = getCompanyDashboardRedirect(req, '/company/dashboard?tab=evaluations');
     try {
         const { status, remarks } = req.body;
         if (!['approved', 'rejected'].includes(status)) {
@@ -232,15 +254,16 @@ router.post('/company/diary/evaluate/:id', async (req, res) => {
             updatedAt: Date.now()
         });
 
-        res.redirect('/company/dashboard?tab=evaluations&success=Manual evaluation recorded');
+        res.redirect(`${redirectTo}${redirectTo.includes('?') ? '&' : '?'}success=Manual evaluation recorded`);
     } catch (err) {
         console.error('Evaluation error:', err);
-        res.redirect('/company/dashboard?tab=evaluations&error=Evaluation failed');
+        res.redirect(`${redirectTo}${redirectTo.includes('?') ? '&' : '?'}error=Evaluation failed`);
     }
 });
 
 router.post('/company/internship/certificate/:applicationId', async (req, res) => {
     if (!req.session.user || req.session.user.role !== 'company') return res.status(403).send('Forbidden');
+    const redirectTo = getCompanyDashboardRedirect(req, '/company/dashboard?tab=evaluations');
     try {
         const app = await Application.findById(req.params.applicationId);
         if (!app) return res.status(404).send('Application not found');
@@ -257,37 +280,39 @@ router.post('/company/internship/certificate/:applicationId', async (req, res) =
         app.certificateId = 'CERT-' + Math.random().toString(36).substr(2, 9).toUpperCase();
         await app.save();
 
-        res.redirect('/company/dashboard?tab=evaluations&success=Manual certificate released');
+        res.redirect(`${redirectTo}${redirectTo.includes('?') ? '&' : '?'}success=Manual certificate released`);
     } catch (err) {
         console.error('Certificate release error:', err);
-        res.redirect('/company/dashboard?tab=evaluations&error=Failed to release certificate');
+        res.redirect(`${redirectTo}${redirectTo.includes('?') ? '&' : '?'}error=Failed to release certificate`);
     }
 });
 
 router.post('/company/internship/certificate/upload/:applicationId', (req, res, next) => {
     upload.single('certificate')(req, res, function (err) {
-        if (err) return res.redirect(`/company/dashboard?tab=evaluations&error=${encodeURIComponent(err.message)}`);
+        const redirectTo = getCompanyDashboardRedirect(req, '/company/dashboard?tab=evaluations');
+        if (err) return res.redirect(`${redirectTo}${redirectTo.includes('?') ? '&' : '?'}error=${encodeURIComponent(err.message)}`);
         next();
     });
 }, async (req, res) => {
     if (!req.session.user || req.session.user.role !== 'company') {
         return res.redirect('/auth/login');
     }
+    const redirectTo = getCompanyDashboardRedirect(req, '/company/dashboard?tab=evaluations');
 
     try {
         const app = await Application.findById(req.params.applicationId);
         if (!app) {
-            return res.redirect('/company/dashboard?tab=evaluations&error=Application record not found');
+            return res.redirect(`${redirectTo}${redirectTo.includes('?') ? '&' : '?'}error=Application record not found`);
         }
 
         // Verify company ownership via internship
         const internship = await Internship.findById(app.internship);
         if (!internship || internship.company.toString() !== req.session.user.id) {
-            return res.redirect('/company/dashboard?tab=evaluations&error=Unauthorized access');
+            return res.redirect(`${redirectTo}${redirectTo.includes('?') ? '&' : '?'}error=Unauthorized access`);
         }
 
         if (!req.file) {
-            return res.redirect('/company/dashboard?tab=evaluations&error=No certificate file selected');
+            return res.redirect(`${redirectTo}${redirectTo.includes('?') ? '&' : '?'}error=No certificate file selected`);
         }
 
         // Overwrite existing certificate data (Binary Storage)
@@ -299,10 +324,10 @@ router.post('/company/internship/certificate/upload/:applicationId', (req, res, 
 
         await app.save();
 
-        res.redirect('/company/dashboard?tab=evaluations&success=Professionally updated certificate has been released successfully');
+        res.redirect(`${redirectTo}${redirectTo.includes('?') ? '&' : '?'}success=Professionally updated certificate has been released successfully`);
     } catch (err) {
         console.error('Certificate upload error:', err);
-        res.redirect('/company/dashboard?tab=evaluations&error=An unexpected error occurred during upload. Please try again.');
+        res.redirect(`${redirectTo}${redirectTo.includes('?') ? '&' : '?'}error=An unexpected error occurred during upload. Please try again.`);
     }
 });
 
@@ -316,7 +341,16 @@ router.get('/company/dashboard', async (req, res) => {
     if (!req.session.user) return res.redirect('/auth/login');
     if (req.session.user.role !== 'company') return res.redirect('/');
 
-    const activeTab = req.query.tab || 'dashboard';
+    const requestedTab = req.query.tab || 'dashboard';
+    const activeTab = {
+        applications: 'applications',
+        internships: 'internships',
+        evaluations: 'evaluations',
+        leaves: 'leaves',
+        settings: 'settings',
+        profile: 'settings',
+        dashboard: 'dashboard'
+    }[requestedTab] || 'dashboard';
     const viewInternshipId = req.query.viewInternshipId || null;
 
     try {
@@ -328,19 +362,20 @@ router.get('/company/dashboard', async (req, res) => {
             .populate('student', 'name email phone')
             .populate('internship')
             .sort({ appliedAt: -1 });
+        const validApplications = applications.filter(app => app && app.student && app.internship);
 
         // NEW: Fetch profiles for each student in the pipeline
-        const studentIds = applications.map(app => app.student._id);
+        const studentIds = validApplications.map(app => app.student._id);
         const profiles = await StudentProfile.find({ user: { $in: studentIds } });
 
         // Attach profile to each application object
-        applications.forEach(app => {
+        validApplications.forEach(app => {
             app.profile = profiles.find(p => p.user.toString() === app.student._id.toString()) || {};
         });
 
         // Calculate stats for Each Internship (for the management tab)
         const internshipsWithStats = myInternships.map(int => {
-            const intApps = applications.filter(a => a.internship && a.internship._id.toString() === int._id.toString());
+            const intApps = validApplications.filter(a => a.internship && a.internship._id.toString() === int._id.toString());
             return {
                 ...int.toObject(),
                 stats: {
@@ -357,14 +392,14 @@ router.get('/company/dashboard', async (req, res) => {
                 grouped[int._id] = { internship: int, applications: [] };
             }
         });
-        applications.forEach(app => {
+        validApplications.forEach(app => {
             if (app.internship && grouped[app.internship._id]) {
                 grouped[app.internship._id].applications.push(app);
             }
         });
 
         // Diary Evaluation Data: Fetch all 'selected' students for company's internships
-        let selectedApplications = applications.filter(app => app.status === 'selected');
+        let selectedApplications = validApplications.filter(app => app.status === 'selected');
         if (viewInternshipId) {
             selectedApplications = selectedApplications.filter(app => app.internship && app.internship._id.toString() === viewInternshipId);
         }
@@ -405,18 +440,18 @@ router.get('/company/dashboard', async (req, res) => {
             focusApplicationId: req.query.focusApplicationId || null,
             stats: {
                 active: myInternships.filter(i => i.isActive).length,
-                totalApplicants: applications.length,
-                interviews: applications.filter(app => ['interview_scheduled', 'shortlisted'].includes(app.status)).length,
-                hired: applications.filter(app => app.status === 'selected').length,
-                rescheduleRequests: applications.filter(app => app.rescheduleRequest).length,
+                totalApplicants: validApplications.length,
+                interviews: validApplications.filter(app => ['interview_scheduled', 'shortlisted'].includes(app.status)).length,
+                hired: validApplications.filter(app => app.status === 'selected').length,
+                rescheduleRequests: validApplications.filter(app => app.rescheduleRequest).length,
                 pendingEvaluations: evaluationData.reduce((acc, curr) => acc + curr.pendingCount, 0),
                 pendingLeaves: leaves.filter(l => l.status === 'Pending').length
             },
-            applicants: applications.slice(0, 10),
+            applicants: validApplications.slice(0, 10),
             myInternships: internshipsWithStats,
             groupedApplications: Object.values(grouped),
             evaluationData,
-            totalApplications: applications.length,
+            totalApplications: validApplications.length,
             leaves,
             success: req.query.success || null,
             error: req.query.error || null
@@ -429,7 +464,7 @@ router.get('/company/dashboard', async (req, res) => {
 
 // Redirect legacy company routes
 router.get('/company/applications', (req, res) => res.redirect('/company/dashboard?tab=applications'));
-router.get('/company/profile', (req, res) => res.redirect('/company/dashboard?tab=profile'));
+router.get('/company/profile', (req, res) => res.redirect('/company/dashboard?tab=settings'));
 router.get('/company/internships', (req, res) => res.redirect('/company/dashboard?tab=internships'));
 
 // The upload middleware is now imported from config/cloudinary.js at the top of the file
@@ -809,3 +844,4 @@ router.get('/view-resume', (req, res) => {
 });
 
 module.exports = router;
+
